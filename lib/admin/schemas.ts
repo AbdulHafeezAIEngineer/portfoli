@@ -44,6 +44,15 @@ export const connectionSchema = z.discriminatedUnion("method", [
         .string()
         .regex(/^sha(256|384|512)-[A-Za-z0-9+/=]+$/)
         .optional(),
+      botpress: z
+        .object({
+          configurationSrc: z
+            .string()
+            .max(1000)
+            .regex(/^https:\/\/files\.bpcontent\.cloud\/[A-Za-z0-9/_-]+\.js$/),
+        })
+        .strict()
+        .optional(),
     })
     .strict(),
   z

@@ -46,7 +46,7 @@ async function main() {
     const savedSource = process.env.CONTENT_SOURCE;
     process.env.CONTENT_SOURCE = "files";
     for (const [order, bot] of getFileBots().entries()) {
-      const { configured: _configured, ...data } = bot;
+      const { configured: _configured, provider: _provider, ...data } = bot;
       await db.bot.upsert({
         where: { id: bot.id },
         update: {},

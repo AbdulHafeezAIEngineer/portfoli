@@ -431,6 +431,56 @@ test("iframe route redirects only to config and script embed escapes markup", as
   );
 });
 
+test("Botpress adapter loads both official scripts with a nonce and rejects other hosts", async () => {
+  const config = {
+    method: "script",
+    src: "https://cdn.botpress.cloud/webchat/v5.0/inject.js",
+    mountId: "forte-study-assistant",
+    attributes: {},
+    botpress: {
+      configurationSrc:
+        "https://files.bpcontent.cloud/2026/10/09/06/20261009063223-SY2FHGEQ.js",
+    },
+  };
+  const f = fixture({ real: config });
+  const response = await f.load("app/api/bot-embed/route.ts").GET(
+    new Request("https://portfolio.example/api/bot-embed?botId=real"),
+  );
+  assert.equal(response.status, 200);
+  const policy = response.headers.get("content-security-policy");
+  const document = await response.text();
+  const nonce = document.match(/<script nonce="([^"]+)"/)[1];
+  assert.ok(policy.includes(`'nonce-${nonce}'`));
+  assert.ok(policy.includes("https://cdn.botpress.cloud https://files.bpcontent.cloud"));
+  assert.ok(!policy.includes("'unsafe-eval'"));
+  assert.ok(document.includes(config.botpress.configurationSrc));
+  assert.ok(document.includes("webchat:ready"));
+  assert.ok(document.indexOf("sdk.on('webchat:ready'") < document.indexOf("configuration.src="));
+  assert.ok(document.includes("window.botpress.open()"));
+  for (const badConfig of [
+    { ...config, src: "https://attacker.example/inject.js" },
+    { ...config, botpress: { configurationSrc: "https://attacker.example/init.js" } },
+    { ...config, src: config.src + "?redirect=https://attacker.example" },
+  ]) {
+    const bad = fixture({ real: badConfig });
+    const result = await bad.load("app/api/bot-embed/route.ts").GET(
+      new Request("https://portfolio.example/api/bot-embed?botId=real"),
+    );
+    assert.equal(result.status, 503);
+  }
+});
+
+test("admin connection parsing retains Botpress's second script and rejects injected markup", () => {
+  const f = fixture();
+  const { connectionSchema } = f.load("lib/admin/schemas.ts");
+  const config = f.load("data/bots.ts").realBotConfig;
+  assert.equal(connectionSchema.parse(config).botpress.configurationSrc, config.botpress.configurationSrc);
+  assert.equal(connectionSchema.safeParse({
+    ...config,
+    botpress: { configurationSrc: 'https://files.bpcontent.cloud/init.js"><script>alert(1)</script>' },
+  }).success, false);
+});
+
 test("conversation context trims complete pairs without changing roles", () => {
   const f = fixture();
   const { buildContext, validateMessages } = f.load("lib/chat/protocol.ts");

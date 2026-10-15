@@ -44,7 +44,7 @@ All editable portfolio content starts in `data/`. `lib/content-loader.ts` is the
 
 - `data/site.ts`: Elvora identity, Abdul Hafeez's introduction, Gmail, navigation and shared UI text.
 - `data/projects.ts`, `demos.ts`: concept descriptions, actual screenshot paths, design highlights, optional promo prompts and demo copy.
-- `data/bots.ts`: bot cards, disclosures, one `realBotConfig` object for iframe/script/API, and an optional `additionalBots` list for adding data-configured connections. `data/prompts/` contains the three server-only demo prompts.
+- `data/bots.ts`: bot cards, disclosures, one `realBotConfig` object for iframe/script/API, and an optional `additionalBots` list for adding data-configured connections. The real slot connects the supplied Forte Institute Study Assistant Botpress scripts; see `BOTPRESS_SETUP.md`. `data/prompts/` contains the three server-only demo prompts.
 - `data/experience.ts`, `skills.ts`: About Me, the owner's supplied 2+ years of experience, AI workflow explanations and remaining tool-name placeholders; no invented client counts or testimonials.
 - `data/certificates.ts`: supplied Master of ChatGPT certificate details and image, click-to-enlarge/zoom viewer.
 - `data/contact.ts`, `admin.ts`: validated form content and admin labels/field definitions.

@@ -12,6 +12,7 @@ import {
 } from "@/lib/chat/http";
 import { limitLogin } from "@/lib/admin/rate-limit";
 import { updateSecurity } from "@/lib/admin/security";
+import { scriptDocument } from "@/lib/chat/embed";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 const headers = {
@@ -141,7 +142,12 @@ export async function POST(
             : config.method === "script"
               ? config.src
               : config.endpoint;
-        if (destination) {
+        const destinations = [destination];
+        if (config.method === "script" && config.botpress) {
+          scriptDocument(config);
+          destinations.push(config.botpress.configurationSrc);
+        }
+        for (const destination of destinations.filter(Boolean)) {
           const url = publicHttpsUrl(destination);
           const allowed = (process.env.BOT_PROVIDER_ALLOWLIST || "")
             .split(",")

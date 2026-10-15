@@ -74,7 +74,7 @@ RESET_ADMIN_2FA=false
 BLOB_READ_WRITE_TOKEN=
 BLOB_PUBLIC_HOST=
 # Comma-separated exact trusted bot provider hostnames (no wildcards).
-BOT_PROVIDER_ALLOWLIST=
+BOT_PROVIDER_ALLOWLIST=cdn.botpress.cloud,files.bpcontent.cloud
 
 # Cloudflare Turnstile: public site key + private verification secret.
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=
@@ -104,12 +104,35 @@ next-env.d.ts
 *.log
 ``````
 
+## BOTPRESS_SETUP.md
+
+``````markdown
+# Forte Institute Study Assistant
+
+The first real-bot card is connected to the two public scripts supplied by the owner:
+
+- Loader: `https://cdn.botpress.cloud/webchat/v5.0/inject.js`
+- Configuration: `https://files.bpcontent.cloud/2026/10/09/06/20261009063223-SY2FHGEQ.js`
+
+Both addresses live in `realBotConfig` in `data/bots.ts`. No Botpress admin token or OpenAI key is needed to embed this published widget. Botpress still controls its publishing state, usage allowance, conversation storage and replies.
+
+After Netlify deploys GitHub `main`, open **AI Bots → Forte Institute Study Assistant → Try Live Demo**. The loader runs first, the configuration runs next, and the adapter opens the chat on Botpress's `webchat:ready` event. A loading message, timeout and retry button cover connection failures. Closing the panel removes the frame and its scripts; reopening starts a fresh embedded page. Provider-side session retention is managed by Botpress.
+
+The trusted Botpress adapter runs in a dedicated same-origin frame with scripts, forms, storage and popups permitted. It is not an origin security boundary from the portfolio. Only official Botpress loader and configuration hosts/paths are accepted by this adapter; a nonce authorizes its fixed bootstrap code. Generic script widgets retain their opaque sandbox. Third-party code should only come from providers the owner trusts.
+
+`CONTENT_SOURCE=files` uses this connection immediately. In database mode, edit the existing `real` bot at `/admin/bots`, change its name to **Forte Institute Study Assistant**, choose `script` and paste the equivalent public config from `data/bots.ts` into its config field. Add `cdn.botpress.cloud,files.bpcontent.cloud` to `BOT_PROVIDER_ALLOWLIST` before saving. Seeding preserves existing database records and will not replace the previous connection.
+
+If the live widget does not appear, confirm the latest Netlify deploy succeeded, publish the bot in Botpress, and check the provider's allowed website/domain settings if enabled. Permit the actual portfolio domain, including `portfolio3821.netlify.app` if that is the current site. Do not add API keys to these public script URLs.
+
+Local validation uses explicit Botpress SDK fixtures to check script order, initialization/opening, storage, close cleanup, mobile layout, errors and retry. The cloud network returned HTTP 403 for the real Botpress assets, so actual provider loading and AI replies still need verification in the owner's browser after deployment.
+``````
+
 ## CHATBOT_SETUP.md
 
 ``````markdown
 # Part 2 — AI chatbot services
 
-Only AI Chatbot Services has been implemented in this part. Experience, Skills, Certification and a contact form remain future work. The AI Bots navbar anchor opens the AI tab, including direct links to `#ai-bots`.
+The complete portfolio includes AI Chatbot Services alongside About Me, Skills, Certification and Contact. The AI Bots navbar anchor opens the AI tab, including direct links to `#ai-bots`. The first real-bot card now connects the owner's **Forte Institute Study Assistant** Botpress widget; see `BOTPRESS_SETUP.md`.
 
 ## Install and run
 
@@ -135,7 +158,7 @@ Stop the development server before building the same `.next` directory. No separ
 
 ## One real-bot config
 
-Replace only `realBotConfig` in `data/bots.ts` with ONE of these objects. The empty default displays “Connection pending”. Card content is in the same data file.
+The supplied Botpress connection is in `realBotConfig` in `data/bots.ts`; its card content is in the same data file. To use a different bot, replace that object with ONE of these shapes. An empty destination displays “Connection pending”.
 
 ### Hosted iframe
 
@@ -159,7 +182,7 @@ export const realBotConfig: RealBotConfig = {
 };
 ```
 
-Transfer the external script URL and public `data-*` attributes from your provider's snippet. Do not paste raw HTML, event attributes, inline JavaScript or secrets. Optional `integrity` accepts the provider's authentic SRI hash; never invent one. The script runs inside a sandboxed iframe document with a CSP allowing that script origin, not inside the portfolio DOM. Widgets requiring cookies/storage, extra script origins, inline bootstrapping or popup escape may need a reviewed provider adapter or the hosted iframe/API method. No blanket sandbox bypass is included.
+Transfer the external script URL and public `data-*` attributes from your provider's snippet. Do not paste raw HTML, event attributes, inline JavaScript or secrets. Optional `integrity` accepts the provider's authentic SRI hash; never invent one. Generic scripts run inside an opaque sandboxed frame with a CSP allowing that script origin. The specific Botpress adapter adds a `botpress: { configurationSrc: "https://files.bpcontent.cloud/...js" }` field, sequential loading and storage support in a same-origin frame. This trusted-provider exception is not an origin security boundary; see `BOTPRESS_SETUP.md`. Other widgets requiring extra permissions need their own reviewed adapter or the hosted iframe/API method.
 
 ### API endpoint
 
@@ -331,7 +354,7 @@ To recover a lost authenticator too, deliberately set `RESET_ADMIN_2FA=true` onl
 
 Create a Vercel Blob store and set `BLOB_READ_WRITE_TOKEN` and the exact `BLOB_PUBLIC_HOST`. Blob can also be used from Netlify. Uploads accept 1–4 JPEG/PNG/WebP files, up to 3 MB each. The server limits total bytes/pixels, checks the decoded format and rejects SVG/animated/corrupt images, rotates/resizes and re-encodes to WebP to strip metadata. Random filenames avoid trusting user-provided names. Uploaded images are public: upload only public portfolio assets. Write accurate alt text and save the record after upload. Removing a URL/record does not delete potentially shared Blob assets; periodically remove orphaned assets through your storage dashboard.
 
-`BOT_PROVIDER_ALLOWLIST` contains exact trusted provider hostnames, comma-separated. Set it before saving external iframe/script/API destinations in admin. No provider secrets belong in public configuration or widget attributes. `REAL_BOT_API_KEY` stays private. The real bot uses the same reusable `BotEmbed` component; scripts execute in an isolated sandboxed document which is destroyed on close. Check framing/CSP/provider storage permissions in the actual deployment. API responses are rendered as escaped plain text and control characters are removed; no provider HTML executes in chat.
+`BOT_PROVIDER_ALLOWLIST` contains exact trusted provider hostnames, comma-separated. Set it before saving external iframe/script/API destinations in admin. No provider secrets belong in public configuration or widget attributes. `REAL_BOT_API_KEY` stays private. The real bot uses the same reusable `BotEmbed` component; generic scripts run in an opaque sandboxed document which is destroyed on close. The trusted Botpress adapter supports its official loader plus configuration script in a dedicated same-origin frame with storage access; this frame is not an origin security boundary. See `BOTPRESS_SETUP.md`. Check framing/CSP/provider storage permissions in the actual deployment. API responses are rendered as escaped plain text and control characters are removed; no provider HTML executes in custom API chat.
 
 ## Mail, Turnstile and AI
 
@@ -359,7 +382,7 @@ Verify outbound SMTP support; if your host blocks it, keep the email link and mo
 
 ## Headers and launch checks
 
-Middleware supplies a per-request nonce CSP, HSTS on external production hosts, SAMEORIGIN framing, nosniff, referrer and permissions policies. Inline Next.js/theme scripts use the nonce; style attributes remain permitted for Framer Motion. Development permits eval for tooling. Microphone permission is restricted to self so voice remains usable. Third-party widget scripts are confined to their own document. Only explicitly configured public Blob images and bot frame hosts are allowed. No wildcard CORS is enabled; API mutations validate same-origin requests. Robots disallows `/admin` and `/api/admin`, and admin metadata uses noindex; these are indexing preferences, not access control.
+Middleware supplies a per-request nonce CSP, HSTS on external production hosts, SAMEORIGIN framing, nosniff, referrer and permissions policies. Inline Next.js/theme scripts use the nonce; style attributes remain permitted for Framer Motion. Development permits eval for tooling. Microphone permission is restricted to self so voice remains usable. Widget scripts load in their own document; trusted Botpress has same-origin access as described above. Only explicitly configured public Blob images and bot frame hosts are allowed. No wildcard CORS is enabled; API mutations validate same-origin requests. Robots disallows `/admin` and `/api/admin`, and admin metadata uses noindex; these are indexing preferences, not access control.
 
 Before launch:
 
@@ -443,7 +466,7 @@ All editable portfolio content starts in `data/`. `lib/content-loader.ts` is the
 
 - `data/site.ts`: Elvora identity, Abdul Hafeez's introduction, Gmail, navigation and shared UI text.
 - `data/projects.ts`, `demos.ts`: concept descriptions, actual screenshot paths, design highlights, optional promo prompts and demo copy.
-- `data/bots.ts`: bot cards, disclosures, one `realBotConfig` object for iframe/script/API, and an optional `additionalBots` list for adding data-configured connections. `data/prompts/` contains the three server-only demo prompts.
+- `data/bots.ts`: bot cards, disclosures, one `realBotConfig` object for iframe/script/API, and an optional `additionalBots` list for adding data-configured connections. The real slot connects the supplied Forte Institute Study Assistant Botpress scripts; see `BOTPRESS_SETUP.md`. `data/prompts/` contains the three server-only demo prompts.
 - `data/experience.ts`, `skills.ts`: About Me, the owner's supplied 2+ years of experience, AI workflow explanations and remaining tool-name placeholders; no invented client counts or testimonials.
 - `data/certificates.ts`: supplied Master of ChatGPT certificate details and image, click-to-enlarge/zoom viewer.
 - `data/contact.ts`, `admin.ts`: validated form content and admin labels/field definitions.
@@ -558,7 +581,7 @@ This is a **review build**, not a verified live deployment. `SECURITY_STATUS.md`
 
 - Dependency installation and the pinned Prisma JS/WASM client generation.
 - `npm run lint`, `npm run typecheck`, `npm run build`.
-- `npm run test:chat`: 14 tests; server-only prompts, message/input guards, quotas, provider adapters, configured extra bots and contained embeds.
+- `npm run test:chat`: 16 tests; server-only prompts, message/input guards, quotas, provider adapters, configured extra bots, contained embeds and Botpress's two-script/nonce/host-validation contract.
 - `npm run test:contact`: 9 tests; validation, fixed-recipient mail, origin checks, honeypot, rate protection, credential absence and honest error handling.
 - `npm run test:security`: 6 tests; password rules, RFC 6238 TOTP vectors, authenticated encryption, strict schemas, Turnstile hostname/action and actual image decoding/re-encoding/rejection.
 - Actual initial migration SQL applied to an isolated temporary local PostgreSQL instance; additive seed completed.
@@ -571,6 +594,7 @@ This is a **review build**, not a verified live deployment. `SECURITY_STATUS.md`
 - Production file tracing includes Prisma's query compiler WASM for routes that use the database.
 - Supplied Coursiv certificate update: rendered the original PDF to a 2200×1555 WebP; checked the exact title, issuer, 31 October 2024 date, 6-hour duration and certificate ID against the document. Re-ran lint/typecheck and browser checks at 1440px/390px for image loading, absent placeholder wording, fullscreen zoom, keyboard shortcuts, Escape, focus return and overflow. Preview: `docs/certificate-showcase.png`.
 - Branding/About Me update: E-and-amber-dot SVG logo in navbar/footer/favicon, Elvora wordmark and portrait label, About Me navigation, the owner's supplied 2+ years of experience, three story paragraphs and four full-stack blocks. The production build passed. Browser checks against both development and production passed at 320px–1440px, including mobile navigation and certificate zoom; dark/light axe scans reported no violations. `docs/brand-preview.png`, `docs/about-preview.png` and `docs/mobile-about-preview.png` show this update.
+- Botpress connection: the supplied Forte Institute Study Assistant loader/configuration URLs are configured in the first real card. Explicit SDK fixtures verified lazy sequential loading, init selector, ready/open, provider storage, in-frame chat, close cleanup, desktop/mobile layout, errors and retry. These checks do not verify Botpress's actual SDK behavior or AI replies. Direct asset requests returned HTTP 403 from this cloud environment. Card preview: `docs/forte-bot-card.png`; setup details: `BOTPRESS_SETUP.md`.
 
 ## Local Lighthouse
 
@@ -589,7 +613,7 @@ Scores vary with device, CPU load, image replacements, network, third-party widg
 
 - A patched framework-major decision before external production launch. Current production dependency audit: one critical affected package, Next.js 14; other reported production findings were resolved.
 - Specific AI-tool names and the owner's portrait remain clearly marked placeholders. The owner has now supplied 2+ years of experience and time invested in AI tools for About Me. The supplied Coursiv certificate and its award details are displayed; external issuer verification has not been performed.
-- Actual public HTTPS domain, external database/Redis/storage credentials, OpenAI key, real bot connection, Gmail App Password and Cloudflare Turnstile keys in private settings.
+- Actual public HTTPS origin settings, external database/Redis/storage credentials, OpenAI key for the three API demos, Gmail App Password and Cloudflare Turnstile keys in private settings. The real Botpress connection uses the owner's supplied public scripts; verify its publishing state, domain permissions and live replies on the deployed site.
 - Live Gmail inbox delivery, real OpenAI/provider replies, actual Blob upload, real Redis REST service and real Turnstile challenge verification. Mock-based checks do not establish these integrations.
 - Native Prisma migration CLI deployment to the owner's cloud database. Its verified engine download was blocked in the current environment; the network draft adds `binaries.prisma.sh` but must be reviewed/saved and published to activate. Initial SQL/seed were independently verified against local PostgreSQL.
 - Physical-device microphone recognition and speech playback over HTTPS. Text fallback and application controls do not prove actual speech-service/device behavior.

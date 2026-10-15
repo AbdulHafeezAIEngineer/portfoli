@@ -89,6 +89,9 @@ export async function databaseBots(): Promise<Bot[]> {
       method: row.method as Bot["method"],
       kind: row.kind as Bot["kind"],
       configured,
+      ...(config?.method === "script" && config.botpress
+        ? { provider: "botpress" as const }
+        : {}),
       welcome: row.welcome,
       starters: row.starters,
       note: row.note,

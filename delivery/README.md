@@ -3,6 +3,7 @@ portfoli/
 ├── .env.example
 ├── .eslintrc.json
 ├── .gitignore
+├── BOTPRESS_SETUP.md
 ├── CHATBOT_SETUP.md
 ├── CONTACT_SETUP.md
 ├── DEPLOYMENT.md
@@ -98,6 +99,7 @@ portfoli/
 │   ├── about-preview.png
 │   ├── brand-preview.png
 │   ├── certificate-showcase.png
+│   ├── forte-bot-card.png
 │   ├── lighthouse-summary.json
 │   ├── mobile-about-preview.png
 │   └── preview.png
@@ -357,7 +359,7 @@ Migration/seed require the owner’s PostgreSQL and private admin settings. The 
 - [ ] Keep brand **Elvora**, owner **Abdul Hafeez**, and public email **buildwithelvora@gmail.com**. No phone/WhatsApp/social profiles are required.
 - [ ] Replace the portrait and remaining factual workflow placeholders. The supplied Coursiv Master of ChatGPT certificate is included with its original award details.
 - [ ] Add real AI-tool names and factual workflow/testing examples. No years, client totals or testimonials are invented.
-- [ ] Configure Bot 1 in data/bots.ts or database admin, trusted provider hosts and any private API key. Additional file-based bots use additionalBots.
+- [ ] The supplied Forte Institute Study Assistant Botpress connection is configured in data/bots.ts. Verify it on the live site; database users must update their existing real-bot record. Additional file-based bots use additionalBots.
 - [ ] Set OpenAI, actual site/auth origins, PostgreSQL, shared Redis, Gmail App Password, Turnstile, Blob and strong admin/auth/TOTP settings privately as needed. Remove seed/reset passwords from normal runtime.
 - [ ] Resolve the Next.js 14 security blocker through an authorized patched-major upgrade before production.
 - [ ] Verify real mail delivery, provider chat, database/cloud migrations, shared quotas, uploads, Turnstile, microphone/voice, DNS/SSL and backups on the final host. See DEPLOYMENT.md and VERIFICATION.md.

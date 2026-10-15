@@ -232,6 +232,7 @@ export type RealBotConfig =
       mountId: string;
       attributes: Record<string, string>;
       integrity?: string;
+      botpress?: { configurationSrc: string };
     }
   | {
       method: "api";
@@ -246,7 +247,16 @@ export type RealBotConfig =
 // iframe: { method: "iframe", url: "https://your-provider.com/embed/your-bot" }
 // script: { method: "script", src: "https://your-provider.com/widget.js", mountId: "bot-root", attributes: { "data-bot-id": "your-public-bot-id" } }
 // api: { method: "api", endpoint: "https://your-provider.com/chat", requestField: "messages", responsePath: "reply", authHeader: "Authorization", authPrefix: "Bearer " }
-export const realBotConfig: RealBotConfig = { method: "iframe", url: "" };
+export const realBotConfig: RealBotConfig = {
+  method: "script",
+  src: "https://cdn.botpress.cloud/webchat/v5.0/inject.js",
+  mountId: "forte-study-assistant",
+  attributes: {},
+  botpress: {
+    configurationSrc:
+      "https://files.bpcontent.cloud/2026/10/09/06/20261009063223-SY2FHGEQ.js",
+  },
+};
 
 export type Bot = {
   id: BotId;
@@ -259,6 +269,7 @@ export type Bot = {
   welcome: string;
   starters: string[];
   note: string;
+  provider?: "botpress";
 };
 export const chatPolicy = {
   maxInput: 1000,
@@ -277,13 +288,16 @@ export function getFileBots(): Bot[] {
   return [
     {
       id: "real",
-      name: "Abdul's AI Assistant",
+      name: "Forte Institute Study Assistant",
       description:
-        "My real chatbot, ready to connect through a hosted iframe, an isolated script widget, or your own API.",
-      tags: ["Custom knowledge", "Website integration", "Real bot"],
+        "Ask a study question in my Botpress-powered Forte Institute Study Assistant, directly inside this portfolio.",
+      tags: ["Study questions", "Education", "Botpress"],
       method: realBotConfig.method,
       kind: "real",
       configured,
+      ...(realBotConfig.method === "script" && realBotConfig.botpress
+        ? { provider: "botpress" as const }
+        : {}),
       welcome: "",
       starters: [],
       note: "The provider manages this bot's conversation and data handling.",
@@ -345,6 +359,9 @@ export function getFileBots(): Bot[] {
     ...additionalBots.map(({ card, connection }) => ({
       ...card,
       method: connection.method,
+      ...(connection.method === "script" && connection.botpress
+        ? { provider: "botpress" as const }
+        : {}),
       configured:
         connection.method === "iframe"
           ? !!connection.url
@@ -395,6 +412,10 @@ export const botContent = {
     emptyReal:
       "My real chatbot will appear here once its connection is ready. In the meantime, try Cedar Support, Meetly Booking, or Aura Voice.",
     embedLoading: "Loading the bot provider…",
+    embedOpening: "Opening the assistant…",
+    embedUnavailable:
+      "The assistant could not load. Please try again or check your connection.",
+    embedRetry: "Try again",
     embedNote:
       "The embedded provider controls its chat interface and message history. If it cannot load here, its embedding permissions may need updating.",
     embedTitle: "Live chatbot",
@@ -457,7 +478,7 @@ export const embedMethods: {
     id: "script",
     title: "Script widget",
     description:
-      "Load a provider's widget script into a dedicated, isolated embed document.",
+      "Load a provider's widget in a dedicated embed document. The Botpress adapter loads its two official scripts in order and supports provider storage.",
     code: '<div id="bot-root"></div>\n<script\n  src="https://your-provider.com/widget.js"\n  data-bot-id="your-public-bot-id"\n  defer\n></script>',
     pros: [
       "Uses the provider's own chat features",

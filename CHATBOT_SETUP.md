@@ -1,6 +1,6 @@
 # Part 2 — AI chatbot services
 
-Only AI Chatbot Services has been implemented in this part. Experience, Skills, Certification and a contact form remain future work. The AI Bots navbar anchor opens the AI tab, including direct links to `#ai-bots`.
+The complete portfolio includes AI Chatbot Services alongside About Me, Skills, Certification and Contact. The AI Bots navbar anchor opens the AI tab, including direct links to `#ai-bots`. The first real-bot card now connects the owner's **Forte Institute Study Assistant** Botpress widget; see `BOTPRESS_SETUP.md`.
 
 ## Install and run
 
@@ -26,7 +26,7 @@ Stop the development server before building the same `.next` directory. No separ
 
 ## One real-bot config
 
-Replace only `realBotConfig` in `data/bots.ts` with ONE of these objects. The empty default displays “Connection pending”. Card content is in the same data file.
+The supplied Botpress connection is in `realBotConfig` in `data/bots.ts`; its card content is in the same data file. To use a different bot, replace that object with ONE of these shapes. An empty destination displays “Connection pending”.
 
 ### Hosted iframe
 
@@ -50,7 +50,7 @@ export const realBotConfig: RealBotConfig = {
 };
 ```
 
-Transfer the external script URL and public `data-*` attributes from your provider's snippet. Do not paste raw HTML, event attributes, inline JavaScript or secrets. Optional `integrity` accepts the provider's authentic SRI hash; never invent one. The script runs inside a sandboxed iframe document with a CSP allowing that script origin, not inside the portfolio DOM. Widgets requiring cookies/storage, extra script origins, inline bootstrapping or popup escape may need a reviewed provider adapter or the hosted iframe/API method. No blanket sandbox bypass is included.
+Transfer the external script URL and public `data-*` attributes from your provider's snippet. Do not paste raw HTML, event attributes, inline JavaScript or secrets. Optional `integrity` accepts the provider's authentic SRI hash; never invent one. Generic scripts run inside an opaque sandboxed frame with a CSP allowing that script origin. The specific Botpress adapter adds a `botpress: { configurationSrc: "https://files.bpcontent.cloud/...js" }` field, sequential loading and storage support in a same-origin frame. This trusted-provider exception is not an origin security boundary; see `BOTPRESS_SETUP.md`. Other widgets requiring extra permissions need their own reviewed adapter or the hosted iframe/API method.
 
 ### API endpoint
 

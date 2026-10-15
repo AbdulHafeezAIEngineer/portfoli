@@ -1107,7 +1107,7 @@ export function BotEmbed({
         loading="lazy"
         title={`${bot.name}: ${copy.embedTitle}`}
         sandbox={
-          bot.method === "script"
+          bot.method === "script" && bot.provider !== "botpress"
             ? "allow-scripts allow-forms allow-popups"
             : "allow-scripts allow-forms allow-same-origin allow-popups"
         }
