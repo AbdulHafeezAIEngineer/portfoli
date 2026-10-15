@@ -1,7 +1,7 @@
 # Elvora — Abdul Hafeez's portfolio
 
 **Launch status:** the requested Next.js 14 release still has reported critical advisories. This is a review build; a patched major-version exception is needed before production. See `SECURITY_STATUS.md`.
-Next.js 14 App Router, TypeScript, Tailwind CSS and Framer Motion. All application backend logic runs in Next.js route handlers. The portfolio includes four original demo sites, actual captured screenshots, CSS 3D laptop/phone cards, cinematic galleries, three AI chat demos, a configurable real bot, voice controls, honest experience/skills sections, a pending certificate viewer, Gmail-only contact, PostgreSQL/Prisma content management and a private Auth.js admin panel.
+Next.js 14 App Router, TypeScript, Tailwind CSS and Framer Motion. All application backend logic runs in Next.js route handlers. The portfolio includes four original demo sites, actual captured screenshots, CSS 3D laptop/phone cards, cinematic galleries, three AI chat demos, a configurable real bot, voice controls, honest experience/skills sections, the supplied Coursiv certificate with a zoomable viewer, Gmail-only contact, PostgreSQL/Prisma content management and a private Auth.js admin panel.
 
 ## Run
 
@@ -46,11 +46,11 @@ All editable portfolio content starts in `data/`. `lib/content-loader.ts` is the
 - `data/projects.ts`, `demos.ts`: concept descriptions, actual screenshot paths, design highlights, optional promo prompts and demo copy.
 - `data/bots.ts`: bot cards, disclosures, one `realBotConfig` object for iframe/script/API, and an optional `additionalBots` list for adding data-configured connections. `data/prompts/` contains the three server-only demo prompts.
 - `data/experience.ts`, `skills.ts`: honest workflow explanations and explicitly missing personal facts; no invented years, client counts or testimonials.
-- `data/certificates.ts`: pending certificate details and image, click-to-enlarge/zoom viewer.
+- `data/certificates.ts`: supplied Master of ChatGPT certificate details and image, click-to-enlarge/zoom viewer.
 - `data/contact.ts`, `admin.ts`: validated form content and admin labels/field definitions.
 - `public/portrait-placeholder.svg`: replace with the owner's actual portrait and update its alt/placeholder wording in `data/site.ts`.
 
-The only public contact is **buildwithelvora@gmail.com**. No WhatsApp, phone or social profiles are displayed. Add real certificate issuer/date/image and personal AI-tool/workflow facts when supplied. See `PART_3.md` for personalization.
+The only public contact is **buildwithelvora@gmail.com**. No WhatsApp, phone or social profiles are displayed. The supplied Coursiv Master of ChatGPT certificate is displayed with its 31 October 2024 issue date and 6-hour course duration. Personal AI-tool/workflow facts still need the owner's input. See `PART_3.md` for personalization.
 
 ## Backend setup
 

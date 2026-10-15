@@ -381,9 +381,9 @@ Brand: **Elvora**. Owner: **Abdul Hafeez**. Public contact: **buildwithelvora@gm
 
 The expanded complete brief retains these personal preferences. Unsupplied real AI-tool/workflow facts remain `[PLACEHOLDER]` in `data/experience.ts` and `data/skills.ts`. No experience duration, client totals or testimonials are invented.
 
-The certificate image and supporting details remain pending. Put the actual image under `public/certificates/`, update `image`, verified title/issuer/date, `alt`, `description`, `isPlaceholder` and the pending section description in `data/certificates.ts`. Use `issuedAt: null` when no exact ISO date is supplied. Do not infer credential details.
+The supplied Coursiv certificate is now showcased: **Master of ChatGPT**, issued to **Abdul Hafeez** on **31 October 2024**, for a **6-hour** course. Certificate ID: **ADO6IJOS**. These details are transcribed from the uploaded PDF; no external credential verification is claimed. This is described as a course completion certificate, not an academic degree.
 
-The current neutral PNG is prominently marked `[PLACEHOLDER]` and explicitly says it is not a credential. Reproduce it with `npm run certificate-placeholder`; existing files are preserved. The fullscreen viewer supports zoom buttons, +/−, 0 to fit, Esc, touch/native scrolling and focus restoration.
+`public/certificates/coursiv-master-of-chatgpt.webp` is a high-resolution rendering of the uploaded certificate, preserving its original artwork and wording. The title, issuer, date, description and accessible image text live in `data/certificates.ts`. The fullscreen viewer supports zoom buttons, +/−, 0 to fit, Esc, touch/native scrolling and focus restoration. The old neutral placeholder remains available for new draft entries; `npm run certificate-placeholder` does not replace the real certificate.
 
 After database seeding, edit published content through `/admin`. File changes are the seed source; they do not overwrite existing database records. Choose `CONTENT_SOURCE=files` when using data-only edits.
 ``````
@@ -394,7 +394,7 @@ After database seeding, edit published content through `/admin`. File changes ar
 # Elvora — Abdul Hafeez's portfolio
 
 **Launch status:** the requested Next.js 14 release still has reported critical advisories. This is a review build; a patched major-version exception is needed before production. See `SECURITY_STATUS.md`.
-Next.js 14 App Router, TypeScript, Tailwind CSS and Framer Motion. All application backend logic runs in Next.js route handlers. The portfolio includes four original demo sites, actual captured screenshots, CSS 3D laptop/phone cards, cinematic galleries, three AI chat demos, a configurable real bot, voice controls, honest experience/skills sections, a pending certificate viewer, Gmail-only contact, PostgreSQL/Prisma content management and a private Auth.js admin panel.
+Next.js 14 App Router, TypeScript, Tailwind CSS and Framer Motion. All application backend logic runs in Next.js route handlers. The portfolio includes four original demo sites, actual captured screenshots, CSS 3D laptop/phone cards, cinematic galleries, three AI chat demos, a configurable real bot, voice controls, honest experience/skills sections, the supplied Coursiv certificate with a zoomable viewer, Gmail-only contact, PostgreSQL/Prisma content management and a private Auth.js admin panel.
 
 ## Run
 
@@ -439,11 +439,11 @@ All editable portfolio content starts in `data/`. `lib/content-loader.ts` is the
 - `data/projects.ts`, `demos.ts`: concept descriptions, actual screenshot paths, design highlights, optional promo prompts and demo copy.
 - `data/bots.ts`: bot cards, disclosures, one `realBotConfig` object for iframe/script/API, and an optional `additionalBots` list for adding data-configured connections. `data/prompts/` contains the three server-only demo prompts.
 - `data/experience.ts`, `skills.ts`: honest workflow explanations and explicitly missing personal facts; no invented years, client counts or testimonials.
-- `data/certificates.ts`: pending certificate details and image, click-to-enlarge/zoom viewer.
+- `data/certificates.ts`: supplied Master of ChatGPT certificate details and image, click-to-enlarge/zoom viewer.
 - `data/contact.ts`, `admin.ts`: validated form content and admin labels/field definitions.
 - `public/portrait-placeholder.svg`: replace with the owner's actual portrait and update its alt/placeholder wording in `data/site.ts`.
 
-The only public contact is **buildwithelvora@gmail.com**. No WhatsApp, phone or social profiles are displayed. Add real certificate issuer/date/image and personal AI-tool/workflow facts when supplied. See `PART_3.md` for personalization.
+The only public contact is **buildwithelvora@gmail.com**. No WhatsApp, phone or social profiles are displayed. The supplied Coursiv Master of ChatGPT certificate is displayed with its 31 October 2024 issue date and 6-hour course duration. Personal AI-tool/workflow facts still need the owner's input. See `PART_3.md` for personalization.
 
 ## Backend setup
 
@@ -563,6 +563,7 @@ This is a **review build**, not a verified live deployment. `SECURITY_STATUS.md`
 - Four-image galleries with thumbnails, wraparound arrows, Escape, actual concept-site links; certificate zoom/keyboard/focus; form validation, error preservation and success reset; dark/light accessibility; 320px–1440px layouts.
 - Deferred AI-tab/hash navigation, all four bot cards, pending real-bot state, three API demos, per-bot history retained across category changes, clear conversation, accessible modals and mobile chat layout.
 - Production file tracing includes Prisma's query compiler WASM for routes that use the database.
+- Supplied Coursiv certificate update: rendered the original PDF to a 2200×1555 WebP; checked the exact title, issuer, 31 October 2024 date, 6-hour duration and certificate ID against the document. Re-ran lint/typecheck and browser checks at 1440px/390px for image loading, absent placeholder wording, fullscreen zoom, keyboard shortcuts, Escape, focus return and overflow. Preview: `docs/certificate-showcase.png`.
 
 ## Local Lighthouse
 
@@ -580,7 +581,7 @@ Scores vary with device, CPU load, image replacements, network, third-party widg
 ## Still needs real owner configuration/verification
 
 - A patched framework-major decision before external production launch. Current production dependency audit: one critical affected package, Next.js 14; other reported production findings were resolved.
-- Real certificate image/issuer/date and factual AI-tool/workflow examples, plus the owner's portrait. These remain clearly marked placeholders.
+- Factual AI-tool/workflow examples and the owner's portrait remain clearly marked placeholders. The supplied Coursiv certificate and its award details are now displayed; external issuer verification has not been performed.
 - Actual public HTTPS domain, external database/Redis/storage credentials, OpenAI key, real bot connection, Gmail App Password and Cloudflare Turnstile keys in private settings.
 - Live Gmail inbox delivery, real OpenAI/provider replies, actual Blob upload, real Redis REST service and real Turnstile challenge verification. Mock-based checks do not establish these integrations.
 - Native Prisma migration CLI deployment to the owner's cloud database. Its verified engine download was blocked in the current environment; the network draft adds `binaries.prisma.sh` but must be reviewed/saved and published to activate. Initial SQL/seed were independently verified against local PostgreSQL.

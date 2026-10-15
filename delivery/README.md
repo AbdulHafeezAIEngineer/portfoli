@@ -94,6 +94,7 @@ portfoli/
 │       ├── support.ts
 │       └── voice.ts
 ├── docs/
+│   ├── certificate-showcase.png
 │   ├── lighthouse-summary.json
 │   └── preview.png
 ├── hooks/
@@ -136,6 +137,7 @@ portfoli/
 ├── public/
 │   ├── portrait-placeholder.svg
 │   ├── certificates/
+│   │   ├── coursiv-master-of-chatgpt.webp
 │   │   └── prompt-engineering-placeholder.png
 │   └── projects/
 │       ├── real-estate-1.webp
@@ -348,7 +350,7 @@ Migration/seed require the owner’s PostgreSQL and private admin settings. The 
 ## Owner replacement / setup checklist
 
 - [ ] Keep brand **Elvora**, owner **Abdul Hafeez**, and public email **buildwithelvora@gmail.com**. No phone/WhatsApp/social profiles are required.
-- [ ] Replace the portrait, actual certificate image and verified issuer/date/title; update alt text and placeholder wording only when factual information is supplied.
+- [ ] Replace the portrait and remaining factual workflow placeholders. The supplied Coursiv Master of ChatGPT certificate is included with its original award details.
 - [ ] Add real AI-tool names and factual workflow/testing examples. No years, client totals or testimonials are invented.
 - [ ] Configure Bot 1 in data/bots.ts or database admin, trusted provider hosts and any private API key. Additional file-based bots use additionalBots.
 - [ ] Set OpenAI, actual site/auth origins, PostgreSQL, shared Redis, Gmail App Password, Turnstile, Blob and strong admin/auth/TOTP settings privately as needed. Remove seed/reset passwords from normal runtime.

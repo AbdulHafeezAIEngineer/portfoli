@@ -508,22 +508,22 @@ export type Certificate = {
 export const certificates: Certificate[] = [
   {
     id: "prompt-engineering",
-    title: "Prompt Engineering degree",
-    issuer: "[PLACEHOLDER] Issuer not supplied",
-    dateLabel: "[PLACEHOLDER] Award date not supplied",
-    issuedAt: null,
+    title: "Master of ChatGPT",
+    issuer: "Coursiv",
+    dateLabel: "31 October 2024",
+    issuedAt: "2024-10-31",
     description:
-      "[PLACEHOLDER] Add the exact qualification title, course description, and verified credential details when the certificate is supplied.",
-    image: "/certificates/prompt-engineering-placeholder.png",
-    alt: "Clearly labeled placeholder for a Prompt Engineering degree image; no genuine certificate is displayed",
-    isPlaceholder: true,
+      "Certificate of completion awarded to Abdul Hafeez for completing the ChatGPT guide, with 6 hours of training and skill development. Certificate ID: ADO6IJOS.",
+    image: "/certificates/coursiv-master-of-chatgpt.webp",
+    alt: "Coursiv Master of ChatGPT certificate issued to Abdul Hafeez on 31 October 2024 for a 6-hour course; certificate ID ADO6IJOS",
+    isPlaceholder: false,
   },
 ];
 export const certificateContent = {
   eyebrow: "05 / CERTIFICATION",
   title: "Learning, with the details to match.",
   description:
-    "A dedicated place for the Prompt Engineering credential. The actual image and supporting details are still pending.",
+    "My course completion certificate, with the original award details. Select the image to explore it in full screen.",
   placeholder: "[PLACEHOLDER] Certificate image pending",
   issuer: "ISSUER",
   date: "AWARDED",
