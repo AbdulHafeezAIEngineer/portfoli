@@ -393,7 +393,7 @@ Migration/seed require the owner’s PostgreSQL and private admin settings. The 
 
 ## Owner replacement / setup checklist
 
-- [ ] Keep brand **Elvora**, owner **Abdul Hafeez**, and public email **buildwithelvora@gmail.com**. No phone/WhatsApp/social profiles are required.
+- [ ] Keep brand **Elvora**, owner **Abdul Hafeez**, and public email **abdulhafeez@elvoraai.online**. No phone/WhatsApp/social profiles are required.
 - [ ] Replace the portrait and remaining factual workflow placeholders. The supplied Coursiv Master of ChatGPT certificate is included with its original award details.
 - [ ] Add real AI-tool names and factual workflow/testing examples. No years, client totals or testimonials are invented.
 - [ ] The supplied Forte O Level Study Assistant Botpress connection is configured in data/bots.ts. Verify it on the live site; database users must update their existing real-bot record. Additional file-based bots use additionalBots.

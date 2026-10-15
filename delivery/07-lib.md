@@ -1413,11 +1413,13 @@ export async function deliverContact(
   fields: ContactFields,
   password: string,
 ): Promise<void> {
+  // The public inbox can use a different provider from the authenticated sender.
+  const sender = process.env.GMAIL_SMTP_USER?.trim() || "buildwithelvora@gmail.com";
   const transport = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
     secure: true,
-    auth: { user: site.email, pass: password },
+    auth: { user: sender, pass: password },
     tls: {
       rejectUnauthorized: true,
       minVersion: "TLSv1.2",
@@ -1431,7 +1433,7 @@ export async function deliverContact(
   try {
     const result = await Promise.race([
       transport.sendMail({
-        from: { name: site.brand, address: site.email },
+        from: { name: site.brand, address: sender },
         to: site.email,
         replyTo: fields.email,
         subject: `${site.brand} enquiry from ${fields.name}`,

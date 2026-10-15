@@ -31,7 +31,9 @@ CHAT_TRUSTED_IP_HEADER=
 # Optional secret for realBotConfig.method="api". No secret belongs in data/bots.ts.
 REAL_BOT_API_KEY=
 
-# Part 3: contact mail. Gmail App Password for buildwithelvora@gmail.com.
+# Contact recipient: abdulhafeez@elvoraai.online (data/site.ts).
+# Gmail remains the SMTP sender; use its matching Gmail App Password.
+GMAIL_SMTP_USER=buildwithelvora@gmail.com
 # Requires Gmail 2-Step Verification. NOT your ordinary Google account password.
 # Set only in ignored .env.local or your hosting provider's secret settings.
 GMAIL_APP_PASSWORD=
@@ -276,7 +278,7 @@ The default file content mode uses the new selection immediately. If an owner ha
 ``````markdown
 # Elvora contact setup
 
-Public contact: **buildwithelvora@gmail.com**. There are no phone, WhatsApp, or social-profile links. Update public identity in `data/site.ts`, form copy and limits in `data/contact.ts`. The destination and sender are fixed on the server; visitors only set the reply-to address.
+Public contact: **abdulhafeez@elvoraai.online**. There are no phone, WhatsApp, or social-profile links. Update public identity in `data/site.ts`, form copy and limits in `data/contact.ts`. The destination is fixed on the server; visitors only set the reply-to address. The public domain inbox is separate from the Gmail SMTP sender. Set `GMAIL_SMTP_USER` to the actual authenticated Gmail account (defaults to the existing `buildwithelvora@gmail.com`) and use its matching `GMAIL_APP_PASSWORD`. Changing the public email does not configure Hostinger SMTP. Verify the new inbox can receive mail. In database content mode, also update the email in admin site settings; existing records are preserved.
 
 ## Gmail delivery
 
@@ -431,7 +433,7 @@ Before launch:
 ``````markdown
 # Elvora personalization
 
-Brand: **Elvora**. Owner: **Abdul Hafeez**. Public contact: **buildwithelvora@gmail.com** only. No phone, WhatsApp or social-profile links.
+Brand: **Elvora**. Owner: **Abdul Hafeez**. Public contact: **abdulhafeez@elvoraai.online** only. No phone, WhatsApp or social-profile links.
 
 The About Me section now uses the owner's supplied **more than two years of experience** and time invested in AI tools. It explains structured prompts, review, testing, refinement and the frontend/backend/database/deployment fundamentals behind a working site. Specific AI-tool names remain `[PLACEHOLDER]` in `data/skills.ts`; no client totals, testimonials or named tools are invented.
 
@@ -503,7 +505,7 @@ All editable portfolio content starts in `data/`. `lib/content-loader.ts` is the
 - `data/contact.ts`, `admin.ts`: validated form content and admin labels/field definitions.
 - `public/portrait-placeholder.svg`: replace with the owner's actual portrait and update its alt/placeholder wording in `data/site.ts`.
 
-The only public contact is **buildwithelvora@gmail.com**. No WhatsApp, phone or social profiles are displayed. The supplied Coursiv Master of ChatGPT certificate is displayed with its 31 October 2024 issue date and 6-hour course duration. About Me includes the owner's supplied 2+ years of experience and time invested in AI tools. Specific tool names and the portrait still need the owner's input. See `PART_3.md` for personalization.
+The only public contact is **abdulhafeez@elvoraai.online**. No WhatsApp, phone or social profiles are displayed. The supplied Coursiv Master of ChatGPT certificate is displayed with its 31 October 2024 issue date and 6-hour course duration. About Me includes the owner's supplied 2+ years of experience and time invested in AI tools. Specific tool names and the portrait still need the owner's input. See `PART_3.md` for personalization.
 
 ## Backend setup
 
@@ -611,6 +613,10 @@ Audit advisories change over time. Once a patched framework upgrade is authorize
 # Verification — 15 October 2026
 
 This is a **review build**, not a verified live deployment. `SECURITY_STATUS.md` records the remaining critical Next.js 14 dependency blocker and the pending major-version decision.
+
+## Public email update
+
+- Public contact links, fallback copy and new admin settings defaults now use `abdulhafeez@elvoraai.online`. The fixed contact-form recipient uses the same address. Existing Gmail SMTP authentication/sender is kept separate through `GMAIL_SMTP_USER`; no Hostinger SMTP credentials or live delivery are claimed. Contact tests (9), lint and typecheck passed. Existing database settings require an owner update if database content mode is enabled.
 
 ## Latest four-concept and direct-chat update
 

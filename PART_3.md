@@ -1,6 +1,6 @@
 # Elvora personalization
 
-Brand: **Elvora**. Owner: **Abdul Hafeez**. Public contact: **buildwithelvora@gmail.com** only. No phone, WhatsApp or social-profile links.
+Brand: **Elvora**. Owner: **Abdul Hafeez**. Public contact: **abdulhafeez@elvoraai.online** only. No phone, WhatsApp or social-profile links.
 
 The About Me section now uses the owner's supplied **more than two years of experience** and time invested in AI tools. It explains structured prompts, review, testing, refinement and the frontend/backend/database/deployment fundamentals behind a working site. Specific AI-tool names remain `[PLACEHOLDER]` in `data/skills.ts`; no client totals, testimonials or named tools are invented.
 

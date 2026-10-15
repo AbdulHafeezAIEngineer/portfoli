@@ -35,7 +35,7 @@ export const contactContent = {
     message: "Enter a message between 20 and 3,000 characters.",
     format: "The form request is invalid. Please check your details.",
     unavailable:
-      "The contact form is not connected yet. Please email buildwithelvora@gmail.com directly.",
+      "The contact form is not connected yet. Please email abdulhafeez@elvoraai.online directly.",
     limited:
       "Too many contact requests. Please try again later or email Elvora directly.",
     protection:

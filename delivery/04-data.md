@@ -209,7 +209,7 @@ export const adminDefaults: Record<string, Record<string, unknown>> = {
   },
   settings: {
     brand: "Elvora",
-    email: "buildwithelvora@gmail.com",
+    email: "abdulhafeez@elvoraai.online",
     title: "",
     description: "",
     chatLogging: false,
@@ -826,7 +826,7 @@ export const contactContent = {
     message: "Enter a message between 20 and 3,000 characters.",
     format: "The form request is invalid. Please check your details.",
     unavailable:
-      "The contact form is not connected yet. Please email buildwithelvora@gmail.com directly.",
+      "The contact form is not connected yet. Please email abdulhafeez@elvoraai.online directly.",
     limited:
       "Too many contact requests. Please try again later or email Elvora directly.",
     protection:
@@ -1290,7 +1290,7 @@ export const site = {
     (deploymentDomain
       ? `https://${deploymentDomain}`
       : "http://localhost:3000"),
-  email: "buildwithelvora@gmail.com",
+  email: "abdulhafeez@elvoraai.online",
   title: "Elvora — Thoughtful websites. Intelligent experiences.",
   description:
     "Elvora is Abdul Hafeez's portfolio for thoughtful websites, AI chatbot concepts, and voice experiences. Explore the work and start a conversation.",

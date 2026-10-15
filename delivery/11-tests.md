@@ -603,7 +603,7 @@ function fixture(options = {}) {
                 mails.push(mail);
                 return options.send
                   ? options.send(mail)
-                  : { accepted: ["buildwithelvora@gmail.com"], rejected: [] };
+                  : { accepted: ["abdulhafeez@elvoraai.online"], rejected: [] };
               },
               close() {},
             };
@@ -641,7 +641,7 @@ const valid = {
   website: "",
 };
 
-test("validated mail uses fixed Gmail addresses, plaintext, safe reply-to and verified TLS", async () => {
+test("validated mail uses the public domain recipient and separate Gmail sender, plaintext, safe reply-to and verified TLS", async () => {
   const f = fixture();
   const response = await f.post({
     ...valid,
@@ -652,7 +652,7 @@ test("validated mail uses fixed Gmail addresses, plaintext, safe reply-to and ve
   assert.equal((await response.json()).ok, true);
   assert.equal(response.headers.get("cache-control"), "no-store");
   const mail = f.mails[0];
-  assert.equal(mail.to, "buildwithelvora@gmail.com");
+  assert.equal(mail.to, "abdulhafeez@elvoraai.online");
   assert.equal(mail.from.address, "buildwithelvora@gmail.com");
   assert.equal(mail.replyTo, "visitor@example.com");
   assert.equal(mail.subject, "Elvora enquiry from Test Visitor");

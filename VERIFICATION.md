@@ -2,6 +2,10 @@
 
 This is a **review build**, not a verified live deployment. `SECURITY_STATUS.md` records the remaining critical Next.js 14 dependency blocker and the pending major-version decision.
 
+## Public email update
+
+- Public contact links, fallback copy and new admin settings defaults now use `abdulhafeez@elvoraai.online`. The fixed contact-form recipient uses the same address. Existing Gmail SMTP authentication/sender is kept separate through `GMAIL_SMTP_USER`; no Hostinger SMTP credentials or live delivery are claimed. Contact tests (9), lint and typecheck passed. Existing database settings require an owner update if database content mode is enabled.
+
 ## Latest four-concept and direct-chat update
 
 - Built four new sample websites: Solenne (hotel), Vanta Motors (electric automotive), Aster Care (wellness/clinic), and Kovo Studio (architecture). Selected Work now contains exactly these four; the previous featured Elvora card is removed. Archived demo routes remain available separately.

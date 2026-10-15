@@ -16,7 +16,7 @@ export const site = {
     (deploymentDomain
       ? `https://${deploymentDomain}`
       : "http://localhost:3000"),
-  email: "buildwithelvora@gmail.com",
+  email: "abdulhafeez@elvoraai.online",
   title: "Elvora — Thoughtful websites. Intelligent experiences.",
   description:
     "Elvora is Abdul Hafeez's portfolio for thoughtful websites, AI chatbot concepts, and voice experiences. Explore the work and start a conversation.",

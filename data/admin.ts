@@ -206,7 +206,7 @@ export const adminDefaults: Record<string, Record<string, unknown>> = {
   },
   settings: {
     brand: "Elvora",
-    email: "buildwithelvora@gmail.com",
+    email: "abdulhafeez@elvoraai.online",
     title: "",
     description: "",
     chatLogging: false,
