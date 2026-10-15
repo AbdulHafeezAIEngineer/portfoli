@@ -14,6 +14,7 @@ import { Experience } from "@/components/experience";
 import { Skills } from "@/components/skills";
 import { Certifications } from "@/components/certifications";
 import { Contact } from "@/components/contact";
+import { ScrollProgress } from "@/components/scroll-progress";
 
 export const dynamic = "force-dynamic";
 export default async function Home() {
@@ -26,6 +27,7 @@ export default async function Home() {
   ]);
   return (
     <div id="top">
+      <ScrollProgress />
       <div className="ambient-background" aria-hidden="true">
         <span />
         <span />

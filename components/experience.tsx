@@ -7,6 +7,8 @@ import {
 } from "lucide-react";
 import { experience as copy } from "@/data/experience";
 import { Reveal } from "./reveal";
+import Image from "next/image";
+import { site } from "@/data/site";
 
 const fundamentalsIcons = {
   frontend: Blocks,
@@ -28,6 +30,16 @@ export function Experience() {
           <div>
             <h2 id="experience-title">{copy.title}</h2>
             <p className="experience-lead">{copy.lead}</p>
+            <figure className="about-portrait">
+              <div className="about-portrait-image">
+                <Image src={site.hero.portrait} alt={site.hero.portraitAlt} fill sizes="(max-width:700px) 85vw, 360px" />
+                {site.hero.portraitStatus && <span className="about-portrait-status">{site.hero.portraitStatus}</span>}
+              </div>
+              <figcaption>
+                <div><span className="eyebrow">{site.brand}</span><strong>{site.name}</strong></div>
+                <span className="about-signature" aria-hidden="true">{site.brand.slice(0, 1)}.</span>
+              </figcaption>
+            </figure>
           </div>
           <div className="about-story">
             {copy.paragraphs.map((paragraph) => (

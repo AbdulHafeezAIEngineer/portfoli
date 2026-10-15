@@ -32,6 +32,7 @@ portfoli/
 │   ├── not-found.tsx
 │   ├── opengraph-image.tsx
 │   ├── page.tsx
+│   ├── premium.css
 │   ├── profile.css
 │   ├── robots.ts
 │   ├── sitemap.ts
@@ -78,6 +79,7 @@ portfoli/
 │   ├── project-card.tsx
 │   ├── project-gallery.tsx
 │   ├── reveal.tsx
+│   ├── scroll-progress.tsx
 │   ├── skills.tsx
 │   ├── turnstile.tsx
 │   └── work.tsx
@@ -88,6 +90,7 @@ portfoli/
 │   ├── contact.ts
 │   ├── demos.ts
 │   ├── experience.ts
+│   ├── project-presentation.ts
 │   ├── projects.ts
 │   ├── site.ts
 │   ├── skills.ts
@@ -99,6 +102,7 @@ portfoli/
 │   ├── about-preview.png
 │   ├── brand-preview.png
 │   ├── certificate-showcase.png
+│   ├── elvora-project-preview.png
 │   ├── forte-bot-card.png
 │   ├── lighthouse-summary.json
 │   ├── mobile-about-preview.png
@@ -147,6 +151,7 @@ portfoli/
 │   │   ├── coursiv-master-of-chatgpt.webp
 │   │   └── prompt-engineering-placeholder.png
 │   └── projects/
+│       ├── elvora-promo.webp
 │       ├── real-estate-1.webp
 │       ├── real-estate-2.webp
 │       ├── real-estate-3.webp
@@ -306,7 +311,7 @@ model AuditLog {
 }
 ```
 
-Complete source files follow in folder order. Binary PNG/WebP assets are included in the project; source snapshots do not pretend image bytes are code. The 16 screenshots are actual browser captures, listed in SCREENSHOTS.md. Private environment files, dependencies and build outputs are excluded.
+Complete source files follow in folder order. Binary PNG/WebP assets are included in the project; source snapshots do not pretend image bytes are code. The original 16 demo screenshots are actual browser captures. The featured Elvora card uses separately labeled generated 3D promotional artwork; see SCREENSHOTS.md. Private environment files, dependencies and build outputs are excluded.
 
 **Review status:** Next.js 14 remains at the user-requested version, with one reported critical production dependency finding. Other production findings were patched. See SECURITY_STATUS.md before any external launch.
 

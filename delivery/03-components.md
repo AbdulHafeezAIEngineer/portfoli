@@ -2381,6 +2381,8 @@ import {
 } from "lucide-react";
 import { experience as copy } from "@/data/experience";
 import { Reveal } from "./reveal";
+import Image from "next/image";
+import { site } from "@/data/site";
 
 const fundamentalsIcons = {
   frontend: Blocks,
@@ -2402,6 +2404,16 @@ export function Experience() {
           <div>
             <h2 id="experience-title">{copy.title}</h2>
             <p className="experience-lead">{copy.lead}</p>
+            <figure className="about-portrait">
+              <div className="about-portrait-image">
+                <Image src={site.hero.portrait} alt={site.hero.portraitAlt} fill sizes="(max-width:700px) 85vw, 360px" />
+                {site.hero.portraitStatus && <span className="about-portrait-status">{site.hero.portraitStatus}</span>}
+              </div>
+              <figcaption>
+                <div><span className="eyebrow">{site.brand}</span><strong>{site.name}</strong></div>
+                <span className="about-signature" aria-hidden="true">{site.brand.slice(0, 1)}.</span>
+              </figcaption>
+            </figure>
           </div>
           <div className="about-story">
             {copy.paragraphs.map((paragraph) => (
@@ -2728,6 +2740,7 @@ import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import type { ProjectView } from "@/data/projects";
 import { site } from "@/data/site";
+import { projectPresentation } from "@/data/project-presentation";
 export function ProjectCard({
   project,
   index,
@@ -2753,16 +2766,19 @@ export function ProjectCard({
     return () => media.removeEventListener("change", sync);
   }, []);
   const tilt = finePointer && !reduced;
+  const presentation = projectPresentation(project.id);
   const mobile = project.screenshots[2] || project.screenshots[0];
   return (
     <button
-      className="project-card device-project"
+      className={`project-card device-project${presentation.artwork ? " artwork-project" : ""}`}
       onClick={onOpen}
       aria-haspopup="dialog"
       aria-label={`${site.work.view}: ${project.title}`}
       onPointerMove={(event) => {
         if (!tilt) return;
         const rect = event.currentTarget.getBoundingClientRect();
+        event.currentTarget.style.setProperty("--pointer-x", `${((event.clientX - rect.left) / rect.width) * 100}%`);
+        event.currentTarget.style.setProperty("--pointer-y", `${((event.clientY - rect.top) / rect.height) * 100}%`);
         x.set(
           (-(event.clientY - rect.top - rect.height / 2) / rect.height) * 10,
         );
@@ -2780,7 +2796,12 @@ export function ProjectCard({
         <span className="device-project-number" aria-hidden="true">
           0{index + 1}
         </span>
-        <div className="device-floor" />
+        {presentation.artwork ? (
+          <m.div className="artwork-composition" style={tilt ? { rotateX, rotateY } : undefined}>
+            <Image src={project.screenshots[0].src} alt={project.screenshots[0].alt} fill sizes="(max-width:700px) 90vw, 580px" />
+            <span className="artwork-light" aria-hidden="true" />
+          </m.div>
+        ) : <><div className="device-floor" />
         <div className="device-float">
           <m.div
             className="device-composition"
@@ -2816,7 +2837,7 @@ export function ProjectCard({
               <span className="device-phone-notch" />
             </div>
           </m.div>
-        </div>
+        </div></>}
         <span className="device-view">
           {site.work.view}
           <ArrowUpRight size={18} />
@@ -2833,7 +2854,7 @@ export function ProjectCard({
       <div className="project-footer">
         <span>
           <i style={{ background: project.accent }} />
-          {site.work.concept}
+          {presentation.label}
         </span>
         <span>
           0{index + 1} / {String(total).padStart(2, "0")}
@@ -2855,6 +2876,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, LoaderCircle, X } from "lucide-react";
 import type { ProjectView } from "@/data/projects";
 import { site } from "@/data/site";
+import { projectPresentation } from "@/data/project-presentation";
 
 export default function ProjectGallery({
   project,
@@ -2871,6 +2893,7 @@ export default function ProjectGallery({
   const touch = useRef({ x: 0, y: 0 });
   const count = project.screenshots.length;
   const image = project.screenshots[index];
+  const presentation = projectPresentation(project.id);
 
   const go = useCallback(
     (next: number) => {
@@ -2945,7 +2968,7 @@ export default function ProjectGallery({
         <header className="gallery-header">
           <div>
             <p className="eyebrow">
-              {site.work.concept} · {project.industry}
+              {presentation.label} · {project.industry}
             </p>
             <h2 id="gallery-title">{project.title}</h2>
           </div>
@@ -3001,6 +3024,7 @@ export default function ProjectGallery({
           )}
           <button
             className="gallery-arrow gallery-prev"
+            hidden={count < 2}
             onClick={() => go(index - 1)}
             aria-label={site.ui.previous}
           >
@@ -3008,6 +3032,7 @@ export default function ProjectGallery({
           </button>
           <button
             className="gallery-arrow gallery-next"
+            hidden={count < 2}
             onClick={() => go(index + 1)}
             aria-label={site.ui.next}
           >
@@ -3027,6 +3052,7 @@ export default function ProjectGallery({
         </p>
         <div
           className="gallery-thumbnails"
+          hidden={count < 2}
           role="group"
           aria-label={site.work.gallery}
         >
@@ -3050,19 +3076,19 @@ export default function ProjectGallery({
           <div>
             <p id="gallery-description">{project.description}</p>
             {project.demoUrl && (
-              <Link className="gallery-demo-link" href={project.demoUrl}>
-                {site.ui.demo} ↗
+              <Link className="gallery-demo-link" href={project.demoUrl} target={project.demoUrl.startsWith("https://") ? "_blank" : undefined} rel={project.demoUrl.startsWith("https://") ? "noopener noreferrer" : undefined}>
+                {presentation.visitLabel} ↗
               </Link>
             )}
           </div>
-          <div>
+          {project.stack.length > 0 && <div>
             <span className="eyebrow">{site.ui.stack}</span>
             <ul>
               {project.stack.map((tech) => (
                 <li key={tech}>{tech}</li>
               ))}
             </ul>
-          </div>
+          </div>}
         </div>
         <div className="gallery-highlights">
           <span className="eyebrow">{site.ui.highlights}</span>
@@ -3072,7 +3098,7 @@ export default function ProjectGallery({
             ))}
           </ul>
         </div>
-        <p className="gallery-help">{site.ui.galleryHelp}</p>
+        <p className="gallery-help">{presentation.visualNote}<br />{count > 1 ? site.ui.galleryHelp : site.ui.gallerySingleHelp}</p>
       </div>
     </dialog>
   );
@@ -3107,6 +3133,14 @@ export function Reveal({
       {children}
     </m.div>
   );
+}
+``````
+
+## components/scroll-progress.tsx
+
+``````tsx
+export function ScrollProgress() {
+  return <div className="scroll-progress" aria-hidden="true" />;
 }
 ``````
 

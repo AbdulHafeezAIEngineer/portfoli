@@ -2,21 +2,21 @@
 
 ``````json
 {
-  "source": "Local production build; mobile emulation; temporary local PostgreSQL; not a live-site guarantee",
-  "fetchTime": "2026-10-15T11:33:24.956Z",
+  "source": "Latest premium visual update; local production build in file content mode; mobile emulation; not a live-site guarantee",
+  "fetchTime": "2026-10-15T18:45:43.020Z",
   "lighthouseVersion": "13.5.0",
   "scores": {
-    "performance": 91,
+    "performance": 85,
     "accessibility": 100,
     "best-practices": 100,
     "seo": 100
   },
   "metrics": {
-    "first-contentful-paint": "0.9 s",
-    "largest-contentful-paint": "3.4 s",
-    "total-blocking-time": "70 ms",
+    "first-contentful-paint": "1.2\u00a0s",
+    "largest-contentful-paint": "3.7\u00a0s",
+    "total-blocking-time": "250\u00a0ms",
     "cumulative-layout-shift": "0",
-    "speed-index": "0.9 s"
+    "speed-index": "2.7\u00a0s"
   },
   "securityNote": "Next.js 14 still has reported critical advisories; see SECURITY_STATUS.md"
 }

@@ -907,6 +907,11 @@ test("admin content schemas reject unsafe image URLs, config mismatch and protot
     "lib/admin/schemas.ts",
   );
   assert.equal(imageUrl.safeParse("/projects/restaurant-1.webp").success, true);
+  const projectLink = schemas.projects.shape.demoUrl;
+  assert.equal(projectLink.safeParse("https://elvora.pplx.app").success, true);
+  assert.equal(projectLink.safeParse("/demo/restaurant").success, true);
+  for (const link of ["javascript:alert(1)", "http://example.com", "https://user:password@example.com", "not-a-url"])
+    assert.equal(projectLink.safeParse(link).success, false);
   for (const value of [
     "javascript:alert(1)",
     "//evil.example/image.png",

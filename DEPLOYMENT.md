@@ -75,6 +75,8 @@ The complete portfolio is on GitHub's `main` branch, including the Elvora logo, 
 
 Use the provided `netlify.toml`: `npm run build`, publish `.next`, Node 24 and the Next.js adapter. Do not upload the source folder as static HTML; API routes/auth need the Next.js runtime. Set `NEXT_PUBLIC_SITE_URL` and `NEXTAUTH_URL` to `https://portfolio3821.netlify.app` unless using a new custom domain. Configure the same private services/Redis/origin variables. Keep `CONTENT_SOURCE=files` for the included file-based content. Existing database records are preserved by seeding; update them in `/admin` when choosing database mode.
 
+Selected Work in file mode now includes Elvora instead of Forma Living. Database-mode owners should unpublish the old `real-estate` sample and add/update the `elvora` project using `data/projects.ts`, including its `https://elvora.pplx.app` URL and local promotional image path. Existing records are not silently deleted or overwritten by the seed.
+
 Verify outbound SMTP support; if your host blocks it, keep the email link and move delivery to an allowed email API before launch. No successful Netlify deployment is claimed without a completed hosting build and public URL verification. The cloud environment could not access the owner's Netlify URL (HTTP/CONNECT 403), so local checks do not establish the current live-site state. The framework security limitation at the top of this document remains outstanding.
 
 ## Headers and launch checks

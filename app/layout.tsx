@@ -8,6 +8,7 @@ import "./globals.css";
 import "./bots.css";
 import "./profile.css";
 import "./devices.css";
+import "./premium.css";
 
 const inter = localFont({
   src: [

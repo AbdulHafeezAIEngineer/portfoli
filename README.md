@@ -1,7 +1,7 @@
 # Elvora — Abdul Hafeez's portfolio
 
 **Launch status:** the requested Next.js 14 release still has reported critical advisories. This is a review build; a patched major-version exception is needed before production. See `SECURITY_STATUS.md`.
-Next.js 14 App Router, TypeScript, Tailwind CSS and Framer Motion. All application backend logic runs in Next.js route handlers. The portfolio includes four original demo sites, actual captured screenshots, CSS 3D laptop/phone cards, cinematic galleries, three AI chat demos, a configurable real bot, voice controls, honest experience/skills sections, the supplied Coursiv certificate with a zoomable viewer, Gmail-only contact, PostgreSQL/Prisma content management and a private Auth.js admin panel.
+Next.js 14 App Router, TypeScript, Tailwind CSS and Framer Motion. All application backend logic runs in Next.js route handlers. Selected Work includes the linked Elvora website with generated 3D promotional artwork and three original concept sites with actual captured screenshots. The app also includes CSS 3D laptop/phone cards, cinematic galleries, the Forte Institute Botpress assistant, three API chat demos, voice controls, About Me, the supplied Coursiv certificate with a zoomable viewer, Gmail-only contact, PostgreSQL/Prisma content management and a private Auth.js admin panel. The archived Forma Living demo remains available but is no longer selected work.
 
 ## Run
 
@@ -43,7 +43,7 @@ The capture script starts and stops its own development server on port 3100. Sto
 All editable portfolio content starts in `data/`. `lib/content-loader.ts` is the server-only boundary: `CONTENT_SOURCE=database` uses Prisma after migrations and seed, while file mode reads the same typed content. Components keep the same display props. Seed is additive and preserves existing records/passwords.
 
 - `data/site.ts`: Elvora identity, Abdul Hafeez's introduction, Gmail, navigation and shared UI text.
-- `data/projects.ts`, `demos.ts`: concept descriptions, actual screenshot paths, design highlights, optional promo prompts and demo copy.
+- `data/projects.ts`, `project-presentation.ts`, `demos.ts`: selected projects, concept/featured labels, actual screenshot paths, the Elvora promotional artwork, public website links, highlights and demo copy.
 - `data/bots.ts`: bot cards, disclosures, one `realBotConfig` object for iframe/script/API, and an optional `additionalBots` list for adding data-configured connections. The real slot connects the supplied Forte Institute Study Assistant Botpress scripts; see `BOTPRESS_SETUP.md`. `data/prompts/` contains the three server-only demo prompts.
 - `data/experience.ts`, `skills.ts`: About Me, the owner's supplied 2+ years of experience, AI workflow explanations and remaining tool-name placeholders; no invented client counts or testimonials.
 - `data/certificates.ts`: supplied Master of ChatGPT certificate details and image, click-to-enlarge/zoom viewer.

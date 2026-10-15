@@ -378,6 +378,8 @@ The complete portfolio is on GitHub's `main` branch, including the Elvora logo, 
 
 Use the provided `netlify.toml`: `npm run build`, publish `.next`, Node 24 and the Next.js adapter. Do not upload the source folder as static HTML; API routes/auth need the Next.js runtime. Set `NEXT_PUBLIC_SITE_URL` and `NEXTAUTH_URL` to `https://portfolio3821.netlify.app` unless using a new custom domain. Configure the same private services/Redis/origin variables. Keep `CONTENT_SOURCE=files` for the included file-based content. Existing database records are preserved by seeding; update them in `/admin` when choosing database mode.
 
+Selected Work in file mode now includes Elvora instead of Forma Living. Database-mode owners should unpublish the old `real-estate` sample and add/update the `elvora` project using `data/projects.ts`, including its `https://elvora.pplx.app` URL and local promotional image path. Existing records are not silently deleted or overwritten by the seed.
+
 Verify outbound SMTP support; if your host blocks it, keep the email link and move delivery to an allowed email API before launch. No successful Netlify deployment is claimed without a completed hosting build and public URL verification. The cloud environment could not access the owner's Netlify URL (HTTP/CONNECT 403), so local checks do not establish the current live-site state. The framework security limitation at the top of this document remains outstanding.
 
 ## Headers and launch checks
@@ -415,6 +417,10 @@ The supplied Coursiv certificate is now showcased: **Master of ChatGPT**, issued
 `public/certificates/coursiv-master-of-chatgpt.webp` is a high-resolution rendering of the uploaded certificate, preserving its original artwork and wording. The title, issuer, date, description and accessible image text live in `data/certificates.ts`. The fullscreen viewer supports zoom buttons, +/−, 0 to fit, Esc, touch/native scrolling and focus restoration. The old neutral placeholder remains available for new draft entries; `npm run certificate-placeholder` does not replace the real certificate.
 
 After database seeding, edit published content through `/admin`. File changes are the seed source; they do not overwrite existing database records. Choose `CONTENT_SOURCE=files` when using data-only edits.
+
+The About Me whitespace now contains a framed portrait area wired to the same `site.hero.portrait` and accessible description as the hero. The owner has not uploaded a personal photo, so the abstract image is explicitly labeled **Portrait placeholder**. Once supplied, put the real image in `public/`, update `portrait` and `portraitAlt` in `data/site.ts`, and clear `portraitStatus`; both portrait locations update together.
+
+`app/premium.css` adds gold lighting, violet atmosphere, reflective buttons, hover depth, portrait motion, card glows and a scroll progress line. It preserves keyboard focus, light theme, mobile layouts and reduced-motion preferences. The generated Elvora artwork and linked-site limitations are documented in `SCREENSHOTS.md`.
 ``````
 
 ## README.md
@@ -423,7 +429,7 @@ After database seeding, edit published content through `/admin`. File changes ar
 # Elvora — Abdul Hafeez's portfolio
 
 **Launch status:** the requested Next.js 14 release still has reported critical advisories. This is a review build; a patched major-version exception is needed before production. See `SECURITY_STATUS.md`.
-Next.js 14 App Router, TypeScript, Tailwind CSS and Framer Motion. All application backend logic runs in Next.js route handlers. The portfolio includes four original demo sites, actual captured screenshots, CSS 3D laptop/phone cards, cinematic galleries, three AI chat demos, a configurable real bot, voice controls, honest experience/skills sections, the supplied Coursiv certificate with a zoomable viewer, Gmail-only contact, PostgreSQL/Prisma content management and a private Auth.js admin panel.
+Next.js 14 App Router, TypeScript, Tailwind CSS and Framer Motion. All application backend logic runs in Next.js route handlers. Selected Work includes the linked Elvora website with generated 3D promotional artwork and three original concept sites with actual captured screenshots. The app also includes CSS 3D laptop/phone cards, cinematic galleries, the Forte Institute Botpress assistant, three API chat demos, voice controls, About Me, the supplied Coursiv certificate with a zoomable viewer, Gmail-only contact, PostgreSQL/Prisma content management and a private Auth.js admin panel. The archived Forma Living demo remains available but is no longer selected work.
 
 ## Run
 
@@ -465,7 +471,7 @@ The capture script starts and stops its own development server on port 3100. Sto
 All editable portfolio content starts in `data/`. `lib/content-loader.ts` is the server-only boundary: `CONTENT_SOURCE=database` uses Prisma after migrations and seed, while file mode reads the same typed content. Components keep the same display props. Seed is additive and preserves existing records/passwords.
 
 - `data/site.ts`: Elvora identity, Abdul Hafeez's introduction, Gmail, navigation and shared UI text.
-- `data/projects.ts`, `demos.ts`: concept descriptions, actual screenshot paths, design highlights, optional promo prompts and demo copy.
+- `data/projects.ts`, `project-presentation.ts`, `demos.ts`: selected projects, concept/featured labels, actual screenshot paths, the Elvora promotional artwork, public website links, highlights and demo copy.
 - `data/bots.ts`: bot cards, disclosures, one `realBotConfig` object for iframe/script/API, and an optional `additionalBots` list for adding data-configured connections. The real slot connects the supplied Forte Institute Study Assistant Botpress scripts; see `BOTPRESS_SETUP.md`. `data/prompts/` contains the three server-only demo prompts.
 - `data/experience.ts`, `skills.ts`: About Me, the owner's supplied 2+ years of experience, AI workflow explanations and remaining tool-name placeholders; no invented client counts or testimonials.
 - `data/certificates.ts`: supplied Master of ChatGPT certificate details and image, click-to-enlarge/zoom viewer.
@@ -493,6 +499,14 @@ The complete file-by-file source snapshot, starting with the folder structure an
 
 ``````markdown
 # Actual concept-site screenshots
+
+## Selected Elvora website
+
+The second Selected Work card now links to **https://elvora.pplx.app** and uses `public/projects/elvora-promo.webp`, an AI-generated 3D brand promotional render (1586×992, approximately 225 KB). It is labeled as promotional artwork in its gallery and accessible image text. It is not a capture of the linked website. The cloud environment received CONNECT/HTTP 403 from that host, so the actual interface and framework were not verified; no technology stack is claimed for it. A supplied homepage capture can replace the conceptual screen content later.
+
+The other three selected projects use the actual captured screenshots below. Forma Living's captures and `/demo/real-estate` are archived reference assets and are no longer shown in Selected Work. The capture script can still reproduce all four original demos without overwriting `elvora-promo.webp`.
+
+## Original demo captures
 
 Captured with `npm run capture` from original demo pages. Actual browser renders, not placeholder mockups. Desktop: 1440×900 at 2× (2880×1800). Mobile: 390×844 at 2× (780×1688).
 
@@ -595,24 +609,26 @@ This is a **review build**, not a verified live deployment. `SECURITY_STATUS.md`
 - Supplied Coursiv certificate update: rendered the original PDF to a 2200×1555 WebP; checked the exact title, issuer, 31 October 2024 date, 6-hour duration and certificate ID against the document. Re-ran lint/typecheck and browser checks at 1440px/390px for image loading, absent placeholder wording, fullscreen zoom, keyboard shortcuts, Escape, focus return and overflow. Preview: `docs/certificate-showcase.png`.
 - Branding/About Me update: E-and-amber-dot SVG logo in navbar/footer/favicon, Elvora wordmark and portrait label, About Me navigation, the owner's supplied 2+ years of experience, three story paragraphs and four full-stack blocks. The production build passed. Browser checks against both development and production passed at 320px–1440px, including mobile navigation and certificate zoom; dark/light axe scans reported no violations. `docs/brand-preview.png`, `docs/about-preview.png` and `docs/mobile-about-preview.png` show this update.
 - Botpress connection: the supplied Forte Institute Study Assistant loader/configuration URLs are configured in the first real card. Explicit SDK fixtures verified lazy sequential loading, init selector, ready/open, provider storage, in-frame chat, close cleanup, desktop/mobile layout, errors and retry. These checks do not verify Botpress's actual SDK behavior or AI replies. Direct asset requests returned HTTP 403 from this cloud environment. Card preview: `docs/forte-bot-card.png`; setup details: `BOTPRESS_SETUP.md`.
+- Premium visual update: Forma Living is replaced in Selected Work by the supplied Elvora URL and a clearly labeled generated 3D promotional render. Checked the external HTTPS link/rel, single-artwork gallery, remaining four-image concept galleries, About Me portrait frame, hover lighting/tilt, reduced-motion behavior and 320px–1440px layouts. Fixed a decorative-glow overflow at tablet width. Both themes reported zero axe violations. The production build and local HTTP 200/gallery-link smoke check passed. The six security tests passed, including HTTPS project-link acceptance and malformed/unsafe-link rejection. The personal photo is still missing and stays visibly labeled as a placeholder.
 
 ## Local Lighthouse
 
-Mobile-emulated audit against the local production build, with the local database content source:
+Latest mobile-emulated audit against the premium local production build, in file content mode:
 
 | Category | Score |
 |---|---:|
-| Performance | 91 |
+| Performance | 85 |
 | Accessibility | 100 |
 | Best practices | 100 |
 | SEO | 100 |
 
-Scores vary with device, CPU load, image replacements, network, third-party widgets, database latency and the production host. Lighthouse is not a dependency security certification. A compact result is in `docs/lighthouse-summary.json`; the standalone HTML/JSON reports are also prepared in the workspace.
+The earlier build recorded 91 performance; the new visual update recorded 85 on the latest run (82–86 across local runs). Trimming the initial hero animation reduced measured heading render delay, and CSS scroll progress avoids an extra client hook. Performance remains below the earlier result. Scores vary with device, CPU load, image replacements, network, third-party widgets, database latency and the production host. Lighthouse is not a dependency security certification. A compact result is in `docs/lighthouse-summary.json`; the standalone HTML/JSON reports are also prepared in the workspace.
 
 ## Still needs real owner configuration/verification
 
 - A patched framework-major decision before external production launch. Current production dependency audit: one critical affected package, Next.js 14; other reported production findings were resolved.
 - Specific AI-tool names and the owner's portrait remain clearly marked placeholders. The owner has now supplied 2+ years of experience and time invested in AI tools for About Me. The supplied Coursiv certificate and its award details are displayed; external issuer verification has not been performed.
+- An owner-uploaded photo is needed to complete the new About Me portrait area. The linked Elvora website returned CONNECT/HTTP 403 here; its featured image is an explicitly labeled promotional render. A supplied homepage screenshot is needed for an exact website mockup.
 - Actual public HTTPS origin settings, external database/Redis/storage credentials, OpenAI key for the three API demos, Gmail App Password and Cloudflare Turnstile keys in private settings. The real Botpress connection uses the owner's supplied public scripts; verify its publishing state, domain permissions and live replies on the deployed site.
 - Live Gmail inbox delivery, real OpenAI/provider replies, actual Blob upload, real Redis REST service and real Turnstile challenge verification. Mock-based checks do not establish these integrations.
 - Native Prisma migration CLI deployment to the owner's cloud database. Its verified engine download was blocked in the current environment; the network draft adds `binaries.prisma.sh` but must be reviewed/saved and published to activate. Initial SQL/seed were independently verified against local PostgreSQL.

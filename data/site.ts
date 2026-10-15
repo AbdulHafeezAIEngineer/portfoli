@@ -51,9 +51,9 @@ export const site = {
     eyebrow: "01 / SELECTED EXPLORATIONS",
     title: "Ideas, brought to the browser.",
     description:
-      "Four industries. Four distinct directions. A collection of self-initiated concepts exploring what your next website could feel like.",
+      "A featured Elvora website alongside three independent concepts. Different directions, brought together with considered design and a little perspective.",
     tabs: [
-      { id: "web", title: "Web Development", detail: "04 concept projects" },
+      { id: "web", title: "Web Development", detail: "01 featured website · 03 concepts" },
       {
         id: "bots",
         title: "AI Chatbot Services",
@@ -64,9 +64,9 @@ export const site = {
     view: "View Project",
     gallery: "screenshot gallery",
     screenshotNote:
-      "Actual screenshots of the fictional demo sites · Explore all four views",
+      "Concept galleries show actual page captures · Elvora uses 3D promotional artwork",
     disclaimer:
-      "Independent concept projects. No client commissions or affiliations are implied.",
+      "Concepts are independent explorations. The featured Elvora card links to the supplied website; no client commissions are implied.",
   },
   errors: {
     notFound: "This page took a different path.",
@@ -90,6 +90,7 @@ export const site = {
     next: "Next screenshot",
     galleryHelp:
       "Use arrow keys to browse · Esc to close · Swipe on touch screens",
+    gallerySingleHelp: "Press Esc to close · Open the website to explore more",
     loading: "Loading portfolio",
     loadingImage: "Loading screenshot",
     imageError: "Screenshot unavailable. Choose another thumbnail.",

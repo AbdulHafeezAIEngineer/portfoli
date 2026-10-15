@@ -1,5 +1,13 @@
 # Actual concept-site screenshots
 
+## Selected Elvora website
+
+The second Selected Work card now links to **https://elvora.pplx.app** and uses `public/projects/elvora-promo.webp`, an AI-generated 3D brand promotional render (1586×992, approximately 225 KB). It is labeled as promotional artwork in its gallery and accessible image text. It is not a capture of the linked website. The cloud environment received CONNECT/HTTP 403 from that host, so the actual interface and framework were not verified; no technology stack is claimed for it. A supplied homepage capture can replace the conceptual screen content later.
+
+The other three selected projects use the actual captured screenshots below. Forma Living's captures and `/demo/real-estate` are archived reference assets and are no longer shown in Selected Work. The capture script can still reproduce all four original demos without overwriting `elvora-promo.webp`.
+
+## Original demo captures
+
 Captured with `npm run capture` from original demo pages. Actual browser renders, not placeholder mockups. Desktop: 1440×900 at 2× (2880×1800). Mobile: 390×844 at 2× (780×1688).
 
 | Project | View | Filename |

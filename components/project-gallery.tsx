@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, LoaderCircle, X } from "lucide-react";
 import type { ProjectView } from "@/data/projects";
 import { site } from "@/data/site";
+import { projectPresentation } from "@/data/project-presentation";
 
 export default function ProjectGallery({
   project,
@@ -22,6 +23,7 @@ export default function ProjectGallery({
   const touch = useRef({ x: 0, y: 0 });
   const count = project.screenshots.length;
   const image = project.screenshots[index];
+  const presentation = projectPresentation(project.id);
 
   const go = useCallback(
     (next: number) => {
@@ -96,7 +98,7 @@ export default function ProjectGallery({
         <header className="gallery-header">
           <div>
             <p className="eyebrow">
-              {site.work.concept} · {project.industry}
+              {presentation.label} · {project.industry}
             </p>
             <h2 id="gallery-title">{project.title}</h2>
           </div>
@@ -152,6 +154,7 @@ export default function ProjectGallery({
           )}
           <button
             className="gallery-arrow gallery-prev"
+            hidden={count < 2}
             onClick={() => go(index - 1)}
             aria-label={site.ui.previous}
           >
@@ -159,6 +162,7 @@ export default function ProjectGallery({
           </button>
           <button
             className="gallery-arrow gallery-next"
+            hidden={count < 2}
             onClick={() => go(index + 1)}
             aria-label={site.ui.next}
           >
@@ -178,6 +182,7 @@ export default function ProjectGallery({
         </p>
         <div
           className="gallery-thumbnails"
+          hidden={count < 2}
           role="group"
           aria-label={site.work.gallery}
         >
@@ -201,19 +206,19 @@ export default function ProjectGallery({
           <div>
             <p id="gallery-description">{project.description}</p>
             {project.demoUrl && (
-              <Link className="gallery-demo-link" href={project.demoUrl}>
-                {site.ui.demo} ↗
+              <Link className="gallery-demo-link" href={project.demoUrl} target={project.demoUrl.startsWith("https://") ? "_blank" : undefined} rel={project.demoUrl.startsWith("https://") ? "noopener noreferrer" : undefined}>
+                {presentation.visitLabel} ↗
               </Link>
             )}
           </div>
-          <div>
+          {project.stack.length > 0 && <div>
             <span className="eyebrow">{site.ui.stack}</span>
             <ul>
               {project.stack.map((tech) => (
                 <li key={tech}>{tech}</li>
               ))}
             </ul>
-          </div>
+          </div>}
         </div>
         <div className="gallery-highlights">
           <span className="eyebrow">{site.ui.highlights}</span>
@@ -223,7 +228,7 @@ export default function ProjectGallery({
             ))}
           </ul>
         </div>
-        <p className="gallery-help">{site.ui.galleryHelp}</p>
+        <p className="gallery-help">{presentation.visualNote}<br />{count > 1 ? site.ui.galleryHelp : site.ui.gallerySingleHelp}</p>
       </div>
     </dialog>
   );

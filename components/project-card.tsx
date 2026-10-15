@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import type { ProjectView } from "@/data/projects";
 import { site } from "@/data/site";
+import { projectPresentation } from "@/data/project-presentation";
 export function ProjectCard({
   project,
   index,
@@ -30,16 +31,19 @@ export function ProjectCard({
     return () => media.removeEventListener("change", sync);
   }, []);
   const tilt = finePointer && !reduced;
+  const presentation = projectPresentation(project.id);
   const mobile = project.screenshots[2] || project.screenshots[0];
   return (
     <button
-      className="project-card device-project"
+      className={`project-card device-project${presentation.artwork ? " artwork-project" : ""}`}
       onClick={onOpen}
       aria-haspopup="dialog"
       aria-label={`${site.work.view}: ${project.title}`}
       onPointerMove={(event) => {
         if (!tilt) return;
         const rect = event.currentTarget.getBoundingClientRect();
+        event.currentTarget.style.setProperty("--pointer-x", `${((event.clientX - rect.left) / rect.width) * 100}%`);
+        event.currentTarget.style.setProperty("--pointer-y", `${((event.clientY - rect.top) / rect.height) * 100}%`);
         x.set(
           (-(event.clientY - rect.top - rect.height / 2) / rect.height) * 10,
         );
@@ -57,7 +61,12 @@ export function ProjectCard({
         <span className="device-project-number" aria-hidden="true">
           0{index + 1}
         </span>
-        <div className="device-floor" />
+        {presentation.artwork ? (
+          <m.div className="artwork-composition" style={tilt ? { rotateX, rotateY } : undefined}>
+            <Image src={project.screenshots[0].src} alt={project.screenshots[0].alt} fill sizes="(max-width:700px) 90vw, 580px" />
+            <span className="artwork-light" aria-hidden="true" />
+          </m.div>
+        ) : <><div className="device-floor" />
         <div className="device-float">
           <m.div
             className="device-composition"
@@ -93,7 +102,7 @@ export function ProjectCard({
               <span className="device-phone-notch" />
             </div>
           </m.div>
-        </div>
+        </div></>}
         <span className="device-view">
           {site.work.view}
           <ArrowUpRight size={18} />
@@ -110,7 +119,7 @@ export function ProjectCard({
       <div className="project-footer">
         <span>
           <i style={{ background: project.accent }} />
-          {site.work.concept}
+          {presentation.label}
         </span>
         <span>
           0{index + 1} / {String(total).padStart(2, "0")}

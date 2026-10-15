@@ -95,7 +95,12 @@ export const schemas = {
       description: text(3000),
       stack: array,
       accent: z.string().regex(/^#[0-9a-fA-F]{6}$/),
-      demoUrl: z.union([z.literal(""), local]),
+      demoUrl: z.union([z.literal(""), local, z.string().url().max(1000).refine((value) => {
+        try {
+          const url = new URL(value);
+          return url.protocol === "https:" && !url.username && !url.password;
+        } catch { return false; }
+      }, "Use a local path or an HTTPS website URL.")]),
       highlights: array,
       screenshots: z
         .array(

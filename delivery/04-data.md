@@ -934,6 +934,35 @@ export const experience = {
 } as const;
 ``````
 
+## data/project-presentation.ts
+
+``````typescript
+type ProjectPresentation = {
+  label: string;
+  artwork: boolean;
+  visitLabel: string;
+  visualNote: string;
+};
+
+const featured: Record<string, ProjectPresentation> = {
+  elvora: {
+    label: "Featured Website",
+    artwork: true,
+    visitLabel: "Visit Elvora website",
+    visualNote: "3D promotional artwork · Explore the website for its current design",
+  },
+};
+
+export function projectPresentation(id: string): ProjectPresentation {
+  return featured[id] || {
+    label: "Concept Project",
+    artwork: false,
+    visitLabel: "Explore the concept site",
+    visualNote: "Actual screenshots of an independent concept website",
+  };
+}
+``````
+
 ## data/projects.ts
 
 ``````typescript
@@ -967,20 +996,6 @@ const directions = [
     ],
     description:
       "A fictional seasonal dining concept with an editorial home page, illustrated menu and a considered story section. The screenshots show the actual interactive concept pages built for this portfolio.",
-  },
-  {
-    id: "real-estate",
-    title: demos["real-estate"].name,
-    subtitle: "Distinctive spaces. Considered living.",
-    industry: "Architecture & Real Estate",
-    accent: "#a9c4be",
-    highlights: [
-      "Original architectural vectors",
-      "Interactive property filters",
-      "Spacious listing presentation",
-    ],
-    description:
-      "A fictional architectural property collection with original vector illustrations, location filtering and a detailed residence feature. Listings and prices are illustrative, with no transactions processed.",
   },
   {
     id: "saas",
@@ -1028,6 +1043,27 @@ export const projects: Project[] = directions.map((project) => ({
     alt: `${project.title}: actual ${title.toLowerCase()} screenshot of the fictional concept website`,
   })),
 }));
+projects.splice(1, 0, {
+  id: "elvora",
+  title: "Elvora",
+  subtitle: "A digital presence, with a different perspective.",
+  industry: "Featured Website / Elvora",
+  accent: "#c7a55c",
+  description:
+    "Explore Elvora at elvora.pplx.app. This cinematic 3D artwork introduces the linked website; visit the live page to see its current design and content.",
+  stack: [],
+  demoUrl: "https://elvora.pplx.app",
+  highlights: ["Cinematic 3D artwork", "Desktop + mobile composition", "Direct website link"],
+  promoPrompt:
+    "A cinematic Elvora brand campaign with a floating titanium laptop and phone, obsidian studio, champagne rim light and a soft violet glow. Clearly a promotional visualization, not an actual website screenshot.",
+  screenshots: [
+    {
+      src: "/projects/elvora-promo.webp",
+      title: "Elvora / 3D promotional artwork",
+      alt: "Elvora promotional 3D artwork with a floating laptop and phone in a dark studio, champagne lighting and a violet glow; a conceptual brand visual rather than a website screenshot",
+    },
+  ],
+});
 export function getFileProjects(): ProjectView[] {
   return projects.map(({ promoPrompt: _prompt, ...project }) => project);
 }
@@ -1124,9 +1160,9 @@ export const site = {
     eyebrow: "01 / SELECTED EXPLORATIONS",
     title: "Ideas, brought to the browser.",
     description:
-      "Four industries. Four distinct directions. A collection of self-initiated concepts exploring what your next website could feel like.",
+      "A featured Elvora website alongside three independent concepts. Different directions, brought together with considered design and a little perspective.",
     tabs: [
-      { id: "web", title: "Web Development", detail: "04 concept projects" },
+      { id: "web", title: "Web Development", detail: "01 featured website · 03 concepts" },
       {
         id: "bots",
         title: "AI Chatbot Services",
@@ -1137,9 +1173,9 @@ export const site = {
     view: "View Project",
     gallery: "screenshot gallery",
     screenshotNote:
-      "Actual screenshots of the fictional demo sites · Explore all four views",
+      "Concept galleries show actual page captures · Elvora uses 3D promotional artwork",
     disclaimer:
-      "Independent concept projects. No client commissions or affiliations are implied.",
+      "Concepts are independent explorations. The featured Elvora card links to the supplied website; no client commissions are implied.",
   },
   errors: {
     notFound: "This page took a different path.",
@@ -1163,6 +1199,7 @@ export const site = {
     next: "Next screenshot",
     galleryHelp:
       "Use arrow keys to browse · Esc to close · Swipe on touch screens",
+    gallerySingleHelp: "Press Esc to close · Open the website to explore more",
     loading: "Loading portfolio",
     loadingImage: "Loading screenshot",
     imageError: "Screenshot unavailable. Choose another thumbnail.",

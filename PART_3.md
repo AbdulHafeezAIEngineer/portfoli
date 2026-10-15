@@ -11,3 +11,7 @@ The supplied Coursiv certificate is now showcased: **Master of ChatGPT**, issued
 `public/certificates/coursiv-master-of-chatgpt.webp` is a high-resolution rendering of the uploaded certificate, preserving its original artwork and wording. The title, issuer, date, description and accessible image text live in `data/certificates.ts`. The fullscreen viewer supports zoom buttons, +/−, 0 to fit, Esc, touch/native scrolling and focus restoration. The old neutral placeholder remains available for new draft entries; `npm run certificate-placeholder` does not replace the real certificate.
 
 After database seeding, edit published content through `/admin`. File changes are the seed source; they do not overwrite existing database records. Choose `CONTENT_SOURCE=files` when using data-only edits.
+
+The About Me whitespace now contains a framed portrait area wired to the same `site.hero.portrait` and accessible description as the hero. The owner has not uploaded a personal photo, so the abstract image is explicitly labeled **Portrait placeholder**. Once supplied, put the real image in `public/`, update `portrait` and `portraitAlt` in `data/site.ts`, and clear `portraitStatus`; both portrait locations update together.
+
+`app/premium.css` adds gold lighting, violet atmosphere, reflective buttons, hover depth, portrait motion, card glows and a scroll progress line. It preserves keyboard focus, light theme, mobile layouts and reduced-motion preferences. The generated Elvora artwork and linked-site limitations are documented in `SCREENSHOTS.md`.
