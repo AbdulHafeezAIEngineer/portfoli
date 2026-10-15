@@ -1,7 +1,7 @@
 # Elvora — Abdul Hafeez's portfolio
 
 **Launch status:** the requested Next.js 14 release still has reported critical advisories. This is a review build; a patched major-version exception is needed before production. See `SECURITY_STATUS.md`.
-Next.js 14 App Router, TypeScript, Tailwind CSS and Framer Motion. All application backend logic runs in Next.js route handlers. Selected Work includes the linked Elvora website with generated 3D promotional artwork and three original concept sites with actual captured screenshots. The app also includes CSS 3D laptop/phone cards, cinematic galleries, the Forte Institute Botpress assistant, three API chat demos, voice controls, About Me, the supplied Coursiv certificate with a zoomable viewer, Gmail-only contact, PostgreSQL/Prisma content management and a private Auth.js admin panel. The archived Forma Living demo remains available but is no longer selected work.
+Next.js 14 App Router, TypeScript, Tailwind CSS and Framer Motion. All application backend logic runs in Next.js route handlers. Selected Work contains four bespoke fictional websites: Solenne (hotel), Vanta Motors (automotive), Aster Care (private clinic) and Kovo Studio (architecture), each with a working demo and four actual browser-captured gallery images. CSS 3D laptop/phone cards present their desktop and mobile views. The featured Forte O Level Study Assistant card displays a chat preview and opens its connected Botpress chat with one click anywhere on the card. The portfolio retains three API chat demos, voice controls, About Me, the supplied Coursiv certificate, Gmail-only contact and the private PostgreSQL/Prisma/Auth.js admin. Older demos and the Elvora promotional asset are archived and are not selected work.
 
 ## Run
 
@@ -13,7 +13,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Do not overwrite an existing `.env.local`. Set the actual site URL; the example origin is not a deployable value. The public portfolio works with `CONTENT_SOURCE=files` without database/API/mail credentials. Chat, mail, uploads and private administration need their own secure settings; unconfigured services report an honest unavailable state.
+Do not overwrite an existing `.env.local`. Set the actual site URL; the example origin is not a deployable value. The public portfolio works with `CONTENT_SOURCE=files` without database/API/mail credentials. The three API demos, mail, uploads and private administration need their own secure settings; unconfigured services report an honest unavailable state.
 
 ```bash
 npm run test:chat
@@ -29,7 +29,7 @@ npm start
 
 ## Actual concept screenshots
 
-The fictional demo sites are `/demo/restaurant`, `/demo/real-estate`, `/demo/saas`, and `/demo/store`. Each uses original CSS/vector visuals, realistic fictional copy and a distinct visual direction. Restaurant reservations, property enquiries, SaaS subscriptions, shopping bags and prices are clearly demonstration content. No client work or real business affiliation is implied.
+The selected demos are `/demo/solenne`, `/demo/vanta`, `/demo/aster` and `/demo/kovo`. Each has a distinct layout, original generated hero imagery, vector details and working local interactions. Try stay filters/date validation, car model/finish configuration, care-service filtering/sample visit planning and architecture/project-type filtering. All businesses, properties and specifications are fictional. No real bookings, orders, payments, healthcare or enquiries are processed.
 
 ```bash
 npx playwright install chromium
@@ -43,8 +43,8 @@ The capture script starts and stops its own development server on port 3100. Sto
 All editable portfolio content starts in `data/`. `lib/content-loader.ts` is the server-only boundary: `CONTENT_SOURCE=database` uses Prisma after migrations and seed, while file mode reads the same typed content. Components keep the same display props. Seed is additive and preserves existing records/passwords.
 
 - `data/site.ts`: Elvora identity, Abdul Hafeez's introduction, Gmail, navigation and shared UI text.
-- `data/projects.ts`, `project-presentation.ts`, `demos.ts`: selected projects, concept/featured labels, actual screenshot paths, the Elvora promotional artwork, public website links, highlights and demo copy.
-- `data/bots.ts`: bot cards, disclosures, one `realBotConfig` object for iframe/script/API, and an optional `additionalBots` list for adding data-configured connections. The real slot connects the supplied Forte Institute Study Assistant Botpress scripts; see `BOTPRESS_SETUP.md`. `data/prompts/` contains the three server-only demo prompts.
+- `data/projects.ts`, `concepts.ts`, `concept-images.ts`: the four selected concepts, page content, 16 screenshot paths, generated-image prompts and design details. `data/demos.ts` retains archived demos.
+- `data/bots.ts`: bot cards, disclosures, one `realBotConfig` object for iframe/script/API, and an optional `additionalBots` list for adding data-configured connections. The real slot connects the supplied Forte O Level Study Assistant Botpress scripts; see `BOTPRESS_SETUP.md`. `data/prompts/` contains the three server-only demo prompts.
 - `data/experience.ts`, `skills.ts`: About Me, the owner's supplied 2+ years of experience, AI workflow explanations and remaining tool-name placeholders; no invented client counts or testimonials.
 - `data/certificates.ts`: supplied Master of ChatGPT certificate details and image, click-to-enlarge/zoom viewer.
 - `data/contact.ts`, `admin.ts`: validated form content and admin labels/field definitions.

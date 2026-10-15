@@ -756,3 +756,29 @@
   font-size: 12px;
   text-align: center;
 }
+.bot-card-real { position: relative; }
+.bots-grid > div:has(.bot-card-real) { grid-column: 1 / -1; }
+@media (min-width: 701px) { .bot-card-real { display: grid; grid-template-columns: 1.05fr 1fr; }.bot-card-real .bot-card-body { justify-content: center; padding: 38px; }.bot-card-real .bot-card-action { margin-top: 10px; } }
+@media (min-width: 1024px) { .bots-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }.bot-card-real .bot-card-body h3 { font-size: 34px; } }
+.forte-card-hitarea { position: absolute; inset: 0; width: 100%; height: 100%; background: transparent; border: 0; border-radius: inherit; z-index: 3; cursor: pointer; }
+.forte-card-hitarea:focus-visible { outline: 2px solid var(--gold); outline-offset: -4px; }
+.bot-card-top.forte-card-top { height: auto; padding: 16px 16px 12px; display: block; background: radial-gradient(ellipse at 50% 30%, #7c5cff10, transparent 70%); }
+.forte-card-top .method-badge { position: static; display: inline-flex; margin: 12px 0 0; }
+.forte-preview { color: #20232a; background: #fbfbfd; border: 1px solid #d9dce5; border-radius: 15px; overflow: hidden; text-align: left; box-shadow: 0 12px 35px #00000020; transition: transform .5s; }
+.bot-card-real:hover .forte-preview { transform: translateY(-3px); }
+.forte-preview-header { display: flex; align-items: center; gap: 9px; padding: 14px 12px; border-bottom: 1px solid #eef0f6; }
+.forte-preview-header > svg { flex-shrink: 0; color: #343640; }
+.forte-preview-header > div { min-width: 0; margin-right: auto; }
+.forte-preview-header strong { display: block; font-size: 10px; font-weight: 500; line-height: 1.5; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.forte-preview-header > div > span { display: block; font-size: 8px; color: #686d7c; line-height: 1.6; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 280px; }
+.forte-preview-mark { font-family: Georgia, serif; font-size: 10px; font-weight: 700; background: #fff; border: 1px solid #e3e4e9; border-radius: 5px; padding: 7px 4px; letter-spacing: -.5px; }
+.forte-preview-body { min-height: 175px; padding: 20px 18px 24px; }
+.forte-preview-label { display: block; font-size: 6px; letter-spacing: 1.6px; color: #727a8a; margin-bottom: 12px; }
+.forte-preview-body > strong { font-size: 23px; font-weight: 600; line-height: 1.25; letter-spacing: -.7px; display: block; max-width: 350px; }
+.forte-preview-body > p { color: #657188; font-size: 12px; line-height: 1.6; margin-top: 9px; max-width: 340px; }
+.forte-preview-invitation { display: inline-flex; align-items: center; gap: 12px; margin-top: 20px; color: #3c4b65; font-size: 9px; }
+.forte-preview-composer { margin: 0 12px; border: 1px solid #d6d9e1; border-radius: 12px; padding: 11px 12px; background: #fff; box-shadow: 0 2px 4px #00000006; color: #657188; font-size: 10px; }
+.forte-preview-composer > div { display: flex; gap: 13px; margin-top: 16px; color: #747f91; }
+.forte-preview-powered { padding: 8px 12px; color: #778397; font-size: 7px; text-align: center; }
+@media (max-width: 700px) { .forte-preview-header > div > span { max-width: 160px; }.forte-preview-body > strong { font-size: 22px; }.bot-card-top.forte-card-top { padding: 12px; }.forte-preview-header { gap: 7px; padding: 12px 9px; }.forte-preview-header > svg:last-child { display: none; } }
+@media (prefers-reduced-motion: reduce) { .forte-preview { transition: none; }.bot-card-real:hover .forte-preview { transform: none; } }

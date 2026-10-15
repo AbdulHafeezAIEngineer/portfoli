@@ -5,6 +5,7 @@ portfoli/
 ├── .gitignore
 ├── BOTPRESS_SETUP.md
 ├── CHATBOT_SETUP.md
+├── CONCEPTS.md
 ├── CONTACT_SETUP.md
 ├── DEPLOYMENT.md
 ├── PART_3.md
@@ -56,6 +57,7 @@ portfoli/
 │   │   └── contact/
 │   │       └── route.ts
 │   └── demo/
+│       ├── concepts.css
 │       ├── demo.css
 │       └── [slug]/
 │           └── page.tsx
@@ -68,11 +70,13 @@ portfoli/
 │   ├── brand-mark.tsx
 │   ├── certificate-viewer.tsx
 │   ├── certifications.tsx
+│   ├── concept-site.tsx
 │   ├── contact-form.tsx
 │   ├── contact.tsx
 │   ├── demo-site.tsx
 │   ├── experience.tsx
 │   ├── footer.tsx
+│   ├── forte-preview.tsx
 │   ├── hero.tsx
 │   ├── motion-provider.tsx
 │   ├── navbar.tsx
@@ -87,6 +91,8 @@ portfoli/
 │   ├── admin.ts
 │   ├── bots.ts
 │   ├── certificates.ts
+│   ├── concept-images.ts
+│   ├── concepts.ts
 │   ├── contact.ts
 │   ├── demos.ts
 │   ├── experience.ts
@@ -106,6 +112,7 @@ portfoli/
 │   ├── forte-bot-card.png
 │   ├── lighthouse-summary.json
 │   ├── mobile-about-preview.png
+│   ├── new-work-preview.png
 │   └── preview.png
 ├── hooks/
 │   ├── use-modal.ts
@@ -150,8 +157,23 @@ portfoli/
 │   ├── certificates/
 │   │   ├── coursiv-master-of-chatgpt.webp
 │   │   └── prompt-engineering-placeholder.png
+│   ├── concepts/
+│   │   ├── aster-hero.webp
+│   │   ├── kovo-hero.webp
+│   │   ├── solenne-hero.webp
+│   │   └── vanta-hero.webp
 │   └── projects/
+│       ├── aster-1.webp
+│       ├── aster-2.webp
+│       ├── aster-3.webp
+│       ├── aster-4.webp
+│       ├── aster-capture.json
 │       ├── elvora-promo.webp
+│       ├── kovo-1.webp
+│       ├── kovo-2.webp
+│       ├── kovo-3.webp
+│       ├── kovo-4.webp
+│       ├── kovo-capture.json
 │       ├── real-estate-1.webp
 │       ├── real-estate-2.webp
 │       ├── real-estate-3.webp
@@ -167,11 +189,21 @@ portfoli/
 │       ├── saas-3.webp
 │       ├── saas-4.webp
 │       ├── saas-capture.json
+│       ├── solenne-1.webp
+│       ├── solenne-2.webp
+│       ├── solenne-3.webp
+│       ├── solenne-4.webp
+│       ├── solenne-capture.json
 │       ├── store-1.webp
 │       ├── store-2.webp
 │       ├── store-3.webp
 │       ├── store-4.webp
-│       └── store-capture.json
+│       ├── store-capture.json
+│       ├── vanta-1.webp
+│       ├── vanta-2.webp
+│       ├── vanta-3.webp
+│       ├── vanta-4.webp
+│       └── vanta-capture.json
 ├── scripts/
 │   ├── capture.ts
 │   ├── generate-certificate.mjs
@@ -311,7 +343,7 @@ model AuditLog {
 }
 ```
 
-Complete source files follow in folder order. Binary PNG/WebP assets are included in the project; source snapshots do not pretend image bytes are code. The original 16 demo screenshots are actual browser captures. The featured Elvora card uses separately labeled generated 3D promotional artwork; see SCREENSHOTS.md. Private environment files, dependencies and build outputs are excluded.
+Complete source files follow in folder order. Binary PNG/WebP assets are included in the project; source snapshots do not pretend image bytes are code. The four selected concept sites have 16 actual browser captures. Original generated hero imagery is disclosed; see SCREENSHOTS.md. Private environment files, dependencies and build outputs are excluded.
 
 **Review status:** Next.js 14 remains at the user-requested version, with one reported critical production dependency finding. Other production findings were patched. See SECURITY_STATUS.md before any external launch.
 
@@ -364,7 +396,7 @@ Migration/seed require the owner’s PostgreSQL and private admin settings. The 
 - [ ] Keep brand **Elvora**, owner **Abdul Hafeez**, and public email **buildwithelvora@gmail.com**. No phone/WhatsApp/social profiles are required.
 - [ ] Replace the portrait and remaining factual workflow placeholders. The supplied Coursiv Master of ChatGPT certificate is included with its original award details.
 - [ ] Add real AI-tool names and factual workflow/testing examples. No years, client totals or testimonials are invented.
-- [ ] The supplied Forte Institute Study Assistant Botpress connection is configured in data/bots.ts. Verify it on the live site; database users must update their existing real-bot record. Additional file-based bots use additionalBots.
+- [ ] The supplied Forte O Level Study Assistant Botpress connection is configured in data/bots.ts. Verify it on the live site; database users must update their existing real-bot record. Additional file-based bots use additionalBots.
 - [ ] Set OpenAI, actual site/auth origins, PostgreSQL, shared Redis, Gmail App Password, Turnstile, Blob and strong admin/auth/TOTP settings privately as needed. Remove seed/reset passwords from normal runtime.
 - [ ] Resolve the Next.js 14 security blocker through an authorized patched-major upgrade before production.
 - [ ] Verify real mail delivery, provider chat, database/cloud migrations, shared quotas, uploads, Turnstile, microphone/voice, DNS/SSL and backups on the final host. See DEPLOYMENT.md and VERIFICATION.md.

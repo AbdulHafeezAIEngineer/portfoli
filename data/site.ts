@@ -51,9 +51,9 @@ export const site = {
     eyebrow: "01 / SELECTED EXPLORATIONS",
     title: "Ideas, brought to the browser.",
     description:
-      "A featured Elvora website alongside three independent concepts. Different directions, brought together with considered design and a little perspective.",
+      "Four original concepts. Four distinct worlds. Bespoke websites for hospitality, electric mobility, private care and architecture—built to explore, not just look at.",
     tabs: [
-      { id: "web", title: "Web Development", detail: "01 featured website · 03 concepts" },
+      { id: "web", title: "Web Development", detail: "04 bespoke concept websites" },
       {
         id: "bots",
         title: "AI Chatbot Services",
@@ -64,9 +64,9 @@ export const site = {
     view: "View Project",
     gallery: "screenshot gallery",
     screenshotNote:
-      "Concept galleries show actual page captures · Elvora uses 3D promotional artwork",
+      "Actual browser captures of all four custom demos · Desktop, details and mobile views",
     disclaimer:
-      "Concepts are independent explorations. The featured Elvora card links to the supplied website; no client commissions are implied.",
+      "Independent concept projects with fictional brands, original illustrations and generated imagery. No client commissions or real bookings, sales or clinical services are implied.",
   },
   errors: {
     notFound: "This page took a different path.",

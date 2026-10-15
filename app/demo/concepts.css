@@ -1,0 +1,217 @@
+.concept-site{--c-bg:#f7f4ed;--c-ink:#313b32;--c-muted:#62685f;--c-accent:#9e7650;--c-line:#313b3226;--c-card:#f0ece2;background:var(--c-bg);color:var(--c-ink);min-height:100vh;overflow:clip;color-scheme:light;font-size:14px}
+.concept-site :focus-visible{outline:2px solid var(--c-ink);outline-offset:5px}
+.concept-site h1,.concept-site h2,.concept-site h3{color:var(--c-ink);font-weight:400}
+.concept-site h1,.concept-site h2{font-family:Georgia,'Times New Roman',serif;letter-spacing:-.055em}
+.concept-site h1{font-size:clamp(58px,6.9vw,106px);line-height:.99;margin:24px 0}
+.concept-site h1 span{display:block}
+.concept-site h2{font-size:clamp(38px,4.2vw,64px);line-height:1.07;letter-spacing:-.045em}
+.concept-site h3{font-size:25px;font-family:Georgia,serif;letter-spacing:-.5px}
+.concept-site a,.concept-site button{transition:background .25s,color .25s,border-color .25s,transform .25s}
+.concept-ribbon{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:10px 4.5%;background:var(--c-ink);color:var(--c-bg);font-size:8px;letter-spacing:1.1px;min-height:34px}
+.concept-ribbon a{display:inline-flex;align-items:center;gap:8px;letter-spacing:0;font-size:10px}
+.concept-ribbon>span:last-child{font-size:7px;opacity:.75}
+.concept-header{position:relative;display:flex;align-items:center;gap:35px;padding:25px 5%;border-bottom:1px solid var(--c-line);min-height:96px;background:var(--c-bg);z-index:5}
+.concept-logo{font-family:Georgia,serif;font-size:37px;letter-spacing:-2px;display:inline-flex;align-items:center;gap:7px;line-height:1}
+.concept-logo small{font:8px var(--font-inter),sans-serif;letter-spacing:2px;margin-left:10px;max-width:110px;line-height:1.5}
+.concept-nav{display:flex;align-items:center;gap:32px;margin-left:auto;font-size:11px}
+.concept-nav a:hover{color:var(--c-accent)}
+.concept-header-action{display:inline-flex;align-items:center;gap:20px;font-size:10px;padding:13px 18px;border:1px solid var(--c-line)}
+.concept-header-action:hover{background:var(--c-ink);color:var(--c-bg)}
+.concept-menu{display:none;background:none;padding:8px;color:var(--c-ink)}
+.concept-hero{position:relative;isolation:isolate}
+.concept-hero-background{position:absolute;inset:0;z-index:-1;background:#343b3a}
+.concept-hero-background>img{object-fit:cover}
+.concept-hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,#11241c88,transparent 80%),linear-gradient(0deg,#10221788,transparent 45%)}
+.concept-hero-copy{padding:90px 6%;position:relative}
+.concept-kicker{font-size:8px;line-height:1.8;letter-spacing:2.2px;text-transform:uppercase}
+.concept-intro{font-size:13px;line-height:1.9;max-width:350px;margin-top:22px}
+.concept-actions{display:flex;align-items:center;gap:25px;flex-wrap:wrap;margin-top:33px}
+.concept-primary,.concept-secondary{display:inline-flex;align-items:center;justify-content:space-between;gap:25px;font-size:11px;line-height:1.5;padding:15px 20px;min-height:46px}
+.concept-primary{background:var(--c-ink);color:var(--c-bg);border:1px solid var(--c-ink)}
+.concept-primary:hover{transform:translateY(-2px);background:var(--c-accent);border-color:var(--c-accent);color:#fff}
+.concept-secondary{padding-inline:0;border-bottom:1px solid currentColor;min-height:38px}
+.concept-secondary:hover{gap:32px}
+.concept-hero-caption{display:flex;justify-content:space-between;gap:20px;padding:22px 6%;font-size:8px;letter-spacing:1.8px;border-top:1px solid #ffffff30}
+.concept-section{padding:85px 6%}
+.concept-section-heading{display:grid;grid-template-columns:1fr 1fr;gap:20px 70px;align-items:end}
+.concept-section-heading>.concept-kicker{grid-column:1/-1}
+.concept-section-heading>p:last-child{color:var(--c-muted);max-width:400px;font-size:12px;line-height:1.9;padding-bottom:5px}
+.concept-filters{display:flex;gap:8px;flex-wrap:wrap;margin:35px 0 30px}
+.concept-filters button{padding:11px 18px;background:none;border:1px solid var(--c-line);color:var(--c-ink);font-size:10px;display:flex;align-items:center;gap:25px;min-height:42px}
+.concept-filters [aria-pressed=true]{background:var(--c-ink);color:var(--c-bg);border-color:var(--c-ink)}
+.concept-item-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.concept-item{border:1px solid var(--c-line);background:var(--c-bg);min-width:0}
+.concept-item-copy{padding:25px}
+.concept-item-copy>.concept-kicker{font-size:7px;color:var(--c-muted);margin-bottom:14px}
+.concept-item-copy>p:not(.concept-kicker){font-size:10px;color:var(--c-muted);line-height:1.9;margin-top:13px}
+.concept-item-copy>div{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--c-line);margin-top:25px;padding-top:16px;font-size:10px}
+.concept-item-copy button{display:grid;place-items:center;width:38px;height:38px;border:1px solid var(--c-line);border-radius:50%;background:none;color:var(--c-ink)}
+.concept-item-copy button:hover{background:var(--c-ink);color:var(--c-bg);transform:rotate(7deg)}
+.room-plan{position:relative;background:#eae4d8;color:#655746;aspect-ratio:1.6;border-bottom:1px solid var(--c-line)}
+.room-plan svg{width:100%;height:100%;display:block}
+.room-plan>span{position:absolute;bottom:14px;left:20px;font-size:7px;letter-spacing:1.8px;text-transform:uppercase}
+.concept-feature{display:grid;grid-template-columns:1fr 1fr;padding-top:0;padding-bottom:90px;gap:0}
+.concept-feature-art{position:relative;min-height:490px;background:var(--c-card);overflow:hidden}
+.concept-feature-art>img{object-fit:cover;object-position:25% center;transition:scale .8s}
+.concept-feature-art:hover>img{scale:1.03}
+.concept-feature-art>span{position:absolute;bottom:23px;left:25px;right:25px;color:#fff;font-size:7px;letter-spacing:1.5px;text-shadow:0 1px 8px #000;background:#00000040;padding:8px 10px;width:fit-content}
+.concept-feature-copy{padding:55px 12%;background:var(--c-card);display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
+.concept-feature-copy h2{font-size:clamp(36px,3.2vw,49px);margin-top:22px}
+.concept-feature-copy>p:not(.concept-kicker){font-size:11px;color:var(--c-muted);line-height:1.95;margin-top:24px}
+.concept-feature-copy ol{list-style:none;padding:0;margin:25px 0 15px;width:100%}
+.concept-feature-copy li{display:flex;align-items:center;gap:18px;padding:15px 0;border-top:1px solid var(--c-line);font-size:10px;line-height:1.5}
+.concept-feature-copy li>span{font-size:8px;color:var(--c-muted)}
+.concept-feature-copy li>svg{margin-left:auto;flex-shrink:0}
+.concept-feature-copy>.concept-secondary{margin-top:10px}
+.concept-planner{display:grid;grid-template-columns:1fr 1fr;gap:70px;border-top:1px solid var(--c-line);padding-top:70px;padding-bottom:80px}
+.concept-planner h2{font-size:clamp(36px,3.5vw,55px);margin-top:20px}
+.concept-planner>div>p:not(.concept-kicker){font-size:11px;color:var(--c-muted);line-height:1.9;max-width:400px;margin-top:22px}
+.concept-plan-form{padding:30px;background:var(--c-card);align-self:start;border:1px solid var(--c-line)}
+.concept-form-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.concept-form-fields>label{display:flex;flex-direction:column;gap:10px;font-size:10px;min-width:0}
+.concept-form-fields input,.concept-form-fields select{width:100%;min-width:0;min-height:46px;background:var(--c-bg);border:1px solid var(--c-line);padding:12px;color:var(--c-ink);border-radius:0;font:11px var(--font-inter),sans-serif}
+.concept-plan-form>.concept-primary{margin-top:25px;width:100%}
+.concept-form-error{color:#992a20;font-size:11px;margin-top:16px;line-height:1.8}
+.concept-summary{margin-top:24px;padding:20px;border:1px solid var(--c-line);background:var(--c-bg);font-size:11px;line-height:1.8}
+.concept-summary>.concept-kicker{display:block;font-size:7px;letter-spacing:1px;margin-bottom:10px}
+.concept-summary strong{display:block;font-weight:500;margin-top:8px}
+.concept-summary button{background:none;color:var(--c-ink);padding:8px 0;border-bottom:1px solid var(--c-line);display:flex;align-items:center;gap:15px;font-size:10px;margin-top:15px}
+.concept-footer{padding:45px 6% 25px;background:var(--c-ink);color:var(--c-bg)}
+.concept-footer>div{display:flex;justify-content:space-between;align-items:center;gap:35px}
+.concept-footer p{max-width:440px;font-size:10px;line-height:1.8;opacity:.8}
+.concept-footer>div+div{border-top:1px solid #ffffff26;margin-top:35px;padding-top:22px;align-items:start;font-size:8px;line-height:1.8;gap:30px}
+.concept-footer>div+div>span{max-width:500px;opacity:.75}
+.concept-footer>div+div>a{display:flex;align-items:center;gap:12px;white-space:nowrap}
+/* Solenne: warm hospitality, editorial serif, a cinematic coastal hero. */
+.concept-solenne{--c-bg:#f7f4ec;--c-ink:#3a4237;--c-muted:#595f53;--c-accent:#776042;--c-card:#ebe8dd}
+.concept-solenne .concept-logo{font-size:42px;font-style:italic}
+.concept-solenne .concept-hero{color:#fff9ef;min-height:660px;display:flex;flex-direction:column;justify-content:space-between}
+.concept-solenne .concept-hero h1{color:#fff9ef;font-size:clamp(65px,7.2vw,108px);max-width:770px}
+.concept-solenne .concept-hero h1 span:last-child{font-style:italic;font-weight:400}
+.concept-solenne .concept-hero-copy{padding-top:80px;padding-bottom:55px}
+.concept-solenne .concept-hero .concept-primary{background:#fff8eb;color:#363b30;border-color:#fff8eb}
+.concept-solenne .concept-hero .concept-secondary{color:#fff9ef}
+.concept-solenne .concept-intro{max-width:330px;text-shadow:0 1px 10px #132419}
+.concept-solenne .concept-collection{background:var(--c-bg)}
+.concept-solenne .concept-filters button{border-radius:50px}
+.concept-solenne .concept-planner{background:#e9e6db}
+.concept-solenne .concept-plan-form{background:#f4f1e8}
+/* Vanta: technical, dark, angular and deliberately high contrast. */
+.concept-vanta{--c-bg:#0f1413;--c-ink:#eff2e9;--c-muted:#a4afa6;--c-accent:#c5ed54;--c-card:#17201d;--c-line:#e3edd42b;color-scheme:dark}
+.concept-vanta .concept-ribbon{background:#c5ed54;color:#172013}
+.concept-vanta .concept-logo{font-family:var(--font-space),sans-serif;font-size:30px;letter-spacing:5px;font-weight:600}
+.concept-vanta .concept-header-action{border-color:#c5ed5466;color:#d0ed86}
+.concept-vanta .concept-header-action:hover{background:#c5ed54;color:#182010}
+.concept-vanta h1,.concept-vanta h2,.concept-vanta h3{font-family:var(--font-space),sans-serif;font-weight:500;letter-spacing:-.055em}
+.concept-vanta .concept-hero{min-height:650px;display:flex;flex-direction:column;justify-content:space-between}
+.concept-vanta .concept-hero-background>img{object-position:65% 50%}
+.concept-vanta .concept-hero-shade{background:linear-gradient(90deg,#060b0bd9,transparent 80%),linear-gradient(0deg,#080f0fcc,transparent 40%)}
+.concept-vanta .concept-hero-copy{padding-top:65px;padding-bottom:35px}
+.concept-vanta h1{font-size:clamp(58px,6.5vw,97px);line-height:1.01;max-width:700px}
+.concept-vanta h1 span:last-child{color:#d1ed86}
+.concept-vanta .concept-intro{max-width:310px;color:#d4dbd2}
+.concept-vanta .concept-kicker{color:#c5ed84}
+.concept-vanta .concept-primary{background:#c5ed54;color:#172013;border-color:#c5ed54}
+.concept-vanta .concept-primary:hover{background:#e4ff9a;color:#172013}
+.concept-vanta .concept-filters button{min-width:120px;justify-content:space-between}
+.concept-vanta .concept-filters [aria-pressed=true]{background:#c5ed54;color:#172013;border-color:#c5ed54}
+.vanta-config-preview{display:grid;grid-template-columns:1.3fr 1fr;min-height:350px;border:1px solid var(--c-line);background:radial-gradient(ellipse at 20% 50%,#c5ed5409,transparent 65%)}
+.vanta-drawing{display:flex;flex-direction:column;justify-content:center;position:relative;padding:25px;min-width:0}
+.vanta-drawing svg{display:block;width:100%;height:auto}
+.vanta-drawing>span{position:absolute;bottom:25px;left:30px;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--c-muted)}
+.vanta-model-copy{padding:45px 40px;border-left:1px solid var(--c-line)}
+.vanta-model-copy h3{font-size:36px;margin-top:12px}
+.vanta-model-copy>p:not(.concept-kicker){font-size:11px;color:var(--c-muted);margin-top:12px;line-height:1.8}
+.vanta-model-copy dl{display:flex;flex-wrap:wrap;gap:25px;margin:25px 0}
+.vanta-model-copy dt{font-size:8px;color:var(--c-muted);margin-bottom:8px}
+.vanta-model-copy dd{font-size:23px;font-family:var(--font-space),sans-serif;margin:0;letter-spacing:-1px}
+.concept-vanta .concept-feature-art>img{object-position:75% center}
+.concept-vanta .concept-planner{background:#151d19}
+.concept-vanta .concept-form-fields{grid-template-columns:1fr}
+.vanta-finishes{border:0;padding:0;margin:0;display:flex;gap:15px;flex-wrap:wrap}
+.vanta-finishes legend{font-size:10px;margin-bottom:13px}
+.vanta-finishes label{position:relative;display:flex;align-items:center;gap:9px;font-size:10px;cursor:pointer;padding:7px 0}
+.vanta-finishes input{position:absolute;width:1px;height:1px;opacity:0;min-height:0;padding:0}
+.finish-swatch{display:grid;place-items:center;width:26px;height:26px;border:1px solid #d2dbc666;border-radius:50%;color:#fff;text-shadow:0 0 3px #000}
+.vanta-finishes input:checked+.finish-swatch{outline:1px solid #c5ed54;outline-offset:3px}
+.vanta-finishes input:focus-visible+.finish-swatch{outline:2px solid #fff;outline-offset:4px}
+.concept-vanta .concept-form-error{color:#ffbfb2}
+.concept-vanta .concept-footer{background:#080d0b;color:#eff2e9}
+/* Aster: a softer, accessible care journey with a rounded visual language. */
+.concept-aster{--c-bg:#f8fbf7;--c-ink:#244c40;--c-muted:#576e61;--c-accent:#365e4d;--c-card:#e9f0e8;--c-line:#244c4026}
+.concept-aster .concept-logo{font-family:var(--font-space),sans-serif;font-size:35px;font-weight:500;letter-spacing:-2px}
+.aster-mark{font-size:40px;line-height:.7;font-weight:400;display:inline-block;margin-right:3px}
+.concept-aster .concept-header-action,.concept-aster .concept-primary{border-radius:50px}
+.concept-aster .concept-hero{display:grid;grid-template-columns:1fr 1fr;gap:50px;padding:45px 6% 65px;align-items:center;background:linear-gradient(120deg,#f8fbf7,#edf4ec)}
+.concept-aster .concept-hero-copy{padding:35px 0}
+.concept-aster h1{font-size:clamp(58px,5.9vw,84px);line-height:1.04}
+.concept-aster h1 span:last-child{font-style:italic}
+.concept-aster .concept-intro{max-width:345px;color:var(--c-muted)}
+.concept-aster .concept-hero-picture{position:relative;min-height:550px;border-radius:150px 30px 30px 30px;overflow:hidden}
+.concept-aster .concept-hero-picture img{object-fit:cover;object-position:60% center}
+.concept-hero-picture>span{position:absolute;inset:auto 20px 20px;display:flex;justify-content:space-between;align-items:center;gap:18px;background:#f8fbf7e8;color:#244c40;padding:17px 20px;font-size:8px;letter-spacing:1.2px;backdrop-filter:blur(12px)}
+.concept-aster .concept-section-heading h2{max-width:500px}
+.concept-aster .concept-filters button{border-radius:50px}
+.concept-aster .concept-item{border-radius:20px;overflow:hidden}
+.care-symbol{padding:30px 30px 15px;display:flex;justify-content:space-between;align-items:start}
+.care-symbol>svg{padding:17px;width:70px;height:70px;border-radius:50%;background:var(--c-card)}
+.care-symbol>span{font-size:10px;color:var(--c-muted);padding-top:10px}
+.concept-aster .concept-item-copy{padding:15px 30px 30px}
+.concept-aster .concept-item-copy h3{font-size:29px}
+.concept-aster .concept-feature-art{border-radius:30px 0 0 30px}
+.concept-aster .concept-feature-copy{border-radius:0 30px 30px 0}
+.concept-aster .concept-plan-form{border-radius:20px}
+.concept-aster .concept-form-fields input,.concept-aster .concept-form-fields select{border-radius:10px}
+.concept-aster .concept-summary{border-radius:12px}
+/* Kovo: a mineral editorial grid, architectural studies and terracotta details. */
+.concept-kovo{--c-bg:#eae5db;--c-ink:#35342f;--c-muted:#56534c;--c-accent:#984f36;--c-card:#ddd6c8;--c-line:#35342f33}
+.concept-kovo .concept-header{padding-block:28px}
+.concept-kovo .concept-logo{font-family:var(--font-space),sans-serif;font-size:40px;letter-spacing:-3px;font-weight:600;gap:25px}
+.concept-kovo .concept-logo small{margin-left:0;font-size:7px;letter-spacing:1.4px}
+.concept-kovo .concept-header-action{border:none;border-bottom:1px solid var(--c-ink);padding-inline:0}
+.concept-kovo h1,.concept-kovo h2,.concept-kovo h3{font-family:var(--font-space),sans-serif;letter-spacing:-.065em;font-weight:400}
+.concept-kovo .concept-hero{padding:0 6% 35px}
+.concept-kovo .concept-hero-copy{display:grid;grid-template-columns:.7fr 1.5fr;gap:15px 65px;padding:55px 0 40px;align-items:start}
+.concept-kovo .concept-hero-copy h1{grid-column:2;grid-row:1/4;font-size:clamp(58px,7vw,100px);margin:0;line-height:1.02}
+.concept-kovo .concept-hero-copy>.concept-kicker{grid-column:1;font-size:7px;letter-spacing:1.5px}
+.concept-kovo .concept-intro{grid-column:1;margin:0;font-size:11px;max-width:265px}
+.concept-kovo .concept-actions{grid-column:1;gap:12px;margin:0}
+.concept-kovo .concept-actions .concept-primary{padding:0;background:none;color:var(--c-ink);border:none;border-bottom:1px solid var(--c-ink);min-height:35px}
+.concept-kovo .concept-actions .concept-secondary{display:none}
+.concept-kovo .concept-hero-picture{position:relative;height:415px;overflow:hidden}
+.concept-kovo .concept-hero-picture img{object-fit:cover;object-position:center 60%}
+.concept-kovo .concept-hero-picture>span{inset:auto 0 0;background:#35342fc9;color:#f4eee3;backdrop-filter:none}
+.concept-kovo .concept-collection{border-top:1px solid var(--c-line);padding-top:70px}
+.concept-kovo .concept-section-heading{grid-template-columns:1.3fr 1fr}
+.concept-kovo .concept-item{border:none;border-top:1px solid var(--c-line);padding-top:12px}
+.space-study{position:relative;aspect-ratio:1.5;background:#dad4c8;color:#665d4a;overflow:hidden}
+.space-study-1{background:#c7c7b9}.space-study-2{background:#dfc5b4}
+.space-study svg{display:block;width:100%;height:100%;transition:transform .6s}
+.concept-item:hover .space-study svg{transform:translateY(-4px)}
+.space-study>span{color:#504a3d;position:absolute;bottom:14px;left:18px;font-size:8px;letter-spacing:1px}
+.concept-kovo .concept-item-copy{padding:22px 0}
+.concept-kovo .concept-item-copy h3{font-size:30px}
+.concept-kovo .concept-feature-art{background:#a6533b;color:#f3ddc7;display:grid;place-items:center}
+.concept-kovo .concept-feature-art>svg{width:85%;height:90%;max-height:480px}
+.concept-kovo .concept-feature-art>span{background:none;color:#fff;text-shadow:none}
+.concept-kovo .concept-feature-copy{background:#dcd5c7}
+.concept-kovo .concept-planner{padding-top:65px}
+.concept-kovo .concept-form-fields{grid-template-columns:1fr}
+@media(min-width:1500px){.concept-section{padding-inline:max(6%,calc((100vw - 1400px)/2))}}
+@media(max-width:1000px){.concept-header{gap:20px;padding-inline:5%}.concept-nav{gap:20px}.concept-header-action{padding:12px;font-size:9px;gap:10px}.concept-logo{font-size:31px}.concept-logo small{display:none}.concept-section{padding:65px 5%}.concept-section-heading{gap:20px 35px}.concept-feature{padding-top:0}.concept-feature-copy{padding:35px 9%}.concept-feature-art{min-height:450px}.concept-item-grid{gap:15px}.concept-item-copy{padding:20px}.concept-item-copy h3{font-size:23px}.concept-planner{gap:35px}.concept-plan-form{padding:23px}.concept-aster .concept-hero{gap:25px;padding-inline:5%}.concept-aster .concept-hero-picture{min-height:480px}.concept-kovo .concept-hero-copy{gap:15px 35px}.concept-kovo .concept-logo{font-size:33px}.vanta-model-copy{padding:30px 25px}}
+@media(max-width:700px){
+.concept-ribbon{padding:10px 5%;gap:12px}.concept-ribbon>span{font-size:6px;letter-spacing:.5px}.concept-ribbon>span:last-child{display:none}.concept-ribbon a{font-size:9px;white-space:nowrap}
+.concept-header{min-height:80px;padding:20px 5%;gap:15px}.concept-logo{font-size:32px}.concept-nav{display:none;position:absolute;inset:100% 0 auto;background:var(--c-bg);border-bottom:1px solid var(--c-line);padding:20px 5%;flex-direction:column;align-items:stretch;gap:0;font-size:14px}.concept-nav.is-open{display:flex}.concept-nav a{padding:14px 0}.concept-header-action{margin-left:auto;font-size:8px;padding:10px 11px;gap:10px}.concept-menu{display:grid;place-items:center;padding:7px}
+.concept-site h1{font-size:clamp(52px,12vw,78px);letter-spacing:-3px;line-height:1.02}.concept-site h2{font-size:39px;letter-spacing:-1.6px}
+.concept-hero-copy{padding:60px 6% 45px}.concept-kicker{font-size:7px;letter-spacing:1.6px}.concept-intro{font-size:12px;line-height:1.9}.concept-actions{gap:18px;margin-top:26px}.concept-primary,.concept-secondary{font-size:10px;gap:16px}.concept-primary{padding:14px 17px}
+.concept-hero-caption{font-size:6px;letter-spacing:1px;padding:19px 6%;line-height:1.8}.concept-hero-caption>span:last-child{max-width:90px;text-align:right}
+.concept-section{padding:55px 6%}.concept-section-heading{display:block}.concept-section-heading h2{margin-top:18px}.concept-section-heading>p:last-child{margin-top:20px;font-size:11px}.concept-filters{margin:25px 0}.concept-filters button{font-size:9px;padding:10px 14px;gap:12px;min-height:40px}.concept-item-grid{grid-template-columns:1fr;gap:22px}.concept-item-copy{padding:24px}.concept-item-copy h3{font-size:29px}.concept-item-copy>p:not(.concept-kicker){font-size:11px}.concept-item-copy>div{font-size:11px}.room-plan{aspect-ratio:1.7}.room-plan>span{font-size:8px}
+.concept-feature{display:flex;flex-direction:column;padding-top:0;gap:0}.concept-feature-art{min-height:330px}.concept-feature-copy{padding:35px 8% 40px}.concept-feature-copy h2{font-size:38px}.concept-feature-copy>p:not(.concept-kicker){font-size:12px}.concept-feature-copy li{font-size:11px}.concept-feature-copy li>span{font-size:9px}
+.concept-planner{display:block}.concept-planner h2{font-size:39px}.concept-planner>div>p:not(.concept-kicker){font-size:12px}.concept-plan-form{margin-top:30px;padding:23px}.concept-form-fields{gap:18px;grid-template-columns:1fr}.concept-form-fields>label{font-size:11px}.concept-form-fields input,.concept-form-fields select{font-size:14px;min-height:48px}.concept-summary{padding:17px;font-size:11px}.concept-summary strong{overflow-wrap:anywhere}
+.concept-footer{padding:35px 6% 25px}.concept-footer>div{display:block}.concept-footer p{margin-top:20px;font-size:10px}.concept-footer>div+div{display:block;font-size:9px}.concept-footer>div+div>a{margin-top:20px}
+.concept-solenne .concept-hero{min-height:660px}.concept-solenne .concept-hero h1{font-size:clamp(58px,13vw,82px)}.concept-solenne .concept-hero-copy{padding-top:65px}.concept-solenne .concept-hero-background>img{object-position:63% center}.concept-solenne .concept-hero-shade{background:linear-gradient(90deg,#0c271ca6,#1632251a),linear-gradient(0deg,#122c2099,transparent 50%)}
+.concept-vanta .concept-logo{font-size:26px;letter-spacing:3px}.concept-vanta .concept-hero{min-height:690px}.concept-vanta h1{font-size:clamp(54px,12.6vw,80px)}.concept-vanta .concept-hero-copy{padding-top:50px}.concept-vanta .concept-intro{max-width:260px}.concept-vanta .concept-hero-background>img{object-position:57% center}.concept-vanta .concept-hero-shade{background:linear-gradient(180deg,#080e0ed9,transparent 90%),linear-gradient(0deg,#080f0fcc,transparent 40%)}.concept-vanta .concept-filters button{min-width:0;flex:1;justify-content:center}.vanta-config-preview{grid-template-columns:1fr}.vanta-drawing{min-height:245px;padding:15px}.vanta-drawing>span{left:22px;bottom:15px;font-size:7px}.vanta-model-copy{border-left:0;border-top:1px solid var(--c-line);padding:28px 25px}.vanta-model-copy h3{font-size:35px}.vanta-model-copy dl{gap:25px}.vanta-model-copy dd{font-size:24px}.vanta-finishes{gap:15px}.vanta-finishes label{font-size:10px}
+.concept-aster .concept-logo{font-size:30px}.aster-mark{font-size:34px}.concept-aster .concept-hero{display:flex;flex-direction:column;gap:20px;padding:25px 6% 40px;align-items:stretch}.concept-aster .concept-hero-copy{padding:20px 0 10px}.concept-aster h1{font-size:clamp(55px,12vw,80px)}.concept-aster .concept-hero-picture{min-height:350px;border-radius:110px 20px 20px 20px}.concept-hero-picture>span{padding:13px;font-size:6px;letter-spacing:1px;inset:auto 15px 15px}.concept-aster .concept-feature-art{border-radius:22px 22px 0 0}.concept-aster .concept-feature-copy{border-radius:0 0 22px 22px}
+.concept-kovo .concept-logo{font-size:32px}.concept-kovo .concept-header{padding-block:22px}.concept-kovo .concept-hero{padding:0 6% 25px}.concept-kovo .concept-hero-copy{display:block;padding:35px 0 30px}.concept-kovo .concept-hero-copy h1{font-size:clamp(55px,12.8vw,80px);margin:23px 0}.concept-kovo .concept-intro{font-size:11px;max-width:290px}.concept-kovo .concept-actions{margin-top:22px}.concept-kovo .concept-hero-picture{height:340px}.concept-kovo .concept-hero-picture img{object-position:55% center}.concept-kovo .concept-hero-picture>span{inset:auto 0 0}.concept-kovo .concept-collection{padding-top:50px}.concept-kovo .concept-item-copy{padding:22px 0}.concept-kovo .concept-item-copy h3{font-size:30px}.concept-kovo .concept-feature-art{min-height:360px}.concept-kovo .concept-feature-copy{padding:35px 8%}
+}
+@media(prefers-reduced-motion:reduce){.concept-site *{scroll-behavior:auto!important}.concept-site a:hover,.concept-site button:hover,.concept-item:hover .space-study svg,.concept-feature-art:hover>img{transform:none;scale:1}}

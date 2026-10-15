@@ -3,7 +3,7 @@ import { spawn } from "node:child_process";
 import { mkdir, access, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
-import { demos } from "../data/demos";
+import { concepts } from "../data/concepts";
 async function main() {
   const base = process.env.CAPTURE_BASE_URL || "http://127.0.0.1:3100";
   const ownServer = !process.env.CAPTURE_BASE_URL;
@@ -18,7 +18,7 @@ async function main() {
     let ready = false;
     for (let attempt = 0; attempt < 120; attempt++) {
       try {
-        const response = await fetch(`${base}/demo/restaurant`, {
+        const response = await fetch(`${base}/demo/solenne`, {
           signal: AbortSignal.timeout(2000),
         });
         if (response.ok) {
@@ -57,7 +57,7 @@ async function main() {
     });
     const output = path.join(process.cwd(), "public/projects");
     await mkdir(output, { recursive: true });
-    for (const slug of Object.keys(demos)) {
+    for (const slug of Object.keys(concepts)) {
       const page = await desktop.newPage();
       const phone = await mobile.newPage();
       await page.goto(`${base}/demo/${slug}`, { waitUntil: "networkidle" });

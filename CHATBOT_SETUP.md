@@ -1,6 +1,6 @@
 # Part 2 — AI chatbot services
 
-The complete portfolio includes AI Chatbot Services alongside About Me, Skills, Certification and Contact. The AI Bots navbar anchor opens the AI tab, including direct links to `#ai-bots`. The first real-bot card now connects the owner's **Forte Institute Study Assistant** Botpress widget; see `BOTPRESS_SETUP.md`.
+The complete portfolio includes AI Chatbot Services alongside About Me, Skills, Certification and Contact. The AI Bots navbar anchor opens the AI tab, including direct links to `#ai-bots`. The first real-bot card now connects the owner's **Forte O Level Study Assistant** Botpress widget; see `BOTPRESS_SETUP.md`.
 
 ## Install and run
 

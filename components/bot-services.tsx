@@ -19,6 +19,7 @@ import {
   type ChatMessage,
 } from "@/data/bots";
 import { Reveal } from "./reveal";
+import { FortePreview } from "./forte-preview";
 
 const ChatPanel = dynamic(() => import("./bot-chat-panel"), { ssr: false });
 const icons = {
@@ -59,20 +60,22 @@ export function BotServices({ bots }: { bots: Bot[] }) {
       <div className="bots-grid">
         {bots.map((bot, index) => {
           const Icon = icons[bot.id as keyof typeof icons] || Sparkles;
+          const forte = bot.id === "real" && bot.provider === "botpress";
           return (
             <Reveal key={bot.id} delay={(index % 2) * 0.06}>
               <article
                 className={`bot-card bot-card-${bot.id}`}
                 aria-labelledby={`bot-name-${bot.id}`}
               >
-                <div className="bot-card-top">
-                  <div className="bot-art" aria-hidden="true">
+                {forte && <button type="button" className="forte-card-hitarea" aria-haspopup="dialog" aria-label={`${copy.open}: ${bot.name}`} onClick={() => setActive(bot)} />}
+                <div className={forte ? "bot-card-top forte-card-top" : "bot-card-top"}>
+                  {forte ? <FortePreview name={bot.name} /> : <div className="bot-art" aria-hidden="true">
                     <span />
                     <Icon size={42} strokeWidth={1.2} />
                     <i />
                     <i />
                     <i />
-                  </div>
+                  </div>}
                   <span className="method-badge">
                     <Code2 size={12} aria-hidden="true" />
                     {copy.methods[bot.method]}
@@ -90,7 +93,7 @@ export function BotServices({ bots }: { bots: Bot[] }) {
                     ))}
                   </ul>
                   <div className="bot-card-action">
-                    <button
+                    {forte ? <span className="button button-outline">{copy.open}<ArrowUpRight size={16} aria-hidden="true" /></span> : <button
                       className="button button-outline"
                       aria-haspopup="dialog"
                       aria-label={`${copy.try}: ${bot.name}`}
@@ -98,7 +101,7 @@ export function BotServices({ bots }: { bots: Bot[] }) {
                     >
                       {copy.try}
                       <ArrowUpRight size={16} aria-hidden="true" />
-                    </button>
+                    </button>}
                     {!bot.configured && (
                       <span className="connection-pending">{copy.pending}</span>
                     )}

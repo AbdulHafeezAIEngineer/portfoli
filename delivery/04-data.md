@@ -288,10 +288,10 @@ export function getFileBots(): Bot[] {
   return [
     {
       id: "real",
-      name: "Forte Institute Study Assistant",
+      name: "Forte O Level Study Assistant",
       description:
-        "Ask a study question in my Botpress-powered Forte Institute Study Assistant, directly inside this portfolio.",
-      tags: ["Study questions", "Education", "Botpress"],
+        "Ask about Forte O Level study materials, exam questions and revision. Click anywhere on this card to open the connected assistant directly.",
+      tags: ["O Level guidance", "Study materials", "Botpress"],
       method: realBotConfig.method,
       kind: "real",
       configured,
@@ -373,6 +373,17 @@ export function getFileBots(): Bot[] {
 }
 
 export const botContent = {
+  preview: {
+    mark: "forte",
+    label: "CHAT PREVIEW",
+    subtitle: "Study materials, exam questions and revision",
+    heading: "Let's prepare for your exams",
+    description: "Ask about your study materials, exam questions, or revision.",
+    invitation: "Click to start a conversation",
+    placeholder: "Type your message…",
+    powered: "Powered by Botpress",
+  },
+  open: "Open chat",
   eyebrow: "02 / AI CHATBOT SERVICES",
   title: "Better conversations. Built right in.",
   description:
@@ -557,6 +568,221 @@ export const certificateContent = {
   loading: "Loading certificate",
   unavailable:
     "The certificate image could not be loaded. Please try again later.",
+} as const;
+``````
+
+## data/concept-images.ts
+
+``````typescript
+export const conceptImagePrompts = [
+  {
+    "slug": "solenne",
+    "src": "/concepts/solenne-hero.webp",
+    "prompt": "Create a photorealistic architectural editorial image for a FICTIONAL boutique Mediterranean coastal hotel website concept named Solenne. Landscape 16:10. View from a sunlit pale limestone terrace across an impossibly serene infinity pool toward a quiet turquoise cove, a sculptural cream hotel facade with deep shaded arches and linen parasols on the left, one olive tree in a large terracotta pot, subtle distant cliffs, early morning golden light. Restrained luxury travel magazine photography, warm ivory, sand, muted terracotta, clear pale blue sea, tactile natural materials, incredible realism and careful architectural geometry. No people, no text, no logos, no watermarks. Beautiful enough to anchor an expensive editorial hotel website. A fictional property, not a recognizable real hotel."
+  },
+  {
+    "slug": "vanta",
+    "src": "/concepts/vanta-hero.webp",
+    "prompt": "Create a photorealistic luxury automotive campaign image for a FICTIONAL performance-car brand Vanta, for a custom website demo. Landscape 16:10. Full side three-quarter view of an original unbranded graphite-black electric grand touring sports coupe in a vast dark architectural studio, dramatic slim white running lights and minimal acid-lime accent reflection on the wet polished floor. Car completely in frame with breathing room, elegant bespoke original bodywork, no identifiable existing car badge or manufacturer. Heroic low camera angle, sculptural architectural ceiling beams receding into darkness, impeccable automotive advertising photography, razor sharp body reflections, charcoal, silver, restrained lime green. No humans, no lettering, no logos, no watermarks."
+  },
+  {
+    "slug": "aster",
+    "src": "/concepts/aster-hero.webp",
+    "prompt": "Create a photorealistic editorial interior image for a FICTIONAL private wellness clinic website concept called Aster Care. Landscape 16:10. A beautiful calm private-clinic reception lounge with softly curved ivory plaster walls, a sage-green velvet sofa, light travertine desk, oak joinery, a large indoor olive tree and abundant soft daylight through tall arched windows, a sculptural frosted-glass partition. Contemporary hospitality quality, welcoming, minimal, elevated, human and serene. No people, no medical procedures, no medical devices, no signage, no logos, no text, no watermarks. Colors warm white, pale mint, sage, natural oak and delicate silver. Realistic architectural photography, refined material textures. Fictional interior, no claim of a real healthcare provider."
+  },
+  {
+    "slug": "kovo",
+    "src": "/concepts/kovo-hero.webp",
+    "prompt": "Create a photorealistic high-end architectural magazine photograph for a FICTIONAL design studio website concept KOVO. Landscape 16:10. A striking sculptural two-storey home of pale raw concrete and warm dark timber, one huge circular window and a dramatically cantilevered monolithic upper volume, nestled in a quiet pine forest, low-slung flat roof, oversized glass reflecting trees, a shallow stone path and wild grasses in the foreground. Carefully composed front three-quarter wide angle, overcast diffuse daylight, poetic stillness, tactile material detail, Belgian minimalism with Japanese spatial restraint, professional architectural photography. A wholly original fictional building, no known real-world project. No humans, no lettering, no logo, no watermark."
+  }
+] as const;
+``````
+
+## data/concepts.ts
+
+``````typescript
+export const concepts = {
+  solenne: {
+    name: "Solenne",
+    wordmark: "solenne",
+    industry: "Boutique Hotel & Hospitality",
+    accent: "#d0ad7c",
+    category: "HOTEL / COASTAL RETREAT",
+    kicker: "A QUIETER KIND OF LUXURY",
+    headline: ["Somewhere", "time slows down."],
+    intro: "Salt on your skin. Sunlight on stone. A considered coastal escape, with room to simply be.",
+    action: "Find your stay",
+    secondary: "Discover Solenne",
+    nav: ["Our stays", "The retreat", "Plan a stay"],
+    image: "/concepts/solenne-hero.webp",
+    imageAlt: "Generated concept of a limestone coastal retreat, an infinity pool and a quiet Mediterranean cove",
+    caption: "THE COAST, AT ITS MOST QUIET",
+    collectionTitle: "A space to call your own.",
+    collectionIntro: "Thoughtful spaces, natural textures, and the luxury of an unhurried morning. Explore our fictional collection.",
+    filters: ["All stays", "Suites", "Villas"],
+    items: [
+      { name: "The Terrace Suite", category: "Suites", detail: "Open sea views · Private terrace · Two guests", price: "From €320 / night", number: "01", icon: "sun" },
+      { name: "The Garden Suite", category: "Suites", detail: "Olive courtyard · Outdoor bath · Two guests", price: "From €280 / night", number: "02", icon: "leaf" },
+      { name: "The Cove Villa", category: "Villas", detail: "Private plunge pool · Two bedrooms · Four guests", price: "From €580 / night", number: "03", icon: "waves" },
+    ],
+    featureTitle: "Nothing extra. Everything considered.",
+    featureText: "Mornings that begin at the water. Long lunches beneath the olive trees. Architecture that belongs to its landscape. A fictional retreat imagined around the simple pleasure of slowing down.",
+    featureList: ["Seasonal coastal kitchen", "Quiet spaces, naturally", "The sea, a few steps away"],
+    formTitle: "Your next quiet moment.",
+    formDescription: "Explore a sample stay. This interactive concept does not check real availability or take reservations.",
+    footer: "A fictional coastal retreat. Sample rooms and rates. No reservations or payments are processed.",
+    highlights: ["Editorial hospitality design", "Interactive stay filters", "Validated sample reservation flow"],
+    subtitle: "A slower rhythm. A different kind of stay.",
+    description: "An original boutique-hotel website concept with coastal imagery, editorial typography, suite/villa filters and a validated sample-stay planner. All property details and rates are fictional; no booking or payment is made.",
+  },
+  vanta: {
+    name: "Vanta Motors",
+    wordmark: "VANTA",
+    industry: "Automotive & Electric Mobility",
+    accent: "#c5ed54",
+    category: "AUTOMOTIVE / ELECTRIC GT",
+    kicker: "THE NEXT CHAPTER OF MOVEMENT",
+    headline: ["PURE FORM.", "PURE INTENT."],
+    intro: "An electric grand tourer imagined around the drive. Sculptural by design. Considered in every detail.",
+    action: "Build your Vanta",
+    secondary: "Explore the collection",
+    nav: ["The collection", "Our philosophy", "Configure"],
+    image: "/concepts/vanta-hero.webp",
+    imageAlt: "Generated original graphite electric coupe in a dark architectural studio; a fictional vehicle design",
+    caption: "VANTA GT / ORIGINAL DESIGN CONCEPT",
+    collectionTitle: "One vision. Your expression.",
+    collectionIntro: "Choose a fictional model and explore the details that make it yours. Specifications are illustrative design content.",
+    filters: ["GT", "GT-S", "Touring"],
+    items: [
+      { name: "Vanta GT", category: "GT", detail: "The considered grand tourer", price: "480 km", number: "3.8 s", icon: "280 kW" },
+      { name: "Vanta GT-S", category: "GT-S", detail: "A sharper expression of electric performance", price: "450 km", number: "3.2 s", icon: "350 kW" },
+      { name: "Vanta Touring", category: "Touring", detail: "More distance. The same intent.", price: "560 km", number: "4.5 s", icon: "250 kW" },
+    ],
+    featureTitle: "The details make the difference.",
+    featureText: "A continuous light signature. Surfaces that catch the light. A cabin reduced to what matters. This original fictional vehicle concept explores how an automotive brand can feel before the first drive.",
+    featureList: ["Sculptural exterior", "Electric by design", "A driver-focused interior"],
+    formTitle: "Make your mark.",
+    formDescription: "Select a model and finish, then create a local configuration summary. No order, test drive or payment is created.",
+    footer: "Fictional automotive brand and original generated vehicle. All ranges and specifications are illustrative. No vehicle sales or test drives are processed.",
+    highlights: ["Cinematic automotive direction", "Interactive model and finish selector", "Live configuration summary"],
+    subtitle: "Electric performance. Sculpted with purpose.",
+    description: "A bespoke electric-automotive concept with a cinematic charcoal/lime identity, original generated vehicle imagery, interactive model comparison and finish selection. Specifications are fictional; configuration stays local and creates no order.",
+  },
+  aster: {
+    name: "Aster Care",
+    wordmark: "aster",
+    industry: "Private Clinic & Wellness",
+    accent: "#9fbdad",
+    category: "HEALTHCARE / PRIVATE WELLNESS",
+    kicker: "A LITTLE MORE HUMAN",
+    headline: ["Care that makes", "space for you."],
+    intro: "Clear conversations. A calmer setting. A thoughtful approach to the everyday experience of care.",
+    action: "Explore care options",
+    secondary: "Our approach",
+    nav: ["Care options", "Our approach", "Plan a visit"],
+    image: "/concepts/aster-hero.webp",
+    imageAlt: "Generated concept of a calm private-clinic reception with curved ivory walls, sage seating and daylight",
+    caption: "A DIFFERENT FEELING OF CARE",
+    collectionTitle: "Start with what you need.",
+    collectionIntro: "Explore example services and plan a sample visit. This fictional clinic does not provide medical advice or real appointments.",
+    filters: ["All services", "Everyday care", "Wellbeing"],
+    items: [
+      { name: "Everyday health", category: "Everyday care", detail: "A first conversation about your care needs", price: "30-minute example", number: "01", icon: "heart" },
+      { name: "Wellbeing planning", category: "Wellbeing", detail: "Space to discuss your everyday wellbeing goals", price: "45-minute example", number: "02", icon: "leaf" },
+      { name: "Follow-up visit", category: "Everyday care", detail: "A sample check-in with your care team", price: "20-minute example", number: "03", icon: "plus" },
+    ],
+    featureTitle: "A considered space. A clearer conversation.",
+    featureText: "Healthcare experiences deserve the same care as the conversations within them. Aster is a fictional design exploration of a calm, accessible service website, from understanding the options to planning a visit.",
+    featureList: ["Clear service information", "Accessible, readable design", "A simple path to the next step"],
+    formTitle: "Let's plan a sample visit.",
+    formDescription: "Choose a service and preferred date. This is a demonstration: no appointment is reserved and no health or contact information is collected.",
+    footer: "Fictional clinic design concept. No medical advice, clinical claims or real appointments. For urgent medical help, contact your local emergency service.",
+    highlights: ["Calm healthcare identity", "Accessible care-option filters", "Private, no-data sample visit planner"],
+    subtitle: "Thoughtful care begins with the experience.",
+    description: "An original private-clinic concept with a sage/ivory palette, clear service navigation, category filters and a sample-visit planner that collects no personal or medical information. A fictional design only, with no medical advice or clinical claims.",
+  },
+  kovo: {
+    name: "Kovo Studio",
+    wordmark: "KOVO",
+    industry: "Architecture & Interior Design",
+    accent: "#c78e73",
+    category: "ARCHITECTURE / SPATIAL DESIGN",
+    kicker: "ARCHITECTURE · INTERIORS · OBJECTS",
+    headline: ["Spaces,", "deeply considered."],
+    intro: "We imagine a quieter relationship between people, materials and place. Architecture with room for life to happen.",
+    action: "View selected spaces",
+    secondary: "Meet the approach",
+    nav: ["Selected work", "The studio", "Start a dialogue"],
+    image: "/concepts/kovo-hero.webp",
+    imageAlt: "Generated original concrete and timber residence with a circular window in a pine forest; a fictional architectural project",
+    caption: "FOREST HOUSE / AN IMAGINED RESIDENCE",
+    collectionTitle: "An ongoing conversation with space.",
+    collectionIntro: "An imagined collection of residential and workplace projects. Every project shown here is a fictional design study.",
+    filters: ["All spaces", "Residential", "Workplace"],
+    items: [
+      { name: "Forest House", category: "Residential", detail: "Concrete, timber and a quieter perspective", price: "Design study / 01", number: "01", icon: "home" },
+      { name: "The Still Office", category: "Workplace", detail: "A place for focused work and shared ideas", price: "Design study / 02", number: "02", icon: "grid" },
+      { name: "Courtyard No. 4", category: "Residential", detail: "An interior landscape built around light", price: "Design study / 03", number: "03", icon: "sun" },
+    ],
+    featureTitle: "Less noise. More meaning.",
+    featureText: "Begin with the way a place should feel. Listen to the landscape. Let materials speak. Kovo is an original fictional studio identity exploring a thoughtful, editorial approach to architecture on the web.",
+    featureList: ["Place before form", "Honest materials", "Life in the details"],
+    formTitle: "Every space starts with a conversation.",
+    formDescription: "Try the concept's project-type selector to create a local sample brief. No enquiry is sent and no contact details are collected.",
+    footer: "Independent fictional architecture studio concept. Original generated building imagery and illustrated design studies; no real projects, awards or client commissions are claimed.",
+    highlights: ["Architectural editorial layout", "Filtered illustrated design studies", "Interactive sample-brief builder"],
+    subtitle: "Architecture with room for life to happen.",
+    description: "An original architecture-studio concept with a warm mineral palette, large editorial typography, generated architectural imagery, illustrated project studies and interactive project filters. The sample brief builder stays local; no client projects or awards are claimed.",
+  },
+} as const;
+
+export type ConceptSlug = keyof typeof concepts;
+export const conceptUI = {
+  back: "Back to Elvora",
+  concept: "CONCEPT PROJECT",
+  independent: "INDEPENDENT DESIGN EXPLORATION",
+  menu: "Open menu",
+  closeMenu: "Close menu",
+  collection: "Explore the collection",
+  select: "Explore",
+  arrival: "Arrival",
+  departure: "Departure",
+  guests: "Guests",
+  date: "Preferred date",
+  service: "Care option",
+  stay: "Your stay",
+  projectType: "Project type",
+  finish: "Exterior finish",
+  finishes: ["Graphite", "Silver", "Forest"] as const,
+  finishColors: ["#45494a", "#b8bdba", "#53675d"],
+  configure: "Create sample configuration",
+  planStay: "Plan sample stay",
+  planVisit: "Plan sample visit",
+  planBrief: "Create sample brief",
+  chooseDate: "Choose a date",
+  invalidStay: "Departure must be after arrival.",
+  futureDate: "Choose today or a future date.",
+  demo: "LOCAL DEMO / NOTHING HAS BEEN SUBMITTED",
+  range: "Illustrative range",
+  acceleration: "0–100 km/h",
+  power: "Illustrative power",
+  details: "Explore the details",
+  location: "AN IMAGINED PLACE. A REAL DESIGN EXPLORATION.",
+  footer: "A website concept by Elvora. All brands, places and services on this page are fictional.",
+  filterLabel: "Filter the collection",
+  modelLabel: "Select a model",
+  collectionLabel: "01 / THE COLLECTION",
+  featureLabel: "02 / A CONSIDERED APPROACH",
+  plannerLabel: "03 / EXPLORE THE POSSIBILITIES",
+  selected: "Selected",
+  reset: "Start again",
+  illustration: "Original illustrated design study",
+  headerActions: { solenne: "Plan your stay", vanta: "Configure", aster: "Plan a visit", kovo: "Start a dialogue" },
+  visitSummary: "Sample visit planned locally. No appointment has been reserved.",
+  staySummary: "Sample stay planned locally. No booking or payment has been made.",
+  carSummary: "Sample configuration created locally. No order or test drive has been requested.",
+  briefSummary: "Sample project brief created locally. No enquiry has been sent.",
+  guestsOptions: ["1 guest", "2 guests", "3 guests", "4 guests"],
 } as const;
 ``````
 
@@ -966,7 +1192,7 @@ export function projectPresentation(id: string): ProjectPresentation {
 ## data/projects.ts
 
 ``````typescript
-import { demos } from "./demos";
+import { concepts, type ConceptSlug } from "./concepts";
 export type Screenshot = { src: string; title: string; alt: string };
 export type Project = {
   id: string;
@@ -982,87 +1208,26 @@ export type Project = {
   screenshots: Screenshot[];
 };
 export type ProjectView = Omit<Project, "promoPrompt">;
-const directions = [
-  {
-    id: "restaurant",
-    title: demos.restaurant.name,
-    subtitle: "A slower kind of extraordinary.",
-    industry: "Restaurant & Hospitality",
-    accent: "#b8c399",
-    highlights: [
-      "Editorial serif typography",
-      "Seasonal food illustrations",
-      "Menu-first navigation",
-    ],
-    description:
-      "A fictional seasonal dining concept with an editorial home page, illustrated menu and a considered story section. The screenshots show the actual interactive concept pages built for this portfolio.",
-  },
-  {
-    id: "saas",
-    title: demos.saas.name,
-    subtitle: "Less busywork. More momentum.",
-    industry: "Software & Productivity",
-    accent: "#a4e5c3",
-    highlights: [
-      "Detailed product workspace",
-      "Mint-on-midnight palette",
-      "Interactive billing selector",
-    ],
-    description:
-      "A fictional team-workspace landing page with a designed dashboard, product-feature section and interactive monthly/yearly price comparison. No signups, subscriptions or billing are processed.",
-  },
-  {
-    id: "store",
-    title: demos.store.name,
-    subtitle: "Fewer pieces. More possibility.",
-    industry: "Fashion & E-commerce",
-    accent: "#d4b494",
-    highlights: [
-      "Original garment illustrations",
-      "Editorial collection layout",
-      "Interactive demo shopping bag",
-    ],
-    description:
-      "A fictional fashion storefront with sculptural garment illustrations, an editorial collection and an interactive demonstration bag. No physical products are sold, and no checkout or payments are processed.",
-  },
-];
-const views = [
-  "Home page desktop",
-  "Inner page desktop",
-  "Mobile view",
-  "Feature / detail section",
-];
-export const projects: Project[] = directions.map((project) => ({
-  ...project,
-  stack: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
-  demoUrl: Object.hasOwn(demos, project.id) ? `/demo/${project.id}` : "",
-  promoPrompt: `Create a premium promotional 3D hero render for the fictional ${project.title} ${project.industry} website: a floating laptop and overlapping phone showing a refined responsive interface, dark midnight studio background, champagne-gold rim lighting, subtle violet atmosphere, realistic metal edges and glass reflections, elegant negative space, ultra-realistic render, 16:10. No claims of client work, no watermarks. The website's visual direction is ${project.highlights.join(", ")}.`,
-  screenshots: views.map((title, index) => ({
-    src: `/projects/${project.id}-${index + 1}.webp`,
-    title,
-    alt: `${project.title}: actual ${title.toLowerCase()} screenshot of the fictional concept website`,
-  })),
-}));
-projects.splice(1, 0, {
-  id: "elvora",
-  title: "Elvora",
-  subtitle: "A digital presence, with a different perspective.",
-  industry: "Featured Website / Elvora",
-  accent: "#c7a55c",
-  description:
-    "Explore Elvora at elvora.pplx.app. This cinematic 3D artwork introduces the linked website; visit the live page to see its current design and content.",
-  stack: [],
-  demoUrl: "https://elvora.pplx.app",
-  highlights: ["Cinematic 3D artwork", "Desktop + mobile composition", "Direct website link"],
-  promoPrompt:
-    "A cinematic Elvora brand campaign with a floating titanium laptop and phone, obsidian studio, champagne rim light and a soft violet glow. Clearly a promotional visualization, not an actual website screenshot.",
-  screenshots: [
-    {
-      src: "/projects/elvora-promo.webp",
-      title: "Elvora / 3D promotional artwork",
-      alt: "Elvora promotional 3D artwork with a floating laptop and phone in a dark studio, champagne lighting and a violet glow; a conceptual brand visual rather than a website screenshot",
-    },
-  ],
+const views = ["Home page desktop", "Collection / inner page", "Mobile view", "Feature / design details"];
+export const projects: Project[] = (Object.keys(concepts) as ConceptSlug[]).map((id) => {
+  const concept = concepts[id];
+  return {
+    id,
+    title: concept.name,
+    subtitle: concept.subtitle,
+    industry: concept.industry,
+    description: concept.description,
+    stack: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
+    accent: concept.accent,
+    demoUrl: `/demo/${id}`,
+    highlights: [...concept.highlights],
+    promoPrompt: `A premium 3D promotional composition for the fictional ${concept.name} ${concept.industry} website: a laptop and phone showing the actual supplied page screenshots, dark studio, champagne rim lighting and refined materials. Concept project, no client-work claims.`,
+    screenshots: views.map((title, index) => ({
+      src: `/projects/${id}-${index + 1}.webp`,
+      title,
+      alt: `${concept.name}: actual browser capture of the ${title.toLowerCase()} from the fictional custom concept website`,
+    })),
+  };
 });
 export function getFileProjects(): ProjectView[] {
   return projects.map(({ promoPrompt: _prompt, ...project }) => project);
@@ -1160,9 +1325,9 @@ export const site = {
     eyebrow: "01 / SELECTED EXPLORATIONS",
     title: "Ideas, brought to the browser.",
     description:
-      "A featured Elvora website alongside three independent concepts. Different directions, brought together with considered design and a little perspective.",
+      "Four original concepts. Four distinct worlds. Bespoke websites for hospitality, electric mobility, private care and architecture—built to explore, not just look at.",
     tabs: [
-      { id: "web", title: "Web Development", detail: "01 featured website · 03 concepts" },
+      { id: "web", title: "Web Development", detail: "04 bespoke concept websites" },
       {
         id: "bots",
         title: "AI Chatbot Services",
@@ -1173,9 +1338,9 @@ export const site = {
     view: "View Project",
     gallery: "screenshot gallery",
     screenshotNote:
-      "Concept galleries show actual page captures · Elvora uses 3D promotional artwork",
+      "Actual browser captures of all four custom demos · Desktop, details and mobile views",
     disclaimer:
-      "Concepts are independent explorations. The featured Elvora card links to the supplied website; no client commissions are implied.",
+      "Independent concept projects with fictional brands, original illustrations and generated imagery. No client commissions or real bookings, sales or clinical services are implied.",
   },
   errors: {
     notFound: "This page took a different path.",

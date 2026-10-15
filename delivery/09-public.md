@@ -27,6 +27,42 @@
 </svg>
 ``````
 
+## public/projects/aster-capture.json
+
+``````json
+{
+  "source": "/demo/aster",
+  "desktop": [
+    1440,
+    900
+  ],
+  "mobile": [
+    390,
+    844
+  ],
+  "scale": 2,
+  "method": "Chromium screenshots of actual local concept pages"
+}
+``````
+
+## public/projects/kovo-capture.json
+
+``````json
+{
+  "source": "/demo/kovo",
+  "desktop": [
+    1440,
+    900
+  ],
+  "mobile": [
+    390,
+    844
+  ],
+  "scale": 2,
+  "method": "Chromium screenshots of actual local concept pages"
+}
+``````
+
 ## public/projects/real-estate-capture.json
 
 ``````json
@@ -81,11 +117,47 @@
 }
 ``````
 
+## public/projects/solenne-capture.json
+
+``````json
+{
+  "source": "/demo/solenne",
+  "desktop": [
+    1440,
+    900
+  ],
+  "mobile": [
+    390,
+    844
+  ],
+  "scale": 2,
+  "method": "Chromium screenshots of actual local concept pages"
+}
+``````
+
 ## public/projects/store-capture.json
 
 ``````json
 {
   "source": "/demo/store",
+  "desktop": [
+    1440,
+    900
+  ],
+  "mobile": [
+    390,
+    844
+  ],
+  "scale": 2,
+  "method": "Chromium screenshots of actual local concept pages"
+}
+``````
+
+## public/projects/vanta-capture.json
+
+``````json
+{
+  "source": "/demo/vanta",
   "desktop": [
     1440,
     900

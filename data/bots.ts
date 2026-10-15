@@ -66,10 +66,10 @@ export function getFileBots(): Bot[] {
   return [
     {
       id: "real",
-      name: "Forte Institute Study Assistant",
+      name: "Forte O Level Study Assistant",
       description:
-        "Ask a study question in my Botpress-powered Forte Institute Study Assistant, directly inside this portfolio.",
-      tags: ["Study questions", "Education", "Botpress"],
+        "Ask about Forte O Level study materials, exam questions and revision. Click anywhere on this card to open the connected assistant directly.",
+      tags: ["O Level guidance", "Study materials", "Botpress"],
       method: realBotConfig.method,
       kind: "real",
       configured,
@@ -151,6 +151,17 @@ export function getFileBots(): Bot[] {
 }
 
 export const botContent = {
+  preview: {
+    mark: "forte",
+    label: "CHAT PREVIEW",
+    subtitle: "Study materials, exam questions and revision",
+    heading: "Let's prepare for your exams",
+    description: "Ask about your study materials, exam questions, or revision.",
+    invitation: "Click to start a conversation",
+    placeholder: "Type your message…",
+    powered: "Powered by Botpress",
+  },
+  open: "Open chat",
   eyebrow: "02 / AI CHATBOT SERVICES",
   title: "Better conversations. Built right in.",
   description:

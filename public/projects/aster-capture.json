@@ -1,0 +1,13 @@
+{
+  "source": "/demo/aster",
+  "desktop": [
+    1440,
+    900
+  ],
+  "mobile": [
+    390,
+    844
+  ],
+  "scale": 2,
+  "method": "Chromium screenshots of actual local concept pages"
+}

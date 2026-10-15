@@ -1,50 +1,46 @@
-# Actual concept-site screenshots
+# Current concept-site screenshots
 
-## Selected Elvora website
+Selected Work contains exactly four new custom concepts. Each gallery uses actual Chromium screenshots of its working Next.js demo. The imagery within those pages is original AI-generated fictional imagery plus original SVG illustrations; it does not depict real client work. The Elvora external/promotional card has been removed.
 
-The second Selected Work card now links to **https://elvora.pplx.app** and uses `public/projects/elvora-promo.webp`, an AI-generated 3D brand promotional render (1586×992, approximately 225 KB). It is labeled as promotional artwork in its gallery and accessible image text. It is not a capture of the linked website. The cloud environment received CONNECT/HTTP 403 from that host, so the actual interface and framework were not verified; no technology stack is claimed for it. A supplied homepage capture can replace the conceptual screen content later.
+Desktop: 1440×900 at 2× (2880×1800). Mobile: 390×844 at 2× (780×1688). `npm run capture` captures these four selected demos. The hero assets are optimized WebP files in `public/concepts/`; their complete generation prompts are in `data/concept-images.ts`.
 
-The other three selected projects use the actual captured screenshots below. Forma Living's captures and `/demo/real-estate` are archived reference assets and are no longer shown in Selected Work. The capture script can still reproduce all four original demos without overwriting `elvora-promo.webp`.
+| Project | Route | Industry |
+|---|---|---|
+| Solenne | `/demo/solenne` | Boutique hotel |
+| Vanta Motors | `/demo/vanta` | Automotive |
+| Aster Care | `/demo/aster` | Private clinic |
+| Kovo Studio | `/demo/kovo` | Architecture |
 
-## Original demo captures
-
-Captured with `npm run capture` from original demo pages. Actual browser renders, not placeholder mockups. Desktop: 1440×900 at 2× (2880×1800). Mobile: 390×844 at 2× (780×1688).
+## Exact screenshot filenames
 
 | Project | View | Filename |
 |---|---|---|
-| Savor & Sage | Home page desktop | `public/projects/restaurant-1.webp` |
-| Savor & Sage | Inner page desktop | `public/projects/restaurant-2.webp` |
-| Savor & Sage | Mobile view | `public/projects/restaurant-3.webp` |
-| Savor & Sage | Feature / detail section | `public/projects/restaurant-4.webp` |
-| Forma Living | Home page desktop | `public/projects/real-estate-1.webp` |
-| Forma Living | Inner page desktop | `public/projects/real-estate-2.webp` |
-| Forma Living | Mobile view | `public/projects/real-estate-3.webp` |
-| Forma Living | Feature / detail section | `public/projects/real-estate-4.webp` |
-| Orbit | Home page desktop | `public/projects/saas-1.webp` |
-| Orbit | Inner page desktop | `public/projects/saas-2.webp` |
-| Orbit | Mobile view | `public/projects/saas-3.webp` |
-| Orbit | Feature / detail section | `public/projects/saas-4.webp` |
-| ATELIER / 01 | Home page desktop | `public/projects/store-1.webp` |
-| ATELIER / 01 | Inner page desktop | `public/projects/store-2.webp` |
-| ATELIER / 01 | Mobile view | `public/projects/store-3.webp` |
-| ATELIER / 01 | Feature / detail section | `public/projects/store-4.webp` |
+| Solenne | Home page desktop | `public/projects/solenne-1.webp` |
+| Solenne | Collection / inner page | `public/projects/solenne-2.webp` |
+| Solenne | Mobile view | `public/projects/solenne-3.webp` |
+| Solenne | Feature / design details | `public/projects/solenne-4.webp` |
+| Vanta Motors | Home page desktop | `public/projects/vanta-1.webp` |
+| Vanta Motors | Collection / inner page | `public/projects/vanta-2.webp` |
+| Vanta Motors | Mobile view | `public/projects/vanta-3.webp` |
+| Vanta Motors | Feature / design details | `public/projects/vanta-4.webp` |
+| Aster Care | Home page desktop | `public/projects/aster-1.webp` |
+| Aster Care | Collection / inner page | `public/projects/aster-2.webp` |
+| Aster Care | Mobile view | `public/projects/aster-3.webp` |
+| Aster Care | Feature / design details | `public/projects/aster-4.webp` |
+| Kovo Studio | Home page desktop | `public/projects/kovo-1.webp` |
+| Kovo Studio | Collection / inner page | `public/projects/kovo-2.webp` |
+| Kovo Studio | Mobile view | `public/projects/kovo-3.webp` |
+| Kovo Studio | Feature / design details | `public/projects/kovo-4.webp` |
 
-## Optional 3D promo prompts
+## Capture
 
-Optional extra promotional renders; gallery images do not require an AI image tool.
+```bash
+npx playwright install chromium
+npm run capture
+```
 
-### Savor & Sage
+If the app is already running, set `CAPTURE_BASE_URL` to its local origin. Stop development before a production build because both use `.next`. Capture opens fresh pages so filters and forms begin in their default states. Each `{slug}-capture.json` records route, viewport and method.
 
-Create a premium promotional 3D hero render for the fictional Savor & Sage Restaurant & Hospitality website: a floating laptop and overlapping phone showing a refined responsive interface, dark midnight studio background, champagne-gold rim lighting, subtle violet atmosphere, realistic metal edges and glass reflections, elegant negative space, ultra-realistic render, 16:10. No claims of client work, no watermarks. The website's visual direction is Editorial serif typography, Seasonal food illustrations, Menu-first navigation.
+## Archived assets
 
-### Forma Living
-
-Create a premium promotional 3D hero render for the fictional Forma Living Architecture & Real Estate website: a floating laptop and overlapping phone showing a refined responsive interface, dark midnight studio background, champagne-gold rim lighting, subtle violet atmosphere, realistic metal edges and glass reflections, elegant negative space, ultra-realistic render, 16:10. No claims of client work, no watermarks. The website's visual direction is Original architectural vectors, Interactive property filters, Spacious listing presentation.
-
-### Orbit
-
-Create a premium promotional 3D hero render for the fictional Orbit Software & Productivity website: a floating laptop and overlapping phone showing a refined responsive interface, dark midnight studio background, champagne-gold rim lighting, subtle violet atmosphere, realistic metal edges and glass reflections, elegant negative space, ultra-realistic render, 16:10. No claims of client work, no watermarks. The website's visual direction is Detailed product workspace, Mint-on-midnight palette, Interactive billing selector.
-
-### ATELIER / 01
-
-Create a premium promotional 3D hero render for the fictional ATELIER / 01 Fashion & E-commerce website: a floating laptop and overlapping phone showing a refined responsive interface, dark midnight studio background, champagne-gold rim lighting, subtle violet atmosphere, realistic metal edges and glass reflections, elegant negative space, ultra-realistic render, 16:10. No claims of client work, no watermarks. The website's visual direction is Original garment illustrations, Editorial collection layout, Interactive demo shopping bag.
+The original restaurant/real-estate/SaaS/store demos and prior Elvora promotional image are retained as archived assets, without appearing in the selected grid or current sitemap. They are not silently deleted from an owner database. For database mode, unpublish older project records and add the four current entries, or use `CONTENT_SOURCE=files`.
