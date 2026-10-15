@@ -1,8 +1,11 @@
+const deploymentDomain = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
+const netlifyUrl = process.env.NETLIFY === "true" ? process.env.URL || process.env.DEPLOY_PRIME_URL : undefined;
+
 export const site = {
   name: "Abdul Hafeez",
   initials: "AH",
   role: "AI Chatbot & Web Developer",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  url: process.env.NEXT_PUBLIC_SITE_URL || netlifyUrl || (deploymentDomain ? `https://${deploymentDomain}` : "http://localhost:3000"),
   email: "", // Set your real public email to enable the email action.
   title: "Abdul Hafeez — Thoughtful websites. Intelligent experiences.",
   description:

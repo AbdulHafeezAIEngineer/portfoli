@@ -4,6 +4,8 @@ Next.js 14 App Router, TypeScript, Tailwind CSS and Framer Motion. Dark by defau
 
 ## Run
 
+To publish without downloading: [Deploy to Netlify](https://app.netlify.com/start/deploy?repository=https://github.com/AbdulHafeezAIEngineer/portfoli). Sign in to your own Netlify account, authorize GitHub, and use the supplied `netlify.toml` settings. See `DEPLOYMENT.md` for production secrets and verification.
+
 Use Node.js 22 or 24 with npm. From this directory:
 
 ```bash
