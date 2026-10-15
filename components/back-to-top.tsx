@@ -13,5 +13,13 @@ export function BackToTop() {
     return () => window.removeEventListener("scroll", update);
   }, []);
   if (!visible) return null;
-  return <a href="#top" className="back-to-top icon-button" aria-label={site.ui.back}><ArrowUp size={19} /></a>;
+  return (
+    <a
+      href="#top"
+      className="back-to-top icon-button"
+      aria-label={site.ui.back}
+    >
+      <ArrowUp size={19} />
+    </a>
+  );
 }

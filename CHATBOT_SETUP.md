@@ -108,3 +108,7 @@ Use HTTPS in production; loopback development is a secure context. Voice input s
 5. Set provider billing controls and review the fictional sample company policies/prompts before adapting them for real business.
 6. Check actual provider embed permissions and Web Speech on your production HTTPS domain.
 7. Retain Part 1's image, portrait, public email and production URL checklist. No new image assets are required.
+
+## Database-managed bots and optional logging
+
+`CONTENT_SOURCE=files` reads the four bots and the one `realBotConfig` object from `data/bots.ts`. Database mode reads published cards, public connections and optional custom system prompts from Prisma; edit them at `/admin/bots`. Add exact external provider hostnames to `BOT_PROVIDER_ALLOWLIST` before saving connections. New API bots can use their own server-only system prompt with the shared OpenAI adapter, or an external API configuration. Never store private keys in public configuration. Chat logs are off by default; if enabled in site settings, database retention and the public chat notice apply.

@@ -8,6 +8,9 @@ const injectionPatterns = [
   /<\|(?:im_start|system|developer)\|>|\[INST\]|<\/?(?:system|developer)>/i,
 ];
 export function hasPromptInjection(content: string): boolean {
-  const normalized = content.normalize("NFKC").replace(/[\u200B-\u200F\u202A-\u202E\u2060-\u206F]/g, "").replace(/\s+/g, " ");
+  const normalized = content
+    .normalize("NFKC")
+    .replace(/[\u200B-\u200F\u202A-\u202E\u2060-\u206F]/g, "")
+    .replace(/\s+/g, " ");
   return injectionPatterns.some((pattern) => pattern.test(normalized));
 }

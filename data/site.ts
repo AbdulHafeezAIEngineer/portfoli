@@ -1,15 +1,25 @@
-const deploymentDomain = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
-const netlifyUrl = process.env.NETLIFY === "true" ? process.env.URL || process.env.DEPLOY_PRIME_URL : undefined;
+const deploymentDomain =
+  process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
+const netlifyUrl =
+  process.env.NETLIFY === "true"
+    ? process.env.URL || process.env.DEPLOY_PRIME_URL
+    : undefined;
 
 export const site = {
+  brand: "Elvora",
   name: "Abdul Hafeez",
   initials: "AH",
   role: "AI Chatbot & Web Developer",
-  url: process.env.NEXT_PUBLIC_SITE_URL || netlifyUrl || (deploymentDomain ? `https://${deploymentDomain}` : "http://localhost:3000"),
-  email: "", // Set your real public email to enable the email action.
-  title: "Abdul Hafeez — Thoughtful websites. Intelligent experiences.",
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    netlifyUrl ||
+    (deploymentDomain
+      ? `https://${deploymentDomain}`
+      : "http://localhost:3000"),
+  email: "buildwithelvora@gmail.com",
+  title: "Elvora — Thoughtful websites. Intelligent experiences.",
   description:
-    "Explore web development concepts and interactive AI chatbot demos by Abdul Hafeez, building thoughtful digital experiences for businesses.",
+    "Elvora is Abdul Hafeez's portfolio for thoughtful websites, AI chatbot concepts, and voice experiences. Explore the work and start a conversation.",
   nav: [
     { label: "Work", href: "#work" },
     { label: "AI Bots", href: "#ai-bots" },
@@ -29,7 +39,8 @@ export const site = {
     secondary: "Contact Me",
     note: "A little design. A lot of possibility.",
     portrait: "/portrait-placeholder.svg",
-    portraitAlt: "Abstract portrait placeholder for Abdul Hafeez; personal photo coming soon",
+    portraitAlt:
+      "Abstract portrait placeholder for Abdul Hafeez; personal photo coming soon",
     portraitLabel: "THE PERSON BEHIND THE PIXELS",
     portraitCaption: "A developer's mind. A designer's eye.",
     portraitStatus: "Portrait placeholder",
@@ -43,35 +54,32 @@ export const site = {
       "Four industries. Four distinct directions. A collection of self-initiated concepts exploring what your next website could feel like.",
     tabs: [
       { id: "web", title: "Web Development", detail: "04 concept projects" },
-      { id: "bots", title: "AI Chatbot Services", detail: "01 custom bot · 03 AI demos" },
+      {
+        id: "bots",
+        title: "AI Chatbot Services",
+        detail: "01 custom bot · 03 AI demos",
+      },
     ],
     concept: "Concept Project",
     view: "View Project",
     gallery: "screenshot gallery",
-    screenshotNote: "Illustrative placeholders · Replace with your screenshots",
-    disclaimer: "Independent concept projects. No client commissions or affiliations are implied.",
-    botsTitle: "A more intelligent conversation.",
-    botsDescription:
-      "Custom-data chatbots, voice functionality, and website integrations will be explored here in a later part. This section is a preview placeholder.",
-    comingSoon: "COMING IN A LATER PART",
+    screenshotNote:
+      "Actual screenshots of the fictional demo sites · Explore all four views",
+    disclaimer:
+      "Independent concept projects. No client commissions or affiliations are implied.",
   },
-  future: [
-    { id: "experience", number: "03", title: "Experience" },
-    { id: "skills", number: "04", title: "Skills" },
-    { id: "certification", number: "05", title: "Certification" },
-  ],
-  futureNote: "Reserved for a later part",
-  contact: {
-    eyebrow: "HAVE SOMETHING IN MIND?",
-    heading: "Let's make your next idea count.",
-    description: "A thoughtful website starts with a conversation.",
-    action: "Start a conversation",
-    placeholder: "Contact details coming soon",
+  errors: {
+    notFound: "This page took a different path.",
+    missing: "The page you requested could not be found.",
+    home: "Return to Elvora",
+    title: "Something interrupted the experience.",
+    description: "Please try again in a moment.",
+    retry: "Try again",
   },
   footer: "Designed with care. Built with intention.",
   ui: {
     skip: "Skip to content",
-    home: "AH. — Abdul Hafeez home",
+    home: "Elvora. — Home",
     menuOpen: "Open navigation",
     menuClose: "Close navigation",
     light: "Switch to light theme",
@@ -80,7 +88,8 @@ export const site = {
     close: "Close gallery",
     previous: "Previous screenshot",
     next: "Next screenshot",
-    galleryHelp: "Use arrow keys to browse · Esc to close · Swipe on touch screens",
+    galleryHelp:
+      "Use arrow keys to browse · Esc to close · Swipe on touch screens",
     loading: "Loading portfolio",
     loadingImage: "Loading screenshot",
     imageError: "Screenshot unavailable. Choose another thumbnail.",
@@ -88,6 +97,8 @@ export const site = {
     screenshot: "Screenshot",
     of: "of",
     stack: "BUILT WITH",
-    placeholder: "PLACEHOLDER PREVIEW",
+    highlights: "DESIGN HIGHLIGHTS",
+    demo: "Explore the concept site",
+    placeholder: "CONCEPT PREVIEW",
   },
 } as const;

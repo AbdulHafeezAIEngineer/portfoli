@@ -1,19 +1,45 @@
-import { BackToTop } from "@/components/back-to-top";
 import { Footer } from "@/components/footer";
 import { Hero } from "@/components/hero";
 import { Navbar } from "@/components/navbar";
 import { Work } from "@/components/work";
-import { getProjects } from "@/data/projects";
-import { getBots } from "@/data/bots";
+import {
+  getProjects,
+  getBots,
+  getSkills,
+  getCertificates,
+  getIdentity,
+} from "@/lib/content-loader";
 
+import { Experience } from "@/components/experience";
+import { Skills } from "@/components/skills";
+import { Certifications } from "@/components/certifications";
+import { Contact } from "@/components/contact";
+
+export const dynamic = "force-dynamic";
 export default async function Home() {
-  const projects = await getProjects();
+  const [projects, skills, certificates, bots, identity] = await Promise.all([
+    getProjects(),
+    getSkills(),
+    getCertificates(),
+    getBots(),
+    getIdentity(),
+  ]);
   return (
     <div id="top">
-      <div className="ambient-background" aria-hidden="true"><span /><span /></div>
-      <Navbar />
-      <main id="main-content"><Hero /><Work projects={projects} bots={getBots()} /><Footer /></main>
-      <BackToTop />
+      <div className="ambient-background" aria-hidden="true">
+        <span />
+        <span />
+      </div>
+      <Navbar identity={identity} />
+      <main id="main-content">
+        <Hero />
+        <Work projects={projects} bots={bots} />
+        <Experience />
+        <Skills skills={skills} />
+        <Certifications certificates={certificates} />
+        <Contact email={identity.email} />
+      </main>
+      <Footer brand={identity.brand} />
     </div>
   );
 }

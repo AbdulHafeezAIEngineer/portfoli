@@ -9,29 +9,61 @@
     "typecheck": "tsc --noEmit",
     "lint": "next lint",
     "test:chat": "node --test tests/chat.test.mjs",
-    "placeholders": "node scripts/generate-placeholders.mjs"
+    "test:contact": "node --test tests/contact.test.mjs",
+    "certificate-placeholder": "node scripts/generate-certificate.mjs",
+    "capture": "tsx scripts/capture.ts",
+    "db:generate": "node scripts/generate-client.mjs",
+    "db:migrate": "node --env-file-if-exists=.env.local node_modules/prisma/build/index.js migrate deploy",
+    "db:dev": "node --env-file-if-exists=.env.local node_modules/prisma/build/index.js migrate dev",
+    "db:seed": "node --env-file-if-exists=.env.local --import tsx prisma/seed.ts",
+    "admin:reset": "node --env-file-if-exists=.env.local --import tsx scripts/reset-admin.ts",
+    "postinstall": "node scripts/generate-client.mjs",
+    "test:security": "node --test tests/security.test.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "5.2.8",
     "@fontsource/space-grotesk": "5.2.10",
+    "@prisma/adapter-pg": "6.19.3",
+    "@prisma/client": "6.19.3",
+    "@vercel/blob": "2.8.2",
+    "bcryptjs": "3.0.2",
     "framer-motion": "11.18.2",
     "lucide-react": "0.468.0",
     "next": "14.2.35",
+    "next-auth": "4.24.15",
+    "pg": "8.16.3",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "server-only": "0.0.1",
-    "sharp": "0.33.5"
+    "sharp": "0.35.5",
+    "zod": "3.25.76",
+    "gmail-smtp": "npm:nodemailer@10.1.1"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "5.16.2",
+    "@playwright/test": "1.56.1",
+    "@prisma/internals": "6.19.3",
     "@types/node": "22.10.5",
+    "@types/nodemailer": "8.0.2",
     "@types/react": "18.3.18",
     "@types/react-dom": "18.3.5",
     "autoprefixer": "10.4.20",
     "eslint": "8.57.1",
     "eslint-config-next": "14.2.35",
-    "postcss": "8.5.6",
+    "postcss": "8.5.30",
+    "prisma": "6.19.3",
     "tailwindcss": "3.4.17",
+    "tsx": "4.20.6",
     "typescript": "5.7.3"
+  },
+  "prisma": {
+    "seed": "node --env-file-if-exists=.env.local --import tsx prisma/seed.ts"
+  },
+  "overrides": {
+    "postcss": "8.5.30",
+    "@prisma/config": {
+      "deepmerge-ts": "8.0.2"
+    },
+    "uuid": "11.1.1"
   }
 }

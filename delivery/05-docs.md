@@ -1,0 +1,24 @@
+## docs/lighthouse-summary.json
+
+``````json
+{
+  "source": "Local production build; mobile emulation; temporary local PostgreSQL; not a live-site guarantee",
+  "fetchTime": "2026-10-15T11:33:24.956Z",
+  "lighthouseVersion": "13.5.0",
+  "scores": {
+    "performance": 91,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+  },
+  "metrics": {
+    "first-contentful-paint": "0.9 s",
+    "largest-contentful-paint": "3.4 s",
+    "total-blocking-time": "70 ms",
+    "cumulative-layout-shift": "0",
+    "speed-index": "0.9 s"
+  },
+  "securityNote": "Next.js 14 still has reported critical advisories; see SECURITY_STATUS.md"
+}
+``````
+
