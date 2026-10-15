@@ -16,12 +16,16 @@
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 70px;
   margin-top: 17px;
-  align-items: end;
+  align-items: start;
 }
-.experience-intro > p {
+.about-story {
+  display: grid;
+  gap: 18px;
+}
+.about-story p {
   color: var(--muted);
   line-height: 1.95;
-  font-size: 12px;
+  font-size: 14px;
 }
 .experience-lead {
   margin-top: 18px;

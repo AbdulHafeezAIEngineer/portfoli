@@ -71,7 +71,11 @@ Chat logging is **off by default**. If enabled in site settings, the last user m
 
 ## Netlify
 
-Import the reviewed GitHub branch into your Netlify account using the provided `netlify.toml`: `npm run build`, publish `.next`, Node 24 and the Next.js adapter. Do not upload the source folder as static HTML; API routes/auth need the Next.js runtime. Configure the same private services/Redis/origin variables. Verify outbound SMTP support; if your host blocks it, keep the email link and move delivery to an allowed email API before launch. No live Netlify site is claimed without a successful deploy and public URL verification.
+The complete portfolio is on GitHub's `main` branch, including the Elvora logo, About Me section and supplied Coursiv certificate. The older main version displayed AH and contained only Parts 1/2. For the owner's existing `portfolio3821.netlify.app` project, select repository `AbdulHafeezAIEngineer/portfoli` and production branch `main` in Netlify's continuous deployment settings. Once linked, pushes to `main` trigger a build. If automatic builds are disabled, choose **Deploys → Trigger deploy → Deploy site**. Use **Clear cache and deploy site** only if a successful build still serves stale assets.
+
+Use the provided `netlify.toml`: `npm run build`, publish `.next`, Node 24 and the Next.js adapter. Do not upload the source folder as static HTML; API routes/auth need the Next.js runtime. Set `NEXT_PUBLIC_SITE_URL` and `NEXTAUTH_URL` to `https://portfolio3821.netlify.app` unless using a new custom domain. Configure the same private services/Redis/origin variables. Keep `CONTENT_SOURCE=files` for the included file-based content. Existing database records are preserved by seeding; update them in `/admin` when choosing database mode.
+
+Verify outbound SMTP support; if your host blocks it, keep the email link and move delivery to an allowed email API before launch. No successful Netlify deployment is claimed without a completed hosting build and public URL verification. The cloud environment could not access the owner's Netlify URL (HTTP/CONNECT 403), so local checks do not establish the current live-site state. The framework security limitation at the top of this document remains outstanding.
 
 ## Headers and launch checks
 

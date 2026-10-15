@@ -7,8 +7,8 @@ const netlifyUrl =
 
 export const site = {
   brand: "Elvora",
+  logo: { src: "/elvora-logo.svg" },
   name: "Abdul Hafeez",
-  initials: "AH",
   role: "AI Chatbot & Web Developer",
   url:
     process.env.NEXT_PUBLIC_SITE_URL ||
@@ -23,7 +23,7 @@ export const site = {
   nav: [
     { label: "Work", href: "#work" },
     { label: "AI Bots", href: "#ai-bots" },
-    { label: "Experience", href: "#experience" },
+    { label: "About Me", href: "#experience" },
     { label: "Skills", href: "#skills" },
     { label: "Certification", href: "#certification" },
     { label: "Contact", href: "#contact" },
@@ -79,7 +79,7 @@ export const site = {
   footer: "Designed with care. Built with intention.",
   ui: {
     skip: "Skip to content",
-    home: "Elvora. — Home",
+    home: "Elvora — Home",
     menuOpen: "Open navigation",
     menuClose: "Close navigation",
     light: "Switch to light theme",

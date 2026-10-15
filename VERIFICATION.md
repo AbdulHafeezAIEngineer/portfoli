@@ -18,6 +18,7 @@ This is a **review build**, not a verified live deployment. `SECURITY_STATUS.md`
 - Deferred AI-tab/hash navigation, all four bot cards, pending real-bot state, three API demos, per-bot history retained across category changes, clear conversation, accessible modals and mobile chat layout.
 - Production file tracing includes Prisma's query compiler WASM for routes that use the database.
 - Supplied Coursiv certificate update: rendered the original PDF to a 2200×1555 WebP; checked the exact title, issuer, 31 October 2024 date, 6-hour duration and certificate ID against the document. Re-ran lint/typecheck and browser checks at 1440px/390px for image loading, absent placeholder wording, fullscreen zoom, keyboard shortcuts, Escape, focus return and overflow. Preview: `docs/certificate-showcase.png`.
+- Branding/About Me update: E-and-amber-dot SVG logo in navbar/footer/favicon, Elvora wordmark and portrait label, About Me navigation, the owner's supplied 2+ years of experience, three story paragraphs and four full-stack blocks. The production build passed. Browser checks against both development and production passed at 320px–1440px, including mobile navigation and certificate zoom; dark/light axe scans reported no violations. `docs/brand-preview.png`, `docs/about-preview.png` and `docs/mobile-about-preview.png` show this update.
 
 ## Local Lighthouse
 
@@ -35,7 +36,7 @@ Scores vary with device, CPU load, image replacements, network, third-party widg
 ## Still needs real owner configuration/verification
 
 - A patched framework-major decision before external production launch. Current production dependency audit: one critical affected package, Next.js 14; other reported production findings were resolved.
-- Factual AI-tool/workflow examples and the owner's portrait remain clearly marked placeholders. The supplied Coursiv certificate and its award details are now displayed; external issuer verification has not been performed.
+- Specific AI-tool names and the owner's portrait remain clearly marked placeholders. The owner has now supplied 2+ years of experience and time invested in AI tools for About Me. The supplied Coursiv certificate and its award details are displayed; external issuer verification has not been performed.
 - Actual public HTTPS domain, external database/Redis/storage credentials, OpenAI key, real bot connection, Gmail App Password and Cloudflare Turnstile keys in private settings.
 - Live Gmail inbox delivery, real OpenAI/provider replies, actual Blob upload, real Redis REST service and real Turnstile challenge verification. Mock-based checks do not establish these integrations.
 - Native Prisma migration CLI deployment to the owner's cloud database. Its verified engine download was blocked in the current environment; the network draft adds `binaries.prisma.sh` but must be reviewed/saved and published to activate. Initial SQL/seed were independently verified against local PostgreSQL.

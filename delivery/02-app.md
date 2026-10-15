@@ -3679,9 +3679,19 @@ h3,
   gap: 30px;
 }
 .wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
   font-size: 30px;
   font-weight: 600;
   letter-spacing: -2px;
+}
+.brand-symbol {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 12px;
 }
 .wordmark span {
   color: var(--gold);
@@ -4809,7 +4819,16 @@ h2 {
 ## app/icon.svg
 
 ``````xml
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#0A0A12"/><path d="M20 16h26v6H27v10h16v6H27v10h19v6H20z" fill="#D4AF37"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="edge" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse"><stop stop-color="#48494a"/><stop offset="1" stop-color="#28292b"/></linearGradient>
+    <linearGradient id="amber" x1="58" y1="43" x2="72" y2="57" gradientUnits="userSpaceOnUse"><stop stop-color="#ffd074"/><stop offset="1" stop-color="#efa944"/></linearGradient>
+  </defs>
+  <rect x="1.5" y="1.5" width="97" height="97" rx="25" fill="#0b0c0e" stroke="url(#edge)" stroke-width="3"/>
+  <rect x="19" y="19" width="62" height="62" rx="10" fill="#101113"/>
+  <path d="M69 30H31V70H69M31 50H49" fill="none" stroke="#f4f4f5" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="65.5" cy="50" r="6.5" fill="url(#amber)"/>
+</svg>
 ``````
 
 ## app/layout.tsx
@@ -5098,12 +5117,16 @@ export default async function Home() {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 70px;
   margin-top: 17px;
-  align-items: end;
+  align-items: start;
 }
-.experience-intro > p {
+.about-story {
+  display: grid;
+  gap: 18px;
+}
+.about-story p {
   color: var(--muted);
   line-height: 1.95;
-  font-size: 12px;
+  font-size: 14px;
 }
 .experience-lead {
   margin-top: 18px;

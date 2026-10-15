@@ -351,7 +351,11 @@ Chat logging is **off by default**. If enabled in site settings, the last user m
 
 ## Netlify
 
-Import the reviewed GitHub branch into your Netlify account using the provided `netlify.toml`: `npm run build`, publish `.next`, Node 24 and the Next.js adapter. Do not upload the source folder as static HTML; API routes/auth need the Next.js runtime. Configure the same private services/Redis/origin variables. Verify outbound SMTP support; if your host blocks it, keep the email link and move delivery to an allowed email API before launch. No live Netlify site is claimed without a successful deploy and public URL verification.
+The complete portfolio is on GitHub's `main` branch, including the Elvora logo, About Me section and supplied Coursiv certificate. The older main version displayed AH and contained only Parts 1/2. For the owner's existing `portfolio3821.netlify.app` project, select repository `AbdulHafeezAIEngineer/portfoli` and production branch `main` in Netlify's continuous deployment settings. Once linked, pushes to `main` trigger a build. If automatic builds are disabled, choose **Deploys → Trigger deploy → Deploy site**. Use **Clear cache and deploy site** only if a successful build still serves stale assets.
+
+Use the provided `netlify.toml`: `npm run build`, publish `.next`, Node 24 and the Next.js adapter. Do not upload the source folder as static HTML; API routes/auth need the Next.js runtime. Set `NEXT_PUBLIC_SITE_URL` and `NEXTAUTH_URL` to `https://portfolio3821.netlify.app` unless using a new custom domain. Configure the same private services/Redis/origin variables. Keep `CONTENT_SOURCE=files` for the included file-based content. Existing database records are preserved by seeding; update them in `/admin` when choosing database mode.
+
+Verify outbound SMTP support; if your host blocks it, keep the email link and move delivery to an allowed email API before launch. No successful Netlify deployment is claimed without a completed hosting build and public URL verification. The cloud environment could not access the owner's Netlify URL (HTTP/CONNECT 403), so local checks do not establish the current live-site state. The framework security limitation at the top of this document remains outstanding.
 
 ## Headers and launch checks
 
@@ -379,7 +383,9 @@ Before launch:
 
 Brand: **Elvora**. Owner: **Abdul Hafeez**. Public contact: **buildwithelvora@gmail.com** only. No phone, WhatsApp or social-profile links.
 
-The expanded complete brief retains these personal preferences. Unsupplied real AI-tool/workflow facts remain `[PLACEHOLDER]` in `data/experience.ts` and `data/skills.ts`. No experience duration, client totals or testimonials are invented.
+The About Me section now uses the owner's supplied **more than two years of experience** and time invested in AI tools. It explains structured prompts, review, testing, refinement and the frontend/backend/database/deployment fundamentals behind a working site. Specific AI-tool names remain `[PLACEHOLDER]` in `data/skills.ts`; no client totals, testimonials or named tools are invented.
+
+The supplied E-and-amber-dot logo is represented as a scalable SVG in `public/elvora-logo.svg` and the favicon in `app/icon.svg`. The navbar and footer pair it with the **Elvora** wordmark. The portrait caption also uses the brand instead of AH.
 
 The supplied Coursiv certificate is now showcased: **Master of ChatGPT**, issued to **Abdul Hafeez** on **31 October 2024**, for a **6-hour** course. Certificate ID: **ADO6IJOS**. These details are transcribed from the uploaded PDF; no external credential verification is claimed. This is described as a course completion certificate, not an academic degree.
 
@@ -438,12 +444,12 @@ All editable portfolio content starts in `data/`. `lib/content-loader.ts` is the
 - `data/site.ts`: Elvora identity, Abdul Hafeez's introduction, Gmail, navigation and shared UI text.
 - `data/projects.ts`, `demos.ts`: concept descriptions, actual screenshot paths, design highlights, optional promo prompts and demo copy.
 - `data/bots.ts`: bot cards, disclosures, one `realBotConfig` object for iframe/script/API, and an optional `additionalBots` list for adding data-configured connections. `data/prompts/` contains the three server-only demo prompts.
-- `data/experience.ts`, `skills.ts`: honest workflow explanations and explicitly missing personal facts; no invented years, client counts or testimonials.
+- `data/experience.ts`, `skills.ts`: About Me, the owner's supplied 2+ years of experience, AI workflow explanations and remaining tool-name placeholders; no invented client counts or testimonials.
 - `data/certificates.ts`: supplied Master of ChatGPT certificate details and image, click-to-enlarge/zoom viewer.
 - `data/contact.ts`, `admin.ts`: validated form content and admin labels/field definitions.
 - `public/portrait-placeholder.svg`: replace with the owner's actual portrait and update its alt/placeholder wording in `data/site.ts`.
 
-The only public contact is **buildwithelvora@gmail.com**. No WhatsApp, phone or social profiles are displayed. The supplied Coursiv Master of ChatGPT certificate is displayed with its 31 October 2024 issue date and 6-hour course duration. Personal AI-tool/workflow facts still need the owner's input. See `PART_3.md` for personalization.
+The only public contact is **buildwithelvora@gmail.com**. No WhatsApp, phone or social profiles are displayed. The supplied Coursiv Master of ChatGPT certificate is displayed with its 31 October 2024 issue date and 6-hour course duration. About Me includes the owner's supplied 2+ years of experience and time invested in AI tools. Specific tool names and the portrait still need the owner's input. See `PART_3.md` for personalization.
 
 ## Backend setup
 
@@ -564,6 +570,7 @@ This is a **review build**, not a verified live deployment. `SECURITY_STATUS.md`
 - Deferred AI-tab/hash navigation, all four bot cards, pending real-bot state, three API demos, per-bot history retained across category changes, clear conversation, accessible modals and mobile chat layout.
 - Production file tracing includes Prisma's query compiler WASM for routes that use the database.
 - Supplied Coursiv certificate update: rendered the original PDF to a 2200×1555 WebP; checked the exact title, issuer, 31 October 2024 date, 6-hour duration and certificate ID against the document. Re-ran lint/typecheck and browser checks at 1440px/390px for image loading, absent placeholder wording, fullscreen zoom, keyboard shortcuts, Escape, focus return and overflow. Preview: `docs/certificate-showcase.png`.
+- Branding/About Me update: E-and-amber-dot SVG logo in navbar/footer/favicon, Elvora wordmark and portrait label, About Me navigation, the owner's supplied 2+ years of experience, three story paragraphs and four full-stack blocks. The production build passed. Browser checks against both development and production passed at 320px–1440px, including mobile navigation and certificate zoom; dark/light axe scans reported no violations. `docs/brand-preview.png`, `docs/about-preview.png` and `docs/mobile-about-preview.png` show this update.
 
 ## Local Lighthouse
 
@@ -581,7 +588,7 @@ Scores vary with device, CPU load, image replacements, network, third-party widg
 ## Still needs real owner configuration/verification
 
 - A patched framework-major decision before external production launch. Current production dependency audit: one critical affected package, Next.js 14; other reported production findings were resolved.
-- Factual AI-tool/workflow examples and the owner's portrait remain clearly marked placeholders. The supplied Coursiv certificate and its award details are now displayed; external issuer verification has not been performed.
+- Specific AI-tool names and the owner's portrait remain clearly marked placeholders. The owner has now supplied 2+ years of experience and time invested in AI tools for About Me. The supplied Coursiv certificate and its award details are displayed; external issuer verification has not been performed.
 - Actual public HTTPS domain, external database/Redis/storage credentials, OpenAI key, real bot connection, Gmail App Password and Cloudflare Turnstile keys in private settings.
 - Live Gmail inbox delivery, real OpenAI/provider replies, actual Blob upload, real Redis REST service and real Turnstile challenge verification. Mock-based checks do not establish these integrations.
 - Native Prisma migration CLI deployment to the owner's cloud database. Its verified engine download was blocked in the current environment; the network draft adds `binaries.prisma.sh` but must be reviewed/saved and published to activate. Initial SQL/seed were independently verified against local PostgreSQL.

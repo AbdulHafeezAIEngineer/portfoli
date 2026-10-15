@@ -521,7 +521,7 @@ export const certificates: Certificate[] = [
 ];
 export const certificateContent = {
   eyebrow: "05 / CERTIFICATION",
-  title: "Learning, with the details to match.",
+  title: "Certificate Showcase",
   description:
     "My course completion certificate, with the original award details. Select the image to explore it in full screen.",
   placeholder: "[PLACEHOLDER] Certificate image pending",
@@ -812,27 +812,30 @@ export const demoUI = {
 
 ``````typescript
 export const experience = {
-  eyebrow: "03 / A CONSIDERED APPROACH",
-  title: "My Experience With AI Tools",
-  lead: "Turning AI output into production-quality work.",
-  description:
-    "The idea that AI can build everything on its own overlooks the work behind a professional result: structured prompts, validation, testing, and refinement. The quality comes from how the output is directed, checked, and improved.",
-  factsLabel: "PERSONAL EXAMPLES",
+  eyebrow: "03 / THE PERSON BEHIND ELVORA",
+  title: "About Me",
+  lead: "2+ years of experience. Thoughtful use of AI. An understanding of the full stack.",
+  paragraphs: [
+    "I'm Abdul Hafeez, the developer behind Elvora. With more than two years of experience, I work on websites and AI chatbot experiences that bring business ideas into a practical, usable form. I've invested a great deal of time in learning how to work with AI tools: understanding their strengths, recognizing their limits, and improving the results through clear direction and careful review.",
+    "It's easy to think that anyone can ask AI to build a website and receive a professional product. Getting a useful first draft is only the beginning. A strong result needs a well-structured prompt, the right context, sensible design decisions, and repeated testing. My contribution is in shaping the requirements, checking the generated work, and refining the details until the experience feels considered and works as intended.",
+    "I also believe in understanding what runs beneath the interface. Frontend code shapes how people interact with a website; backend logic handles requests and business rules; a database stores and organizes information; and deployment, security, and maintenance keep the product available and protected. AI can assist with each layer, but making them work together still takes technical understanding, judgment, and responsibility.",
+  ],
+  factsLabel: "HOW I WORK",
   factsNote:
-    "Only verified details belong here. No years of experience, client counts, or testimonials have been supplied.",
+    "Time spent learning the tools matters. The real value comes from the decisions, checks, and refinements made along the way.",
   facts: [
     {
-      label: "Tools I have actually used",
-      value: "[PLACEHOLDER] Add the AI tools you have personally used.",
+      label: "Experience",
+      value: "More than two years of experience, with time dedicated to learning and working with AI tools.",
     },
     {
-      label: "A real workflow example",
-      value: "[PLACEHOLDER] Describe your task, prompts, and own contribution.",
+      label: "Prompting with purpose",
+      value: "Clear goals, relevant context, and specific constraints help turn a broad idea into useful output.",
     },
     {
-      label: "Validation and refinement",
+      label: "Engineering beyond the prompt",
       value:
-        "[PLACEHOLDER] Add a factual example of what you tested and improved.",
+        "Review the frontend, backend, data flow, and deployment together, then test and refine the complete experience.",
     },
   ],
   process: [
@@ -1056,8 +1059,8 @@ const netlifyUrl =
 
 export const site = {
   brand: "Elvora",
+  logo: { src: "/elvora-logo.svg" },
   name: "Abdul Hafeez",
-  initials: "AH",
   role: "AI Chatbot & Web Developer",
   url:
     process.env.NEXT_PUBLIC_SITE_URL ||
@@ -1072,7 +1075,7 @@ export const site = {
   nav: [
     { label: "Work", href: "#work" },
     { label: "AI Bots", href: "#ai-bots" },
-    { label: "Experience", href: "#experience" },
+    { label: "About Me", href: "#experience" },
     { label: "Skills", href: "#skills" },
     { label: "Certification", href: "#certification" },
     { label: "Contact", href: "#contact" },
@@ -1128,7 +1131,7 @@ export const site = {
   footer: "Designed with care. Built with intention.",
   ui: {
     skip: "Skip to content",
-    home: "Elvora. — Home",
+    home: "Elvora — Home",
     menuOpen: "Open navigation",
     menuClose: "Close navigation",
     light: "Switch to light theme",

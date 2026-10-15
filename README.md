@@ -45,12 +45,12 @@ All editable portfolio content starts in `data/`. `lib/content-loader.ts` is the
 - `data/site.ts`: Elvora identity, Abdul Hafeez's introduction, Gmail, navigation and shared UI text.
 - `data/projects.ts`, `demos.ts`: concept descriptions, actual screenshot paths, design highlights, optional promo prompts and demo copy.
 - `data/bots.ts`: bot cards, disclosures, one `realBotConfig` object for iframe/script/API, and an optional `additionalBots` list for adding data-configured connections. `data/prompts/` contains the three server-only demo prompts.
-- `data/experience.ts`, `skills.ts`: honest workflow explanations and explicitly missing personal facts; no invented years, client counts or testimonials.
+- `data/experience.ts`, `skills.ts`: About Me, the owner's supplied 2+ years of experience, AI workflow explanations and remaining tool-name placeholders; no invented client counts or testimonials.
 - `data/certificates.ts`: supplied Master of ChatGPT certificate details and image, click-to-enlarge/zoom viewer.
 - `data/contact.ts`, `admin.ts`: validated form content and admin labels/field definitions.
 - `public/portrait-placeholder.svg`: replace with the owner's actual portrait and update its alt/placeholder wording in `data/site.ts`.
 
-The only public contact is **buildwithelvora@gmail.com**. No WhatsApp, phone or social profiles are displayed. The supplied Coursiv Master of ChatGPT certificate is displayed with its 31 October 2024 issue date and 6-hour course duration. Personal AI-tool/workflow facts still need the owner's input. See `PART_3.md` for personalization.
+The only public contact is **buildwithelvora@gmail.com**. No WhatsApp, phone or social profiles are displayed. The supplied Coursiv Master of ChatGPT certificate is displayed with its 31 October 2024 issue date and 6-hour course duration. About Me includes the owner's supplied 2+ years of experience and time invested in AI tools. Specific tool names and the portrait still need the owner's input. See `PART_3.md` for personalization.
 
 ## Backend setup
 

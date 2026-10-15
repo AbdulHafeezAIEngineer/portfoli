@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Menu, Moon, Sun, X } from "lucide-react";
 import { site } from "@/data/site";
+import { BrandMark } from "./brand-mark";
 
 export function Navbar({ identity }: { identity: { brand: string } }) {
   const [open, setOpen] = useState(false);
@@ -58,11 +59,10 @@ export function Navbar({ identity }: { identity: { brand: string } }) {
         <a
           href="#top"
           className="wordmark"
-          aria-label={`${identity.brand}. — Home`}
+          aria-label={`${identity.brand} — Home`}
           onClick={() => setOpen(false)}
         >
-          {identity.brand}
-          <span aria-hidden="true">.</span>
+          <BrandMark brand={identity.brand} />
         </a>
         <div className="desktop-nav">
           {site.nav.map((item) => (

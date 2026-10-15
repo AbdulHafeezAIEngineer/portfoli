@@ -1304,6 +1304,29 @@ export function BotServices({ bots }: { bots: Bot[] }) {
 }
 ``````
 
+## components/brand-mark.tsx
+
+``````tsx
+import Image from "next/image";
+import { site } from "@/data/site";
+
+export function BrandMark({ brand }: { brand: string }) {
+  return (
+    <>
+      <Image
+        className="brand-symbol"
+        src={site.logo.src}
+        alt=""
+        width={44}
+        height={44}
+        aria-hidden="true"
+      />
+      {brand}
+    </>
+  );
+}
+``````
+
 ## components/certificate-viewer.tsx
 
 ``````tsx
@@ -2380,7 +2403,11 @@ export function Experience() {
             <h2 id="experience-title">{copy.title}</h2>
             <p className="experience-lead">{copy.lead}</p>
           </div>
-          <p>{copy.description}</p>
+          <div className="about-story">
+            {copy.paragraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
         </div>
       </Reveal>
       <div className="process-grid">
@@ -2447,13 +2474,13 @@ export function Experience() {
 ``````tsx
 import { BackToTop } from "./back-to-top";
 import { site } from "@/data/site";
+import { BrandMark } from "./brand-mark";
 
 export function Footer({ brand }: { brand: string }) {
   return (
     <footer className="container footer">
-      <a href="#top" className="wordmark" aria-label={`${brand}. — Home`}>
-        {brand}
-        <span aria-hidden="true">.</span>
+      <a href="#top" className="wordmark" aria-label={`${brand} — Home`}>
+        <BrandMark brand={brand} />
       </a>
       <p>
         © {new Date().getFullYear()} {brand}
@@ -2509,7 +2536,7 @@ export function Hero() {
         <div className="portrait-orbit" aria-hidden="true" />
         <figure className="portrait-card">
           <div className="portrait-topline">
-            <span>{site.initials} / 01</span>
+            <span>{site.brand.toUpperCase()} / 01</span>
             <span className="status-dot" />
           </div>
           <div className="portrait-image">
@@ -2578,6 +2605,7 @@ export function MotionProvider({ children }: { children: React.ReactNode }) {
 import { useEffect, useRef, useState } from "react";
 import { Menu, Moon, Sun, X } from "lucide-react";
 import { site } from "@/data/site";
+import { BrandMark } from "./brand-mark";
 
 export function Navbar({ identity }: { identity: { brand: string } }) {
   const [open, setOpen] = useState(false);
@@ -2633,11 +2661,10 @@ export function Navbar({ identity }: { identity: { brand: string } }) {
         <a
           href="#top"
           className="wordmark"
-          aria-label={`${identity.brand}. — Home`}
+          aria-label={`${identity.brand} — Home`}
           onClick={() => setOpen(false)}
         >
-          {identity.brand}
-          <span aria-hidden="true">.</span>
+          <BrandMark brand={identity.brand} />
         </a>
         <div className="desktop-nav">
           {site.nav.map((item) => (

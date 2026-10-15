@@ -63,6 +63,7 @@ portfoli/
 │   ├── bot-chat-panel.tsx
 │   ├── bot-embed.tsx
 │   ├── bot-services.tsx
+│   ├── brand-mark.tsx
 │   ├── certificate-viewer.tsx
 │   ├── certifications.tsx
 │   ├── contact-form.tsx
@@ -94,8 +95,11 @@ portfoli/
 │       ├── support.ts
 │       └── voice.ts
 ├── docs/
+│   ├── about-preview.png
+│   ├── brand-preview.png
 │   ├── certificate-showcase.png
 │   ├── lighthouse-summary.json
+│   ├── mobile-about-preview.png
 │   └── preview.png
 ├── hooks/
 │   ├── use-modal.ts
@@ -135,6 +139,7 @@ portfoli/
 │       └── 202610150001_initial/
 │           └── migration.sql
 ├── public/
+│   ├── elvora-logo.svg
 │   ├── portrait-placeholder.svg
 │   ├── certificates/
 │   │   ├── coursiv-master-of-chatgpt.webp

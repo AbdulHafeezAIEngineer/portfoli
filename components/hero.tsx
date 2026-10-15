@@ -39,7 +39,7 @@ export function Hero() {
         <div className="portrait-orbit" aria-hidden="true" />
         <figure className="portrait-card">
           <div className="portrait-topline">
-            <span>{site.initials} / 01</span>
+            <span>{site.brand.toUpperCase()} / 01</span>
             <span className="status-dot" />
           </div>
           <div className="portrait-image">

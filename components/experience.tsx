@@ -29,7 +29,11 @@ export function Experience() {
             <h2 id="experience-title">{copy.title}</h2>
             <p className="experience-lead">{copy.lead}</p>
           </div>
-          <p>{copy.description}</p>
+          <div className="about-story">
+            {copy.paragraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
         </div>
       </Reveal>
       <div className="process-grid">

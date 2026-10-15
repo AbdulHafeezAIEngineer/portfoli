@@ -2,7 +2,9 @@
 
 Brand: **Elvora**. Owner: **Abdul Hafeez**. Public contact: **buildwithelvora@gmail.com** only. No phone, WhatsApp or social-profile links.
 
-The expanded complete brief retains these personal preferences. Unsupplied real AI-tool/workflow facts remain `[PLACEHOLDER]` in `data/experience.ts` and `data/skills.ts`. No experience duration, client totals or testimonials are invented.
+The About Me section now uses the owner's supplied **more than two years of experience** and time invested in AI tools. It explains structured prompts, review, testing, refinement and the frontend/backend/database/deployment fundamentals behind a working site. Specific AI-tool names remain `[PLACEHOLDER]` in `data/skills.ts`; no client totals, testimonials or named tools are invented.
+
+The supplied E-and-amber-dot logo is represented as a scalable SVG in `public/elvora-logo.svg` and the favicon in `app/icon.svg`. The navbar and footer pair it with the **Elvora** wordmark. The portrait caption also uses the brand instead of AH.
 
 The supplied Coursiv certificate is now showcased: **Master of ChatGPT**, issued to **Abdul Hafeez** on **31 October 2024**, for a **6-hour** course. Certificate ID: **ADO6IJOS**. These details are transcribed from the uploaded PDF; no external credential verification is claimed. This is described as a course completion certificate, not an academic degree.
 

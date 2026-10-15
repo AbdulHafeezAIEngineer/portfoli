@@ -25,7 +25,7 @@ export const certificates: Certificate[] = [
 ];
 export const certificateContent = {
   eyebrow: "05 / CERTIFICATION",
-  title: "Learning, with the details to match.",
+  title: "Certificate Showcase",
   description:
     "My course completion certificate, with the original award details. Select the image to explore it in full screen.",
   placeholder: "[PLACEHOLDER] Certificate image pending",
