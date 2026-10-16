@@ -13,18 +13,22 @@ import {
 } from "lucide-react";
 import { studio, testimonials } from "@/data/studio";
 import { Reveal } from "./reveal";
+import { TextReveal } from "./text-reveal";
 
 export function WallOfLove() {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { amount: 0.2 });
   const reduced = useReducedMotion();
   const [index, setIndex] = useState(0);
+  const [hydrated, setHydrated] = useState(false);
   const [playing, setPlaying] = useState(true);
   const [interacting, setInteracting] = useState(false);
   const [visible, setVisible] = useState(true);
   const review = testimonials[index];
-  const active = playing && !reduced && !interacting && inView && visible;
+  const autoplay = hydrated && playing && !reduced;
+  const active = autoplay && !interacting && inView && visible;
   useEffect(() => {
+    setHydrated(true);
     const update = () => setVisible(document.visibilityState === "visible");
     update();
     document.addEventListener("visibilitychange", update);
@@ -51,8 +55,8 @@ export function WallOfLove() {
     >
       <Reveal>
         <p className="eyebrow">{studio.love.eyebrow}</p>
-        <div className="studio-heading">
-          <h2 id="love-title">{studio.love.title}</h2>
+        <div className="studio-heading reference-love-heading">
+          <TextReveal id="love-title" text={studio.love.title} />
           <p>{studio.love.intro}</p>
         </div>
       </Reveal>
@@ -86,7 +90,7 @@ export function WallOfLove() {
           </div>
           <div
             className="love-slide-area"
-            aria-live={playing && !reduced ? "off" : "polite"}
+            aria-live={autoplay ? "off" : "polite"}
             aria-atomic="true"
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -150,13 +154,11 @@ export function WallOfLove() {
               <button
                 type="button"
                 className="icon-button"
-                disabled={Boolean(reduced)}
+                disabled={hydrated && Boolean(reduced)}
                 onClick={() => setPlaying((value) => !value)}
-                aria-label={
-                  playing && !reduced ? studio.love.pause : studio.love.play
-                }
+                aria-label={autoplay ? studio.love.pause : studio.love.play}
               >
-                {playing && !reduced ? <Pause size={17} /> : <Play size={17} />}
+                {autoplay ? <Pause size={17} /> : <Play size={17} />}
               </button>
               <button
                 type="button"

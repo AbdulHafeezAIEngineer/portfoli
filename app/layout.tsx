@@ -10,6 +10,7 @@ import "./profile.css";
 import "./devices.css";
 import "./premium.css";
 import "./studio.css";
+import "./reference.css";
 import { ConsentProvider } from "@/components/consent-provider";
 
 const inter = localFont({
@@ -106,6 +107,9 @@ export default function RootLayout({
         <a className="skip-link" href="#main-content">
           {site.ui.skip}
         </a>
+        <noscript>
+          <style>{`.motion-reveal,.motion-word{opacity:1!important;transform:none!important;filter:none!important}`}</style>
+        </noscript>
         <MotionProvider>
           <ConsentProvider>{children}</ConsentProvider>
         </MotionProvider>

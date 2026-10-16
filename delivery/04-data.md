@@ -1060,8 +1060,8 @@ export const demoUI = {
 
 ``````typescript
 export const experience = {
-  eyebrow: "03 / THE PERSON BEHIND ELVORA",
-  title: "About Me",
+  eyebrow: "ABOUT ABDUL HAFEEZ",
+  title: "An independent developer.\nA thoughtful approach to AI.",
   lead: "Independent developer. Thoughtful AI. A human eye for the details.",
   paragraphs: [
     "I'm Abdul Hafeez, the developer behind Elvora. My curiosity about Python and AI grew into a passion for web development. Through hands-on projects, agency work and independent development, I've learned to turn ideas into practical digital experiences. Today, I'm bringing that curiosity into a startup of my own.",
@@ -1238,7 +1238,7 @@ export const legal = {
       sections: [
         {
           title: "Portfolio and concept work",
-          text: "The sample websites are independent concept projects with fictional brands, generated hero images and original interface work. They do not represent client commissions, real reservations, vehicle sales or clinical services. Their sample planners and configurators create local demo summaries without submitting bookings or taking payment.",
+          text: "The sample websites and UI studies are independent concept projects with fictional brands, generated hero images and original interface work. Financial balances and analytics in UI studies are illustrative demo data. They do not represent client commissions, real reservations, vehicle sales or clinical services. Their sample planners and configurators create local demo summaries without submitting bookings or taking payment.",
         },
         {
           title: "Services and project agreements",
@@ -1546,16 +1546,189 @@ export const skillContent = {
 } as const;
 ``````
 
+## data/studies.ts
+
+``````typescript
+export type Study = {
+  id: string;
+  name: string;
+  industry: string;
+  headline: string;
+  description: string;
+  eyebrow: string;
+  action: string;
+  accent: string;
+  kind: "finance" | "analytics" | "travel" | "fitness" | "creative" | "beauty";
+  labels: string[];
+  details: string[];
+  screenshot: string;
+};
+export const studies: Study[] = [
+  {
+    id: "noma",
+    name: "noma",
+    industry: "FINTECH / DASHBOARD",
+    headline: "Your money.\nMore possibilities.",
+    description: "A calm, considered space to see the bigger picture.",
+    eyebrow: "A BETTER FINANCIAL PERSPECTIVE",
+    action: "Explore the overview",
+    accent: "#c4ef6a",
+    kind: "finance",
+    labels: ["Overview", "Accounts", "Activity", "Cards", "Insights"],
+    details: [
+      "Available balance",
+      "$24,860.00",
+      "Monthly overview",
+      "Money in",
+      "$8,420",
+      "Money out",
+      "$3,180",
+      "Recent activity",
+      "Studio subscription",
+      "Design tools",
+      "Coffee & co.",
+      "Sample workspace",
+    ],
+    screenshot: "/studies/noma.webp",
+  },
+  {
+    id: "orbit",
+    name: "ORBIT",
+    industry: "AI / ANALYTICS",
+    headline: "Signals into\npossibilities.",
+    description: "A new perspective on the patterns that matter.",
+    eyebrow: "INTELLIGENCE, BEAUTIFULLY CONNECTED",
+    action: "Explore the signals",
+    accent: "#c5b3ff",
+    kind: "analytics",
+    labels: ["Workspace", "Overview", "Signals", "Connections", "Reports"],
+    details: [
+      "Signal activity",
+      "84.6k",
+      "Connected sources",
+      "12",
+      "Response time",
+      "128ms",
+      "Network health",
+      "All systems connected",
+      "Signal overview",
+      "Sample data",
+    ],
+    screenshot: "/studies/orbit.webp",
+  },
+  {
+    id: "elsewhere",
+    name: "elsewhere.",
+    industry: "TRAVEL / EDITORIAL",
+    headline: "Less ordinary.\nMore elsewhere.",
+    description: "For the places that stay with you long after you leave.",
+    eyebrow: "A DIFFERENT KIND OF GETAWAY",
+    action: "Find your next escape",
+    accent: "#e3d1a2",
+    kind: "travel",
+    labels: ["Our places", "The journal", "Travel differently"],
+    details: [
+      "A slower kind of beautiful",
+      "The coast collection",
+      "A little closer to nature",
+      "Thoughtfully curated places",
+      "Stay curious",
+      "Fictional travel editorial",
+    ],
+    screenshot: "/studies/elsewhere.webp",
+  },
+  {
+    id: "form",
+    name: "FORM /",
+    industry: "FITNESS / LIFESTYLE",
+    headline: "MOVE WITH\nINTENTION.",
+    description: "Strength is a practice. Find your rhythm.",
+    eyebrow: "TRAIN YOUR WAY",
+    action: "Discover the practice",
+    accent: "#f87643",
+    kind: "fitness",
+    labels: ["The method", "The practice", "Our approach"],
+    details: [
+      "01 / STRENGTH",
+      "02 / MOBILITY",
+      "03 / RECOVERY",
+      "Built around your rhythm.",
+      "A stronger everyday.",
+      "Concept fitness studio",
+    ],
+    screenshot: "/studies/form.webp",
+  },
+  {
+    id: "offscript",
+    name: "offscript.",
+    industry: "CREATIVE / DESIGN STUDIO",
+    headline: "GOOD IDEAS\nDON'T PLAY SAFE.",
+    description: "A little unusual. Entirely intentional.",
+    eyebrow: "INDEPENDENT DESIGN EXPLORATION",
+    action: "Meet the ideas",
+    accent: "#e1523a",
+    kind: "creative",
+    labels: ["Selected ideas", "The studio", "Say hello"],
+    details: [
+      "01 / IDENTITY",
+      "02 / DIGITAL",
+      "03 / EDITORIAL",
+      "MAKE SOMETHING",
+      "WORTH NOTICING.",
+      "Original interface experiment",
+    ],
+    screenshot: "/studies/offscript.webp",
+  },
+  {
+    id: "aura",
+    name: "aura",
+    industry: "BEAUTY / E-COMMERCE",
+    headline: "A little ritual.\nA softer everyday.",
+    description: "Considered essentials for the moments that belong to you.",
+    eyebrow: "BEAUTY IN THE EVERYDAY",
+    action: "Explore the ritual",
+    accent: "#bfaecf",
+    kind: "beauty",
+    labels: ["The collection", "Our philosophy", "The journal"],
+    details: [
+      "THE DAILY RITUAL",
+      "aura",
+      "daily essence",
+      "FORM / FEEL / RITUAL",
+      "Thoughtfully composed.",
+      "Fictional product concept",
+    ],
+    screenshot: "/studies/aura.webp",
+  },
+];
+export const studyContent = {
+  label: "UI STUDY · CONCEPT EXPLORATION",
+  note: "An original interface design study. All brands, balances, charts and products shown here are fictional demo content. This is a presentation, not a financial, analytics, booking, fitness or shopping service.",
+  back: "Back to Elvora",
+  details: "Design details",
+  home: "Home",
+  sidebarLabel: "Concept workspace",
+  overview: "Overview",
+  role: "Independent design study",
+  metricNote: "ILLUSTRATIVE DATA",
+  collection: "THE EXPLORATION",
+  framework: "Original layout · Next.js · CSS · SVG",
+  stats: ["M", "T", "W", "T", "F", "S", "S"],
+  chartLabel: "Illustrative activity chart, not real performance data",
+} as const;
+``````
+
 ## data/studio.ts
 
 ``````typescript
 export const studio = {
   services: {
     eyebrow: "WHAT I CAN HELP YOU BUILD",
-    title: "Your next idea.\nThoughtfully made.",
+    title: "Websites + AI.\nBuilt with purpose.",
     intro:
       "Design, development and useful AI—connected around what your business actually needs.",
     action: "Let's discuss your project",
+    more: "Let's talk",
     items: [
       {
         id: "web",
@@ -1662,24 +1835,48 @@ export const studio = {
       {
         title: "Discovering Web Development",
         label: "CURIOSITY → CRAFT",
+        phase: "Foundations",
+        points: [
+          "Explored Python and AI tools",
+          "Learned through building and experimentation",
+          "Found a direction in web development",
+        ],
         description:
           "I started learning how websites are designed, developed, and brought to life. I experimented with different technologies, built projects, and gradually improved my skills through hands-on experience.",
       },
       {
         title: "Working With Agencies",
         label: "LEARNING THROUGH REAL WORK",
+        phase: "Collaboration",
+        points: [
+          "Translated requirements into working interfaces",
+          "Solved practical problems with agencies",
+          "Learned to review and refine real projects",
+        ],
         description:
           "As my skills developed, I began working with agencies, helping them build websites and bring digital projects to life. Working on real projects taught me how to understand client requirements, solve practical problems, and deliver work that serves a purpose.",
       },
       {
         title: "Becoming Independent",
         label: "FINDING MY OWN DIRECTION",
+        phase: "Independence",
+        points: [
+          "Started taking on projects independently",
+          "Built solutions around useful ideas",
+          "Combined design decisions with technical understanding",
+        ],
         description:
           "With experience and confidence, I began taking on projects independently. I wanted more freedom to explore my own ideas, work directly on solutions, and build products around the problems I cared about.",
       },
       {
         title: "Building My Own Startup",
         label: "THE NEXT CHAPTER",
+        phase: "In progress",
+        points: [
+          "Working toward an independent startup",
+          "Bringing web development and AI together",
+          "Continuing to learn, build and improve",
+        ],
         description:
           "Today, I'm working toward building my own independent startup, combining my interest in web development and AI to create useful digital products. What started as curiosity has grown into a journey of learning, building, and creating something of my own.",
       },
@@ -1734,9 +1931,10 @@ export const studio = {
     eyebrow: "A CLOSER LOOK AT THE CRAFT",
     title: "My bunch of work.",
     intro:
-      "A collection of interfaces, details and different design directions. Same care. A different world every time.",
-    note: "Actual screenshots of original concept websites. Fictional brands, generated hero imagery and local demo interactions; not commissioned client work.",
+      "Websites, dashboards, editorial worlds and interface experiments. Different directions, brought together by an eye for the details.",
+    note: "Original concept websites and UI studies with fictional brands and illustrative data. Actual browser captures—not a claim of additional client commissions.",
     explore: "Explore concept",
+    websiteLabel: "WEBSITE CONCEPT",
     view: "View all selected work",
     views: [
       "First impression",
@@ -1767,8 +1965,9 @@ export const studio = {
     description:
       "A website with character. AI with a purpose. An experience worth coming back to.",
     action: "Tell me what you have in mind",
-    signature: "Made with curiosity. Refined with care.",
-    navigation: "Explore",
+    signature:
+      "Thoughtful websites and useful AI experiences, designed around people and the businesses they build.",
+    navigation: "Navigation",
     navLinks: [
       { label: "Services", href: "#services" },
       { label: "Work", href: "#work" },

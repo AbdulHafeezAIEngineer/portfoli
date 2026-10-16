@@ -171,3 +171,25 @@
 }
 ``````
 
+## public/studies/capture.json
+
+``````json
+{
+  "source": "/studies/[slug]",
+  "studies": [
+    "noma",
+    "orbit",
+    "elsewhere",
+    "form",
+    "offscript",
+    "aura"
+  ],
+  "viewport": [
+    1440,
+    900
+  ],
+  "scale": 2,
+  "method": "Chromium captures of actual coded concept interfaces; fictional demo data"
+}
+``````
+

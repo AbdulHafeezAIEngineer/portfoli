@@ -44,3 +44,7 @@ If the app is already running, set `CAPTURE_BASE_URL` to its local origin. Stop 
 ## Archived assets
 
 The original restaurant/real-estate/SaaS/store demos and prior Elvora promotional image are retained as archived assets, without appearing in the selected grid or current sitemap. They are not silently deleted from an owner database. For database mode, unpublish older project records and add the four current entries, or use `CONTENT_SOURCE=files`.
+
+## Additional UI-study collage assets
+
+Six actual 1440×900 browser captures at 2× resolution now live in `public/studies/`: `noma.webp`, `orbit.webp`, `elsewhere.webp`, `form.webp`, `offscript.webp` and `aura.webp`. They show the original coded `/studies/[slug]` pages with fictional demo content. Refresh with `npx tsx scripts/capture-studies.ts`; stop other Next.js processes first or provide `CAPTURE_BASE_URL`. These are separate from the four complete selected concept websites and their 16-image galleries.

@@ -68,6 +68,8 @@ The complete file-by-file source snapshot, starting with the folder structure an
 
 ## Studio design and privacy update
 
-Services, a separate My bunch of work contact sheet, a six-tool AI board, five-step workflow, the owner-supplied journey, one-at-a-time review preview, animated hero emblem and large footer wordmark are configured in `data/studio.ts`. The missing numbered reference images were not attached, and the external Framer reference was blocked in this environment, so these are original Elvora layouts rather than a claimed exact reference match.
+Services, a separate My bunch of work contact sheet, a six-tool AI board, five-step workflow, the owner-supplied journey, one-at-a-time review preview, animated hero emblem and large footer wordmark are configured in `data/studio.ts`. The owner has now supplied the numbered reference images. The latest service grid, horizontal workflow, timeline, portrait-left About and three-column footer adapt those compositions to Elvora. The live Framer URL remains blocked here, so exact animation timing is not claimed. See `REFERENCE_DESIGN.md`.
 
 `data/privacy.ts` contains policy copy and consent settings. See `PRIVACY_SETUP.md` for actual behavior and owner review. Four consent parsing tests run with `node --import tsx --test tests/consent.test.ts`. Review/portrait placeholders are explicit; publish only genuine approved material.
+
+The separate My bunch of work collage includes four website concepts plus six new coded UI studies at `/studies/[slug]`. Their snapshots are actual browser captures with fictional data clearly identified. `data/studies.ts` configures the studies and `npx tsx scripts/capture-studies.ts` refreshes their WebP images.

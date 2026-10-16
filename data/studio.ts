@@ -1,10 +1,11 @@
 export const studio = {
   services: {
     eyebrow: "WHAT I CAN HELP YOU BUILD",
-    title: "Your next idea.\nThoughtfully made.",
+    title: "Websites + AI.\nBuilt with purpose.",
     intro:
       "Design, development and useful AI—connected around what your business actually needs.",
     action: "Let's discuss your project",
+    more: "Let's talk",
     items: [
       {
         id: "web",
@@ -111,24 +112,48 @@ export const studio = {
       {
         title: "Discovering Web Development",
         label: "CURIOSITY → CRAFT",
+        phase: "Foundations",
+        points: [
+          "Explored Python and AI tools",
+          "Learned through building and experimentation",
+          "Found a direction in web development",
+        ],
         description:
           "I started learning how websites are designed, developed, and brought to life. I experimented with different technologies, built projects, and gradually improved my skills through hands-on experience.",
       },
       {
         title: "Working With Agencies",
         label: "LEARNING THROUGH REAL WORK",
+        phase: "Collaboration",
+        points: [
+          "Translated requirements into working interfaces",
+          "Solved practical problems with agencies",
+          "Learned to review and refine real projects",
+        ],
         description:
           "As my skills developed, I began working with agencies, helping them build websites and bring digital projects to life. Working on real projects taught me how to understand client requirements, solve practical problems, and deliver work that serves a purpose.",
       },
       {
         title: "Becoming Independent",
         label: "FINDING MY OWN DIRECTION",
+        phase: "Independence",
+        points: [
+          "Started taking on projects independently",
+          "Built solutions around useful ideas",
+          "Combined design decisions with technical understanding",
+        ],
         description:
           "With experience and confidence, I began taking on projects independently. I wanted more freedom to explore my own ideas, work directly on solutions, and build products around the problems I cared about.",
       },
       {
         title: "Building My Own Startup",
         label: "THE NEXT CHAPTER",
+        phase: "In progress",
+        points: [
+          "Working toward an independent startup",
+          "Bringing web development and AI together",
+          "Continuing to learn, build and improve",
+        ],
         description:
           "Today, I'm working toward building my own independent startup, combining my interest in web development and AI to create useful digital products. What started as curiosity has grown into a journey of learning, building, and creating something of my own.",
       },
@@ -183,9 +208,10 @@ export const studio = {
     eyebrow: "A CLOSER LOOK AT THE CRAFT",
     title: "My bunch of work.",
     intro:
-      "A collection of interfaces, details and different design directions. Same care. A different world every time.",
-    note: "Actual screenshots of original concept websites. Fictional brands, generated hero imagery and local demo interactions; not commissioned client work.",
+      "Websites, dashboards, editorial worlds and interface experiments. Different directions, brought together by an eye for the details.",
+    note: "Original concept websites and UI studies with fictional brands and illustrative data. Actual browser captures—not a claim of additional client commissions.",
     explore: "Explore concept",
+    websiteLabel: "WEBSITE CONCEPT",
     view: "View all selected work",
     views: [
       "First impression",
@@ -216,8 +242,9 @@ export const studio = {
     description:
       "A website with character. AI with a purpose. An experience worth coming back to.",
     action: "Tell me what you have in mind",
-    signature: "Made with curiosity. Refined with care.",
-    navigation: "Explore",
+    signature:
+      "Thoughtful websites and useful AI experiences, designed around people and the businesses they build.",
+    navigation: "Navigation",
     navLinks: [
       { label: "Services", href: "#services" },
       { label: "Work", href: "#work" },

@@ -1,6 +1,6 @@
 export const experience = {
-  eyebrow: "03 / THE PERSON BEHIND ELVORA",
-  title: "About Me",
+  eyebrow: "ABOUT ABDUL HAFEEZ",
+  title: "An independent developer.\nA thoughtful approach to AI.",
   lead: "Independent developer. Thoughtful AI. A human eye for the details.",
   paragraphs: [
     "I'm Abdul Hafeez, the developer behind Elvora. My curiosity about Python and AI grew into a passion for web development. Through hands-on projects, agency work and independent development, I've learned to turn ideas into practical digital experiences. Today, I'm bringing that curiosity into a startup of my own.",

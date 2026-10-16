@@ -1,5 +1,6 @@
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { site } from "@/data/site";
+import { TextReveal } from "./text-reveal";
 import { HeroEmblem } from "./hero-emblem";
 
 export function Hero() {
@@ -11,13 +12,12 @@ export function Hero() {
             <span className="tiny-line" />
             {site.hero.eyebrow}
           </p>
-          <h1 id="hero-title">
-            {site.hero.heading[0]}
-            <br />
-            <span className="gold-text">{site.hero.heading[1]}</span>
-            <br />
-            {site.hero.heading[2]}
-          </h1>
+          <TextReveal
+            as="h1"
+            id="hero-title"
+            className="hero-title-reveal"
+            text={site.hero.heading.join("\n")}
+          />
         </div>
         <div>
           <p className="hero-intro">{site.hero.intro}</p>

@@ -2765,78 +2765,388 @@ function Garment({ variant }: { variant: number }) {
 }
 ``````
 
+## components/design-study.tsx
+
+``````tsx
+import Image from "next/image";
+import Link from "next/link";
+import {
+  ArrowDownRight,
+  ArrowUpRight,
+  ChevronRight,
+  CircleDot,
+  Command,
+  Grid2X2,
+  Layers3,
+  Search,
+  Sparkles,
+  Wallet,
+} from "lucide-react";
+import { studyContent as copy, type Study } from "@/data/studies";
+
+function Graph({ variant = 0 }: { variant?: number }) {
+  return (
+    <svg
+      className="study-chart"
+      viewBox="0 0 600 180"
+      role="img"
+      aria-label={copy.chartLabel}
+    >
+      <defs>
+        <linearGradient
+          id={`chart-fill-${variant}`}
+          x1="0"
+          y1="0"
+          x2="0"
+          y2="1"
+        >
+          <stop offset="0%" stopColor="currentColor" stopOpacity=".28" />
+          <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      {[35, 80, 125, 170].map((y) => (
+        <path
+          key={y}
+          d={`M0 ${y}H600`}
+          stroke="currentColor"
+          strokeOpacity=".1"
+        />
+      ))}
+      <path
+        d="M0 150 C35 150 35 130 70 133 S120 102 160 114 S220 131 250 95 S310 70 350 83 S395 35 430 50 S490 80 520 44 S565 28 600 15 V180 H0Z"
+        fill={`url(#chart-fill-${variant})`}
+      />
+      <path
+        d="M0 150 C35 150 35 130 70 133 S120 102 160 114 S220 131 250 95 S310 70 350 83 S395 35 430 50 S490 80 520 44 S565 28 600 15"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="3"
+      />
+    </svg>
+  );
+}
+function Dashboard({ study }: { study: Study }) {
+  const ai = study.kind === "analytics",
+    d = study.details;
+  return (
+    <div className="study-dashboard">
+      <aside className="study-sidebar">
+        <div className="study-logo">
+          {ai ? <Command size={22} /> : <CircleDot size={25} />} {study.name}
+        </div>
+        <small>{copy.sidebarLabel}</small>
+        <nav aria-label={`${study.name} sections`}>
+          {study.labels.map((label, i) => (
+            <a
+              key={label}
+              href={i === 0 ? "#study-main" : "#study-details"}
+              className={i === 0 ? "selected" : ""}
+            >
+              <Grid2X2 size={15} aria-hidden="true" />
+              {label}
+            </a>
+          ))}
+        </nav>
+        <div className="study-user">
+          <span>E</span>
+          <div>
+            {copy.role}
+            <small>{copy.metricNote}</small>
+          </div>
+        </div>
+      </aside>
+      <div className="study-dashboard-main">
+        <header>
+          <p>{study.eyebrow}</p>
+          <div>
+            <Search size={18} aria-hidden="true" />
+            <span className="study-avatar">E</span>
+          </div>
+        </header>
+        <div className="study-dashboard-greeting">
+          <h1>{study.headline}</h1>
+          <p>{study.description}</p>
+        </div>
+        <div className="study-metrics">
+          <div>
+            <small>{d[0]}</small>
+            <strong>{d[1]}</strong>
+            <span>{copy.metricNote}</span>
+          </div>
+          <div>
+            <small>{ai ? d[2] : d[3]}</small>
+            <strong>{ai ? d[3] : d[4]}</strong>
+            <span>{copy.metricNote}</span>
+          </div>
+          <div>
+            <small>{ai ? d[4] : d[5]}</small>
+            <strong>{ai ? d[5] : d[6]}</strong>
+            <span>{copy.metricNote}</span>
+          </div>
+        </div>
+        <div className="study-dashboard-panels">
+          <section className="study-graph-panel">
+            <div>
+              <h2>{ai ? d[8] : d[2]}</h2>
+              <span>{copy.metricNote}</span>
+            </div>
+            <Graph variant={ai ? 1 : 0} />
+            <div className="study-week">
+              {copy.stats.map((day, i) => (
+                <span key={`${day}-${i}`}>{day}</span>
+              ))}
+            </div>
+          </section>
+          {ai ? (
+            <section className="study-network">
+              <div className="network-globe">
+                <i />
+                <i />
+                <i />
+                <span>
+                  <Sparkles size={30} />
+                </span>
+              </div>
+              <h2>{d[6]}</h2>
+              <p>{d[7]}</p>
+            </section>
+          ) : (
+            <section className="study-bank-card">
+              <Wallet size={24} aria-hidden="true" />
+              <p>{study.name}</p>
+              <strong>•••• &nbsp; •••• &nbsp; 0284</strong>
+              <small>{copy.role}</small>
+              <span className="bank-card-orb" />
+            </section>
+          )}
+        </div>
+        <div className="study-activity">
+          <h2>{ai ? d[8] : d[7]}</h2>
+          {[0, 1, 2].map((i) => (
+            <div key={i}>
+              <span className="activity-symbol">
+                {i === 0 ? <Layers3 size={17} /> : <ArrowUpRight size={17} />}
+              </span>
+              <span>{ai ? study.labels[i + 1] : d[i + 8]}</span>
+              <small>{copy.metricNote}</small>
+              <span className="activity-bars">
+                <i style={{ width: `${35 + i * 20}%` }} />
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+function Editorial({ study }: { study: Study }) {
+  const d = study.details;
+  return (
+    <div className={`study-editorial study-editorial-${study.kind}`}>
+      <header className="study-editorial-header">
+        <span className="study-logo">{study.name}</span>
+        <nav aria-label={`${study.name} sections`}>
+          {study.labels.map((label) => (
+            <a href="#study-details" key={label}>
+              {label}
+            </a>
+          ))}
+        </nav>
+        <a className="study-header-action" href="#study-details">
+          <ArrowUpRight size={20} aria-label={copy.details} />
+        </a>
+      </header>
+      <div className="study-editorial-hero">
+        <div className="study-editorial-copy">
+          <p>{study.eyebrow}</p>
+          <h1>{study.headline}</h1>
+          <div>
+            <span>{study.description}</span>
+            <a href="#study-details">
+              {study.action}
+              <ArrowUpRight size={18} aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+        <div className="study-editorial-art" aria-hidden="true">
+          {study.kind === "travel" ? (
+            <>
+              <Image
+                src="/concepts/solenne-hero.webp"
+                alt=""
+                fill
+                sizes="100vw"
+                priority
+              />
+              <span className="travel-coordinates">
+                A SLOWER PERSPECTIVE / 01
+              </span>
+            </>
+          ) : study.kind === "fitness" ? (
+            <>
+              <div className="fitness-ring ring-a" />
+              <div className="fitness-ring ring-b" />
+              <div className="fitness-ring ring-c" />
+              <span className="fitness-art-type">F/</span>
+            </>
+          ) : study.kind === "creative" ? (
+            <>
+              <div className="creative-poster">
+                <span>{d[3]}</span>
+                <i />
+                <strong>{d[4]}</strong>
+              </div>
+              <div className="creative-poster-small">
+                <i />
+                <span>{study.name}</span>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="beauty-disc" />
+              <div className="beauty-bottle">
+                <div />
+                <span>{d[1]}</span>
+                <small>{d[2]}</small>
+                <i>01</i>
+              </div>
+              <div className="beauty-box">
+                <span>{d[1]}</span>
+                <small>{d[0]}</small>
+              </div>
+              <span className="beauty-art-caption">{d[3]}</span>
+            </>
+          )}
+        </div>
+      </div>
+      <div className="study-editorial-bottom">
+        <span>{d[0]}</span>
+        <span>{d[1]}</span>
+        <span>{d[2]}</span>
+        <ArrowDownRight size={24} aria-hidden="true" />
+      </div>
+    </div>
+  );
+}
+export function DesignStudy({ study }: { study: Study }) {
+  return (
+    <div
+      className={`study-surface study-${study.kind}`}
+      style={{ "--study-accent": study.accent } as React.CSSProperties}
+    >
+      <div className="study-notice">
+        <Link href="/#work-bunch">{copy.back}</Link>
+        <span>{copy.label}</span>
+        <span>{study.industry}</span>
+      </div>
+      <main id="main-content">
+        <div id="study-main">
+          {study.kind === "finance" || study.kind === "analytics" ? (
+            <Dashboard study={study} />
+          ) : (
+            <Editorial study={study} />
+          )}
+        </div>
+        <section id="study-details" className="study-details">
+          <div>
+            <p>{copy.collection}</p>
+            <h2>
+              {study.name} / {study.industry}
+            </h2>
+            <p>{copy.note}</p>
+          </div>
+          <Link href="/#work-bunch">
+            {copy.back}
+            <ChevronRight size={17} aria-hidden="true" />
+          </Link>
+        </section>
+      </main>
+      <footer className="study-footer">
+        {copy.framework}
+        <span>© {new Date().getFullYear()} Elvora</span>
+      </footer>
+    </div>
+  );
+}
+``````
+
 ## components/experience.tsx
 
 ``````tsx
 import { Blocks, Braces, Database, ShieldCheck } from "lucide-react";
 import { experience as copy } from "@/data/experience";
 import { Reveal } from "./reveal";
+import { TextReveal } from "./text-reveal";
+import { SocialLinks } from "./social-links";
 import Image from "next/image";
 import { site } from "@/data/site";
-
 const fundamentalsIcons = {
   frontend: Blocks,
   backend: Braces,
   database: Database,
   deployment: ShieldCheck,
 };
-
 export function Experience() {
   return (
     <section
       id="experience"
-      className="container experience-section"
+      className="container experience-section reference-about"
       aria-labelledby="experience-title"
     >
-      <Reveal>
-        <p className="eyebrow">{copy.eyebrow}</p>
-        <div className="experience-intro">
-          <div>
-            <h2 id="experience-title">{copy.title}</h2>
-            <p className="experience-lead">{copy.lead}</p>
-            <figure className="about-portrait">
-              <div className="about-portrait-image">
-                <Image
-                  src={site.hero.portrait}
-                  alt={site.hero.portraitAlt}
-                  fill
-                  sizes="(max-width:700px) 85vw, 360px"
-                />
-                {site.hero.portraitStatus && (
-                  <span className="about-portrait-status">
-                    {site.hero.portraitStatus}
-                  </span>
-                )}
-              </div>
-              <figcaption>
-                <div>
-                  <span className="eyebrow">{site.brand}</span>
-                  <strong>{site.name}</strong>
-                </div>
-                <span className="about-signature" aria-hidden="true">
-                  {site.brand.slice(0, 1)}.
+      <div className="experience-intro">
+        <Reveal>
+          <figure className="about-portrait">
+            <div className="about-portrait-image">
+              <Image
+                src={site.hero.portrait}
+                alt={site.hero.portraitAlt}
+                fill
+                sizes="(max-width:700px) 85vw,480px"
+              />
+              {site.hero.portraitStatus && (
+                <span className="about-portrait-status">
+                  {site.hero.portraitStatus}
                 </span>
-              </figcaption>
-            </figure>
-          </div>
-          <div className="about-story">
+              )}
+            </div>
+            <figcaption>
+              <div>
+                <span className="eyebrow">{site.brand}</span>
+                <strong>{site.name}</strong>
+              </div>
+              <span className="about-signature" aria-hidden="true">
+                E.
+              </span>
+            </figcaption>
+          </figure>
+        </Reveal>
+        <div className="about-story">
+          <Reveal>
+            <p className="eyebrow">{copy.eyebrow}</p>
+          </Reveal>
+          <TextReveal id="experience-title" text={copy.title} />
+          <Reveal>
+            <p className="experience-lead">{copy.lead}</p>
             {copy.paragraphs.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
-          </div>
+            <SocialLinks />
+          </Reveal>
         </div>
-      </Reveal>
+      </div>
       <div className="fundamentals-section">
         <Reveal>
           <p className="eyebrow">{copy.fundamentals.eyebrow}</p>
-          <h2 id="fundamentals-title">{copy.fundamentals.title}</h2>
+        </Reveal>
+        <TextReveal id="fundamentals-title" text={copy.fundamentals.title} />
+        <Reveal>
           <p className="section-intro">{copy.fundamentals.description}</p>
         </Reveal>
         <div className="fundamentals-grid">
           {copy.fundamentals.blocks.map((block, index) => {
             const Icon = fundamentalsIcons[block.id];
             return (
-              <Reveal key={block.id} delay={index * 0.04}>
+              <Reveal key={block.id} delay={index * 0.05}>
                 <article className="fundamental-card">
                   <Icon size={25} strokeWidth={1.4} aria-hidden="true" />
                   <h3>{block.title}</h3>
@@ -2861,7 +3171,7 @@ export function Experience() {
 
 ``````tsx
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Mail } from "lucide-react";
 import { BackToTop } from "./back-to-top";
 import { site } from "@/data/site";
 import { studio } from "@/data/studio";
@@ -2869,7 +3179,7 @@ import { BrandMark } from "./brand-mark";
 import { SocialLinks } from "./social-links";
 import { CookieSettingsButton } from "./consent-provider";
 import { Reveal } from "./reveal";
-
+import { TextReveal } from "./text-reveal";
 export function Footer({
   brand,
   email = site.email,
@@ -2878,12 +3188,14 @@ export function Footer({
   email?: string;
 }) {
   return (
-    <footer className="studio-footer">
+    <footer className="studio-footer reference-footer">
       <div className="container">
-        <Reveal>
-          <div className="footer-invitation">
+        <div className="footer-invitation">
+          <Reveal>
             <p className="eyebrow">{studio.ending.eyebrow}</p>
-            <h2>{studio.ending.title}</h2>
+          </Reveal>
+          <TextReveal text={studio.ending.title} />
+          <Reveal>
             <div>
               <p>{studio.ending.description}</p>
               <a href={`mailto:${email}`} className="button button-gold">
@@ -2891,32 +3203,48 @@ export function Footer({
                 <ArrowUpRight size={18} aria-hidden="true" />
               </a>
             </div>
-          </div>
-        </Reveal>
+          </Reveal>
+        </div>
         <div className="footer-directory">
-          <div className="footer-identity">
-            <a href="/#top" className="wordmark" aria-label={`${brand} — Home`}>
-              <BrandMark brand={brand} />
-            </a>
-            <p>{studio.ending.signature}</p>
-            <a className="footer-email" href={`mailto:${email}`}>
-              {email}
-            </a>
-          </div>
-          <nav aria-label="Footer navigation">
-            <h3>{studio.ending.navigation}</h3>
-            {studio.ending.navLinks.map((item) => (
-              <a key={item.href} href={`/${item.href}`}>
-                {item.label}
+          <Reveal>
+            <div className="footer-identity">
+              <a
+                href="/#top"
+                className="wordmark"
+                aria-label={`${brand} — Home`}
+              >
+                <BrandMark brand={brand} />
               </a>
-            ))}
-          </nav>
-          <div>
-            <h3>{studio.ending.connect}</h3>
-            <SocialLinks />
-          </div>
+              <p className="footer-role">{site.role}</p>
+              <p>{studio.ending.signature}</p>
+            </div>
+          </Reveal>
+          <Reveal delay={0.06}>
+            <nav aria-label="Footer navigation">
+              <h3>{studio.ending.navigation}</h3>
+              {studio.ending.navLinks.map((item) => (
+                <a key={item.href} href={`/${item.href}`}>
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+          </Reveal>
+          <Reveal delay={0.12}>
+            <div>
+              <h3>{studio.ending.connect}</h3>
+              <SocialLinks />
+              <a className="footer-email" href={`mailto:${email}`}>
+                <Mail size={15} aria-hidden="true" />
+                {email}
+              </a>
+            </div>
+          </Reveal>
+        </div>
+        <div className="footer-colophon">
+          <p>
+            © {new Date().getFullYear()} {brand}. {studio.ending.copyright}
+          </p>
           <nav aria-label="Legal information">
-            <h3>{studio.ending.legal}</h3>
             {studio.ending.legalLinks.map((item) => (
               <Link key={item.href} href={item.href}>
                 {item.label}
@@ -2924,14 +3252,11 @@ export function Footer({
             ))}
             <CookieSettingsButton />
           </nav>
+          <a href="/#top" aria-label={site.ui.back}>
+            ↑
+          </a>
         </div>
-        <div className="footer-colophon">
-          <p>
-            © {new Date().getFullYear()} {brand}. {studio.ending.copyright}
-          </p>
-          <p>{studio.ending.credit}</p>
-          <a href="/#top">{site.ui.back} ↑</a>
-        </div>
+        <p className="footer-credit">{studio.ending.credit}</p>
         <div className="footer-art" aria-hidden="true">
           <span>{brand}</span>
           <i />
@@ -2998,6 +3323,7 @@ export function HeroEmblem() {
 ``````tsx
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { site } from "@/data/site";
+import { TextReveal } from "./text-reveal";
 import { HeroEmblem } from "./hero-emblem";
 
 export function Hero() {
@@ -3009,13 +3335,12 @@ export function Hero() {
             <span className="tiny-line" />
             {site.hero.eyebrow}
           </p>
-          <h1 id="hero-title">
-            {site.hero.heading[0]}
-            <br />
-            <span className="gold-text">{site.hero.heading[1]}</span>
-            <br />
-            {site.hero.heading[2]}
-          </h1>
+          <TextReveal
+            as="h1"
+            id="hero-title"
+            className="hero-title-reveal"
+            text={site.hero.heading.join("\n")}
+          />
         </div>
         <div>
           <p className="hero-intro">{site.hero.intro}</p>
@@ -3629,7 +3954,6 @@ export default function ProjectGallery({
 
 ``````tsx
 "use client";
-
 import { m, useReducedMotion } from "framer-motion";
 
 export function Reveal({
@@ -3644,11 +3968,24 @@ export function Reveal({
   const reduced = useReducedMotion();
   return (
     <m.div
-      className={className}
-      initial={{ opacity: 1, y: 0 }}
-      whileInView={reduced ? undefined : { y: [18, 0], opacity: [0.45, 1] }}
-      viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
+      className={`motion-reveal ${className}`}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.12, margin: "0px 0px -20px 0px" }}
+      variants={{
+        hidden: { opacity: 0, y: 32, scale: 0.985, filter: "blur(5px)" },
+        visible: {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          filter: "blur(0px)",
+          transition: {
+            duration: reduced ? 0 : 0.75,
+            delay: reduced ? 0 : delay,
+            ease: [0.22, 1, 0.36, 1],
+          },
+        },
+      }}
     >
       {children}
     </m.div>
@@ -3745,7 +4082,6 @@ export function SocialLinks() {
 
 ``````tsx
 "use client";
-
 import Image from "next/image";
 import { useRef } from "react";
 import { m, useReducedMotion, useScroll, useTransform } from "framer-motion";
@@ -3754,6 +4090,7 @@ import {
   ArrowUpRight,
   Bot,
   Braces,
+  Check,
   CheckCheck,
   Layers3,
   Search,
@@ -3761,34 +4098,37 @@ import {
   Workflow as WorkflowIcon,
 } from "lucide-react";
 import { studio } from "@/data/studio";
+import { studies } from "@/data/studies";
 import type { ProjectView } from "@/data/projects";
 import { Reveal } from "./reveal";
+import { TextReveal } from "./text-reveal";
 const serviceIcons = [Braces, Bot, WorkflowIcon, Search];
 
 export function Services() {
   return (
     <section
       id="services"
-      className="container studio-section services-section"
+      className="container studio-section services-section reference-services"
       aria-labelledby="services-title"
     >
-      <Reveal>
-        <p className="eyebrow">{studio.services.eyebrow}</p>
-        <div className="studio-heading">
-          <h2 id="services-title">{studio.services.title}</h2>
+      <div className="reference-heading">
+        <Reveal>
+          <p className="eyebrow">{studio.services.eyebrow}</p>
+        </Reveal>
+        <TextReveal id="services-title" text={studio.services.title} />
+        <Reveal>
           <p>{studio.services.intro}</p>
-        </div>
-      </Reveal>
+        </Reveal>
+      </div>
       <div className="studio-services">
         {studio.services.items.map((service, index) => {
           const Icon = serviceIcons[index];
           return (
-            <Reveal key={service.id} delay={index * 0.05}>
+            <Reveal key={service.id} delay={(index % 2) * 0.08}>
               <article className={`studio-service service-${service.id}`}>
-                <div className="service-top">
-                  <span className="studio-index">0{index + 1} / SERVICE</span>
-                  <Icon size={28} strokeWidth={1.3} aria-hidden="true" />
-                </div>
+                <span className="reference-service-icon">
+                  <Icon size={22} strokeWidth={1.5} aria-hidden="true" />
+                </span>
                 <h3>{service.title}</h3>
                 <p>{service.description}</p>
                 <ul>
@@ -3796,16 +4136,15 @@ export function Services() {
                     <li key={tag}>{tag}</li>
                   ))}
                 </ul>
-                <div className="service-bottom">
-                  <small>{service.detail}</small>
-                  <a
-                    href="#contact"
-                    aria-label={`${studio.services.action}: ${service.title}`}
-                  >
-                    <ArrowUpRight size={22} aria-hidden="true" />
-                  </a>
-                </div>
-                <span className="service-orbit" aria-hidden="true" />
+                <p className="service-detail">{service.detail}</p>
+                <a
+                  className="service-learn"
+                  href="#contact"
+                  aria-label={`${studio.services.action}: ${service.title}`}
+                >
+                  {studio.services.more}
+                  <ArrowUpRight size={15} aria-hidden="true" />
+                </a>
               </article>
             </Reveal>
           );
@@ -3814,113 +4153,101 @@ export function Services() {
     </section>
   );
 }
-
-function WorkflowStep({
-  step,
-  index,
-}: {
-  step: (typeof studio.workflow.steps)[number];
-  index: number;
-}) {
-  const ref = useRef<HTMLElement>(null);
-  const reduced = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start .9", "start .35"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], [30, 0]);
-  const icons = [Search, Layers3, Braces, CheckCheck, Sparkles];
-  const Icon = icons[index];
-  return (
-    <m.article
-      ref={ref}
-      className="workflow-step"
-      style={reduced ? undefined : { y }}
-    >
-      <span className="workflow-node" aria-hidden="true" />
-      <div className="workflow-step-label">
-        <span>0{index + 1}</span>
-        <Icon size={24} strokeWidth={1.3} aria-hidden="true" />
-      </div>
-      <h3>{step.title}</h3>
-      <p>{step.description}</p>
-      <small>
-        <ArrowDownRight size={14} aria-hidden="true" />
-        {step.note}
-      </small>
-    </m.article>
-  );
-}
 export function Workflow() {
+  const icons = [Search, Layers3, Braces, CheckCheck, Sparkles];
   return (
     <section
       id="workflow"
-      className="container studio-section workflow-section"
+      className="container studio-section reference-workflow"
       aria-labelledby="workflow-title"
     >
-      <div className="workflow-intro">
+      <div className="reference-heading">
         <Reveal>
           <p className="eyebrow">{studio.workflow.eyebrow}</p>
-          <h2 id="workflow-title">{studio.workflow.title}</h2>
+        </Reveal>
+        <TextReveal id="workflow-title" text={studio.workflow.title} />
+        <Reveal>
           <p>{studio.workflow.intro}</p>
-          <div className="workflow-art" aria-hidden="true">
-            <span className="workflow-art-ring" />
-            <span className="workflow-art-ring" />
-            <span className="workflow-art-core">
-              <WorkflowIcon size={42} strokeWidth={1} />
-            </span>
-            <i>IDEA</i>
-            <i>DESIGN</i>
-            <i>BUILD</i>
-          </div>
-          <small>{studio.workflow.label}</small>
         </Reveal>
       </div>
-      <div className="workflow-steps">
-        {studio.workflow.steps.map((step, index) => (
-          <WorkflowStep key={step.title} step={step} index={index} />
-        ))}
+      <div className="workflow-cards">
+        {studio.workflow.steps.map((step, index) => {
+          const Icon = icons[index];
+          return (
+            <Reveal key={step.title} delay={index * 0.07}>
+              <article className="workflow-step">
+                <span className="workflow-number">{index + 1}</span>
+                <Icon
+                  size={18}
+                  className="workflow-card-icon"
+                  aria-hidden="true"
+                />
+                <h3>{step.title}</h3>
+                <p>{step.description}</p>
+                <small>
+                  <ArrowDownRight size={13} aria-hidden="true" />
+                  {step.note}
+                </small>
+              </article>
+            </Reveal>
+          );
+        })}
       </div>
+      <Reveal>
+        <p className="workflow-caption">{studio.workflow.label}</p>
+      </Reveal>
     </section>
   );
 }
-
 export function Journey() {
   return (
     <section
       id="journey"
-      className="container studio-section journey-section"
+      className="container studio-section journey-section reference-journey"
       aria-labelledby="journey-title"
     >
-      <Reveal>
-        <p className="eyebrow">{studio.journey.eyebrow}</p>
-        <div className="studio-heading">
-          <h2 id="journey-title">{studio.journey.title}</h2>
+      <div className="reference-heading">
+        <Reveal>
+          <p className="eyebrow">{studio.journey.eyebrow}</p>
+        </Reveal>
+        <TextReveal id="journey-title" text={studio.journey.title} />
+        <Reveal>
           <p>{studio.journey.intro}</p>
-        </div>
-      </Reveal>
+        </Reveal>
+      </div>
       <div className="journey-chapters">
         {studio.journey.chapters.map((chapter, index) => (
-          <Reveal key={chapter.title} delay={index * 0.04}>
+          <Reveal key={chapter.title} delay={0.03}>
             <article className="journey-chapter">
-              <div className="journey-chapter-number" aria-hidden="true">
-                0{index + 1}
-                <span />
-              </div>
-              <div>
-                <p className="eyebrow">{chapter.label}</p>
-                <h3>{chapter.title}</h3>
-                <p>{chapter.description}</p>
-              </div>
-              <ArrowUpRight size={28} strokeWidth={1} aria-hidden="true" />
+              <span className="timeline-dot" aria-hidden="true" />
+              <header>
+                <div>
+                  <span className="journey-mini-index">
+                    0{index + 1} / {chapter.label}
+                  </span>
+                  <h3>{chapter.title}</h3>
+                </div>
+                <span className="journey-phase">{chapter.phase}</span>
+              </header>
+              <p>{chapter.description}</p>
+              <ul>
+                {chapter.points.map((point) => (
+                  <li key={point}>
+                    <Check size={14} aria-hidden="true" />
+                    {point}
+                  </li>
+                ))}
+              </ul>
             </article>
           </Reveal>
         ))}
       </div>
-      <p className="journey-signature">
-        {studio.journey.note}
-        <span aria-hidden="true">↗</span>
-      </p>
+      <Reveal>
+        <p className="journey-signature">
+          {studio.journey.note}
+          <span aria-hidden="true">↗</span>
+        </p>
+      </Reveal>
     </section>
   );
 }
@@ -3935,7 +4262,7 @@ export function ToolOrbit() {
         <div className="tool-board">
           <div className="tool-copy">
             <p className="eyebrow">{studio.tools.eyebrow}</p>
-            <h2 id="tool-title">{studio.tools.title}</h2>
+            <TextReveal id="tool-title" text={studio.tools.title} />
             <p>{studio.tools.intro}</p>
             <span className="tool-handwriting" aria-hidden="true">
               a little help, a lot of intention ↗
@@ -3971,22 +4298,41 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
     target: ref,
     offset: ["start end", "end start"],
   });
-  const drift = useTransform(scrollYProgress, [0, 1], [-18, 18]);
-  const items = projects.slice(0, 4);
+  const drift = useTransform(scrollYProgress, [0, 1], [-24, 24]);
+  const items = [
+    ...projects
+      .slice(0, 4)
+      .map((project) => ({
+        id: project.id,
+        title: project.title,
+        image: project.screenshots[0].src,
+        alt: project.screenshots[0].alt,
+        href: project.demoUrl,
+        category: studio.bunch.websiteLabel,
+      })),
+    ...studies.map((study) => ({
+      id: study.id,
+      title: study.name,
+      image: study.screenshot,
+      alt: `${study.name}: original ${study.industry.toLowerCase()} interface concept, captured from its implemented design study`,
+      href: `/studies/${study.id}`,
+      category: study.industry,
+    })),
+  ];
   return (
     <section
       ref={ref}
       id="work-bunch"
-      className="bunch-section studio-section"
+      className="bunch-section studio-section reference-bunch"
       aria-labelledby="bunch-title"
     >
-      <div className="container">
+      <div className="container reference-heading">
         <Reveal>
           <p className="eyebrow">{studio.bunch.eyebrow}</p>
-          <div className="studio-heading">
-            <h2 id="bunch-title">{studio.bunch.title}</h2>
-            <p>{studio.bunch.intro}</p>
-          </div>
+        </Reveal>
+        <TextReveal id="bunch-title" text={studio.bunch.title} />
+        <Reveal>
+          <p>{studio.bunch.intro}</p>
         </Reveal>
       </div>
       <div className="bunch-window">
@@ -3994,43 +4340,36 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
           className="bunch-grid"
           style={reduced ? undefined : { y: drift }}
         >
-          {items.flatMap((project, index) =>
-            [0, 1].map((view) => {
-              const screenshot =
-                project.screenshots[view === 0 ? 0 : 3] ||
-                project.screenshots[0];
-              return (
-                <a
-                  className={`bunch-piece bunch-piece-${index * 2 + view}`}
-                  href={project.demoUrl}
-                  key={`${project.id}-${view}`}
-                  aria-label={`${studio.bunch.explore}: ${project.title}, ${studio.bunch.views[view]}`}
-                >
-                  <div className="bunch-browser" aria-hidden="true">
-                    <i />
-                    <i />
-                    <i />
-                    <span>
-                      {project.title.toLowerCase().replaceAll(" ", "-")}.concept
-                    </span>
-                  </div>
-                  <div className="bunch-image">
-                    <Image
-                      src={screenshot.src}
-                      alt={screenshot.alt}
-                      fill
-                      sizes="(max-width:700px) 75vw, 430px"
-                    />
-                  </div>
-                  <div className="bunch-caption">
-                    <span>{project.title}</span>
-                    <small>{studio.bunch.views[view]}</small>
-                    <ArrowUpRight size={17} aria-hidden="true" />
-                  </div>
-                </a>
-              );
-            }),
-          )}
+          {items.map((item, index) => (
+            <a
+              className={`bunch-piece bunch-piece-${index}`}
+              href={item.href}
+              key={item.id}
+              aria-label={`${studio.bunch.explore}: ${item.title}`}
+            >
+              <div className="bunch-browser" aria-hidden="true">
+                <i />
+                <i />
+                <i />
+                <span>
+                  {item.title.toLowerCase().replaceAll(" ", "-")}.concept
+                </span>
+              </div>
+              <div className="bunch-image">
+                <Image
+                  src={item.image}
+                  alt={item.alt}
+                  fill
+                  sizes="(max-width:650px) 70vw,(max-width:1000px) 35vw,400px"
+                />
+              </div>
+              <div className="bunch-caption">
+                <span>{item.title}</span>
+                <small>{item.category}</small>
+                <ArrowUpRight size={15} aria-hidden="true" />
+              </div>
+            </a>
+          ))}
         </m.div>
       </div>
       <div className="container bunch-after">
@@ -4041,6 +4380,81 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
         </a>
       </div>
     </section>
+  );
+}
+``````
+
+## components/text-reveal.tsx
+
+``````tsx
+"use client";
+import { m, useReducedMotion } from "framer-motion";
+
+export function TextReveal({
+  text,
+  as = "h2",
+  id,
+  className = "",
+}: {
+  text: string;
+  as?: "h1" | "h2" | "h3";
+  id?: string;
+  className?: string;
+}) {
+  const reduced = useReducedMotion();
+  const Heading = as === "h1" ? m.h1 : as === "h3" ? m.h3 : m.h2;
+  return (
+    <Heading
+      id={id}
+      className={`text-reveal ${className}`}
+      aria-label={text.replaceAll("\n", " ")}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.45 }}
+      variants={{
+        hidden: {},
+        visible: {
+          transition: {
+            staggerChildren: reduced ? 0 : 0.035,
+            delayChildren: reduced ? 0 : 0.02,
+          },
+        },
+      }}
+    >
+      {text.split("\n").map((line, lineIndex) => (
+        <span
+          className="text-reveal-line"
+          aria-hidden="true"
+          key={`${lineIndex}-${line}`}
+        >
+          {line.split(" ").map((word, index) => (
+            <span className="word-mask" key={`${word}-${index}`}>
+              <m.span
+                className="motion-word"
+                variants={{
+                  hidden: { y: "112%", rotate: 3 },
+                  visible: {
+                    y: "0%",
+                    rotate: 0,
+                    transition: reduced
+                      ? { duration: 0 }
+                      : {
+                          type: "spring",
+                          stiffness: 160,
+                          damping: 24,
+                          mass: 0.8,
+                        },
+                  },
+                }}
+              >
+                {word}
+              </m.span>
+              {index < line.split(" ").length - 1 && " "}
+            </span>
+          ))}
+        </span>
+      ))}
+    </Heading>
   );
 }
 ``````
@@ -4120,18 +4534,22 @@ import {
 } from "lucide-react";
 import { studio, testimonials } from "@/data/studio";
 import { Reveal } from "./reveal";
+import { TextReveal } from "./text-reveal";
 
 export function WallOfLove() {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { amount: 0.2 });
   const reduced = useReducedMotion();
   const [index, setIndex] = useState(0);
+  const [hydrated, setHydrated] = useState(false);
   const [playing, setPlaying] = useState(true);
   const [interacting, setInteracting] = useState(false);
   const [visible, setVisible] = useState(true);
   const review = testimonials[index];
-  const active = playing && !reduced && !interacting && inView && visible;
+  const autoplay = hydrated && playing && !reduced;
+  const active = autoplay && !interacting && inView && visible;
   useEffect(() => {
+    setHydrated(true);
     const update = () => setVisible(document.visibilityState === "visible");
     update();
     document.addEventListener("visibilitychange", update);
@@ -4158,8 +4576,8 @@ export function WallOfLove() {
     >
       <Reveal>
         <p className="eyebrow">{studio.love.eyebrow}</p>
-        <div className="studio-heading">
-          <h2 id="love-title">{studio.love.title}</h2>
+        <div className="studio-heading reference-love-heading">
+          <TextReveal id="love-title" text={studio.love.title} />
           <p>{studio.love.intro}</p>
         </div>
       </Reveal>
@@ -4193,7 +4611,7 @@ export function WallOfLove() {
           </div>
           <div
             className="love-slide-area"
-            aria-live={playing && !reduced ? "off" : "polite"}
+            aria-live={autoplay ? "off" : "polite"}
             aria-atomic="true"
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -4257,13 +4675,11 @@ export function WallOfLove() {
               <button
                 type="button"
                 className="icon-button"
-                disabled={Boolean(reduced)}
+                disabled={hydrated && Boolean(reduced)}
                 onClick={() => setPlaying((value) => !value)}
-                aria-label={
-                  playing && !reduced ? studio.love.pause : studio.love.play
-                }
+                aria-label={autoplay ? studio.love.pause : studio.love.play}
               >
-                {playing && !reduced ? <Pause size={17} /> : <Play size={17} />}
+                {autoplay ? <Pause size={17} /> : <Play size={17} />}
               </button>
               <button
                 type="button"

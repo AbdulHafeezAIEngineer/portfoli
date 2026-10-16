@@ -112,7 +112,7 @@ export const legal = {
       sections: [
         {
           title: "Portfolio and concept work",
-          text: "The sample websites are independent concept projects with fictional brands, generated hero images and original interface work. They do not represent client commissions, real reservations, vehicle sales or clinical services. Their sample planners and configurators create local demo summaries without submitting bookings or taking payment.",
+          text: "The sample websites and UI studies are independent concept projects with fictional brands, generated hero images and original interface work. Financial balances and analytics in UI studies are illustrative demo data. They do not represent client commissions, real reservations, vehicle sales or clinical services. Their sample planners and configurators create local demo summaries without submitting bookings or taking payment.",
         },
         {
           title: "Services and project agreements",

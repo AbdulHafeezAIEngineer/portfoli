@@ -11,6 +11,7 @@ portfoli/
 ├── PART_3.md
 ├── PRIVACY_SETUP.md
 ├── README.md
+├── REFERENCE_DESIGN.md
 ├── SCREENSHOTS.md
 ├── SECURITY_STATUS.md
 ├── VERIFICATION.md
@@ -36,6 +37,7 @@ portfoli/
 │   ├── page.tsx
 │   ├── premium.css
 │   ├── profile.css
+│   ├── reference.css
 │   ├── robots.ts
 │   ├── sitemap.ts
 │   ├── studio.css
@@ -67,6 +69,10 @@ portfoli/
 │   │       └── page.tsx
 │   ├── privacy/
 │   │   └── page.tsx
+│   ├── studies/
+│   │   ├── studies.css
+│   │   └── [slug]/
+│   │       └── page.tsx
 │   └── terms/
 │       └── page.tsx
 ├── components/
@@ -83,6 +89,7 @@ portfoli/
 │   ├── contact-form.tsx
 │   ├── contact.tsx
 │   ├── demo-site.tsx
+│   ├── design-study.tsx
 │   ├── experience.tsx
 │   ├── footer.tsx
 │   ├── forte-preview.tsx
@@ -98,6 +105,7 @@ portfoli/
 │   ├── skills.tsx
 │   ├── social-links.tsx
 │   ├── studio-sections.tsx
+│   ├── text-reveal.tsx
 │   ├── turnstile.tsx
 │   ├── wall-of-love.tsx
 │   └── work.tsx
@@ -115,6 +123,7 @@ portfoli/
 │   ├── projects.ts
 │   ├── site.ts
 │   ├── skills.ts
+│   ├── studies.ts
 │   ├── studio.ts
 │   └── prompts/
 │       ├── booking.ts
@@ -130,6 +139,19 @@ portfoli/
 │   ├── mobile-about-preview.png
 │   ├── new-work-preview.png
 │   ├── preview.png
+│   ├── reference-about-preview.png
+│   ├── reference-footer-preview.png
+│   ├── reference-hero-preview.png
+│   ├── reference-journey-preview.png
+│   ├── reference-mobile-about.png
+│   ├── reference-mobile-consent-preview.png
+│   ├── reference-mobile-work-bunch.png
+│   ├── reference-mobile-workflow.png
+│   ├── reference-services-preview.png
+│   ├── reference-tools-preview.png
+│   ├── reference-wall-of-love-preview.png
+│   ├── reference-work-bunch-preview.png
+│   ├── reference-workflow-preview.png
 │   ├── studio-footer-preview.png
 │   ├── studio-hero-preview.png
 │   ├── studio-journey-preview.png
@@ -188,49 +210,58 @@ portfoli/
 │   │   ├── kovo-hero.webp
 │   │   ├── solenne-hero.webp
 │   │   └── vanta-hero.webp
-│   └── projects/
-│       ├── aster-1.webp
-│       ├── aster-2.webp
-│       ├── aster-3.webp
-│       ├── aster-4.webp
-│       ├── aster-capture.json
-│       ├── elvora-promo.webp
-│       ├── kovo-1.webp
-│       ├── kovo-2.webp
-│       ├── kovo-3.webp
-│       ├── kovo-4.webp
-│       ├── kovo-capture.json
-│       ├── real-estate-1.webp
-│       ├── real-estate-2.webp
-│       ├── real-estate-3.webp
-│       ├── real-estate-4.webp
-│       ├── real-estate-capture.json
-│       ├── restaurant-1.webp
-│       ├── restaurant-2.webp
-│       ├── restaurant-3.webp
-│       ├── restaurant-4.webp
-│       ├── restaurant-capture.json
-│       ├── saas-1.webp
-│       ├── saas-2.webp
-│       ├── saas-3.webp
-│       ├── saas-4.webp
-│       ├── saas-capture.json
-│       ├── solenne-1.webp
-│       ├── solenne-2.webp
-│       ├── solenne-3.webp
-│       ├── solenne-4.webp
-│       ├── solenne-capture.json
-│       ├── store-1.webp
-│       ├── store-2.webp
-│       ├── store-3.webp
-│       ├── store-4.webp
-│       ├── store-capture.json
-│       ├── vanta-1.webp
-│       ├── vanta-2.webp
-│       ├── vanta-3.webp
-│       ├── vanta-4.webp
-│       └── vanta-capture.json
+│   ├── projects/
+│   │   ├── aster-1.webp
+│   │   ├── aster-2.webp
+│   │   ├── aster-3.webp
+│   │   ├── aster-4.webp
+│   │   ├── aster-capture.json
+│   │   ├── elvora-promo.webp
+│   │   ├── kovo-1.webp
+│   │   ├── kovo-2.webp
+│   │   ├── kovo-3.webp
+│   │   ├── kovo-4.webp
+│   │   ├── kovo-capture.json
+│   │   ├── real-estate-1.webp
+│   │   ├── real-estate-2.webp
+│   │   ├── real-estate-3.webp
+│   │   ├── real-estate-4.webp
+│   │   ├── real-estate-capture.json
+│   │   ├── restaurant-1.webp
+│   │   ├── restaurant-2.webp
+│   │   ├── restaurant-3.webp
+│   │   ├── restaurant-4.webp
+│   │   ├── restaurant-capture.json
+│   │   ├── saas-1.webp
+│   │   ├── saas-2.webp
+│   │   ├── saas-3.webp
+│   │   ├── saas-4.webp
+│   │   ├── saas-capture.json
+│   │   ├── solenne-1.webp
+│   │   ├── solenne-2.webp
+│   │   ├── solenne-3.webp
+│   │   ├── solenne-4.webp
+│   │   ├── solenne-capture.json
+│   │   ├── store-1.webp
+│   │   ├── store-2.webp
+│   │   ├── store-3.webp
+│   │   ├── store-4.webp
+│   │   ├── store-capture.json
+│   │   ├── vanta-1.webp
+│   │   ├── vanta-2.webp
+│   │   ├── vanta-3.webp
+│   │   ├── vanta-4.webp
+│   │   └── vanta-capture.json
+│   └── studies/
+│       ├── aura.webp
+│       ├── capture.json
+│       ├── elsewhere.webp
+│       ├── form.webp
+│       ├── noma.webp
+│       ├── offscript.webp
+│       └── orbit.webp
 ├── scripts/
+│   ├── capture-studies.ts
 │   ├── capture.ts
 │   ├── generate-certificate.mjs
 │   ├── generate-client.mjs
@@ -370,7 +401,7 @@ model AuditLog {
 }
 ```
 
-Complete source files follow in folder order. Binary assets are included in the ZIP. Four selected concepts have 16 actual browser screenshots, with generated hero imagery disclosed separately. The studio design uses original Elvora layouts; numbered reference images and genuine reviews/portraits are pending. Private environment files, dependencies and build outputs are excluded.
+Complete source files follow in folder order. Binary assets are included in the ZIP. Four selected concepts have 16 actual browser screenshots, with generated hero imagery disclosed separately. Six additional coded UI studies have their own captured images in the work collage. The latest layouts adapt the supplied visual references. Genuine reviews/portraits and the personal photo are pending. The live Framer animation timing remains unverified. Private environment files, dependencies and build outputs are excluded.
 
 **Review status:** Next.js 14 retains known critical advisories. See SECURITY_STATUS.md.
 
@@ -404,6 +435,7 @@ Keep actual origins and private service settings in ignored .env.local or hostin
 ```bash
 npx playwright install chromium
 npm run capture
+npx tsx scripts/capture-studies.ts
 npm run db:generate
 npm run db:migrate
 npm run db:seed
@@ -422,7 +454,7 @@ Migration/seed require PostgreSQL and private admin settings. Keep CONTENT_SOURC
 ## Owner replacement / setup checklist
 
 - [ ] Brand Elvora, owner Abdul Hafeez, contact abdulhafeez@elvoraai.online. Approved GitHub and Instagram links are included. No phone or WhatsApp links.
-- [ ] Provide the actual personal portrait, genuine approved testimonials/portraits, and the missing numbered design-reference images. Review placeholders are clearly marked.
+- [ ] Provide the actual personal portrait, genuine approved testimonials/portraits. Review placeholders are clearly marked.
 - [ ] The supplied Coursiv Master of ChatGPT certificate retains its actual award details.
 - [ ] Forte uses the supplied public Botpress scripts. Verify live replies, publishing/domain permissions and consent behavior on the deployed site.
 - [ ] Review policy copy against actual providers, retention practice, business identity and relevant legal obligations; no global legal-compliance certification is claimed.

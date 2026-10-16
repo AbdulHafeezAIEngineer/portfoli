@@ -433,7 +433,9 @@ Before launch:
 
 ## Studio sections and privacy controls
 
-The services, supplied journey, workflow, AI toolkit, owner-supplied GitHub/Instagram links, separate screenshot contact sheet and animated ending use `data/studio.ts`. New policy pages are `/privacy`, `/cookies`, and `/terms`; they and the consent code require no extra credentials. Review those policies against the actual configured providers, retention/deletion practice and applicable legal requirements. Third-party chat is opt-in and consent can be withdrawn in the footer. No analytics or advertising tracking was added. Genuine review copy and approved portraits are still missing; the Wall of Love entries are explicitly labeled layout previews. The numbered reference images were not attached, and the external Framer reference was inaccessible here. See `PRIVACY_SETUP.md`.
+The services, supplied journey, workflow, AI toolkit, owner-supplied GitHub/Instagram links, separate screenshot contact sheet and animated ending use `data/studio.ts`. New policy pages are `/privacy`, `/cookies`, and `/terms`; they and the consent code require no extra credentials. Review those policies against the actual configured providers, retention/deletion practice and applicable legal requirements. Third-party chat is opt-in and consent can be withdrawn in the footer. No analytics or advertising tracking was added. Genuine review copy and approved portraits are still missing; the Wall of Love entries are explicitly labeled layout previews. The numbered reference images have now been supplied and used for the latest layout adaptation. The live Framer reference remains inaccessible here; exact motion timing is unverified. See `PRIVACY_SETUP.md`.
+
+The six additional interface studies use `/studies/noma`, `/studies/orbit`, `/studies/elsewhere`, `/studies/form`, `/studies/offscript` and `/studies/aura`. Their actual screenshot assets are included, and the collage links resolve inside the same Next.js app. No new environment variables or database changes are required. See `REFERENCE_DESIGN.md`.
 ``````
 
 ## PART_3.md
@@ -479,7 +481,7 @@ Theme storage remembers an explicit theme choice. Sign-in and configured anti-ab
 
 The Wall of Love currently contains three **explicit review layout previews**, not client testimonials. No real face or invented endorsement is used. Replace entries in `data/studio.ts` only after obtaining genuine review copy, the correct name/role, and permission to publish the portrait and review. Put approved portraits in `public/testimonials/`, use the local path in `portrait`, and set `placeholder: false`. The template renders one slide at a time, pauses on hover/focus or a hidden tab, supports manual controls, and disables autoplay under reduced-motion preferences.
 
-The owner supplied the journey copy, four services, GitHub and Instagram URLs and requested the AI-tool category. No client/project/success totals or new experience-duration claims are added. The missing personal photo remains honestly labeled in About Me. The hero uses the existing Elvora logo as a CSS sculpture. Tool tiles use custom typographic marks and product names without endorsement claims.
+The owner supplied the journey copy, four services, GitHub and Instagram URLs and requested the AI-tool category. No client/project/success totals or new experience-duration claims are added. The missing personal photo remains honestly labeled in About Me. The owner has now supplied the design-reference images, which inform the latest layouts; review copy and approved client portraits remain pending. The hero uses the existing Elvora logo as a CSS sculpture. Tool tiles use custom typographic marks and product names without endorsement claims.
 
 All new section copy lives in `data/studio.ts`, `data/experience.ts`, `data/skills.ts`, and `data/privacy.ts`; no database migration is required for these sections. In database content mode, existing skills and site settings are preserved; update them through admin to match the file-based AI toolkit and email. Never seed destructive replacements over existing content.
 ``````
@@ -557,9 +559,55 @@ The complete file-by-file source snapshot, starting with the folder structure an
 
 ## Studio design and privacy update
 
-Services, a separate My bunch of work contact sheet, a six-tool AI board, five-step workflow, the owner-supplied journey, one-at-a-time review preview, animated hero emblem and large footer wordmark are configured in `data/studio.ts`. The missing numbered reference images were not attached, and the external Framer reference was blocked in this environment, so these are original Elvora layouts rather than a claimed exact reference match.
+Services, a separate My bunch of work contact sheet, a six-tool AI board, five-step workflow, the owner-supplied journey, one-at-a-time review preview, animated hero emblem and large footer wordmark are configured in `data/studio.ts`. The owner has now supplied the numbered reference images. The latest service grid, horizontal workflow, timeline, portrait-left About and three-column footer adapt those compositions to Elvora. The live Framer URL remains blocked here, so exact animation timing is not claimed. See `REFERENCE_DESIGN.md`.
 
 `data/privacy.ts` contains policy copy and consent settings. See `PRIVACY_SETUP.md` for actual behavior and owner review. Four consent parsing tests run with `node --import tsx --test tests/consent.test.ts`. Review/portrait placeholders are explicit; publish only genuine approved material.
+
+The separate My bunch of work collage includes four website concepts plus six new coded UI studies at `/studies/[slug]`. Their snapshots are actual browser captures with fictional data clearly identified. `data/studies.ts` configures the studies and `npx tsx scripts/capture-studies.ts` refreshes their WebP images.
+``````
+
+## REFERENCE_DESIGN.md
+
+``````markdown
+# Elvora: supplied-reference design adaptation
+
+The owner supplied seven images in this update; two show the same footer family. They are now available and were used to adapt the structure, spacing and card language. The latest implementation supersedes the earlier original layouts made before these images were received.
+
+| Supplied visual | Elvora adaptation |
+|---|---|
+| Rounded 2×2 service grid | Four supplied services, centered section heading, gold icon circles, quiet tags, contact links and charcoal rounded cards |
+| Five connected workflow cards | All five supplied AI-powered website steps in a horizontal sequence on desktop and readable cards on mobile |
+| Vertical experience timeline | Four owner-supplied journey chapters, gold timeline dots, phase badges and factual bullets; no invented dates or numeric success claims |
+| Portrait-left About block | Portrait frame on the left and a concise story/AI philosophy on the right; no copied person/photo or statistic cards |
+| Feedback card family | Rounded charcoal review card with decorative offset cards; the requested one-at-a-time carousel and controls are retained |
+| Three-column footer | Elvora identity, Navigation and Connect columns, owner-supplied GitHub/Instagram/email, and a compact legal/copyright row; the animated closing wordmark remains |
+
+The real personal portrait and genuine approved review copy/client portraits remain pending. The About image and testimonial previews remain honestly labeled. Other people's reference testimonials, faces, locations, dates and accomplishments are not reused as the owner's facts.
+
+## Motion
+
+`TextReveal` uses clipped word masks, staggered spring transitions and one-time viewport entry. `Reveal` adds a short blur/scale/vertical transition to cards and image blocks. The existing logo shine, orbit, screenshot hover and scroll drift provide additional motion. Reduced-motion preferences disable these entrances, and a noscript style keeps headings and content visible without JavaScript.
+
+The Framer URL `https://majd-portfolio.framer.website/` returned CONNECT/HTTP 403 from this environment again. Its exact live easing, sequence and timing could not be inspected or verified. The implementation matches the described pop-up/reveal behavior and supplied static composition; it does not claim an exact measured animation copy.
+
+## My bunch of work
+
+The separate collage below Selected Work now combines four existing concept website captures with six new coded UI studies. All are labeled concept work. No additional client count or commissioned-work claim is implied.
+
+| UI study | Route | Art direction | Actual screenshot |
+|---|---|---|---|
+| noma | `/studies/noma` | Sage/ivory financial dashboard | `/studies/noma.webp` |
+| ORBIT | `/studies/orbit` | Violet/dark AI analytics | `/studies/orbit.webp` |
+| elsewhere. | `/studies/elsewhere` | Coastal travel editorial | `/studies/elsewhere.webp` |
+| FORM / | `/studies/form` | Graphite/orange fitness and sculptural rings | `/studies/form.webp` |
+| offscript. | `/studies/offscript` | Cream/coral creative typography | `/studies/offscript.webp` |
+| aura | `/studies/aura` | Lilac/serif beauty and CSS product art | `/studies/aura.webp` |
+
+These are interface presentations with fictional brands, balances, metrics and products. Their navigation/CTA links lead to design details or back to the portfolio. They do not submit financial transactions, appointments or orders. Travel imagery reuses the disclosed original generated Solenne scene; other illustrations/charts/products are original CSS/SVG. Screenshots are captured from the actual pages, not substituted generated website pictures.
+
+Copy and themes live in `data/studies.ts` and `data/studio.ts`. `components/design-study.tsx` and `app/studies/studies.css` implement the six designs. The reusable collage uses the existing project records plus those studies; no schema migration or extra credentials are required.
+
+Capture from an existing local app using `CAPTURE_BASE_URL=http://127.0.0.1:3008 npx tsx scripts/capture-studies.ts`, or stop other Next.js processes and run `npx tsx scripts/capture-studies.ts` to start/stop its own temporary server. It uses a 1440×900 viewport at 2× resolution and writes six WebP files plus `public/studies/capture.json`. Do not run a build and development server against the same `.next` output simultaneously.
 ``````
 
 ## SCREENSHOTS.md
@@ -611,6 +659,10 @@ If the app is already running, set `CAPTURE_BASE_URL` to its local origin. Stop 
 ## Archived assets
 
 The original restaurant/real-estate/SaaS/store demos and prior Elvora promotional image are retained as archived assets, without appearing in the selected grid or current sitemap. They are not silently deleted from an owner database. For database mode, unpublish older project records and add the four current entries, or use `CONTENT_SOURCE=files`.
+
+## Additional UI-study collage assets
+
+Six actual 1440×900 browser captures at 2× resolution now live in `public/studies/`: `noma.webp`, `orbit.webp`, `elsewhere.webp`, `form.webp`, `offscript.webp` and `aura.webp`. They show the original coded `/studies/[slug]` pages with fictional demo content. Refresh with `npx tsx scripts/capture-studies.ts`; stop other Next.js processes first or provide `CAPTURE_BASE_URL`. These are separate from the four complete selected concept websites and their 16-image galleries.
 ``````
 
 ## SECURITY_STATUS.md
@@ -654,7 +706,19 @@ Audit advisories change over time. Once a patched framework upgrade is authorize
 
 This is a **review build**, not a verified live deployment. `SECURITY_STATUS.md` records the remaining critical Next.js 14 dependency blocker and the pending major-version decision.
 
-## Latest studio design and privacy update
+## Latest supplied-reference layout and motion update
+
+- The owner has now supplied seven reference images, including a repeated footer family. Adapted their centered headings, rounded charcoal service cards, horizontal five-step workflow, gold-dot vertical timeline, portrait-left About layout and compact three-column footer to Elvora. The previous claim that the design references were missing is superseded by this update. See `REFERENCE_DESIGN.md` for the mapping.
+- Retained the owner's supplied services/journey/AI philosophy, actual email and social URLs. Did not import Badhon's photo, names, dates, projects, testimonials, location or experience/success numbers. The personal photo and genuine approved testimonials/client portraits are still pending and labeled honestly.
+- Added clipped, staggered spring word reveals, short blur/scale/vertical image/card entrances, and retained the Elvora logo/footer shine and screenshot drift/hover. The Framer URL still returns CONNECT/HTTP 403 here; its exact live timing/easing could not be inspected, so no exact animation-copy claim is made.
+- The separate work collage now contains four original website concepts plus six new coded UI studies: noma, ORBIT, elsewhere., FORM /, offscript. and aura. Their balances, charts, products and brands are illustrative. Six actual browser captures at 1440×900, 2×, are included in `public/studies/`. No additional commissioned-client count is claimed.
+- Latest lint, typecheck and final production build passed. The new `/studies/[slug]` pages, images, policy routes and sitemap links return successful responses. Unknown study paths display the not-found screen with `noindex`; this async App Router layout streams that result with HTTP 200, so verification checks the actual not-found/noindex behavior rather than incorrectly requiring HTTP 404.
+- Development browser checks passed for dark/light homepage accessibility, the preferences dialog and policy pages, all six UI-study accessibility scans, 320–1440px layouts, gallery-study back links, review rotation/manual controls, consent denial/persistence/revocation, storage failure and JavaScript-disabled content. No real provider request or email was sent; provider behavior used an explicit local iframe fixture.
+- Production checks verified a word begins below its mask, moves upward on viewport entry and settles inside the mask, and all five workflow cards share a desktop row. Captured every journey chapter after revealing it, checked the three-column footer and ten-item collage, and generated complete desktop/mobile preview images.
+- A reduced-motion production check caught a server/client SVG mismatch in the review Play/Pause icon. Fixed it by deferring media-dependent icon/autoplay state until hydration and keeping initial reveal variants consistent. Final fresh normal/reduced-motion browser sessions, a study page with live consent controls under CSP, and the no-JavaScript fallback all passed without page errors. Final mobile workflow/About/collage captures also passed without overflow or page errors.
+- Current previews use the `docs/reference-` prefix: hero, services, workflow, journey, About, review preview, footer and work collage, with additional mobile workflow/About/collage captures. No new Lighthouse score, legal-compliance certification, paid AI reply or external public-deployment verification is claimed. Earlier dependency-security findings remain in `SECURITY_STATUS.md`.
+
+## Earlier studio design and privacy update
 
 - Built four service cards, a distinct eight-image My bunch of work contact sheet beneath Selected Work, a six-tool AI board, expanded AI/development skills, the supplied five-step workflow, the owner-supplied four-chapter journey, a short About Me summary, social links, a one-at-a-time review carousel, shining CSS hero logo and animated footer wordmark. Added no experience/project/client/success metric cards. The personal portrait remains labeled until supplied.
 - The numbered reference images were not attached. The external Framer reference returned HTTP/CONNECT 403 in this environment; these are original Elvora layouts, not a verified exact reference match. Review entries are explicit layout previews with neutral icons. No genuine testimonial or real client face has been fabricated.
@@ -715,7 +779,7 @@ The earlier build recorded 91 performance; the earlier premium visual update rec
 ## Still needs real owner configuration/verification
 
 - A patched framework-major decision before external production launch. Current production dependency audit: one critical affected package, Next.js 14; other reported production findings were resolved.
-- The personal portrait, approved review text/client portraits, and numbered design-reference images are still missing. AI tools and the supplied journey are now included without metric cards. The supplied Coursiv certificate is displayed; external issuer verification has not been performed.
+- The personal portrait and approved review text/client portraits are still missing. The design-reference images have now been supplied and used. AI tools and the supplied journey are included without metric cards. The supplied Coursiv certificate is displayed; external issuer verification has not been performed.
 - An owner-uploaded photo is needed to complete the About Me portrait area. The previous Elvora featured card has been removed; no screenshot of that external website is needed for the current selected-work grid.
 - Actual public HTTPS origin settings, external database/Redis/storage credentials, OpenAI key for the three API demos, Gmail App Password and Cloudflare Turnstile keys in private settings. The real Botpress connection uses the owner's supplied public scripts; verify its publishing state, domain permissions and live replies on the deployed site.
 - Live Gmail inbox delivery, real OpenAI/provider replies, actual Blob upload, real Redis REST service and real Turnstile challenge verification. Mock-based checks do not establish these integrations.
