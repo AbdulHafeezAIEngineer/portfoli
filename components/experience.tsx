@@ -1,4 +1,11 @@
-import { Blocks, Braces, Database, ShieldCheck } from "lucide-react";
+import {
+  Blocks,
+  Braces,
+  Database,
+  ShieldCheck,
+  Bot,
+  ArrowUpRight,
+} from "lucide-react";
 import { experience as copy } from "@/data/experience";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
@@ -10,6 +17,7 @@ const fundamentalsIcons = {
   backend: Braces,
   database: Database,
   deployment: ShieldCheck,
+  ai: Bot,
 };
 export function Experience() {
   return (
@@ -59,7 +67,10 @@ export function Experience() {
           </Reveal>
         </div>
       </div>
-      <div className="fundamentals-section">
+      <div
+        className="fundamentals-section domains-section"
+        aria-labelledby="fundamentals-title"
+      >
         <Reveal>
           <p className="eyebrow">{copy.fundamentals.eyebrow}</p>
         </Reveal>
@@ -67,17 +78,36 @@ export function Experience() {
         <Reveal>
           <p className="section-intro">{copy.fundamentals.description}</p>
         </Reveal>
-        <div className="fundamentals-grid">
+        <div className="domains-bento">
           {copy.fundamentals.blocks.map((block, index) => {
             const Icon = fundamentalsIcons[block.id];
             return (
               <Reveal key={block.id} delay={index * 0.05}>
-                <article className="fundamental-card">
-                  <Icon size={25} strokeWidth={1.4} aria-hidden="true" />
-                  <h3>{block.title}</h3>
-                  {block.lines.map((line) => (
-                    <p key={line}>{line}</p>
-                  ))}
+                <article className={`domain-card domain-${block.id}`}>
+                  <div className="domain-heading">
+                    <span className="domain-icon">
+                      <Icon size={24} strokeWidth={1.4} aria-hidden="true" />
+                    </span>
+                    <h3>{block.title}</h3>
+                    <span className="domain-index" aria-hidden="true">
+                      0{index + 1}
+                    </span>
+                  </div>
+                  <p>{block.description}</p>
+                  <ul
+                    className="domain-tags"
+                    aria-label={`${block.title} technologies`}
+                  >
+                    {block.tags.map((tag) => (
+                      <li key={tag}>{tag}</li>
+                    ))}
+                  </ul>
+                  {block.id === "ai" && (
+                    <a href="#ai-bots" className="domain-demo-link">
+                      Explore the AI demos
+                      <ArrowUpRight size={17} aria-hidden="true" />
+                    </a>
+                  )}
                 </article>
               </Reveal>
             );

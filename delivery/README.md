@@ -26,6 +26,7 @@ portfoli/
 ├── app/
 │   ├── bots.css
 │   ├── devices.css
+│   ├── editorial.css
 │   ├── error.tsx
 │   ├── global-error.tsx
 │   ├── globals.css
@@ -106,6 +107,7 @@ portfoli/
 │   ├── social-links.tsx
 │   ├── studio-sections.tsx
 │   ├── text-reveal.tsx
+│   ├── tool-mark.tsx
 │   ├── turnstile.tsx
 │   ├── wall-of-love.tsx
 │   └── work.tsx
@@ -125,6 +127,7 @@ portfoli/
 │   ├── skills.ts
 │   ├── studies.ts
 │   ├── studio.ts
+│   ├── tool-marks.ts
 │   └── prompts/
 │       ├── booking.ts
 │       ├── support.ts
@@ -133,6 +136,20 @@ portfoli/
 │   ├── about-preview.png
 │   ├── brand-preview.png
 │   ├── certificate-showcase.png
+│   ├── editorial-contact-desktop.png
+│   ├── editorial-contact-mobile.png
+│   ├── editorial-domains-desktop.png
+│   ├── editorial-domains-mobile.png
+│   ├── editorial-footer-desktop.png
+│   ├── editorial-footer-mobile.png
+│   ├── editorial-journey-desktop.png
+│   ├── editorial-journey-mobile.png
+│   ├── editorial-reviews-desktop.png
+│   ├── editorial-reviews-mobile.png
+│   ├── editorial-skills-desktop.png
+│   ├── editorial-skills-mobile.png
+│   ├── editorial-tools-desktop.png
+│   ├── editorial-tools-mobile.png
 │   ├── elvora-project-preview.png
 │   ├── forte-bot-card.png
 │   ├── lighthouse-summary.json
@@ -252,14 +269,29 @@ portfoli/
 │   │   ├── vanta-3.webp
 │   │   ├── vanta-4.webp
 │   │   └── vanta-capture.json
-│   └── studies/
-│       ├── aura.webp
-│       ├── capture.json
-│       ├── elsewhere.webp
-│       ├── form.webp
-│       ├── noma.webp
-│       ├── offscript.webp
-│       └── orbit.webp
+│   ├── studies/
+│   │   ├── aura.webp
+│   │   ├── capture.json
+│   │   ├── elsewhere.webp
+│   │   ├── form.webp
+│   │   ├── noma.webp
+│   │   ├── offscript.webp
+│   │   └── orbit.webp
+│   └── tool-marks/
+│       ├── SOURCES.md
+│       ├── claude.svg
+│       ├── css.svg
+│       ├── git.svg
+│       ├── github.svg
+│       ├── githubcopilot.svg
+│       ├── googlegemini.svg
+│       ├── html5.svg
+│       ├── nextdotjs.svg
+│       ├── openai.svg
+│       ├── python.svg
+│       ├── react.svg
+│       ├── tailwindcss.svg
+│       └── typescript.svg
 ├── scripts/
 │   ├── capture-studies.ts
 │   ├── capture.ts

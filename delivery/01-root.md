@@ -533,7 +533,7 @@ The capture script starts and stops its own development server on port 3100. Sto
 
 All editable portfolio content starts in `data/`. `lib/content-loader.ts` is the server-only boundary: `CONTENT_SOURCE=database` uses Prisma after migrations and seed, while file mode reads the same typed content. Components keep the same display props. Seed is additive and preserves existing records/passwords.
 
-- `data/site.ts`: Elvora identity, Abdul Hafeez's introduction, Gmail, navigation and shared UI text.
+- `data/site.ts`: Elvora identity, Abdul Hafeez's introduction, domain email, navigation and shared UI text.
 - `data/projects.ts`, `concepts.ts`, `concept-images.ts`: the four selected concepts, page content, 16 screenshot paths, generated-image prompts and design details. `data/demos.ts` retains archived demos.
 - `data/bots.ts`: bot cards, disclosures, one `realBotConfig` object for iframe/script/API, and an optional `additionalBots` list for adding data-configured connections. The real slot connects the supplied Forte O Level Study Assistant Botpress scripts; see `BOTPRESS_SETUP.md`. `data/prompts/` contains the three server-only demo prompts.
 - `data/experience.ts`, `skills.ts`: About Me summary, AI workflow explanations and an expanded AI/development toolkit; no invented client counts or testimonials.
@@ -559,11 +559,13 @@ The complete file-by-file source snapshot, starting with the folder structure an
 
 ## Studio design and privacy update
 
-Services, a separate My bunch of work contact sheet, a six-tool AI board, five-step workflow, the owner-supplied journey, one-at-a-time review preview, animated hero emblem and large footer wordmark are configured in `data/studio.ts`. The owner has now supplied the numbered reference images. The latest service grid, horizontal workflow, timeline, portrait-left About and three-column footer adapt those compositions to Elvora. The live Framer URL remains blocked here, so exact animation timing is not claimed. See `REFERENCE_DESIGN.md`.
+Services, a separate My bunch of work contact sheet, eight-tool creative directory, five-step workflow, the owner-supplied journey, one-at-a-time review preview, animated hero emblem and large footer wordmark are configured in `data/studio.ts`. The latest feature update adds categorized skill rows, five technical-domain bento cards, oversized journey typography, an ivory Let’s talk panel, pill footer navigation and a violet wave sign-off. Local tool marks are shared by the skill rows and directory; no new runtime dependency or tracking is introduced. The owner has now supplied the numbered reference images. The latest service grid, horizontal workflow, journey, portrait-left About and editorial footer adapt those compositions to Elvora. The live Framer URL remains blocked here, so exact animation timing is not claimed. See `REFERENCE_DESIGN.md`.
 
 `data/privacy.ts` contains policy copy and consent settings. See `PRIVACY_SETUP.md` for actual behavior and owner review. Four consent parsing tests run with `node --import tsx --test tests/consent.test.ts`. Review/portrait placeholders are explicit; publish only genuine approved material.
 
 The separate My bunch of work collage includes four website concepts plus six new coded UI studies at `/studies/[slug]`. Their snapshots are actual browser captures with fictional data clearly identified. `data/studies.ts` configures the studies and `npx tsx scripts/capture-studies.ts` refreshes their WebP images.
+
+Latest previews: [footer](docs/editorial-footer-desktop.png), [contact](docs/editorial-contact-desktop.png), [skills](docs/editorial-skills-desktop.png), [tools](docs/editorial-tools-desktop.png), [technical domains](docs/editorial-domains-desktop.png), [journey](docs/editorial-journey-desktop.png) and [review layout](docs/editorial-reviews-desktop.png). Matching mobile captures use the same names with `-mobile.png`.
 ``````
 
 ## REFERENCE_DESIGN.md
@@ -571,16 +573,42 @@ The separate My bunch of work collage includes four website concepts plus six ne
 ``````markdown
 # Elvora: supplied-reference design adaptation
 
+## Latest editorial feature update
+
+The latest batch adds nine reference images. These features are implemented in Elvora’s existing gold/violet visual identity, with a deliberate ivory contact panel. Earlier compositions below describe the previous design phase.
+
+| New visual reference                          | Current Elvora adaptation                                                                                                   |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Oversized footer with pill navigation         | Three-column invitation, Quick links and actual email; filled cropped ELVORA lettering with a slow shine                    |
+| Ivory “Let’s talk” invitation                 | Large editorial heading, direct email, accessible GitHub/Instagram icon buttons and the existing validated form             |
+| Categorized skills rows                       | Six ruled rows for AI tools, prompts, web interfaces, APIs/data, voice and development tools                                |
+| Sliding Wall of Love                          | One active horizontal review, cropped neighbouring cards, pause/previous/next and keyboard arrows                           |
+| Technical Domains bento                       | Five asymmetrical cards for interfaces, integrations, data, deployment and conversational AI, with relevant technology tags |
+| Wave-separated social footer                  | Layered animated violet waves, an Elvora emblem, owner-supplied social links, legal links, cookie settings and copyright    |
+| Oversized experience heading and entries      | Two-tone MY JOURNEY heading and four owner-supplied chapters; no borrowed employment dates or experience totals             |
+| Premium tools directory                       | Two-tone CREATIVE TOOLKIT heading, eight icon/role tiles and local brand assets                                             |
+| Asymmetrical testimonial cards and star field | Soft star pattern and different card proportions merged with the one-review-at-a-time carousel                              |
+
+All named tools, domains and journey facts come from the existing portfolio content and implemented stack. Reference hardware/networking skills, employers, reviews and metrics have not been attributed to the owner. No paid tool subscription or affiliation is implied. Simple Icons assets are bundled locally with attribution in `public/tool-marks/SOURCES.md`; Botpress uses a text identifier.
+
+The carousel is ready for real reviews and approved portraits through `data/studio.ts`. Until supplied, its entries are labeled layout previews with neutral profile icons. No reference people or fabricated five-star ratings are used. Review rotation pauses on hover/focus, when the page is hidden and under reduced-motion preferences.
+
+`app/editorial.css` scopes the new layouts; `ToolMark` shares the tool art between the directory and skill rows. No new runtime package or tracking integration is added. The contact recipient, validation, rate limits and privacy controls are retained.
+
+Desktop/mobile captures use the `docs/editorial-` prefix: tools, skills, domains, journey, reviews, contact and footer. These supersede the corresponding older reference captures.
+
+## Earlier supplied-reference phase
+
 The owner supplied seven images in this update; two show the same footer family. They are now available and were used to adapt the structure, spacing and card language. The latest implementation supersedes the earlier original layouts made before these images were received.
 
-| Supplied visual | Elvora adaptation |
-|---|---|
-| Rounded 2×2 service grid | Four supplied services, centered section heading, gold icon circles, quiet tags, contact links and charcoal rounded cards |
-| Five connected workflow cards | All five supplied AI-powered website steps in a horizontal sequence on desktop and readable cards on mobile |
-| Vertical experience timeline | Four owner-supplied journey chapters, gold timeline dots, phase badges and factual bullets; no invented dates or numeric success claims |
-| Portrait-left About block | Portrait frame on the left and a concise story/AI philosophy on the right; no copied person/photo or statistic cards |
-| Feedback card family | Rounded charcoal review card with decorative offset cards; the requested one-at-a-time carousel and controls are retained |
-| Three-column footer | Elvora identity, Navigation and Connect columns, owner-supplied GitHub/Instagram/email, and a compact legal/copyright row; the animated closing wordmark remains |
+| Supplied visual               | Elvora adaptation                                                                                                                                                |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Rounded 2×2 service grid      | Four supplied services, centered section heading, gold icon circles, quiet tags, contact links and charcoal rounded cards                                        |
+| Five connected workflow cards | All five supplied AI-powered website steps in a horizontal sequence on desktop and readable cards on mobile                                                      |
+| Vertical experience timeline  | Four owner-supplied journey chapters, gold timeline dots, phase badges and factual bullets; no invented dates or numeric success claims                          |
+| Portrait-left About block     | Portrait frame on the left and a concise story/AI philosophy on the right; no copied person/photo or statistic cards                                             |
+| Feedback card family          | Rounded charcoal review card with decorative offset cards; the requested one-at-a-time carousel and controls are retained                                        |
+| Three-column footer           | Elvora identity, Navigation and Connect columns, owner-supplied GitHub/Instagram/email, and a compact legal/copyright row; the animated closing wordmark remains |
 
 The real personal portrait and genuine approved review copy/client portraits remain pending. The About image and testimonial previews remain honestly labeled. Other people's reference testimonials, faces, locations, dates and accomplishments are not reused as the owner's facts.
 
@@ -594,14 +622,14 @@ The Framer URL `https://majd-portfolio.framer.website/` returned CONNECT/HTTP 40
 
 The separate collage below Selected Work now combines four existing concept website captures with six new coded UI studies. All are labeled concept work. No additional client count or commissioned-work claim is implied.
 
-| UI study | Route | Art direction | Actual screenshot |
-|---|---|---|---|
-| noma | `/studies/noma` | Sage/ivory financial dashboard | `/studies/noma.webp` |
-| ORBIT | `/studies/orbit` | Violet/dark AI analytics | `/studies/orbit.webp` |
-| elsewhere. | `/studies/elsewhere` | Coastal travel editorial | `/studies/elsewhere.webp` |
-| FORM / | `/studies/form` | Graphite/orange fitness and sculptural rings | `/studies/form.webp` |
-| offscript. | `/studies/offscript` | Cream/coral creative typography | `/studies/offscript.webp` |
-| aura | `/studies/aura` | Lilac/serif beauty and CSS product art | `/studies/aura.webp` |
+| UI study   | Route                | Art direction                                | Actual screenshot         |
+| ---------- | -------------------- | -------------------------------------------- | ------------------------- |
+| noma       | `/studies/noma`      | Sage/ivory financial dashboard               | `/studies/noma.webp`      |
+| ORBIT      | `/studies/orbit`     | Violet/dark AI analytics                     | `/studies/orbit.webp`     |
+| elsewhere. | `/studies/elsewhere` | Coastal travel editorial                     | `/studies/elsewhere.webp` |
+| FORM /     | `/studies/form`      | Graphite/orange fitness and sculptural rings | `/studies/form.webp`      |
+| offscript. | `/studies/offscript` | Cream/coral creative typography              | `/studies/offscript.webp` |
+| aura       | `/studies/aura`      | Lilac/serif beauty and CSS product art       | `/studies/aura.webp`      |
 
 These are interface presentations with fictional brands, balances, metrics and products. Their navigation/CTA links lead to design details or back to the portfolio. They do not submit financial transactions, appointments or orders. Travel imagery reuses the disclosed original generated Solenne scene; other illustrations/charts/products are original CSS/SVG. Screenshots are captured from the actual pages, not substituted generated website pictures.
 
@@ -619,33 +647,33 @@ Selected Work contains exactly four new custom concepts. Each gallery uses actua
 
 Desktop: 1440×900 at 2× (2880×1800). Mobile: 390×844 at 2× (780×1688). `npm run capture` captures these four selected demos. The hero assets are optimized WebP files in `public/concepts/`; their complete generation prompts are in `data/concept-images.ts`.
 
-| Project | Route | Industry |
-|---|---|---|
-| Solenne | `/demo/solenne` | Boutique hotel |
-| Vanta Motors | `/demo/vanta` | Automotive |
-| Aster Care | `/demo/aster` | Private clinic |
-| Kovo Studio | `/demo/kovo` | Architecture |
+| Project      | Route           | Industry       |
+| ------------ | --------------- | -------------- |
+| Solenne      | `/demo/solenne` | Boutique hotel |
+| Vanta Motors | `/demo/vanta`   | Automotive     |
+| Aster Care   | `/demo/aster`   | Private clinic |
+| Kovo Studio  | `/demo/kovo`    | Architecture   |
 
 ## Exact screenshot filenames
 
-| Project | View | Filename |
-|---|---|---|
-| Solenne | Home page desktop | `public/projects/solenne-1.webp` |
-| Solenne | Collection / inner page | `public/projects/solenne-2.webp` |
-| Solenne | Mobile view | `public/projects/solenne-3.webp` |
-| Solenne | Feature / design details | `public/projects/solenne-4.webp` |
-| Vanta Motors | Home page desktop | `public/projects/vanta-1.webp` |
-| Vanta Motors | Collection / inner page | `public/projects/vanta-2.webp` |
-| Vanta Motors | Mobile view | `public/projects/vanta-3.webp` |
-| Vanta Motors | Feature / design details | `public/projects/vanta-4.webp` |
-| Aster Care | Home page desktop | `public/projects/aster-1.webp` |
-| Aster Care | Collection / inner page | `public/projects/aster-2.webp` |
-| Aster Care | Mobile view | `public/projects/aster-3.webp` |
-| Aster Care | Feature / design details | `public/projects/aster-4.webp` |
-| Kovo Studio | Home page desktop | `public/projects/kovo-1.webp` |
-| Kovo Studio | Collection / inner page | `public/projects/kovo-2.webp` |
-| Kovo Studio | Mobile view | `public/projects/kovo-3.webp` |
-| Kovo Studio | Feature / design details | `public/projects/kovo-4.webp` |
+| Project      | View                     | Filename                         |
+| ------------ | ------------------------ | -------------------------------- |
+| Solenne      | Home page desktop        | `public/projects/solenne-1.webp` |
+| Solenne      | Collection / inner page  | `public/projects/solenne-2.webp` |
+| Solenne      | Mobile view              | `public/projects/solenne-3.webp` |
+| Solenne      | Feature / design details | `public/projects/solenne-4.webp` |
+| Vanta Motors | Home page desktop        | `public/projects/vanta-1.webp`   |
+| Vanta Motors | Collection / inner page  | `public/projects/vanta-2.webp`   |
+| Vanta Motors | Mobile view              | `public/projects/vanta-3.webp`   |
+| Vanta Motors | Feature / design details | `public/projects/vanta-4.webp`   |
+| Aster Care   | Home page desktop        | `public/projects/aster-1.webp`   |
+| Aster Care   | Collection / inner page  | `public/projects/aster-2.webp`   |
+| Aster Care   | Mobile view              | `public/projects/aster-3.webp`   |
+| Aster Care   | Feature / design details | `public/projects/aster-4.webp`   |
+| Kovo Studio  | Home page desktop        | `public/projects/kovo-1.webp`    |
+| Kovo Studio  | Collection / inner page  | `public/projects/kovo-2.webp`    |
+| Kovo Studio  | Mobile view              | `public/projects/kovo-3.webp`    |
+| Kovo Studio  | Feature / design details | `public/projects/kovo-4.webp`    |
 
 ## Capture
 
@@ -663,6 +691,10 @@ The original restaurant/real-estate/SaaS/store demos and prior Elvora promotiona
 ## Additional UI-study collage assets
 
 Six actual 1440×900 browser captures at 2× resolution now live in `public/studies/`: `noma.webp`, `orbit.webp`, `elsewhere.webp`, `form.webp`, `offscript.webp` and `aura.webp`. They show the original coded `/studies/[slug]` pages with fictional demo content. Refresh with `npx tsx scripts/capture-studies.ts`; stop other Next.js processes first or provide `CAPTURE_BASE_URL`. These are separate from the four complete selected concept websites and their 16-image galleries.
+
+## Latest portfolio feature previews
+
+`docs/editorial-{tools,skills,domains,journey,reviews,contact,footer}-{desktop,mobile}.png` capture the current portfolio sections at 1440px and 390px. They show the implemented Elvora designs, not the reference uploads. Reduced-motion capture mode reveals every heading/card, and fixed navigation is hidden for unobstructed section previews. Review/profile placeholders remain clearly identified. Earlier `reference-` and `studio-` captures document previous design phases.
 ``````
 
 ## SECURITY_STATUS.md
@@ -702,11 +734,23 @@ Audit advisories change over time. Once a patched framework upgrade is authorize
 ## VERIFICATION.md
 
 ``````markdown
-# Verification — 17 October 2026
+# Verification — 16 October 2026
 
 This is a **review build**, not a verified live deployment. `SECURITY_STATUS.md` records the remaining critical Next.js 14 dependency blocker and the pending major-version decision.
 
-## Latest supplied-reference layout and motion update
+## Latest editorial feature update
+
+- Applied the nine new visual references through an oversized two-tone tool/journey heading style, an eight-tool directory, six categorized skill rows, five technical-domain bento cards, an ivory Let’s talk panel, a horizontal one-review carousel and a new footer. The footer combines pill navigation, actual contact details, cropped filled ELVORA typography, animated violet waves, a central emblem and legal/cookie controls.
+- Preserved the supplied journey, services, actual domain email, GitHub/Instagram and existing contact/consent behavior. Reference employers, experience totals, unrelated hardware/networking skills, client reviews and portrait photos were not attributed to the owner. Review entries remain clearly labeled previews until genuine owner-approved material is supplied.
+- The tool art is local SVG from Simple Icons with attribution; there is no additional runtime dependency, analytics provider or tracking integration. ChatGPT/OpenAI use the actual OpenAI mark; Botpress uses a text identifier.
+- Latest lint, TypeScript check and optimized production build passed. The homepage first-load JavaScript remains approximately 163 kB. No backend schema or dependency declarations changed.
+- Development browser checks passed for all seven updated sections at 320, 390, 768, 1024 and 1440px, including internal content bounds. The intentionally offscreen contact honeypot is excluded from visual-boundary assertions. There is no document overflow. Reviewed actual desktop/mobile section captures.
+- Dark and light homepage axe WCAG A/AA checks passed after correcting light-theme tool-label contrast. Browser checks verified review rotation, pause and keyboard arrows, exactly one active accessible slide, reduced-motion autoplay disabling and JavaScript-disabled content visibility. Fresh sessions reported no page errors.
+- Verified footer quick links, actual social destinations and reopening/rejecting cookie preferences. Contact empty-field validation, focus/error state, success/reset behavior and mobile accessibility passed with an explicit HTTP fixture. No real email, external chat or paid AI request was sent.
+- Fresh production sessions passed dark/light axe checks, 320px/390px layouts, policy/demo/study/local-logo HTTP checks, footer preference reopening, horizontal review rotation, keyboard arrows, reduced-motion behavior and zero hydration/page errors. All fourteen current previews were regenerated from the production build. Historical backend/provider/database tests in earlier sections were not rerun for this visual update. The known dependency findings and live-provider limitations remain documented separately.
+- Current screenshots use `docs/editorial-{tools,skills,domains,journey,reviews,contact,footer}-{desktop,mobile}.png`. Earlier `reference-` and `studio-` captures describe prior design phases. The live Framer timing and public deployment remain unverified; no exact animation-copy or legal-compliance certification is claimed.
+
+## Earlier supplied-reference layout and motion update
 
 - The owner has now supplied seven reference images, including a repeated footer family. Adapted their centered headings, rounded charcoal service cards, horizontal five-step workflow, gold-dot vertical timeline, portrait-left About layout and compact three-column footer to Elvora. The previous claim that the design references were missing is superseded by this update. See `REFERENCE_DESIGN.md` for the mapping.
 - Retained the owner's supplied services/journey/AI philosophy, actual email and social URLs. Did not import Badhon's photo, names, dates, projects, testimonials, location or experience/success numbers. The personal photo and genuine approved testimonials/client portraits are still pending and labeled honestly.
@@ -767,12 +811,12 @@ This is a **review build**, not a verified live deployment. `SECURITY_STATUS.md`
 
 Earlier mobile-emulated audit against the premium local production build, in file content mode, before the four-concept/direct-chat update above. Lighthouse was not rerun for the latest update:
 
-| Category | Score |
-|---|---:|
-| Performance | 85 |
-| Accessibility | 100 |
-| Best practices | 100 |
-| SEO | 100 |
+| Category       | Score |
+| -------------- | ----: |
+| Performance    |    85 |
+| Accessibility  |   100 |
+| Best practices |   100 |
+| SEO            |   100 |
 
 The earlier build recorded 91 performance; the earlier premium visual update recorded 85 on its final run (82–86 across local runs). Trimming the initial hero animation reduced measured heading render delay, and CSS scroll progress avoids an extra client hook. Performance remains below the earlier result. Scores vary with device, CPU load, image replacements, network, third-party widgets, database latency and the production host. Lighthouse is not a dependency security certification. A compact result is in `docs/lighthouse-summary.json`; the standalone HTML/JSON reports are also prepared in the workspace.
 

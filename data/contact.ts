@@ -1,8 +1,8 @@
 export const contactContent = {
   eyebrow: "06 / START A CONVERSATION",
-  title: "Let's build something considered.",
+  title: "Let's talk.",
   description:
-    "Tell Elvora what you have in mind. A clear brief is a good place to start.",
+    "Have a project in mind? Tell me a little about it, and let's find a thoughtful way forward.",
   emailLabel: "EMAIL ELVORA",
   emailCta: "Open Gmail or your email app",
   emailNote: "Prefer email? Reach out directly using the address below.",

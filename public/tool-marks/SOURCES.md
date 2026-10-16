@@ -1,0 +1,1 @@
+Brand marks from Simple Icons 16.35.0 and the OpenAI mark from Simple Icons 14.15.0 (https://simpleicons.org), distributed under CC0. Individual marks may be subject to trademark rights. Product names identify tools in the toolkit; no affiliation is implied. Botpress uses a text identifier.

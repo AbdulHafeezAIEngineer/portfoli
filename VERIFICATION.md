@@ -1,8 +1,20 @@
-# Verification — 17 October 2026
+# Verification — 16 October 2026
 
 This is a **review build**, not a verified live deployment. `SECURITY_STATUS.md` records the remaining critical Next.js 14 dependency blocker and the pending major-version decision.
 
-## Latest supplied-reference layout and motion update
+## Latest editorial feature update
+
+- Applied the nine new visual references through an oversized two-tone tool/journey heading style, an eight-tool directory, six categorized skill rows, five technical-domain bento cards, an ivory Let’s talk panel, a horizontal one-review carousel and a new footer. The footer combines pill navigation, actual contact details, cropped filled ELVORA typography, animated violet waves, a central emblem and legal/cookie controls.
+- Preserved the supplied journey, services, actual domain email, GitHub/Instagram and existing contact/consent behavior. Reference employers, experience totals, unrelated hardware/networking skills, client reviews and portrait photos were not attributed to the owner. Review entries remain clearly labeled previews until genuine owner-approved material is supplied.
+- The tool art is local SVG from Simple Icons with attribution; there is no additional runtime dependency, analytics provider or tracking integration. ChatGPT/OpenAI use the actual OpenAI mark; Botpress uses a text identifier.
+- Latest lint, TypeScript check and optimized production build passed. The homepage first-load JavaScript remains approximately 163 kB. No backend schema or dependency declarations changed.
+- Development browser checks passed for all seven updated sections at 320, 390, 768, 1024 and 1440px, including internal content bounds. The intentionally offscreen contact honeypot is excluded from visual-boundary assertions. There is no document overflow. Reviewed actual desktop/mobile section captures.
+- Dark and light homepage axe WCAG A/AA checks passed after correcting light-theme tool-label contrast. Browser checks verified review rotation, pause and keyboard arrows, exactly one active accessible slide, reduced-motion autoplay disabling and JavaScript-disabled content visibility. Fresh sessions reported no page errors.
+- Verified footer quick links, actual social destinations and reopening/rejecting cookie preferences. Contact empty-field validation, focus/error state, success/reset behavior and mobile accessibility passed with an explicit HTTP fixture. No real email, external chat or paid AI request was sent.
+- Fresh production sessions passed dark/light axe checks, 320px/390px layouts, policy/demo/study/local-logo HTTP checks, footer preference reopening, horizontal review rotation, keyboard arrows, reduced-motion behavior and zero hydration/page errors. All fourteen current previews were regenerated from the production build. Historical backend/provider/database tests in earlier sections were not rerun for this visual update. The known dependency findings and live-provider limitations remain documented separately.
+- Current screenshots use `docs/editorial-{tools,skills,domains,journey,reviews,contact,footer}-{desktop,mobile}.png`. Earlier `reference-` and `studio-` captures describe prior design phases. The live Framer timing and public deployment remain unverified; no exact animation-copy or legal-compliance certification is claimed.
+
+## Earlier supplied-reference layout and motion update
 
 - The owner has now supplied seven reference images, including a repeated footer family. Adapted their centered headings, rounded charcoal service cards, horizontal five-step workflow, gold-dot vertical timeline, portrait-left About layout and compact three-column footer to Elvora. The previous claim that the design references were missing is superseded by this update. See `REFERENCE_DESIGN.md` for the mapping.
 - Retained the owner's supplied services/journey/AI philosophy, actual email and social URLs. Did not import Badhon's photo, names, dates, projects, testimonials, location or experience/success numbers. The personal photo and genuine approved testimonials/client portraits are still pending and labeled honestly.
@@ -63,12 +75,12 @@ This is a **review build**, not a verified live deployment. `SECURITY_STATUS.md`
 
 Earlier mobile-emulated audit against the premium local production build, in file content mode, before the four-concept/direct-chat update above. Lighthouse was not rerun for the latest update:
 
-| Category | Score |
-|---|---:|
-| Performance | 85 |
-| Accessibility | 100 |
-| Best practices | 100 |
-| SEO | 100 |
+| Category       | Score |
+| -------------- | ----: |
+| Performance    |    85 |
+| Accessibility  |   100 |
+| Best practices |   100 |
+| SEO            |   100 |
 
 The earlier build recorded 91 performance; the earlier premium visual update recorded 85 on its final run (82–86 across local runs). Trimming the initial hero animation reduced measured heading render delay, and CSS scroll progress avoids an extra client hook. Performance remains below the earlier result. Scores vary with device, CPU load, image replacements, network, third-party widgets, database latency and the production host. Lighthouse is not a dependency security certification. A compact result is in `docs/lighthouse-summary.json`; the standalone HTML/JSON reports are also prepared in the workspace.
 

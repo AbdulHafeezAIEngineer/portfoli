@@ -1,15 +1,41 @@
 # Elvora: supplied-reference design adaptation
 
+## Latest editorial feature update
+
+The latest batch adds nine reference images. These features are implemented in Elvora’s existing gold/violet visual identity, with a deliberate ivory contact panel. Earlier compositions below describe the previous design phase.
+
+| New visual reference                          | Current Elvora adaptation                                                                                                   |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Oversized footer with pill navigation         | Three-column invitation, Quick links and actual email; filled cropped ELVORA lettering with a slow shine                    |
+| Ivory “Let’s talk” invitation                 | Large editorial heading, direct email, accessible GitHub/Instagram icon buttons and the existing validated form             |
+| Categorized skills rows                       | Six ruled rows for AI tools, prompts, web interfaces, APIs/data, voice and development tools                                |
+| Sliding Wall of Love                          | One active horizontal review, cropped neighbouring cards, pause/previous/next and keyboard arrows                           |
+| Technical Domains bento                       | Five asymmetrical cards for interfaces, integrations, data, deployment and conversational AI, with relevant technology tags |
+| Wave-separated social footer                  | Layered animated violet waves, an Elvora emblem, owner-supplied social links, legal links, cookie settings and copyright    |
+| Oversized experience heading and entries      | Two-tone MY JOURNEY heading and four owner-supplied chapters; no borrowed employment dates or experience totals             |
+| Premium tools directory                       | Two-tone CREATIVE TOOLKIT heading, eight icon/role tiles and local brand assets                                             |
+| Asymmetrical testimonial cards and star field | Soft star pattern and different card proportions merged with the one-review-at-a-time carousel                              |
+
+All named tools, domains and journey facts come from the existing portfolio content and implemented stack. Reference hardware/networking skills, employers, reviews and metrics have not been attributed to the owner. No paid tool subscription or affiliation is implied. Simple Icons assets are bundled locally with attribution in `public/tool-marks/SOURCES.md`; Botpress uses a text identifier.
+
+The carousel is ready for real reviews and approved portraits through `data/studio.ts`. Until supplied, its entries are labeled layout previews with neutral profile icons. No reference people or fabricated five-star ratings are used. Review rotation pauses on hover/focus, when the page is hidden and under reduced-motion preferences.
+
+`app/editorial.css` scopes the new layouts; `ToolMark` shares the tool art between the directory and skill rows. No new runtime package or tracking integration is added. The contact recipient, validation, rate limits and privacy controls are retained.
+
+Desktop/mobile captures use the `docs/editorial-` prefix: tools, skills, domains, journey, reviews, contact and footer. These supersede the corresponding older reference captures.
+
+## Earlier supplied-reference phase
+
 The owner supplied seven images in this update; two show the same footer family. They are now available and were used to adapt the structure, spacing and card language. The latest implementation supersedes the earlier original layouts made before these images were received.
 
-| Supplied visual | Elvora adaptation |
-|---|---|
-| Rounded 2×2 service grid | Four supplied services, centered section heading, gold icon circles, quiet tags, contact links and charcoal rounded cards |
-| Five connected workflow cards | All five supplied AI-powered website steps in a horizontal sequence on desktop and readable cards on mobile |
-| Vertical experience timeline | Four owner-supplied journey chapters, gold timeline dots, phase badges and factual bullets; no invented dates or numeric success claims |
-| Portrait-left About block | Portrait frame on the left and a concise story/AI philosophy on the right; no copied person/photo or statistic cards |
-| Feedback card family | Rounded charcoal review card with decorative offset cards; the requested one-at-a-time carousel and controls are retained |
-| Three-column footer | Elvora identity, Navigation and Connect columns, owner-supplied GitHub/Instagram/email, and a compact legal/copyright row; the animated closing wordmark remains |
+| Supplied visual               | Elvora adaptation                                                                                                                                                |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Rounded 2×2 service grid      | Four supplied services, centered section heading, gold icon circles, quiet tags, contact links and charcoal rounded cards                                        |
+| Five connected workflow cards | All five supplied AI-powered website steps in a horizontal sequence on desktop and readable cards on mobile                                                      |
+| Vertical experience timeline  | Four owner-supplied journey chapters, gold timeline dots, phase badges and factual bullets; no invented dates or numeric success claims                          |
+| Portrait-left About block     | Portrait frame on the left and a concise story/AI philosophy on the right; no copied person/photo or statistic cards                                             |
+| Feedback card family          | Rounded charcoal review card with decorative offset cards; the requested one-at-a-time carousel and controls are retained                                        |
+| Three-column footer           | Elvora identity, Navigation and Connect columns, owner-supplied GitHub/Instagram/email, and a compact legal/copyright row; the animated closing wordmark remains |
 
 The real personal portrait and genuine approved review copy/client portraits remain pending. The About image and testimonial previews remain honestly labeled. Other people's reference testimonials, faces, locations, dates and accomplishments are not reused as the owner's facts.
 
@@ -23,14 +49,14 @@ The Framer URL `https://majd-portfolio.framer.website/` returned CONNECT/HTTP 40
 
 The separate collage below Selected Work now combines four existing concept website captures with six new coded UI studies. All are labeled concept work. No additional client count or commissioned-work claim is implied.
 
-| UI study | Route | Art direction | Actual screenshot |
-|---|---|---|---|
-| noma | `/studies/noma` | Sage/ivory financial dashboard | `/studies/noma.webp` |
-| ORBIT | `/studies/orbit` | Violet/dark AI analytics | `/studies/orbit.webp` |
-| elsewhere. | `/studies/elsewhere` | Coastal travel editorial | `/studies/elsewhere.webp` |
-| FORM / | `/studies/form` | Graphite/orange fitness and sculptural rings | `/studies/form.webp` |
-| offscript. | `/studies/offscript` | Cream/coral creative typography | `/studies/offscript.webp` |
-| aura | `/studies/aura` | Lilac/serif beauty and CSS product art | `/studies/aura.webp` |
+| UI study   | Route                | Art direction                                | Actual screenshot         |
+| ---------- | -------------------- | -------------------------------------------- | ------------------------- |
+| noma       | `/studies/noma`      | Sage/ivory financial dashboard               | `/studies/noma.webp`      |
+| ORBIT      | `/studies/orbit`     | Violet/dark AI analytics                     | `/studies/orbit.webp`     |
+| elsewhere. | `/studies/elsewhere` | Coastal travel editorial                     | `/studies/elsewhere.webp` |
+| FORM /     | `/studies/form`      | Graphite/orange fitness and sculptural rings | `/studies/form.webp`      |
+| offscript. | `/studies/offscript` | Cream/coral creative typography              | `/studies/offscript.webp` |
+| aura       | `/studies/aura`      | Lilac/serif beauty and CSS product art       | `/studies/aura.webp`      |
 
 These are interface presentations with fictional brands, balances, metrics and products. Their navigation/CTA links lead to design details or back to the portfolio. They do not submit financial transactions, appointments or orders. Travel imagery reuses the disclosed original generated Solenne scene; other illustrations/charts/products are original CSS/SVG. Screenshots are captured from the actual pages, not substituted generated website pictures.
 

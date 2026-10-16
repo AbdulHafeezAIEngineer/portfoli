@@ -105,6 +105,7 @@ export const studio = {
   journey: {
     eyebrow: "MY JOURNEY",
     title: "From a Curious Kid\nto an Independent Developer",
+    displayTitle: "MY\nJOURNEY.",
     intro:
       "My journey began with curiosity: exploring different fields, learning the basics of Python, and experimenting with AI tools to understand what technology could make possible. Over time, I found myself drawn to web development—the ability to turn an idea into something people can actually use.",
     note: "Still curious. Always building.",
@@ -161,7 +162,7 @@ export const studio = {
   },
   tools: {
     eyebrow: "HUMAN DIRECTION. INTELLIGENT TOOLS.",
-    title: "The tools are powerful.\nThe decisions are human.",
+    title: "CREATIVE\nTOOLKIT.",
     intro:
       "AI can accelerate an idea. Clear prompts, technical understanding, testing and thoughtful refinement turn it into useful work.",
     note: "Tools in the creative and development toolkit; selected to suit each project. Product names belong to their respective owners. No partnership or certification is implied.",
@@ -202,6 +203,18 @@ export const studio = {
         purpose: "AI inside the product",
         color: "#e4cc88",
       },
+      {
+        name: "Next.js",
+        mark: "N",
+        purpose: "Web application framework",
+        color: "#f5f5f5",
+      },
+      {
+        name: "GitHub",
+        mark: "GH",
+        purpose: "Code & version control",
+        color: "#f5f5f5",
+      },
     ],
   },
   bunch: {
@@ -222,7 +235,7 @@ export const studio = {
   },
   love: {
     eyebrow: "WALL OF LOVE",
-    title: "Good work starts\nwith a good conversation.",
+    title: "Wall of love.",
     intro: "A space for the people behind the projects.",
     previewLabel: "REVIEW LAYOUT PREVIEW",
     notice:
@@ -244,15 +257,16 @@ export const studio = {
     action: "Tell me what you have in mind",
     signature:
       "Thoughtful websites and useful AI experiences, designed around people and the businesses they build.",
-    navigation: "Navigation",
+    navigation: "/Quick links",
     navLinks: [
+      { label: "Home", href: "#top" },
       { label: "Services", href: "#services" },
       { label: "Work", href: "#work" },
       { label: "About Me", href: "#experience" },
       { label: "Workflow", href: "#workflow" },
       { label: "Contact", href: "#contact" },
     ],
-    connect: "Connect",
+    connect: "/Contact",
     legal: "The details",
     copyright: "All rights reserved.",
     credit: "Designed & developed by Abdul Hafeez · Elvora",

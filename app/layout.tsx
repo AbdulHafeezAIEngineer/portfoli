@@ -11,6 +11,7 @@ import "./devices.css";
 import "./premium.css";
 import "./studio.css";
 import "./reference.css";
+import "./editorial.css";
 import { ConsentProvider } from "@/components/consent-provider";
 
 const inter = localFont({

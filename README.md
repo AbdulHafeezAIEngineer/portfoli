@@ -42,7 +42,7 @@ The capture script starts and stops its own development server on port 3100. Sto
 
 All editable portfolio content starts in `data/`. `lib/content-loader.ts` is the server-only boundary: `CONTENT_SOURCE=database` uses Prisma after migrations and seed, while file mode reads the same typed content. Components keep the same display props. Seed is additive and preserves existing records/passwords.
 
-- `data/site.ts`: Elvora identity, Abdul Hafeez's introduction, Gmail, navigation and shared UI text.
+- `data/site.ts`: Elvora identity, Abdul Hafeez's introduction, domain email, navigation and shared UI text.
 - `data/projects.ts`, `concepts.ts`, `concept-images.ts`: the four selected concepts, page content, 16 screenshot paths, generated-image prompts and design details. `data/demos.ts` retains archived demos.
 - `data/bots.ts`: bot cards, disclosures, one `realBotConfig` object for iframe/script/API, and an optional `additionalBots` list for adding data-configured connections. The real slot connects the supplied Forte O Level Study Assistant Botpress scripts; see `BOTPRESS_SETUP.md`. `data/prompts/` contains the three server-only demo prompts.
 - `data/experience.ts`, `skills.ts`: About Me summary, AI workflow explanations and an expanded AI/development toolkit; no invented client counts or testimonials.
@@ -68,8 +68,10 @@ The complete file-by-file source snapshot, starting with the folder structure an
 
 ## Studio design and privacy update
 
-Services, a separate My bunch of work contact sheet, a six-tool AI board, five-step workflow, the owner-supplied journey, one-at-a-time review preview, animated hero emblem and large footer wordmark are configured in `data/studio.ts`. The owner has now supplied the numbered reference images. The latest service grid, horizontal workflow, timeline, portrait-left About and three-column footer adapt those compositions to Elvora. The live Framer URL remains blocked here, so exact animation timing is not claimed. See `REFERENCE_DESIGN.md`.
+Services, a separate My bunch of work contact sheet, eight-tool creative directory, five-step workflow, the owner-supplied journey, one-at-a-time review preview, animated hero emblem and large footer wordmark are configured in `data/studio.ts`. The latest feature update adds categorized skill rows, five technical-domain bento cards, oversized journey typography, an ivory Let’s talk panel, pill footer navigation and a violet wave sign-off. Local tool marks are shared by the skill rows and directory; no new runtime dependency or tracking is introduced. The owner has now supplied the numbered reference images. The latest service grid, horizontal workflow, journey, portrait-left About and editorial footer adapt those compositions to Elvora. The live Framer URL remains blocked here, so exact animation timing is not claimed. See `REFERENCE_DESIGN.md`.
 
 `data/privacy.ts` contains policy copy and consent settings. See `PRIVACY_SETUP.md` for actual behavior and owner review. Four consent parsing tests run with `node --import tsx --test tests/consent.test.ts`. Review/portrait placeholders are explicit; publish only genuine approved material.
 
 The separate My bunch of work collage includes four website concepts plus six new coded UI studies at `/studies/[slug]`. Their snapshots are actual browser captures with fictional data clearly identified. `data/studies.ts` configures the studies and `npx tsx scripts/capture-studies.ts` refreshes their WebP images.
+
+Latest previews: [footer](docs/editorial-footer-desktop.png), [contact](docs/editorial-contact-desktop.png), [skills](docs/editorial-skills-desktop.png), [tools](docs/editorial-tools-desktop.png), [technical domains](docs/editorial-domains-desktop.png), [journey](docs/editorial-journey-desktop.png) and [review layout](docs/editorial-reviews-desktop.png). Matching mobile captures use the same names with `-mobile.png`.

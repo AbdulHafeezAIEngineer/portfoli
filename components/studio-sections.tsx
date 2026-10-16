@@ -19,6 +19,7 @@ import { studies } from "@/data/studies";
 import type { ProjectView } from "@/data/projects";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
+import { ToolMark } from "./tool-mark";
 const serviceIcons = [Braces, Bot, WorkflowIcon, Search];
 
 export function Services() {
@@ -120,31 +121,39 @@ export function Journey() {
   return (
     <section
       id="journey"
-      className="container studio-section journey-section reference-journey"
+      className="container studio-section editorial-journey"
       aria-labelledby="journey-title"
     >
-      <div className="reference-heading">
+      <div className="journey-editorial-heading">
         <Reveal>
           <p className="eyebrow">{studio.journey.eyebrow}</p>
         </Reveal>
-        <TextReveal id="journey-title" text={studio.journey.title} />
-        <Reveal>
+        <TextReveal
+          id="journey-title"
+          className="split-display"
+          text={studio.journey.displayTitle}
+        />
+        <Reveal className="journey-story-intro">
+          <h3>{studio.journey.title.replaceAll("\n", " ")}</h3>
           <p>{studio.journey.intro}</p>
         </Reveal>
       </div>
-      <div className="journey-chapters">
+      <div className="journey-editorial-list">
         {studio.journey.chapters.map((chapter, index) => (
           <Reveal key={chapter.title} delay={0.03}>
-            <article className="journey-chapter">
-              <span className="timeline-dot" aria-hidden="true" />
+            <article className="journey-editorial-entry">
+              <span className="journey-entry-index" aria-hidden="true">
+                0{index + 1}
+              </span>
               <header>
                 <div>
-                  <span className="journey-mini-index">
-                    0{index + 1} / {chapter.label}
-                  </span>
+                  <span className="journey-entry-label">{chapter.label}</span>
                   <h3>{chapter.title}</h3>
                 </div>
-                <span className="journey-phase">{chapter.phase}</span>
+                <span className="journey-entry-phase">
+                  {chapter.phase}
+                  <ArrowUpRight size={17} aria-hidden="true" />
+                </span>
               </header>
               <p>{chapter.description}</p>
               <ul>
@@ -162,7 +171,9 @@ export function Journey() {
       <Reveal>
         <p className="journey-signature">
           {studio.journey.note}
-          <span aria-hidden="true">↗</span>
+          <span aria-hidden="true">
+            <ArrowUpRight size={28} strokeWidth={1.4} />
+          </span>
         </p>
       </Reveal>
     </section>
@@ -172,38 +183,51 @@ export function Journey() {
 export function ToolOrbit() {
   return (
     <section
-      className="container studio-section tool-section"
+      id="creative-toolkit"
+      className="container studio-section premium-tool-section"
       aria-labelledby="tool-title"
     >
-      <Reveal>
-        <div className="tool-board">
-          <div className="tool-copy">
+      <div className="premium-tool-heading">
+        <div>
+          <Reveal>
             <p className="eyebrow">{studio.tools.eyebrow}</p>
-            <TextReveal id="tool-title" text={studio.tools.title} />
-            <p>{studio.tools.intro}</p>
-            <span className="tool-handwriting" aria-hidden="true">
-              a little help, a lot of intention ↗
-            </span>
-          </div>
-          <div className="tool-tiles">
-            {studio.tools.items.map((tool, index) => (
-              <div className={`tool-tile tool-tile-${index}`} key={tool.name}>
-                <span
-                  className="tool-mark"
-                  style={{ color: tool.color }}
-                  aria-hidden="true"
-                >
-                  {tool.mark}
-                </span>
-                <strong>{tool.name}</strong>
-                <small>{tool.purpose}</small>
-              </div>
-            ))}
-          </div>
-          <div className="tool-board-grid" aria-hidden="true" />
+          </Reveal>
+          <TextReveal
+            id="tool-title"
+            className="split-display"
+            text={studio.tools.title}
+          />
         </div>
-        <p className="studio-note">{studio.tools.note}</p>
-      </Reveal>
+        <Reveal>
+          <p className="premium-tool-intro">
+            {studio.tools.intro}
+            <span>
+              The tools are powerful.
+              <br />
+              The decisions are human.
+            </span>
+          </p>
+        </Reveal>
+      </div>
+      <div className="premium-tool-grid">
+        {studio.tools.items.map((tool, index) => (
+          <Reveal key={tool.name} delay={(index % 2) * 0.06}>
+            <article className="premium-tool-item">
+              <span className="premium-tool-logo">
+                <ToolMark name={tool.name} />
+              </span>
+              <div>
+                <h3>{tool.name}</h3>
+                <p>{tool.purpose}</p>
+              </div>
+              <span className="premium-tool-index" aria-hidden="true">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+            </article>
+          </Reveal>
+        ))}
+      </div>
+      <p className="studio-note">{studio.tools.note}</p>
     </section>
   );
 }
@@ -217,16 +241,14 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
   });
   const drift = useTransform(scrollYProgress, [0, 1], [-24, 24]);
   const items = [
-    ...projects
-      .slice(0, 4)
-      .map((project) => ({
-        id: project.id,
-        title: project.title,
-        image: project.screenshots[0].src,
-        alt: project.screenshots[0].alt,
-        href: project.demoUrl,
-        category: studio.bunch.websiteLabel,
-      })),
+    ...projects.slice(0, 4).map((project) => ({
+      id: project.id,
+      title: project.title,
+      image: project.screenshots[0].src,
+      alt: project.screenshots[0].alt,
+      href: project.demoUrl,
+      category: studio.bunch.websiteLabel,
+    })),
     ...studies.map((study) => ({
       id: study.id,
       title: study.name,

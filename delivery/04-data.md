@@ -791,9 +791,9 @@ export const conceptUI = {
 ``````typescript
 export const contactContent = {
   eyebrow: "06 / START A CONVERSATION",
-  title: "Let's build something considered.",
+  title: "Let's talk.",
   description:
-    "Tell Elvora what you have in mind. A clear brief is a good place to start.",
+    "Have a project in mind? Tell me a little about it, and let's find a thoughtful way forward.",
   emailLabel: "EMAIL ELVORA",
   emailCta: "Open Gmail or your email app",
   emailNote: "Prefer email? Reach out directly using the address below.",
@@ -1070,13 +1070,16 @@ export const experience = {
   ],
   fundamentals: {
     eyebrow: "THE ENGINEERING BEHIND THE INTERFACE",
-    title: "Beyond AI: Full-Stack Understanding",
+    title: "Technical domains.",
     description:
-      "A polished screen is one part of a working product. These fundamentals explain what needs to happen behind it.",
+      "A considered interface needs a solid foundation. From the first interaction to the data behind it, here are the pieces I bring together.",
     blocks: [
       {
         id: "frontend",
-        title: "Frontend",
+        title: "Web & Interfaces",
+        description:
+          "Responsive, accessible interfaces that bring an idea to life across mobile and desktop.",
+        tags: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
         lines: [
           "Structure clear, semantic interfaces.",
           "Adapt layouts to screens and input methods.",
@@ -1086,7 +1089,10 @@ export const experience = {
       },
       {
         id: "backend",
-        title: "Backend",
+        title: "APIs & Integrations",
+        description:
+          "Connect websites to useful services, with validated requests and clear error handling.",
+        tags: ["API routes", "Server actions", "Input validation"],
         lines: [
           "Validate requests on the server.",
           "Design APIs and server actions with clear contracts.",
@@ -1096,7 +1102,10 @@ export const experience = {
       },
       {
         id: "database",
-        title: "Database",
+        title: "Data & Structure",
+        description:
+          "Organize product information with clear schemas and controlled access to private records.",
+        tags: ["Data modeling", "Prisma", "PostgreSQL"],
         lines: [
           "Choose a schema that matches the product.",
           "Keep data consistent and queries efficient.",
@@ -1106,12 +1115,26 @@ export const experience = {
       },
       {
         id: "deployment",
-        title: "Deployment / Security",
+        title: "Deployment & Care",
+        description:
+          "Take a website from development to a connected domain, with server-side secrets and abuse protection.",
+        tags: ["Vercel", "Git", "HTTPS", "Rate limiting"],
         lines: [
           "Build and release through repeatable steps.",
           "Use HTTPS and secure secret management.",
           "Monitor errors, usage, and availability.",
           "Maintain dependencies and abuse protection.",
+        ],
+      },
+      {
+        id: "ai",
+        title: "AI & Conversational Experiences",
+        description:
+          "Make business information easier to explore with custom website chatbots, carefully guided prompts and optional voice interaction.",
+        tags: ["Botpress", "OpenAI API", "Business FAQs", "Web Speech API"],
+        lines: [
+          "Provide useful context.",
+          "Test answers and handle uncertainty.",
         ],
       },
     ],
@@ -1531,10 +1554,10 @@ export const skills: Skill[] = [
 ];
 export const skillContent = {
   eyebrow: "04 / TOOLS & TECHNOLOGIES",
-  title: "A toolkit with purpose.",
+  title: "Skills & tools.",
   description:
     "The technologies and topics behind web, chatbot, and voice experiences.",
-  note: "A toolkit for building, experimenting and refining. No proficiency percentages, project totals or outcome guarantees.",
+  note: "Always learning. Always refining. The right tool, chosen for the task.",
   categories: [
     "AI tools",
     "Prompt engineering",
@@ -1828,6 +1851,7 @@ export const studio = {
   journey: {
     eyebrow: "MY JOURNEY",
     title: "From a Curious Kid\nto an Independent Developer",
+    displayTitle: "MY\nJOURNEY.",
     intro:
       "My journey began with curiosity: exploring different fields, learning the basics of Python, and experimenting with AI tools to understand what technology could make possible. Over time, I found myself drawn to web development—the ability to turn an idea into something people can actually use.",
     note: "Still curious. Always building.",
@@ -1884,7 +1908,7 @@ export const studio = {
   },
   tools: {
     eyebrow: "HUMAN DIRECTION. INTELLIGENT TOOLS.",
-    title: "The tools are powerful.\nThe decisions are human.",
+    title: "CREATIVE\nTOOLKIT.",
     intro:
       "AI can accelerate an idea. Clear prompts, technical understanding, testing and thoughtful refinement turn it into useful work.",
     note: "Tools in the creative and development toolkit; selected to suit each project. Product names belong to their respective owners. No partnership or certification is implied.",
@@ -1925,6 +1949,18 @@ export const studio = {
         purpose: "AI inside the product",
         color: "#e4cc88",
       },
+      {
+        name: "Next.js",
+        mark: "N",
+        purpose: "Web application framework",
+        color: "#f5f5f5",
+      },
+      {
+        name: "GitHub",
+        mark: "GH",
+        purpose: "Code & version control",
+        color: "#f5f5f5",
+      },
     ],
   },
   bunch: {
@@ -1945,7 +1981,7 @@ export const studio = {
   },
   love: {
     eyebrow: "WALL OF LOVE",
-    title: "Good work starts\nwith a good conversation.",
+    title: "Wall of love.",
     intro: "A space for the people behind the projects.",
     previewLabel: "REVIEW LAYOUT PREVIEW",
     notice:
@@ -1967,15 +2003,16 @@ export const studio = {
     action: "Tell me what you have in mind",
     signature:
       "Thoughtful websites and useful AI experiences, designed around people and the businesses they build.",
-    navigation: "Navigation",
+    navigation: "/Quick links",
     navLinks: [
+      { label: "Home", href: "#top" },
       { label: "Services", href: "#services" },
       { label: "Work", href: "#work" },
       { label: "About Me", href: "#experience" },
       { label: "Workflow", href: "#workflow" },
       { label: "Contact", href: "#contact" },
     ],
-    connect: "Connect",
+    connect: "/Contact",
     legal: "The details",
     copyright: "All rights reserved.",
     credit: "Designed & developed by Abdul Hafeez · Elvora",
@@ -2016,5 +2053,30 @@ export const testimonials: Testimonial[] = ["01", "02", "03"].map((id) => ({
   portrait: null,
   placeholder: true,
 }));
+``````
+
+## data/tool-marks.ts
+
+``````typescript
+export const toolMarks: Record<
+  string,
+  { icon?: string; text?: string; color: string }
+> = {
+  Claude: { icon: "claude", color: "#d9a381" },
+  ChatGPT: { icon: "openai", color: "#83bea5" },
+  Gemini: { icon: "googlegemini", color: "#a9a5fa" },
+  "GitHub Copilot": { icon: "githubcopilot", color: "#b6b8dd" },
+  Botpress: { text: "bp", color: "#ab9bf0" },
+  "OpenAI API": { icon: "openai", color: "#d9be7b" },
+  "Python basics": { icon: "python", color: "#7eb9dc" },
+  GitHub: { icon: "github", color: "currentColor" },
+  Git: { icon: "git", color: "#ef8067" },
+  HTML: { icon: "html5", color: "#e88560" },
+  CSS: { icon: "css", color: "#a5a5ff" },
+  "Next.js": { icon: "nextdotjs", color: "currentColor" },
+  React: { icon: "react", color: "#69c7dc" },
+  TypeScript: { icon: "typescript", color: "#73abe0" },
+  "Tailwind CSS": { icon: "tailwindcss", color: "#6cc5d4" },
+};
 ``````
 

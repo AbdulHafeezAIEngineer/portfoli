@@ -9,13 +9,16 @@ export const experience = {
   ],
   fundamentals: {
     eyebrow: "THE ENGINEERING BEHIND THE INTERFACE",
-    title: "Beyond AI: Full-Stack Understanding",
+    title: "Technical domains.",
     description:
-      "A polished screen is one part of a working product. These fundamentals explain what needs to happen behind it.",
+      "A considered interface needs a solid foundation. From the first interaction to the data behind it, here are the pieces I bring together.",
     blocks: [
       {
         id: "frontend",
-        title: "Frontend",
+        title: "Web & Interfaces",
+        description:
+          "Responsive, accessible interfaces that bring an idea to life across mobile and desktop.",
+        tags: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
         lines: [
           "Structure clear, semantic interfaces.",
           "Adapt layouts to screens and input methods.",
@@ -25,7 +28,10 @@ export const experience = {
       },
       {
         id: "backend",
-        title: "Backend",
+        title: "APIs & Integrations",
+        description:
+          "Connect websites to useful services, with validated requests and clear error handling.",
+        tags: ["API routes", "Server actions", "Input validation"],
         lines: [
           "Validate requests on the server.",
           "Design APIs and server actions with clear contracts.",
@@ -35,7 +41,10 @@ export const experience = {
       },
       {
         id: "database",
-        title: "Database",
+        title: "Data & Structure",
+        description:
+          "Organize product information with clear schemas and controlled access to private records.",
+        tags: ["Data modeling", "Prisma", "PostgreSQL"],
         lines: [
           "Choose a schema that matches the product.",
           "Keep data consistent and queries efficient.",
@@ -45,12 +54,26 @@ export const experience = {
       },
       {
         id: "deployment",
-        title: "Deployment / Security",
+        title: "Deployment & Care",
+        description:
+          "Take a website from development to a connected domain, with server-side secrets and abuse protection.",
+        tags: ["Vercel", "Git", "HTTPS", "Rate limiting"],
         lines: [
           "Build and release through repeatable steps.",
           "Use HTTPS and secure secret management.",
           "Monitor errors, usage, and availability.",
           "Maintain dependencies and abuse protection.",
+        ],
+      },
+      {
+        id: "ai",
+        title: "AI & Conversational Experiences",
+        description:
+          "Make business information easier to explore with custom website chatbots, carefully guided prompts and optional voice interaction.",
+        tags: ["Botpress", "OpenAI API", "Business FAQs", "Web Speech API"],
+        lines: [
+          "Provide useful context.",
+          "Test answers and handle uncertainty.",
         ],
       },
     ],

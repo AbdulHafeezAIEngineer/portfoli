@@ -2207,39 +2207,43 @@ export function ContactForm() {
 ## components/contact.tsx
 
 ``````tsx
-import { ArrowUpRight, Mail } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { contactContent as copy } from "@/data/contact";
 import { ContactForm } from "./contact-form";
 import { Reveal } from "./reveal";
 import { SocialLinks } from "./social-links";
+import { TextReveal } from "./text-reveal";
 
 export function Contact({ email }: { email: string }) {
   return (
     <section
       id="contact"
-      className="container elvora-contact"
+      className="container editorial-contact"
       aria-labelledby="contact-title"
     >
-      <Reveal>
-        <p className="eyebrow">{copy.eyebrow}</p>
-        <h2 id="contact-title">{copy.title}</h2>
-        <p className="section-intro">{copy.description}</p>
-      </Reveal>
-      <div className="contact-grid">
-        <Reveal>
-          <div className="email-card">
-            <Mail size={28} strokeWidth={1.3} aria-hidden="true" />
-            <p className="eyebrow">{copy.emailLabel}</p>
-            <p>{copy.emailNote}</p>
-            <a href={`mailto:${email}`}>
-              {email}
-              <ArrowUpRight size={18} aria-hidden="true" />
-            </a>
-            <small>{copy.emailCta}</small>
-            <SocialLinks />
+      <div className="contact-paper">
+        <div className="contact-editorial-copy">
+          <div>
+            <Reveal>
+              <p className="eyebrow">{copy.eyebrow}</p>
+            </Reveal>
+            <TextReveal id="contact-title" text={copy.title} />
+            <Reveal>
+              <p className="contact-invitation">{copy.description}</p>
+            </Reveal>
           </div>
-        </Reveal>
-        <Reveal delay={0.08}>
+          <Reveal>
+            <div className="contact-direct">
+              <p>{copy.emailNote}</p>
+              <a className="contact-address" href={`mailto:${email}`}>
+                {email}
+                <ArrowUpRight size={20} aria-hidden="true" />
+              </a>
+              <SocialLinks iconsOnly />
+            </div>
+          </Reveal>
+        </div>
+        <Reveal delay={0.08} className="contact-form-wrap">
           <ContactForm />
         </Reveal>
       </div>
@@ -3073,7 +3077,14 @@ export function DesignStudy({ study }: { study: Study }) {
 ## components/experience.tsx
 
 ``````tsx
-import { Blocks, Braces, Database, ShieldCheck } from "lucide-react";
+import {
+  Blocks,
+  Braces,
+  Database,
+  ShieldCheck,
+  Bot,
+  ArrowUpRight,
+} from "lucide-react";
 import { experience as copy } from "@/data/experience";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
@@ -3085,6 +3096,7 @@ const fundamentalsIcons = {
   backend: Braces,
   database: Database,
   deployment: ShieldCheck,
+  ai: Bot,
 };
 export function Experience() {
   return (
@@ -3134,7 +3146,10 @@ export function Experience() {
           </Reveal>
         </div>
       </div>
-      <div className="fundamentals-section">
+      <div
+        className="fundamentals-section domains-section"
+        aria-labelledby="fundamentals-title"
+      >
         <Reveal>
           <p className="eyebrow">{copy.fundamentals.eyebrow}</p>
         </Reveal>
@@ -3142,17 +3157,36 @@ export function Experience() {
         <Reveal>
           <p className="section-intro">{copy.fundamentals.description}</p>
         </Reveal>
-        <div className="fundamentals-grid">
+        <div className="domains-bento">
           {copy.fundamentals.blocks.map((block, index) => {
             const Icon = fundamentalsIcons[block.id];
             return (
               <Reveal key={block.id} delay={index * 0.05}>
-                <article className="fundamental-card">
-                  <Icon size={25} strokeWidth={1.4} aria-hidden="true" />
-                  <h3>{block.title}</h3>
-                  {block.lines.map((line) => (
-                    <p key={line}>{line}</p>
-                  ))}
+                <article className={`domain-card domain-${block.id}`}>
+                  <div className="domain-heading">
+                    <span className="domain-icon">
+                      <Icon size={24} strokeWidth={1.4} aria-hidden="true" />
+                    </span>
+                    <h3>{block.title}</h3>
+                    <span className="domain-index" aria-hidden="true">
+                      0{index + 1}
+                    </span>
+                  </div>
+                  <p>{block.description}</p>
+                  <ul
+                    className="domain-tags"
+                    aria-label={`${block.title} technologies`}
+                  >
+                    {block.tags.map((tag) => (
+                      <li key={tag}>{tag}</li>
+                    ))}
+                  </ul>
+                  {block.id === "ai" && (
+                    <a href="#ai-bots" className="domain-demo-link">
+                      Explore the AI demos
+                      <ArrowUpRight size={17} aria-hidden="true" />
+                    </a>
+                  )}
                 </article>
               </Reveal>
             );
@@ -3171,15 +3205,16 @@ export function Experience() {
 
 ``````tsx
 import Link from "next/link";
-import { ArrowUpRight, Mail } from "lucide-react";
+import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
 import { BackToTop } from "./back-to-top";
 import { site } from "@/data/site";
 import { studio } from "@/data/studio";
-import { BrandMark } from "./brand-mark";
 import { SocialLinks } from "./social-links";
 import { CookieSettingsButton } from "./consent-provider";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
+
 export function Footer({
   brand,
   email = site.email,
@@ -3188,78 +3223,103 @@ export function Footer({
   email?: string;
 }) {
   return (
-    <footer className="studio-footer reference-footer">
-      <div className="container">
-        <div className="footer-invitation">
+    <footer className="editorial-footer">
+      <div className="container footer-top-grid">
+        <div className="footer-editorial-invitation">
           <Reveal>
             <p className="eyebrow">{studio.ending.eyebrow}</p>
           </Reveal>
           <TextReveal text={studio.ending.title} />
           <Reveal>
-            <div>
-              <p>{studio.ending.description}</p>
-              <a href={`mailto:${email}`} className="button button-gold">
-                {studio.ending.action}
-                <ArrowUpRight size={18} aria-hidden="true" />
-              </a>
-            </div>
+            <p>{studio.ending.description}</p>
           </Reveal>
         </div>
-        <div className="footer-directory">
-          <Reveal>
-            <div className="footer-identity">
-              <a
-                href="/#top"
-                className="wordmark"
-                aria-label={`${brand} — Home`}
-              >
-                <BrandMark brand={brand} />
-              </a>
-              <p className="footer-role">{site.role}</p>
-              <p>{studio.ending.signature}</p>
-            </div>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <nav aria-label="Footer navigation">
-              <h3>{studio.ending.navigation}</h3>
+        <Reveal>
+          <nav aria-label="Footer navigation" className="footer-quick-links">
+            <h3>{studio.ending.navigation}</h3>
+            <div>
               {studio.ending.navLinks.map((item) => (
                 <a key={item.href} href={`/${item.href}`}>
                   {item.label}
                 </a>
               ))}
-            </nav>
-          </Reveal>
-          <Reveal delay={0.12}>
-            <div>
-              <h3>{studio.ending.connect}</h3>
-              <SocialLinks />
-              <a className="footer-email" href={`mailto:${email}`}>
-                <Mail size={15} aria-hidden="true" />
-                {email}
+            </div>
+          </nav>
+        </Reveal>
+        <Reveal delay={0.06}>
+          <div className="footer-contact-column">
+            <h3>{studio.ending.connect}</h3>
+            <a href={`mailto:${email}`} className="footer-contact-address">
+              {email}
+              <ArrowUpRight size={17} aria-hidden="true" />
+            </a>
+            <a href="/#contact" className="footer-brief-link">
+              {studio.ending.action}
+              <ArrowUpRight size={16} aria-hidden="true" />
+            </a>
+          </div>
+        </Reveal>
+      </div>
+      <div className="footer-wordmark-window" aria-hidden="true">
+        <span>{brand}</span>
+        <i />
+      </div>
+      <div className="footer-signoff">
+        <div className="footer-waves" aria-hidden="true">
+          <svg viewBox="0 0 1440 110" preserveAspectRatio="none">
+            <path d="M0 75C200 75 280 0 480 24S780 128 1000 52S1240 0 1440 46V110H0Z" />
+            <path d="M0 55C260 120 370 5 650 43S990 102 1180 34S1350 15 1440 25V110H0Z" />
+            <path d="M0 90C250 50 390 105 610 66S990 0 1160 65S1350 100 1440 60V110H0Z" />
+          </svg>
+        </div>
+        <div className="container">
+          <Reveal>
+            <a
+              className="footer-emblem"
+              href="/#top"
+              aria-label={`${brand} — Home`}
+            >
+              <span>
+                <Image
+                  src={site.logo.src}
+                  alt=""
+                  width={64}
+                  height={64}
+                  aria-hidden="true"
+                />
+              </span>
+              <strong>{brand}</strong>
+            </a>
+            <p className="footer-signature">{studio.ending.signature}</p>
+            <div className="footer-social-row">
+              <SocialLinks iconsOnly />
+              <a className="footer-email-icon" href={`mailto:${email}`}>
+                Let’s connect
+                <ArrowUpRight size={18} aria-hidden="true" />
               </a>
             </div>
           </Reveal>
-        </div>
-        <div className="footer-colophon">
-          <p>
-            © {new Date().getFullYear()} {brand}. {studio.ending.copyright}
-          </p>
-          <nav aria-label="Legal information">
-            {studio.ending.legalLinks.map((item) => (
-              <Link key={item.href} href={item.href}>
-                {item.label}
-              </Link>
-            ))}
-            <CookieSettingsButton />
-          </nav>
-          <a href="/#top" aria-label={site.ui.back}>
-            ↑
-          </a>
-        </div>
-        <p className="footer-credit">{studio.ending.credit}</p>
-        <div className="footer-art" aria-hidden="true">
-          <span>{brand}</span>
-          <i />
+          <div className="footer-editorial-colophon">
+            <p>
+              © {new Date().getFullYear()} {brand}. {studio.ending.copyright}
+            </p>
+            <nav aria-label="Legal information">
+              {studio.ending.legalLinks.map((item) => (
+                <Link key={item.href} href={item.href}>
+                  {item.label}
+                </Link>
+              ))}
+              <CookieSettingsButton />
+            </nav>
+            <a
+              className="footer-top-link"
+              href="/#top"
+              aria-label={site.ui.back}
+            >
+              ↑
+            </a>
+          </div>
+          <p className="footer-editorial-credit">{studio.ending.credit}</p>
         </div>
       </div>
       <BackToTop />
@@ -4006,46 +4066,79 @@ export function ScrollProgress() {
 ``````tsx
 import { skillContent as copy, type Skill } from "@/data/skills";
 import { Reveal } from "./reveal";
+import { TextReveal } from "./text-reveal";
+import { ToolMark } from "./tool-mark";
+import {
+  Braces,
+  CheckCheck,
+  Database,
+  GitBranch,
+  Mic,
+  Waypoints,
+} from "lucide-react";
+
+const categoryIcons = [Waypoints, CheckCheck, Braces, Database, Mic, GitBranch];
 
 export function Skills({ skills }: { skills: Skill[] }) {
   return (
     <section
       id="skills"
-      className="container skills-section"
+      className="container skills-section toolkit-section"
       aria-labelledby="skills-title"
     >
-      <Reveal>
-        <p className="eyebrow">{copy.eyebrow}</p>
-        <div className="section-heading">
-          <h2 id="skills-title">{copy.title}</h2>
-          <p>{copy.description}</p>
-        </div>
-      </Reveal>
-      <div className="skills-grid">
-        {copy.categories.map((category, index) => (
-          <Reveal key={category} delay={index * 0.04}>
-            <article className="skill-group glass">
-              <span className="skill-number">0{index + 1}</span>
-              <h3>{category}</h3>
-              <ul>
-                {skills
-                  .filter((skill) => skill.category === category)
-                  .map((skill) => (
-                    <li
-                      key={skill.id}
-                      className={
-                        skill.name.includes("[PLACEHOLDER]")
-                          ? "skill-placeholder"
-                          : ""
-                      }
-                    >
-                      {skill.name}
-                    </li>
-                  ))}
-              </ul>
-            </article>
+      <div className="toolkit-heading">
+        <div>
+          <Reveal>
+            <p className="eyebrow">{copy.eyebrow}</p>
           </Reveal>
-        ))}
+          <TextReveal id="skills-title" text={copy.title} />
+        </div>
+        <Reveal>
+          <p>{copy.description}</p>
+        </Reveal>
+      </div>
+      <div className="toolkit-rows">
+        {copy.categories.map((category, index) => {
+          const Icon = categoryIcons[index];
+          return (
+            <Reveal key={category}>
+              <div className="toolkit-row">
+                <h3>
+                  <span className="toolkit-index">0{index + 1}</span>
+                  {category}
+                </h3>
+                <ul aria-label={category}>
+                  {skills
+                    .filter((skill) => skill.category === category)
+                    .map((skill) => (
+                      <li
+                        key={skill.id}
+                        className={
+                          skill.name.includes("[PLACEHOLDER]")
+                            ? "skill-placeholder"
+                            : ""
+                        }
+                      >
+                        {category === "AI tools" ||
+                        category === "Web interfaces" ||
+                        category === "Development tools" ? (
+                          <ToolMark name={skill.name} />
+                        ) : (
+                          <span
+                            className="toolkit-topic-icon"
+                            aria-hidden="true"
+                          >
+                            <Icon size={23} strokeWidth={1.3} />
+                          </span>
+                        )}
+                        {skill.name}
+                      </li>
+                    ))}
+                </ul>
+              </div>
+            </Reveal>
+          );
+        })}
       </div>
       <p className="skills-note">{copy.note}</p>
     </section>
@@ -4058,17 +4151,28 @@ export function Skills({ skills }: { skills: Skill[] }) {
 ``````tsx
 import { ArrowUpRight, Github, Instagram } from "lucide-react";
 import { studio } from "@/data/studio";
-export function SocialLinks() {
+export function SocialLinks({ iconsOnly = false }: { iconsOnly?: boolean }) {
   return (
-    <ul className="social-links">
+    <ul className={`social-links${iconsOnly ? " social-icons" : ""}`}>
       {studio.socials.map((social) => {
         const Icon = social.icon === "github" ? Github : Instagram;
         return (
           <li key={social.name}>
-            <a href={social.href} target="_blank" rel="noopener noreferrer">
+            <a
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={
+                iconsOnly ? `${social.name} (opens in a new tab)` : undefined
+              }
+            >
               <Icon size={18} aria-hidden="true" />
-              {social.name}
-              <ArrowUpRight size={14} aria-hidden="true" />
+              {!iconsOnly && (
+                <>
+                  {social.name}
+                  <ArrowUpRight size={14} aria-hidden="true" />
+                </>
+              )}
             </a>
           </li>
         );
@@ -4102,6 +4206,7 @@ import { studies } from "@/data/studies";
 import type { ProjectView } from "@/data/projects";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
+import { ToolMark } from "./tool-mark";
 const serviceIcons = [Braces, Bot, WorkflowIcon, Search];
 
 export function Services() {
@@ -4203,31 +4308,39 @@ export function Journey() {
   return (
     <section
       id="journey"
-      className="container studio-section journey-section reference-journey"
+      className="container studio-section editorial-journey"
       aria-labelledby="journey-title"
     >
-      <div className="reference-heading">
+      <div className="journey-editorial-heading">
         <Reveal>
           <p className="eyebrow">{studio.journey.eyebrow}</p>
         </Reveal>
-        <TextReveal id="journey-title" text={studio.journey.title} />
-        <Reveal>
+        <TextReveal
+          id="journey-title"
+          className="split-display"
+          text={studio.journey.displayTitle}
+        />
+        <Reveal className="journey-story-intro">
+          <h3>{studio.journey.title.replaceAll("\n", " ")}</h3>
           <p>{studio.journey.intro}</p>
         </Reveal>
       </div>
-      <div className="journey-chapters">
+      <div className="journey-editorial-list">
         {studio.journey.chapters.map((chapter, index) => (
           <Reveal key={chapter.title} delay={0.03}>
-            <article className="journey-chapter">
-              <span className="timeline-dot" aria-hidden="true" />
+            <article className="journey-editorial-entry">
+              <span className="journey-entry-index" aria-hidden="true">
+                0{index + 1}
+              </span>
               <header>
                 <div>
-                  <span className="journey-mini-index">
-                    0{index + 1} / {chapter.label}
-                  </span>
+                  <span className="journey-entry-label">{chapter.label}</span>
                   <h3>{chapter.title}</h3>
                 </div>
-                <span className="journey-phase">{chapter.phase}</span>
+                <span className="journey-entry-phase">
+                  {chapter.phase}
+                  <ArrowUpRight size={17} aria-hidden="true" />
+                </span>
               </header>
               <p>{chapter.description}</p>
               <ul>
@@ -4245,7 +4358,9 @@ export function Journey() {
       <Reveal>
         <p className="journey-signature">
           {studio.journey.note}
-          <span aria-hidden="true">↗</span>
+          <span aria-hidden="true">
+            <ArrowUpRight size={28} strokeWidth={1.4} />
+          </span>
         </p>
       </Reveal>
     </section>
@@ -4255,38 +4370,51 @@ export function Journey() {
 export function ToolOrbit() {
   return (
     <section
-      className="container studio-section tool-section"
+      id="creative-toolkit"
+      className="container studio-section premium-tool-section"
       aria-labelledby="tool-title"
     >
-      <Reveal>
-        <div className="tool-board">
-          <div className="tool-copy">
+      <div className="premium-tool-heading">
+        <div>
+          <Reveal>
             <p className="eyebrow">{studio.tools.eyebrow}</p>
-            <TextReveal id="tool-title" text={studio.tools.title} />
-            <p>{studio.tools.intro}</p>
-            <span className="tool-handwriting" aria-hidden="true">
-              a little help, a lot of intention ↗
-            </span>
-          </div>
-          <div className="tool-tiles">
-            {studio.tools.items.map((tool, index) => (
-              <div className={`tool-tile tool-tile-${index}`} key={tool.name}>
-                <span
-                  className="tool-mark"
-                  style={{ color: tool.color }}
-                  aria-hidden="true"
-                >
-                  {tool.mark}
-                </span>
-                <strong>{tool.name}</strong>
-                <small>{tool.purpose}</small>
-              </div>
-            ))}
-          </div>
-          <div className="tool-board-grid" aria-hidden="true" />
+          </Reveal>
+          <TextReveal
+            id="tool-title"
+            className="split-display"
+            text={studio.tools.title}
+          />
         </div>
-        <p className="studio-note">{studio.tools.note}</p>
-      </Reveal>
+        <Reveal>
+          <p className="premium-tool-intro">
+            {studio.tools.intro}
+            <span>
+              The tools are powerful.
+              <br />
+              The decisions are human.
+            </span>
+          </p>
+        </Reveal>
+      </div>
+      <div className="premium-tool-grid">
+        {studio.tools.items.map((tool, index) => (
+          <Reveal key={tool.name} delay={(index % 2) * 0.06}>
+            <article className="premium-tool-item">
+              <span className="premium-tool-logo">
+                <ToolMark name={tool.name} />
+              </span>
+              <div>
+                <h3>{tool.name}</h3>
+                <p>{tool.purpose}</p>
+              </div>
+              <span className="premium-tool-index" aria-hidden="true">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+            </article>
+          </Reveal>
+        ))}
+      </div>
+      <p className="studio-note">{studio.tools.note}</p>
     </section>
   );
 }
@@ -4300,16 +4428,14 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
   });
   const drift = useTransform(scrollYProgress, [0, 1], [-24, 24]);
   const items = [
-    ...projects
-      .slice(0, 4)
-      .map((project) => ({
-        id: project.id,
-        title: project.title,
-        image: project.screenshots[0].src,
-        alt: project.screenshots[0].alt,
-        href: project.demoUrl,
-        category: studio.bunch.websiteLabel,
-      })),
+    ...projects.slice(0, 4).map((project) => ({
+      id: project.id,
+      title: project.title,
+      image: project.screenshots[0].src,
+      alt: project.screenshots[0].alt,
+      href: project.demoUrl,
+      category: studio.bunch.websiteLabel,
+    })),
     ...studies.map((study) => ({
       id: study.id,
       title: study.name,
@@ -4459,6 +4585,40 @@ export function TextReveal({
 }
 ``````
 
+## components/tool-mark.tsx
+
+``````tsx
+import type { CSSProperties } from "react";
+import { Sparkles } from "lucide-react";
+import { toolMarks } from "@/data/tool-marks";
+
+export function ToolMark({ name }: { name: string }) {
+  const mark = toolMarks[name];
+  return (
+    <span
+      className={`tool-brand-mark${mark?.icon ? " has-brand-icon" : ""}`}
+      aria-hidden="true"
+      style={
+        {
+          "--mark-color": mark?.color || "var(--gold)",
+          ...(mark?.icon
+            ? { "--mark-image": `url('/tool-marks/${mark.icon}.svg')` }
+            : {}),
+        } as CSSProperties
+      }
+    >
+      {mark?.icon ? (
+        <i />
+      ) : mark?.text ? (
+        <b>{mark.text}</b>
+      ) : (
+        <Sparkles size={23} strokeWidth={1.4} />
+      )}
+    </span>
+  );
+}
+``````
+
 ## components/turnstile.tsx
 
 ``````tsx
@@ -4541,6 +4701,7 @@ export function WallOfLove() {
   const inView = useInView(ref, { amount: 0.2 });
   const reduced = useReducedMotion();
   const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
   const [hydrated, setHydrated] = useState(false);
   const [playing, setPlaying] = useState(true);
   const [interacting, setInteracting] = useState(false);
@@ -4557,21 +4718,22 @@ export function WallOfLove() {
   }, []);
   useEffect(() => {
     if (!active || testimonials.length < 2) return;
-    const timer = window.setTimeout(
-      () => setIndex((current) => (current + 1) % testimonials.length),
-      6500,
-    );
+    const timer = window.setTimeout(() => {
+      setDirection(1);
+      setIndex((current) => (current + 1) % testimonials.length);
+    }, 6500);
     return () => window.clearTimeout(timer);
   }, [active, index]);
   function go(next: number) {
     setPlaying(false);
+    setDirection(next > index ? 1 : -1);
     setIndex((next + testimonials.length) % testimonials.length);
   }
   return (
     <section
       ref={ref}
       id="wall-of-love"
-      className="container studio-section love-section"
+      className="container studio-section love-section editorial-love"
       aria-labelledby="love-title"
     >
       <Reveal>
@@ -4586,6 +4748,14 @@ export function WallOfLove() {
         role="region"
         aria-roledescription="carousel"
         aria-label="Testimonials"
+        tabIndex={0}
+        onKeyDown={(event) => {
+          if (event.target !== event.currentTarget) return;
+          if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+            event.preventDefault();
+            go(index + (event.key === "ArrowRight" ? 1 : -1));
+          }
+        }}
         onMouseEnter={() => setInteracting(true)}
         onMouseLeave={() => setInteracting(false)}
         onFocusCapture={() => setInteracting(true)}
@@ -4594,8 +4764,26 @@ export function WallOfLove() {
             setInteracting(false);
         }}
       >
-        <div className="love-offset" aria-hidden="true" />
-        <div className="love-offset" aria-hidden="true" />
+        {[-1, 1].map((offset) => {
+          const adjacent =
+            testimonials[
+              (index + offset + testimonials.length) % testimonials.length
+            ];
+          return (
+            <div
+              className={`love-preview-card ${offset < 0 ? "love-preview-left" : "love-preview-right"}`}
+              key={offset}
+              aria-hidden="true"
+            >
+              <Quote size={29} strokeWidth={1} />
+              <p>{adjacent.quote}</p>
+              <span className="love-preview-person">
+                <UserRound size={23} strokeWidth={1} />
+                <span>{adjacent.role}</span>
+              </span>
+            </div>
+          );
+        })}
         <div className="love-card">
           <div className="love-card-top">
             <Quote size={35} strokeWidth={1} aria-hidden="true" />
@@ -4614,18 +4802,24 @@ export function WallOfLove() {
             aria-live={autoplay ? "off" : "polite"}
             aria-atomic="true"
           >
-            <AnimatePresence mode="wait" initial={false}>
+            <AnimatePresence mode="wait" initial={false} custom={direction}>
               <m.div
                 key={review.id}
-                initial={
-                  reduced ? false : { opacity: 0, y: 15, filter: "blur(3px)" }
-                }
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                exit={
-                  reduced
-                    ? { opacity: 1 }
-                    : { opacity: 0, y: -12, filter: "blur(3px)" }
-                }
+                custom={direction}
+                variants={{
+                  enter: (travel: number) =>
+                    reduced
+                      ? { opacity: 1, x: 0 }
+                      : { opacity: 0, x: travel * 40 },
+                  center: { opacity: 1, x: 0 },
+                  leave: (travel: number) =>
+                    reduced
+                      ? { opacity: 1, x: 0 }
+                      : { opacity: 0, x: travel * -40 },
+                }}
+                initial="enter"
+                animate="center"
+                exit="leave"
                 transition={{ duration: reduced ? 0 : 0.4 }}
                 role="group"
                 aria-roledescription="slide"

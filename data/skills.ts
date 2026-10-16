@@ -40,10 +40,10 @@ export const skills: Skill[] = [
 ];
 export const skillContent = {
   eyebrow: "04 / TOOLS & TECHNOLOGIES",
-  title: "A toolkit with purpose.",
+  title: "Skills & tools.",
   description:
     "The technologies and topics behind web, chatbot, and voice experiences.",
-  note: "A toolkit for building, experimenting and refining. No proficiency percentages, project totals or outcome guarantees.",
+  note: "Always learning. Always refining. The right tool, chosen for the task.",
   categories: [
     "AI tools",
     "Prompt engineering",
