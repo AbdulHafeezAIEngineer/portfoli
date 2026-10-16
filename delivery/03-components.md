@@ -1082,8 +1082,10 @@ export default function BotChatPanel({
 ``````tsx
 "use client";
 import { useState, type ReactNode } from "react";
-import { LoaderCircle } from "lucide-react";
+import { LoaderCircle, ShieldCheck } from "lucide-react";
 import { botContent, type Bot } from "@/data/bots";
+import { useConsent } from "./consent-provider";
+import { consentContent } from "@/data/privacy";
 export function BotEmbed({
   bot,
   children,
@@ -1092,8 +1094,27 @@ export function BotEmbed({
   children?: ReactNode;
 }) {
   const [loaded, setLoaded] = useState(false);
+  const consent = useConsent();
   const copy = botContent.chat;
   if (bot.method === "api") return <>{children}</>;
+  if (!consent.external)
+    return (
+      <div className="embed-consent-gate">
+        <ShieldCheck size={35} strokeWidth={1.3} aria-hidden="true" />
+        <h3>{consentContent.gateTitle}</h3>
+        <p>{consentContent.gateNote}</p>
+        <button
+          type="button"
+          className="button button-gold"
+          onClick={consent.allowExternal}
+        >
+          {consentContent.allow}
+        </button>
+        <a href="/cookies" target="_blank" rel="noopener noreferrer">
+          {consentContent.policy}
+        </a>
+      </div>
+    );
   return (
     <div className="external-chat">
       {!loaded && (
@@ -1725,10 +1746,228 @@ function FloorStudy() {
 }
 ``````
 
+## components/consent-provider.tsx
+
+``````tsx
+"use client";
+
+import Link from "next/link";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { ShieldCheck, X } from "lucide-react";
+import { consentContent as copy } from "@/data/privacy";
+import { parseConsent, type ConsentRecord } from "@/lib/consent";
+import { useModal } from "@/hooks/use-modal";
+
+type ConsentContextValue = {
+  external: boolean;
+  ready: boolean;
+  allowExternal: () => void;
+  openSettings: () => void;
+};
+const ConsentContext = createContext<ConsentContextValue>({
+  external: false,
+  ready: false,
+  allowExternal: () => {},
+  openSettings: () => {},
+});
+export const useConsent = () => useContext(ConsentContext);
+
+function Preferences({
+  external,
+  save,
+  close,
+}: {
+  external: boolean;
+  save: (value: boolean) => void;
+  close: () => void;
+}) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  const trap = useModal(dialog);
+  const [selected, setSelected] = useState(external);
+  return (
+    <dialog
+      ref={dialog}
+      className="privacy-dialog"
+      aria-labelledby="privacy-dialog-title"
+      aria-describedby="privacy-dialog-description"
+      onKeyDown={trap}
+      onCancel={(event) => {
+        event.preventDefault();
+        close();
+      }}
+    >
+      <div className="privacy-dialog-head">
+        <ShieldCheck size={25} aria-hidden="true" />
+        <button
+          type="button"
+          className="icon-button"
+          onClick={close}
+          aria-label={copy.close}
+        >
+          <X size={20} />
+        </button>
+      </div>
+      <h2 id="privacy-dialog-title">{copy.dialogTitle}</h2>
+      <p id="privacy-dialog-description">{copy.dialogDescription}</p>
+      <label className="privacy-option">
+        <span>
+          <strong>{copy.essential}</strong>
+          <small>{copy.essentialNote}</small>
+        </span>
+        <input type="checkbox" checked disabled aria-label={copy.essential} />
+      </label>
+      <label className="privacy-option">
+        <span>
+          <strong>{copy.external}</strong>
+          <small>{copy.externalNote}</small>
+        </span>
+        <input
+          type="checkbox"
+          checked={selected}
+          onChange={(event) => setSelected(event.target.checked)}
+        />
+      </label>
+      <p className="privacy-withdrawal">{copy.withdrawal}</p>
+      <div className="consent-actions">
+        <button type="button" onClick={() => save(true)}>
+          {copy.accept}
+        </button>
+        <button type="button" onClick={() => save(false)}>
+          {copy.reject}
+        </button>
+        <button type="button" onClick={() => save(selected)}>
+          {copy.save}
+        </button>
+      </div>
+      <div className="privacy-links">
+        <Link href="/cookies" onClick={close}>
+          {copy.policy}
+        </Link>
+        <Link href="/privacy" onClick={close}>
+          {copy.privacy}
+        </Link>
+      </div>
+    </dialog>
+  );
+}
+
+export function ConsentProvider({ children }: { children: React.ReactNode }) {
+  const [record, setRecord] = useState<ConsentRecord | null>(null);
+  const [ready, setReady] = useState(false);
+  const [settings, setSettings] = useState(false);
+  const [status, setStatus] = useState("");
+  useEffect(() => {
+    const read = () => {
+      let current: ConsentRecord | null = null;
+      try {
+        current = parseConsent(localStorage.getItem(copy.key));
+      } catch {
+        setReady(true);
+        return;
+      }
+      setRecord(current);
+      setReady(true);
+    };
+    read();
+    const changed = (event: StorageEvent) => {
+      if (event.key === copy.key || event.key === null) read();
+    };
+    const visible = () => {
+      if (document.visibilityState === "visible") read();
+    };
+    window.addEventListener("storage", changed);
+    document.addEventListener("visibilitychange", visible);
+    return () => {
+      window.removeEventListener("storage", changed);
+      document.removeEventListener("visibilitychange", visible);
+    };
+  }, []);
+  const save = useCallback((external: boolean) => {
+    const next = { version: copy.version, external, updatedAt: Date.now() };
+    setRecord(next);
+    setSettings(false);
+    setReady(true);
+    try {
+      localStorage.setItem(copy.key, JSON.stringify(next));
+      setStatus(copy.saved);
+    } catch {
+      setStatus(copy.notSaved);
+    }
+  }, []);
+  return (
+    <ConsentContext.Provider
+      value={{
+        external: ready && Boolean(record?.external),
+        ready,
+        allowExternal: () => save(true),
+        openSettings: () => setSettings(true),
+      }}
+    >
+      {children}
+      {ready && !record && !settings && (
+        <aside className="consent-banner" aria-labelledby="consent-title">
+          <div className="consent-symbol">
+            <ShieldCheck size={24} aria-hidden="true" />
+          </div>
+          <div className="consent-copy">
+            <h2 id="consent-title">{copy.title}</h2>
+            <p>
+              {copy.description} <Link href="/cookies">{copy.policy}</Link>
+            </p>
+          </div>
+          <div className="consent-actions">
+            <button type="button" onClick={() => save(true)}>
+              {copy.accept}
+            </button>
+            <button type="button" onClick={() => save(false)}>
+              {copy.reject}
+            </button>
+            <button type="button" onClick={() => setSettings(true)}>
+              {copy.manage}
+            </button>
+          </div>
+        </aside>
+      )}
+      {settings && (
+        <Preferences
+          external={Boolean(record?.external)}
+          save={save}
+          close={() => setSettings(false)}
+        />
+      )}
+      <span className="sr-only" role="status">
+        {status}
+      </span>
+    </ConsentContext.Provider>
+  );
+}
+export function CookieSettingsButton() {
+  const { openSettings } = useConsent();
+  return (
+    <button
+      type="button"
+      className="cookie-settings-link"
+      onClick={openSettings}
+    >
+      {copy.settings}
+    </button>
+  );
+}
+``````
+
 ## components/contact-form.tsx
 
 ``````tsx
 "use client";
+
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Turnstile } from "./turnstile";
 import { ArrowUpRight, CheckCircle2, LoaderCircle } from "lucide-react";
@@ -1929,7 +2168,9 @@ export function ContactForm() {
         />
       </div>
       <Turnstile onToken={setToken} resetKey={resetKey} />
-      <p className="contact-privacy">{copy.privacy}</p>
+      <p className="contact-privacy">
+        {copy.privacy} <Link href="/privacy">{copy.privacyLink}</Link>
+      </p>
       <button className="button button-gold" type="submit" disabled={sending}>
         {sending ? (
           <>
@@ -1970,6 +2211,7 @@ import { ArrowUpRight, Mail } from "lucide-react";
 import { contactContent as copy } from "@/data/contact";
 import { ContactForm } from "./contact-form";
 import { Reveal } from "./reveal";
+import { SocialLinks } from "./social-links";
 
 export function Contact({ email }: { email: string }) {
   return (
@@ -1994,6 +2236,7 @@ export function Contact({ email }: { email: string }) {
               <ArrowUpRight size={18} aria-hidden="true" />
             </a>
             <small>{copy.emailCta}</small>
+            <SocialLinks />
           </div>
         </Reveal>
         <Reveal delay={0.08}>
@@ -2525,13 +2768,7 @@ function Garment({ variant }: { variant: number }) {
 ## components/experience.tsx
 
 ``````tsx
-import {
-  ArrowDownRight,
-  Blocks,
-  Braces,
-  Database,
-  ShieldCheck,
-} from "lucide-react";
+import { Blocks, Braces, Database, ShieldCheck } from "lucide-react";
 import { experience as copy } from "@/data/experience";
 import { Reveal } from "./reveal";
 import Image from "next/image";
@@ -2559,12 +2796,26 @@ export function Experience() {
             <p className="experience-lead">{copy.lead}</p>
             <figure className="about-portrait">
               <div className="about-portrait-image">
-                <Image src={site.hero.portrait} alt={site.hero.portraitAlt} fill sizes="(max-width:700px) 85vw, 360px" />
-                {site.hero.portraitStatus && <span className="about-portrait-status">{site.hero.portraitStatus}</span>}
+                <Image
+                  src={site.hero.portrait}
+                  alt={site.hero.portraitAlt}
+                  fill
+                  sizes="(max-width:700px) 85vw, 360px"
+                />
+                {site.hero.portraitStatus && (
+                  <span className="about-portrait-status">
+                    {site.hero.portraitStatus}
+                  </span>
+                )}
               </div>
               <figcaption>
-                <div><span className="eyebrow">{site.brand}</span><strong>{site.name}</strong></div>
-                <span className="about-signature" aria-hidden="true">{site.brand.slice(0, 1)}.</span>
+                <div>
+                  <span className="eyebrow">{site.brand}</span>
+                  <strong>{site.name}</strong>
+                </div>
+                <span className="about-signature" aria-hidden="true">
+                  {site.brand.slice(0, 1)}.
+                </span>
               </figcaption>
             </figure>
           </div>
@@ -2574,34 +2825,6 @@ export function Experience() {
             ))}
           </div>
         </div>
-      </Reveal>
-      <div className="process-grid">
-        {copy.process.map((step, index) => (
-          <Reveal key={step.title} delay={index * 0.04}>
-            <article className="process-card glass">
-              <span>0{index + 1}</span>
-              <ArrowDownRight size={17} aria-hidden="true" />
-              <h3>{step.title}</h3>
-              <p>{step.description}</p>
-            </article>
-          </Reveal>
-        ))}
-      </div>
-      <Reveal>
-        <aside className="experience-facts">
-          <div>
-            <p className="eyebrow">{copy.factsLabel}</p>
-            <p>{copy.factsNote}</p>
-          </div>
-          <dl>
-            {copy.facts.map((fact) => (
-              <div key={fact.label}>
-                <dt>{fact.label}</dt>
-                <dd>{fact.value}</dd>
-              </div>
-            ))}
-          </dl>
-        </aside>
       </Reveal>
       <div className="fundamentals-section">
         <Reveal>
@@ -2637,20 +2860,83 @@ export function Experience() {
 ## components/footer.tsx
 
 ``````tsx
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { BackToTop } from "./back-to-top";
 import { site } from "@/data/site";
+import { studio } from "@/data/studio";
 import { BrandMark } from "./brand-mark";
+import { SocialLinks } from "./social-links";
+import { CookieSettingsButton } from "./consent-provider";
+import { Reveal } from "./reveal";
 
-export function Footer({ brand }: { brand: string }) {
+export function Footer({
+  brand,
+  email = site.email,
+}: {
+  brand: string;
+  email?: string;
+}) {
   return (
-    <footer className="container footer">
-      <a href="#top" className="wordmark" aria-label={`${brand} — Home`}>
-        <BrandMark brand={brand} />
-      </a>
-      <p>
-        © {new Date().getFullYear()} {brand}
-      </p>
-      <p>{site.footer}</p>
+    <footer className="studio-footer">
+      <div className="container">
+        <Reveal>
+          <div className="footer-invitation">
+            <p className="eyebrow">{studio.ending.eyebrow}</p>
+            <h2>{studio.ending.title}</h2>
+            <div>
+              <p>{studio.ending.description}</p>
+              <a href={`mailto:${email}`} className="button button-gold">
+                {studio.ending.action}
+                <ArrowUpRight size={18} aria-hidden="true" />
+              </a>
+            </div>
+          </div>
+        </Reveal>
+        <div className="footer-directory">
+          <div className="footer-identity">
+            <a href="/#top" className="wordmark" aria-label={`${brand} — Home`}>
+              <BrandMark brand={brand} />
+            </a>
+            <p>{studio.ending.signature}</p>
+            <a className="footer-email" href={`mailto:${email}`}>
+              {email}
+            </a>
+          </div>
+          <nav aria-label="Footer navigation">
+            <h3>{studio.ending.navigation}</h3>
+            {studio.ending.navLinks.map((item) => (
+              <a key={item.href} href={`/${item.href}`}>
+                {item.label}
+              </a>
+            ))}
+          </nav>
+          <div>
+            <h3>{studio.ending.connect}</h3>
+            <SocialLinks />
+          </div>
+          <nav aria-label="Legal information">
+            <h3>{studio.ending.legal}</h3>
+            {studio.ending.legalLinks.map((item) => (
+              <Link key={item.href} href={item.href}>
+                {item.label}
+              </Link>
+            ))}
+            <CookieSettingsButton />
+          </nav>
+        </div>
+        <div className="footer-colophon">
+          <p>
+            © {new Date().getFullYear()} {brand}. {studio.ending.copyright}
+          </p>
+          <p>{studio.ending.credit}</p>
+          <a href="/#top">{site.ui.back} ↑</a>
+        </div>
+        <div className="footer-art" aria-hidden="true">
+          <span>{brand}</span>
+          <i />
+        </div>
+      </div>
       <BackToTop />
     </footer>
   );
@@ -2674,12 +2960,45 @@ export function FortePreview({ name }: { name: string }) {
 }
 ``````
 
-## components/hero.tsx
+## components/hero-emblem.tsx
 
 ``````tsx
 import Image from "next/image";
-import { ArrowDownRight, ArrowUpRight, Code2 } from "lucide-react";
 import { site } from "@/data/site";
+export function HeroEmblem() {
+  return (
+    <div
+      className="hero-emblem"
+      aria-label={`${site.brand}: websites and AI experiences`}
+      role="img"
+    >
+      <div className="emblem-grid" aria-hidden="true" />
+      <div className="emblem-ring emblem-ring-one" aria-hidden="true" />
+      <div className="emblem-ring emblem-ring-two" aria-hidden="true" />
+      <div className="emblem-plinth" aria-hidden="true" />
+      <div className="emblem-object" aria-hidden="true">
+        <Image src={site.logo.src} alt="" width={240} height={240} priority />
+        <span className="emblem-shine" />
+      </div>
+      <span className="emblem-label">
+        {site.brand.toUpperCase()}
+        <small>{site.hero.floatingLabel}</small>
+      </span>
+      <span className="emblem-coordinate" aria-hidden="true">
+        E / AI + WEB
+      </span>
+      <span className="emblem-orbit-dot" aria-hidden="true" />
+    </div>
+  );
+}
+``````
+
+## components/hero.tsx
+
+``````tsx
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { site } from "@/data/site";
+import { HeroEmblem } from "./hero-emblem";
 
 export function Hero() {
   return (
@@ -2715,37 +3034,7 @@ export function Hero() {
         </div>
       </div>
       <div className="hero-visual">
-        <div className="portrait-orbit" aria-hidden="true" />
-        <figure className="portrait-card">
-          <div className="portrait-topline">
-            <span>{site.brand.toUpperCase()} / 01</span>
-            <span className="status-dot" />
-          </div>
-          <div className="portrait-image">
-            <Image
-              src={site.hero.portrait}
-              alt={site.hero.portraitAlt}
-              fill
-              sizes="(max-width: 700px) 85vw, 390px"
-              priority
-            />
-            <span className="portrait-placeholder">
-              {site.hero.portraitStatus}
-            </span>
-          </div>
-          <figcaption>
-            <span className="eyebrow">{site.hero.portraitLabel}</span>
-            <strong>{site.name}</strong>
-            <p>{site.hero.portraitCaption}</p>
-          </figcaption>
-        </figure>
-        <div className="floating-note glass">
-          <Code2 size={23} aria-hidden="true" />
-          <span>{site.hero.floatingLabel}</span>
-        </div>
-        <span className="visual-coordinates" aria-hidden="true">
-          CREATIVE × TECHNICAL
-        </span>
+        <HeroEmblem />
       </div>
       <div className="hero-bottom">
         <div className="expertise-list">
@@ -2759,6 +3048,67 @@ export function Hero() {
         </a>
       </div>
     </section>
+  );
+}
+``````
+
+## components/legal-page.tsx
+
+``````tsx
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { legal } from "@/data/privacy";
+import { site } from "@/data/site";
+import { BrandMark } from "./brand-mark";
+import { Footer } from "./footer";
+import { CookieSettingsButton } from "./consent-provider";
+export function LegalPage({ page }: { page: keyof typeof legal.pages }) {
+  const copy = legal.pages[page];
+  return (
+    <div id="top">
+      <header className="container legal-header">
+        <Link href="/" className="wordmark">
+          <BrandMark brand={site.brand} />
+        </Link>
+        <Link href="/" className="text-link">
+          <ArrowLeft size={16} aria-hidden="true" />
+          {legal.back}
+        </Link>
+      </header>
+      <main id="main-content" className="container legal-main">
+        <p className="eyebrow">
+          {legal.updatedLabel} · {legal.updated}
+        </p>
+        <h1>{copy.title}</h1>
+        <p className="legal-intro">{copy.intro}</p>
+        <nav className="legal-tabs" aria-label="Policies">
+          {Object.entries(legal.pages).map(([id, item]) => (
+            <Link
+              key={id}
+              href={`/${id}`}
+              aria-current={id === page ? "page" : undefined}
+            >
+              {item.title}
+            </Link>
+          ))}
+          <CookieSettingsButton />
+        </nav>
+        {copy.sections.map((section, index) => (
+          <section key={section.title} className="legal-section">
+            <span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+            <div>
+              <h2>{section.title}</h2>
+              <p>{section.text}</p>
+            </div>
+          </section>
+        ))}
+        <div className="legal-contact">
+          <p>{legal.contact}</p>
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+        </div>
+      </main>
+      <Footer brand={site.brand} />
+    </div>
   );
 }
 ``````
@@ -3366,6 +3716,335 @@ export function Skills({ skills }: { skills: Skill[] }) {
 }
 ``````
 
+## components/social-links.tsx
+
+``````tsx
+import { ArrowUpRight, Github, Instagram } from "lucide-react";
+import { studio } from "@/data/studio";
+export function SocialLinks() {
+  return (
+    <ul className="social-links">
+      {studio.socials.map((social) => {
+        const Icon = social.icon === "github" ? Github : Instagram;
+        return (
+          <li key={social.name}>
+            <a href={social.href} target="_blank" rel="noopener noreferrer">
+              <Icon size={18} aria-hidden="true" />
+              {social.name}
+              <ArrowUpRight size={14} aria-hidden="true" />
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+``````
+
+## components/studio-sections.tsx
+
+``````tsx
+"use client";
+
+import Image from "next/image";
+import { useRef } from "react";
+import { m, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import {
+  ArrowDownRight,
+  ArrowUpRight,
+  Bot,
+  Braces,
+  CheckCheck,
+  Layers3,
+  Search,
+  Sparkles,
+  Workflow as WorkflowIcon,
+} from "lucide-react";
+import { studio } from "@/data/studio";
+import type { ProjectView } from "@/data/projects";
+import { Reveal } from "./reveal";
+const serviceIcons = [Braces, Bot, WorkflowIcon, Search];
+
+export function Services() {
+  return (
+    <section
+      id="services"
+      className="container studio-section services-section"
+      aria-labelledby="services-title"
+    >
+      <Reveal>
+        <p className="eyebrow">{studio.services.eyebrow}</p>
+        <div className="studio-heading">
+          <h2 id="services-title">{studio.services.title}</h2>
+          <p>{studio.services.intro}</p>
+        </div>
+      </Reveal>
+      <div className="studio-services">
+        {studio.services.items.map((service, index) => {
+          const Icon = serviceIcons[index];
+          return (
+            <Reveal key={service.id} delay={index * 0.05}>
+              <article className={`studio-service service-${service.id}`}>
+                <div className="service-top">
+                  <span className="studio-index">0{index + 1} / SERVICE</span>
+                  <Icon size={28} strokeWidth={1.3} aria-hidden="true" />
+                </div>
+                <h3>{service.title}</h3>
+                <p>{service.description}</p>
+                <ul>
+                  {service.tags.map((tag) => (
+                    <li key={tag}>{tag}</li>
+                  ))}
+                </ul>
+                <div className="service-bottom">
+                  <small>{service.detail}</small>
+                  <a
+                    href="#contact"
+                    aria-label={`${studio.services.action}: ${service.title}`}
+                  >
+                    <ArrowUpRight size={22} aria-hidden="true" />
+                  </a>
+                </div>
+                <span className="service-orbit" aria-hidden="true" />
+              </article>
+            </Reveal>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function WorkflowStep({
+  step,
+  index,
+}: {
+  step: (typeof studio.workflow.steps)[number];
+  index: number;
+}) {
+  const ref = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start .9", "start .35"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], [30, 0]);
+  const icons = [Search, Layers3, Braces, CheckCheck, Sparkles];
+  const Icon = icons[index];
+  return (
+    <m.article
+      ref={ref}
+      className="workflow-step"
+      style={reduced ? undefined : { y }}
+    >
+      <span className="workflow-node" aria-hidden="true" />
+      <div className="workflow-step-label">
+        <span>0{index + 1}</span>
+        <Icon size={24} strokeWidth={1.3} aria-hidden="true" />
+      </div>
+      <h3>{step.title}</h3>
+      <p>{step.description}</p>
+      <small>
+        <ArrowDownRight size={14} aria-hidden="true" />
+        {step.note}
+      </small>
+    </m.article>
+  );
+}
+export function Workflow() {
+  return (
+    <section
+      id="workflow"
+      className="container studio-section workflow-section"
+      aria-labelledby="workflow-title"
+    >
+      <div className="workflow-intro">
+        <Reveal>
+          <p className="eyebrow">{studio.workflow.eyebrow}</p>
+          <h2 id="workflow-title">{studio.workflow.title}</h2>
+          <p>{studio.workflow.intro}</p>
+          <div className="workflow-art" aria-hidden="true">
+            <span className="workflow-art-ring" />
+            <span className="workflow-art-ring" />
+            <span className="workflow-art-core">
+              <WorkflowIcon size={42} strokeWidth={1} />
+            </span>
+            <i>IDEA</i>
+            <i>DESIGN</i>
+            <i>BUILD</i>
+          </div>
+          <small>{studio.workflow.label}</small>
+        </Reveal>
+      </div>
+      <div className="workflow-steps">
+        {studio.workflow.steps.map((step, index) => (
+          <WorkflowStep key={step.title} step={step} index={index} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export function Journey() {
+  return (
+    <section
+      id="journey"
+      className="container studio-section journey-section"
+      aria-labelledby="journey-title"
+    >
+      <Reveal>
+        <p className="eyebrow">{studio.journey.eyebrow}</p>
+        <div className="studio-heading">
+          <h2 id="journey-title">{studio.journey.title}</h2>
+          <p>{studio.journey.intro}</p>
+        </div>
+      </Reveal>
+      <div className="journey-chapters">
+        {studio.journey.chapters.map((chapter, index) => (
+          <Reveal key={chapter.title} delay={index * 0.04}>
+            <article className="journey-chapter">
+              <div className="journey-chapter-number" aria-hidden="true">
+                0{index + 1}
+                <span />
+              </div>
+              <div>
+                <p className="eyebrow">{chapter.label}</p>
+                <h3>{chapter.title}</h3>
+                <p>{chapter.description}</p>
+              </div>
+              <ArrowUpRight size={28} strokeWidth={1} aria-hidden="true" />
+            </article>
+          </Reveal>
+        ))}
+      </div>
+      <p className="journey-signature">
+        {studio.journey.note}
+        <span aria-hidden="true">↗</span>
+      </p>
+    </section>
+  );
+}
+
+export function ToolOrbit() {
+  return (
+    <section
+      className="container studio-section tool-section"
+      aria-labelledby="tool-title"
+    >
+      <Reveal>
+        <div className="tool-board">
+          <div className="tool-copy">
+            <p className="eyebrow">{studio.tools.eyebrow}</p>
+            <h2 id="tool-title">{studio.tools.title}</h2>
+            <p>{studio.tools.intro}</p>
+            <span className="tool-handwriting" aria-hidden="true">
+              a little help, a lot of intention ↗
+            </span>
+          </div>
+          <div className="tool-tiles">
+            {studio.tools.items.map((tool, index) => (
+              <div className={`tool-tile tool-tile-${index}`} key={tool.name}>
+                <span
+                  className="tool-mark"
+                  style={{ color: tool.color }}
+                  aria-hidden="true"
+                >
+                  {tool.mark}
+                </span>
+                <strong>{tool.name}</strong>
+                <small>{tool.purpose}</small>
+              </div>
+            ))}
+          </div>
+          <div className="tool-board-grid" aria-hidden="true" />
+        </div>
+        <p className="studio-note">{studio.tools.note}</p>
+      </Reveal>
+    </section>
+  );
+}
+
+export function WorkBunch({ projects }: { projects: ProjectView[] }) {
+  const ref = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const drift = useTransform(scrollYProgress, [0, 1], [-18, 18]);
+  const items = projects.slice(0, 4);
+  return (
+    <section
+      ref={ref}
+      id="work-bunch"
+      className="bunch-section studio-section"
+      aria-labelledby="bunch-title"
+    >
+      <div className="container">
+        <Reveal>
+          <p className="eyebrow">{studio.bunch.eyebrow}</p>
+          <div className="studio-heading">
+            <h2 id="bunch-title">{studio.bunch.title}</h2>
+            <p>{studio.bunch.intro}</p>
+          </div>
+        </Reveal>
+      </div>
+      <div className="bunch-window">
+        <m.div
+          className="bunch-grid"
+          style={reduced ? undefined : { y: drift }}
+        >
+          {items.flatMap((project, index) =>
+            [0, 1].map((view) => {
+              const screenshot =
+                project.screenshots[view === 0 ? 0 : 3] ||
+                project.screenshots[0];
+              return (
+                <a
+                  className={`bunch-piece bunch-piece-${index * 2 + view}`}
+                  href={project.demoUrl}
+                  key={`${project.id}-${view}`}
+                  aria-label={`${studio.bunch.explore}: ${project.title}, ${studio.bunch.views[view]}`}
+                >
+                  <div className="bunch-browser" aria-hidden="true">
+                    <i />
+                    <i />
+                    <i />
+                    <span>
+                      {project.title.toLowerCase().replaceAll(" ", "-")}.concept
+                    </span>
+                  </div>
+                  <div className="bunch-image">
+                    <Image
+                      src={screenshot.src}
+                      alt={screenshot.alt}
+                      fill
+                      sizes="(max-width:700px) 75vw, 430px"
+                    />
+                  </div>
+                  <div className="bunch-caption">
+                    <span>{project.title}</span>
+                    <small>{studio.bunch.views[view]}</small>
+                    <ArrowUpRight size={17} aria-hidden="true" />
+                  </div>
+                </a>
+              );
+            }),
+          )}
+        </m.div>
+      </div>
+      <div className="container bunch-after">
+        <p className="studio-note">{studio.bunch.note}</p>
+        <a href="#work" className="text-link">
+          {studio.bunch.view}
+          <ArrowUpRight size={17} aria-hidden="true" />
+        </a>
+      </div>
+    </section>
+  );
+}
+``````
+
 ## components/turnstile.tsx
 
 ``````tsx
@@ -3419,6 +4098,189 @@ export function Turnstile({
       />
       <div ref={container} />
     </div>
+  );
+}
+``````
+
+## components/wall-of-love.tsx
+
+``````tsx
+"use client";
+
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, m, useInView, useReducedMotion } from "framer-motion";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Pause,
+  Play,
+  Quote,
+  UserRound,
+} from "lucide-react";
+import { studio, testimonials } from "@/data/studio";
+import { Reveal } from "./reveal";
+
+export function WallOfLove() {
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { amount: 0.2 });
+  const reduced = useReducedMotion();
+  const [index, setIndex] = useState(0);
+  const [playing, setPlaying] = useState(true);
+  const [interacting, setInteracting] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const review = testimonials[index];
+  const active = playing && !reduced && !interacting && inView && visible;
+  useEffect(() => {
+    const update = () => setVisible(document.visibilityState === "visible");
+    update();
+    document.addEventListener("visibilitychange", update);
+    return () => document.removeEventListener("visibilitychange", update);
+  }, []);
+  useEffect(() => {
+    if (!active || testimonials.length < 2) return;
+    const timer = window.setTimeout(
+      () => setIndex((current) => (current + 1) % testimonials.length),
+      6500,
+    );
+    return () => window.clearTimeout(timer);
+  }, [active, index]);
+  function go(next: number) {
+    setPlaying(false);
+    setIndex((next + testimonials.length) % testimonials.length);
+  }
+  return (
+    <section
+      ref={ref}
+      id="wall-of-love"
+      className="container studio-section love-section"
+      aria-labelledby="love-title"
+    >
+      <Reveal>
+        <p className="eyebrow">{studio.love.eyebrow}</p>
+        <div className="studio-heading">
+          <h2 id="love-title">{studio.love.title}</h2>
+          <p>{studio.love.intro}</p>
+        </div>
+      </Reveal>
+      <div
+        className="love-stage"
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Testimonials"
+        onMouseEnter={() => setInteracting(true)}
+        onMouseLeave={() => setInteracting(false)}
+        onFocusCapture={() => setInteracting(true)}
+        onBlurCapture={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget as Node))
+            setInteracting(false);
+        }}
+      >
+        <div className="love-offset" aria-hidden="true" />
+        <div className="love-offset" aria-hidden="true" />
+        <div className="love-card">
+          <div className="love-card-top">
+            <Quote size={35} strokeWidth={1} aria-hidden="true" />
+            <span className="eyebrow">
+              {review.placeholder
+                ? studio.love.previewLabel
+                : studio.love.eyebrow}
+            </span>
+            <span className="love-count">
+              {String(index + 1).padStart(2, "0")} /{" "}
+              {String(testimonials.length).padStart(2, "0")}
+            </span>
+          </div>
+          <div
+            className="love-slide-area"
+            aria-live={playing && !reduced ? "off" : "polite"}
+            aria-atomic="true"
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              <m.div
+                key={review.id}
+                initial={
+                  reduced ? false : { opacity: 0, y: 15, filter: "blur(3px)" }
+                }
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={
+                  reduced
+                    ? { opacity: 1 }
+                    : { opacity: 0, y: -12, filter: "blur(3px)" }
+                }
+                transition={{ duration: reduced ? 0 : 0.4 }}
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`Review ${index + 1} of ${testimonials.length}`}
+              >
+                <blockquote>{review.quote}</blockquote>
+                <div className="review-person">
+                  <div className="review-avatar">
+                    {review.portrait && !review.placeholder ? (
+                      <Image
+                        src={review.portrait}
+                        alt={review.name}
+                        width={60}
+                        height={60}
+                      />
+                    ) : (
+                      <UserRound
+                        size={27}
+                        strokeWidth={1}
+                        aria-label={studio.love.personPlaceholder}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    <strong>{review.name}</strong>
+                    <small>{review.role}</small>
+                  </div>
+                </div>
+              </m.div>
+            </AnimatePresence>
+          </div>
+          <div className="love-controls">
+            <div className="love-progress" aria-hidden="true">
+              {testimonials.map((item, i) => (
+                <span key={item.id} className={i === index ? "current" : ""} />
+              ))}
+            </div>
+            <div>
+              <button
+                type="button"
+                className="icon-button"
+                onClick={() => go(index - 1)}
+                aria-label={studio.love.previous}
+              >
+                <ArrowLeft size={18} />
+              </button>
+              <button
+                type="button"
+                className="icon-button"
+                disabled={Boolean(reduced)}
+                onClick={() => setPlaying((value) => !value)}
+                aria-label={
+                  playing && !reduced ? studio.love.pause : studio.love.play
+                }
+              >
+                {playing && !reduced ? <Pause size={17} /> : <Play size={17} />}
+              </button>
+              <button
+                type="button"
+                className="icon-button"
+                onClick={() => go(index + 1)}
+                aria-label={studio.love.next}
+              >
+                <ArrowRight size={18} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {testimonials.some((item) => item.placeholder) && (
+        <p className="studio-note love-disclosure">{studio.love.notice}</p>
+      )}
+    </section>
   );
 }
 ``````

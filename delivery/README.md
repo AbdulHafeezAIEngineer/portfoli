@@ -9,6 +9,7 @@ portfoli/
 ├── CONTACT_SETUP.md
 ├── DEPLOYMENT.md
 ├── PART_3.md
+├── PRIVACY_SETUP.md
 ├── README.md
 ├── SCREENSHOTS.md
 ├── SECURITY_STATUS.md
@@ -37,6 +38,7 @@ portfoli/
 │   ├── profile.css
 │   ├── robots.ts
 │   ├── sitemap.ts
+│   ├── studio.css
 │   ├── admin/
 │   │   ├── admin.css
 │   │   └── [[...path]]/
@@ -56,11 +58,17 @@ portfoli/
 │   │   │   └── route.ts
 │   │   └── contact/
 │   │       └── route.ts
-│   └── demo/
-│       ├── concepts.css
-│       ├── demo.css
-│       └── [slug]/
-│           └── page.tsx
+│   ├── cookies/
+│   │   └── page.tsx
+│   ├── demo/
+│   │   ├── concepts.css
+│   │   ├── demo.css
+│   │   └── [slug]/
+│   │       └── page.tsx
+│   ├── privacy/
+│   │   └── page.tsx
+│   └── terms/
+│       └── page.tsx
 ├── components/
 │   ├── admin-app.tsx
 │   ├── back-to-top.tsx
@@ -71,13 +79,16 @@ portfoli/
 │   ├── certificate-viewer.tsx
 │   ├── certifications.tsx
 │   ├── concept-site.tsx
+│   ├── consent-provider.tsx
 │   ├── contact-form.tsx
 │   ├── contact.tsx
 │   ├── demo-site.tsx
 │   ├── experience.tsx
 │   ├── footer.tsx
 │   ├── forte-preview.tsx
+│   ├── hero-emblem.tsx
 │   ├── hero.tsx
+│   ├── legal-page.tsx
 │   ├── motion-provider.tsx
 │   ├── navbar.tsx
 │   ├── project-card.tsx
@@ -85,7 +96,10 @@ portfoli/
 │   ├── reveal.tsx
 │   ├── scroll-progress.tsx
 │   ├── skills.tsx
+│   ├── social-links.tsx
+│   ├── studio-sections.tsx
 │   ├── turnstile.tsx
+│   ├── wall-of-love.tsx
 │   └── work.tsx
 ├── data/
 │   ├── admin.ts
@@ -96,10 +110,12 @@ portfoli/
 │   ├── contact.ts
 │   ├── demos.ts
 │   ├── experience.ts
+│   ├── privacy.ts
 │   ├── project-presentation.ts
 │   ├── projects.ts
 │   ├── site.ts
 │   ├── skills.ts
+│   ├── studio.ts
 │   └── prompts/
 │       ├── booking.ts
 │       ├── support.ts
@@ -113,12 +129,22 @@ portfoli/
 │   ├── lighthouse-summary.json
 │   ├── mobile-about-preview.png
 │   ├── new-work-preview.png
-│   └── preview.png
+│   ├── preview.png
+│   ├── studio-footer-preview.png
+│   ├── studio-hero-preview.png
+│   ├── studio-journey-preview.png
+│   ├── studio-mobile-consent-preview.png
+│   ├── studio-services-preview.png
+│   ├── studio-tools-preview.png
+│   ├── studio-wall-of-love-preview.png
+│   ├── studio-work-bunch-preview.png
+│   └── studio-workflow-preview.png
 ├── hooks/
 │   ├── use-modal.ts
 │   └── use-voice.ts
 ├── lib/
 │   ├── bot-runtime.ts
+│   ├── consent.ts
 │   ├── content-loader.ts
 │   ├── content.ts
 │   ├── db.ts
@@ -211,6 +237,7 @@ portfoli/
 │   └── reset-admin.ts
 ├── tests/
 │   ├── chat.test.mjs
+│   ├── consent.test.ts
 │   ├── contact.test.mjs
 │   └── security.test.mjs
 └── types/
@@ -343,9 +370,9 @@ model AuditLog {
 }
 ```
 
-Complete source files follow in folder order. Binary PNG/WebP assets are included in the project; source snapshots do not pretend image bytes are code. The four selected concept sites have 16 actual browser captures. Original generated hero imagery is disclosed; see SCREENSHOTS.md. Private environment files, dependencies and build outputs are excluded.
+Complete source files follow in folder order. Binary assets are included in the ZIP. Four selected concepts have 16 actual browser screenshots, with generated hero imagery disclosed separately. The studio design uses original Elvora layouts; numbered reference images and genuine reviews/portraits are pending. Private environment files, dependencies and build outputs are excluded.
 
-**Review status:** Next.js 14 remains at the user-requested version, with one reported critical production dependency finding. Other production findings were patched. See SECURITY_STATUS.md before any external launch.
+**Review status:** Next.js 14 retains known critical advisories. See SECURITY_STATUS.md.
 
 ## Every source file, in folder order
 
@@ -362,7 +389,7 @@ Complete source files follow in folder order. Binary PNG/WebP assets are include
 11. [tests/ — complete files](11-tests.md)
 12. [types/ — complete files](12-types.md)
 
-The delivery/ directory contains these generated snapshots and is excluded from recursive source listing. The running application uses the original files above.
+Generated source snapshots exclude delivery/ recursively. The application uses the original files.
 
 ## Install / run / capture / migrate / seed
 
@@ -372,7 +399,7 @@ test -e .env.local || cp .env.example .env.local
 npm run dev
 ```
 
-Set the actual site URL and private service settings securely in .env.local. Never send passwords or API keys in chat. Stop Next.js before running capture or a production build.
+Keep actual origins and private service settings in ignored .env.local or hosting secret settings. Stop Next.js before capture or a production build.
 
 ```bash
 npx playwright install chromium
@@ -380,6 +407,7 @@ npm run capture
 npm run db:generate
 npm run db:migrate
 npm run db:seed
+node --import tsx --test tests/consent.test.ts
 npm run test:chat
 npm run test:contact
 npm run test:security
@@ -389,15 +417,16 @@ npm run build
 npm start
 ```
 
-Migration/seed require the owner’s PostgreSQL and private admin settings. The native migration CLI needs verified engine-download access. Keep CONTENT_SOURCE=files until a database has been prepared. Current Next.js 14 is a review build with a known critical dependency finding: do not externally launch before resolving SECURITY_STATUS.md.
+Migration/seed require PostgreSQL and private admin settings. Keep CONTENT_SOURCE=files until a database is prepared. Next.js 14 has known critical advisories; see SECURITY_STATUS.md.
 
 ## Owner replacement / setup checklist
 
-- [ ] Keep brand **Elvora**, owner **Abdul Hafeez**, and public email **abdulhafeez@elvoraai.online**. No phone/WhatsApp/social profiles are required.
-- [ ] Replace the portrait and remaining factual workflow placeholders. The supplied Coursiv Master of ChatGPT certificate is included with its original award details.
-- [ ] Add real AI-tool names and factual workflow/testing examples. No years, client totals or testimonials are invented.
-- [ ] The supplied Forte O Level Study Assistant Botpress connection is configured in data/bots.ts. Verify it on the live site; database users must update their existing real-bot record. Additional file-based bots use additionalBots.
-- [ ] Set OpenAI, actual site/auth origins, PostgreSQL, shared Redis, Gmail App Password, Turnstile, Blob and strong admin/auth/TOTP settings privately as needed. Remove seed/reset passwords from normal runtime.
-- [ ] Resolve the Next.js 14 security blocker through an authorized patched-major upgrade before production.
-- [ ] Verify real mail delivery, provider chat, database/cloud migrations, shared quotas, uploads, Turnstile, microphone/voice, DNS/SSL and backups on the final host. See DEPLOYMENT.md and VERIFICATION.md.
+- [ ] Brand Elvora, owner Abdul Hafeez, contact abdulhafeez@elvoraai.online. Approved GitHub and Instagram links are included. No phone or WhatsApp links.
+- [ ] Provide the actual personal portrait, genuine approved testimonials/portraits, and the missing numbered design-reference images. Review placeholders are clearly marked.
+- [ ] The supplied Coursiv Master of ChatGPT certificate retains its actual award details.
+- [ ] Forte uses the supplied public Botpress scripts. Verify live replies, publishing/domain permissions and consent behavior on the deployed site.
+- [ ] Review policy copy against actual providers, retention practice, business identity and relevant legal obligations; no global legal-compliance certification is claimed.
+- [ ] Configure private email sender, AI, shared quotas, actual origins and optional database/auth/Turnstile/storage settings as needed. See DEPLOYMENT.md.
+- [ ] Resolve the known Next.js 14 security blocker through an authorized patched-major decision.
+- [ ] Verify real delivery, provider replies, voice, external services, domain/SSL, retention and backups on the final host.
 

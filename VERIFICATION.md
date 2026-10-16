@@ -1,6 +1,17 @@
-# Verification — 15 October 2026
+# Verification — 17 October 2026
 
 This is a **review build**, not a verified live deployment. `SECURITY_STATUS.md` records the remaining critical Next.js 14 dependency blocker and the pending major-version decision.
+
+## Latest studio design and privacy update
+
+- Built four service cards, a distinct eight-image My bunch of work contact sheet beneath Selected Work, a six-tool AI board, expanded AI/development skills, the supplied five-step workflow, the owner-supplied four-chapter journey, a short About Me summary, social links, a one-at-a-time review carousel, shining CSS hero logo and animated footer wordmark. Added no experience/project/client/success metric cards. The personal portrait remains labeled until supplied.
+- The numbered reference images were not attached. The external Framer reference returned HTTP/CONNECT 403 in this environment; these are original Elvora layouts, not a verified exact reference match. Review entries are explicit layout previews with neutral icons. No genuine testimonial or real client face has been fabricated.
+- Latest `npm run lint`, `npm run typecheck`, `npm run build`, 16 chat tests, and four new consent parsing tests passed. Contact/backend delivery was not modified; no new real email or AI request was sent. Earlier contact/security/database checks below are historical, not rerun for this UI change.
+- Browser checks against the final production build passed: consent defaults off, Reject All persistence after reload, an explicit permission before creating the provider frame, cross-tab revocation and frame teardown, blocked-storage fallback, and a 320px banner/preferences layout. The provider response in these browser checks was an explicit local iframe fixture; this does not establish real Botpress replies.
+- Dark and light homepage axe checks reported zero WCAG A/AA violations. The initial consent banner, preferences dialog, and all three policy pages also passed. Corrected persistent low-contrast opacity in the scroll workflow; body text now retains full contrast while moving. Layout checks passed at 320, 390, 768, 1024 and 1440 pixels with no document overflow.
+- Verified one review at a time, timed rotation, pause and next controls, honest placeholder labels, correct social profile URLs, and no browser page errors. Reduced motion makes the emblem static and disables review autoplay. Policy routes returned HTTP 200 with working settings controls and readable mobile layouts.
+- New screenshot previews: `docs/studio-hero-preview.png`, `studio-services-preview.png`, `studio-work-bunch-preview.png`, `studio-tools-preview.png`, `studio-workflow-preview.png`, `studio-journey-preview.png`, `studio-wall-of-love-preview.png`, `studio-footer-preview.png`, and `studio-mobile-consent-preview.png`. They are captures of the implemented website, not the missing reference images.
+- No new Lighthouse audit, legal-compliance certification or public deployment verification is claimed. Policy copy must be reviewed against actual provider configuration, retention practice and served regions; see `PRIVACY_SETUP.md`. Known Next.js 14 advisories remain recorded in `SECURITY_STATUS.md`.
 
 ## Public email update
 
@@ -52,7 +63,7 @@ The earlier build recorded 91 performance; the earlier premium visual update rec
 ## Still needs real owner configuration/verification
 
 - A patched framework-major decision before external production launch. Current production dependency audit: one critical affected package, Next.js 14; other reported production findings were resolved.
-- Specific AI-tool names and the owner's portrait remain clearly marked placeholders. The owner has now supplied 2+ years of experience and time invested in AI tools for About Me. The supplied Coursiv certificate and its award details are displayed; external issuer verification has not been performed.
+- The personal portrait, approved review text/client portraits, and numbered design-reference images are still missing. AI tools and the supplied journey are now included without metric cards. The supplied Coursiv certificate is displayed; external issuer verification has not been performed.
 - An owner-uploaded photo is needed to complete the About Me portrait area. The previous Elvora featured card has been removed; no screenshot of that external website is needed for the current selected-work grid.
 - Actual public HTTPS origin settings, external database/Redis/storage credentials, OpenAI key for the three API demos, Gmail App Password and Cloudflare Turnstile keys in private settings. The real Botpress connection uses the owner's supplied public scripts; verify its publishing state, domain permissions and live replies on the deployed site.
 - Live Gmail inbox delivery, real OpenAI/provider replies, actual Blob upload, real Redis REST service and real Turnstile challenge verification. Mock-based checks do not establish these integrations.

@@ -9,6 +9,8 @@ import "./bots.css";
 import "./profile.css";
 import "./devices.css";
 import "./premium.css";
+import "./studio.css";
+import { ConsentProvider } from "@/components/consent-provider";
 
 const inter = localFont({
   src: [
@@ -104,7 +106,9 @@ export default function RootLayout({
         <a className="skip-link" href="#main-content">
           {site.ui.skip}
         </a>
-        <MotionProvider>{children}</MotionProvider>
+        <MotionProvider>
+          <ConsentProvider>{children}</ConsentProvider>
+        </MotionProvider>
       </body>
     </html>
   );

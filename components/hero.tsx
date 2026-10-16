@@ -1,6 +1,6 @@
-import Image from "next/image";
-import { ArrowDownRight, ArrowUpRight, Code2 } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { site } from "@/data/site";
+import { HeroEmblem } from "./hero-emblem";
 
 export function Hero() {
   return (
@@ -36,37 +36,7 @@ export function Hero() {
         </div>
       </div>
       <div className="hero-visual">
-        <div className="portrait-orbit" aria-hidden="true" />
-        <figure className="portrait-card">
-          <div className="portrait-topline">
-            <span>{site.brand.toUpperCase()} / 01</span>
-            <span className="status-dot" />
-          </div>
-          <div className="portrait-image">
-            <Image
-              src={site.hero.portrait}
-              alt={site.hero.portraitAlt}
-              fill
-              sizes="(max-width: 700px) 85vw, 390px"
-              priority
-            />
-            <span className="portrait-placeholder">
-              {site.hero.portraitStatus}
-            </span>
-          </div>
-          <figcaption>
-            <span className="eyebrow">{site.hero.portraitLabel}</span>
-            <strong>{site.name}</strong>
-            <p>{site.hero.portraitCaption}</p>
-          </figcaption>
-        </figure>
-        <div className="floating-note glass">
-          <Code2 size={23} aria-hidden="true" />
-          <span>{site.hero.floatingLabel}</span>
-        </div>
-        <span className="visual-coordinates" aria-hidden="true">
-          CREATIVE × TECHNICAL
-        </span>
+        <HeroEmblem />
       </div>
       <div className="hero-bottom">
         <div className="expertise-list">

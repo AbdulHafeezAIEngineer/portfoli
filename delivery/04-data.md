@@ -813,6 +813,7 @@ export const contactContent = {
   characters: "characters",
   privacy:
     "Your name, email, and message are kept in a private inbox to respond to your enquiry. Please avoid confidential information.",
+  privacyLink: "Privacy Policy",
   success:
     "Your message was accepted by the mail server for delivery. Thank you for reaching out.",
   invalid: "Please check the highlighted fields.",
@@ -1061,51 +1062,11 @@ export const demoUI = {
 export const experience = {
   eyebrow: "03 / THE PERSON BEHIND ELVORA",
   title: "About Me",
-  lead: "2+ years of experience. Thoughtful use of AI. An understanding of the full stack.",
+  lead: "Independent developer. Thoughtful AI. A human eye for the details.",
   paragraphs: [
-    "I'm Abdul Hafeez, the developer behind Elvora. With more than two years of experience, I work on websites and AI chatbot experiences that bring business ideas into a practical, usable form. I've invested a great deal of time in learning how to work with AI tools: understanding their strengths, recognizing their limits, and improving the results through clear direction and careful review.",
-    "It's easy to think that anyone can ask AI to build a website and receive a professional product. Getting a useful first draft is only the beginning. A strong result needs a well-structured prompt, the right context, sensible design decisions, and repeated testing. My contribution is in shaping the requirements, checking the generated work, and refining the details until the experience feels considered and works as intended.",
-    "I also believe in understanding what runs beneath the interface. Frontend code shapes how people interact with a website; backend logic handles requests and business rules; a database stores and organizes information; and deployment, security, and maintenance keep the product available and protected. AI can assist with each layer, but making them work together still takes technical understanding, judgment, and responsibility.",
-  ],
-  factsLabel: "HOW I WORK",
-  factsNote:
-    "Time spent learning the tools matters. The real value comes from the decisions, checks, and refinements made along the way.",
-  facts: [
-    {
-      label: "Experience",
-      value: "More than two years of experience, with time dedicated to learning and working with AI tools.",
-    },
-    {
-      label: "Prompting with purpose",
-      value: "Clear goals, relevant context, and specific constraints help turn a broad idea into useful output.",
-    },
-    {
-      label: "Engineering beyond the prompt",
-      value:
-        "Review the frontend, backend, data flow, and deployment together, then test and refine the complete experience.",
-    },
-  ],
-  process: [
-    {
-      title: "Structure the prompt",
-      description:
-        "Define the goal, context, constraints, and expected result before generating.",
-    },
-    {
-      title: "Validate the output",
-      description:
-        "Check assumptions, facts, requirements, and the behavior behind the interface.",
-    },
-    {
-      title: "Test the behavior",
-      description:
-        "Exercise real user flows, edge cases, accessibility, and failure states.",
-    },
-    {
-      title: "Refine with intent",
-      description:
-        "Resolve what testing reveals and improve clarity, reliability, and usability.",
-    },
+    "I'm Abdul Hafeez, the developer behind Elvora. My curiosity about Python and AI grew into a passion for web development. Through hands-on projects, agency work and independent development, I've learned to turn ideas into practical digital experiences. Today, I'm bringing that curiosity into a startup of my own.",
+    "I believe AI is a powerful tool, but access alone doesn't create professional work. The result depends on clear prompts, the right context, design judgment and patient testing. I've invested time in understanding how to guide these tools, check what they produce and refine the details until the work feels considered.",
+    "That means understanding the full stack: the frontend people use, the backend that handles requests, the database that keeps information organized, and the deployment and security that keep it running. My role is to connect those pieces with intention—not simply accept the first AI-generated draft.",
   ],
   fundamentals: {
     eyebrow: "THE ENGINEERING BEHIND THE INTERFACE",
@@ -1156,6 +1117,151 @@ export const experience = {
     ],
     closing:
       "If you don't understand these fundamentals, how will your website actually run, scale, and stay secure?",
+  },
+} as const;
+``````
+
+## data/privacy.ts
+
+``````typescript
+export const consentContent = {
+  version: 1,
+  retentionDays: 180,
+  key: "elvora-consent-v1",
+  title: "A little choice. A better visit.",
+  description:
+    "Essential storage keeps your chosen theme and privacy choices working. Optional embedded chat connects to a third-party provider only when you allow it. No analytics or advertising trackers are installed by this portfolio.",
+  accept: "Accept All",
+  reject: "Reject All",
+  manage: "Manage Preferences",
+  save: "Save Preferences",
+  settings: "Cookie Settings",
+  close: "Close preferences",
+  policy: "Cookie Policy",
+  privacy: "Privacy Policy",
+  dialogTitle: "Your privacy preferences",
+  dialogDescription:
+    "Optional features are off until you choose them. You can change your mind using Cookie Settings in the footer. Rejecting optional features leaves the rest of the portfolio available.",
+  essential: "Essential storage",
+  essentialNote:
+    "Privacy choices, your explicitly selected theme, and security or sign-in functionality when used. Always active; no advertising or analytics.",
+  external: "Third-party chat",
+  externalNote:
+    "Allow embedded services such as Botpress. Opening a chat then shares connection information with that provider, which may use its own cookies or local storage. AI API demos remain available without this permission.",
+  withdrawal:
+    "Withdrawing consent removes open chat embeds and stops future loading. It cannot erase information already sent to a provider or its stored data.",
+  gateTitle: "Your choice before we connect.",
+  gateNote:
+    "This chat uses an external provider. Allow third-party chat to load it, or keep browsing without it.",
+  allow: "Allow third-party chat",
+  saved: "Privacy choices saved.",
+  notSaved:
+    "Preferences apply to this page, but this browser could not save them for your next visit.",
+} as const;
+
+export const legal = {
+  updated: "17 October 2026",
+  updatedLabel: "Last updated",
+  back: "Back to Elvora",
+  contact: "Questions about this policy?",
+  pages: {
+    privacy: {
+      title: "Privacy Policy",
+      intro:
+        "This policy describes how Elvora, the portfolio of independent developer Abdul Hafeez, handles information when you browse, send an enquiry or use a demo.",
+      sections: [
+        {
+          title: "Who to contact",
+          text: "Abdul Hafeez operates this portfolio under the Elvora name. Contact abdulhafeez@elvoraai.online about your information, a request, or this policy.",
+        },
+        {
+          title: "Browsing and essential storage",
+          text: "The hosting provider processes connection details, such as IP address, request information and operational logs, to deliver and protect the site. Your selected theme and privacy preferences may be stored locally in your browser. Admin sign-in uses security cookies when used. This portfolio does not install analytics or advertising trackers.",
+        },
+        {
+          title: "Contact enquiries",
+          text: "If you submit the form, your name, email and message are processed to respond to your enquiry and limit abuse. Messages are delivered through the configured email service; a private inbox may also store them if database features are enabled. Cloudflare Turnstile may process technical information for form security when configured. Do not send passwords, payment details, medical information or other sensitive content.",
+        },
+        {
+          title: "AI demos, voice and embedded chat",
+          text: "AI API demos send your question and limited conversation context to the configured AI provider to generate a reply. Provider processing and retention are governed by its terms. Portfolio chat logging is off by default; if enabled, the chat notice must disclose it. Optional external embeds such as Botpress load only after third-party chat permission and opening the chat. Microphone features require browser permission, and browser speech services may process audio externally. Avoid sharing private information. Demo answers can be inaccurate.",
+        },
+        {
+          title: "Why information is processed",
+          text: "Information is used to operate and secure the site, respond to requests, and provide features you choose to use. Where applicable, the basis is your request to take steps toward a service, legitimate interests in security and communication, or consent for optional embedded features. You may withdraw optional-feature consent at any time through Cookie Settings.",
+        },
+        {
+          title: "Providers and international processing",
+          text: "Hosting, email, anti-abuse and AI providers may process information in other countries under their applicable contracts and privacy terms. A GitHub or Instagram link takes you to that platform only when you choose to open it. Social feeds and tracking pixels are not embedded here. Information is not sold by Elvora.",
+        },
+        {
+          title: "Retention and your choices",
+          text: "Privacy choices expire after 180 days. Enquiries are kept only as needed to respond, manage a working relationship, or meet applicable record-keeping obligations, then reviewed for deletion. Provider retention may differ. Depending on your location, you may request access, correction, deletion, restriction or portability, object to processing, withdraw consent, or contact your local privacy regulator. Email Elvora to make a request; reasonable verification may be needed.",
+        },
+        {
+          title: "Changes",
+          text: "This policy will be updated when the actual services or processing change. The date above identifies this version. New optional purposes require a new consent choice before activation.",
+        },
+      ],
+    },
+    cookies: {
+      title: "Cookie Policy",
+      intro:
+        "Cookies and browser storage are used for specific features. Optional external chat is off by default, and you have equal options to accept, reject or manage it.",
+      sections: [
+        {
+          title: "Essential features",
+          text: "The local-storage key elvora-consent-v1 remembers your privacy choice and timestamp for up to 180 days. portfolio-theme remembers a theme you explicitly select. Necessary security, anti-abuse and admin sign-in features may use additional security storage when used. These are not used for advertising or audience analytics.",
+        },
+        {
+          title: "Optional third-party chat",
+          text: "Botpress and other configured embedded providers may use cookies or local storage once you permit third-party chat and open the feature. Their storage names and duration are provider-controlled and may change; consult their current policies. No embedded provider frame is created by the public chat component before this permission. AI API demos do not require embedded-chat consent.",
+        },
+        {
+          title: "No analytics or advertising category",
+          text: "This portfolio does not install analytics, advertising pixels or social-media tracking embeds. There is no inactive consent category pretending to control those technologies. If optional purposes are introduced later, this notice and the consent version must be updated before those features are loaded.",
+        },
+        {
+          title: "Change or withdraw your choice",
+          text: "Choose Cookie Settings in the footer to change preferences at any time. Reject All disables optional chat; Accept All allows it. Manage Preferences lets you keep it off or on separately from essential features. Withdrawing removes active provider frames but does not delete information already received or stored by the provider. Use your browser's site-data controls to clear stored browser data.",
+        },
+        {
+          title: "Storage restrictions",
+          text: "If your browser blocks storage, the choice applies to the current page but may be requested again on a later visit. Other browser tabs update when a saved preference changes. Expired or invalid choices are treated as no permission.",
+        },
+      ],
+    },
+    terms: {
+      title: "Terms of Service",
+      intro:
+        "These terms cover use of the Elvora portfolio and its demonstrations. A paid project needs its own agreed scope and terms.",
+      sections: [
+        {
+          title: "Portfolio and concept work",
+          text: "The sample websites are independent concept projects with fictional brands, generated hero images and original interface work. They do not represent client commissions, real reservations, vehicle sales or clinical services. Their sample planners and configurators create local demo summaries without submitting bookings or taking payment.",
+        },
+        {
+          title: "Services and project agreements",
+          text: "Website design, development, AI chatbot integration, scoped API automation and optimization are subject to requirements, feasibility and a separate written agreement. Scope, pricing, payment, timelines, support, ownership and any third-party costs must be agreed for each project. No search ranking, revenue or business outcome is guaranteed.",
+        },
+        {
+          title: "AI limitations and acceptable use",
+          text: "AI output may be incomplete or inaccurate and requires human judgment. The booking and support demos are examples, not professional advice or confirmed transactions. Do not submit sensitive data, abuse the services, bypass limits, attempt unauthorized access or use the site unlawfully. Voice features depend on device and browser support.",
+        },
+        {
+          title: "Intellectual property and third-party services",
+          text: "Elvora branding and original portfolio materials belong to their respective rights holders. Tool names, third-party brands and permitted client material remain their owners' property. Display does not imply endorsement or partnership. External links and providers have their own terms and availability.",
+        },
+        {
+          title: "Availability and responsibility",
+          text: "The site and demos are provided as available and may change, be limited or be interrupted. To the extent permitted by applicable law, Elvora does not guarantee uninterrupted or error-free demo operation. Nothing here excludes rights or liabilities that cannot lawfully be excluded. Any paid-project responsibility is set out in its own agreement, subject to law.",
+        },
+        {
+          title: "Contact and updates",
+          text: "Contact abdulhafeez@elvoraai.online with questions. These terms may be updated as the portfolio changes; the date above identifies the current version.",
+        },
+      ],
+    },
   },
 } as const;
 ``````
@@ -1295,6 +1401,7 @@ export const site = {
   description:
     "Elvora is Abdul Hafeez's portfolio for thoughtful websites, AI chatbot concepts, and voice experiences. Explore the work and start a conversation.",
   nav: [
+    { label: "Services", href: "#services" },
     { label: "Work", href: "#work" },
     { label: "AI Bots", href: "#ai-bots" },
     { label: "About Me", href: "#experience" },
@@ -1384,11 +1491,17 @@ export const site = {
 ``````typescript
 export type Skill = { id: string; name: string; category: string };
 export const skills: Skill[] = [
-  {
-    id: "ai-tools",
-    name: "[PLACEHOLDER] Verified AI tool names",
-    category: "AI tools",
-  },
+  { id: "claude", name: "Claude", category: "AI tools" },
+  { id: "chatgpt", name: "ChatGPT", category: "AI tools" },
+  { id: "gemini", name: "Gemini", category: "AI tools" },
+  { id: "copilot", name: "GitHub Copilot", category: "AI tools" },
+  { id: "botpress", name: "Botpress", category: "AI tools" },
+  { id: "openai", name: "OpenAI API", category: "AI tools" },
+  { id: "python", name: "Python basics", category: "Development tools" },
+  { id: "github", name: "GitHub", category: "Development tools" },
+  { id: "git", name: "Git", category: "Development tools" },
+  { id: "html", name: "HTML", category: "Web interfaces" },
+  { id: "css", name: "CSS", category: "Web interfaces" },
   { id: "prompts", name: "Structured prompts", category: "Prompt engineering" },
   {
     id: "context",
@@ -1421,14 +1534,288 @@ export const skillContent = {
   title: "A toolkit with purpose.",
   description:
     "The technologies and topics behind web, chatbot, and voice experiences.",
-  note: "Toolkit topics are shown without proficiency scores or experience-duration claims. [PLACEHOLDER] Add verified hands-on examples and your actual AI tool names.",
+  note: "A toolkit for building, experimenting and refining. No proficiency percentages, project totals or outcome guarantees.",
   categories: [
     "AI tools",
     "Prompt engineering",
     "Web interfaces",
     "APIs & data",
     "Voice AI",
+    "Development tools",
   ],
 } as const;
+``````
+
+## data/studio.ts
+
+``````typescript
+export const studio = {
+  services: {
+    eyebrow: "WHAT I CAN HELP YOU BUILD",
+    title: "Your next idea.\nThoughtfully made.",
+    intro:
+      "Design, development and useful AI—connected around what your business actually needs.",
+    action: "Let's discuss your project",
+    items: [
+      {
+        id: "web",
+        title: "Website Design & Development",
+        description:
+          "I build modern, responsive websites that look professional on mobile and desktop, helping businesses showcase their services and connect with customers.",
+        tags: [
+          "Business websites",
+          "Landing pages",
+          "Portfolio websites",
+          "E-commerce",
+        ],
+        detail: "From the first impression to the final interaction.",
+      },
+      {
+        id: "chat",
+        title: "AI Chatbot Development",
+        description:
+          "I create custom AI chatbots trained on your business information, services, and FAQs to answer customer questions and provide instant assistance on your website.",
+        tags: ["Custom knowledge", "FAQ automation", "Website chatbots"],
+        detail:
+          "Custom AI Chatbots — Trained on your business data for customer support and FAQs.",
+      },
+      {
+        id: "automation",
+        title: "AI Automation & Integrations",
+        description:
+          "I connect AI tools to websites and business workflows through APIs and webhooks, helping reduce repetitive tasks with practical, clearly scoped automation.",
+        tags: [
+          "API connections",
+          "Form-to-inbox flows",
+          "Lead routing",
+          "AI-assisted replies",
+        ],
+        detail:
+          "The right connection, with validation and human review where it matters.",
+      },
+      {
+        id: "seo",
+        title: "SEO & Website Optimization",
+        description:
+          "I improve search engine basics, mobile responsiveness, accessibility, and website performance so your website is easier to discover and use.",
+        tags: [
+          "Metadata & structure",
+          "Mobile experience",
+          "Image optimization",
+          "Performance",
+        ],
+        detail: "A stronger foundation. No guaranteed search rankings.",
+      },
+    ],
+  },
+  workflow: {
+    eyebrow: "WORKFLOW",
+    title: "How I Build\nAI-Powered Websites",
+    intro:
+      "From understanding your business to launching a website with intelligent AI assistance.",
+    label: "A clear process. Room for better ideas.",
+    steps: [
+      {
+        title: "Understand Your Needs",
+        description:
+          "I learn about your business, target audience, goals, and requirements. I identify what your website needs to achieve and how AI can improve your customers' experience.",
+        note: "Listen before building",
+        icon: "discover",
+      },
+      {
+        title: "Plan & Design",
+        description:
+          "I plan the website structure, page layouts, visual style, and user journey. I also define how the AI chatbot will work, what business information it needs, and how visitors will interact with it.",
+        note: "Give the idea a direction",
+        icon: "design",
+      },
+      {
+        title: "Develop & Integrate AI",
+        description:
+          "I build your responsive website and integrate a custom AI chatbot trained on your business information. Depending on your requirements, I can add voice interaction, customer FAQs, and lead capture.",
+        note: "Make the pieces work together",
+        icon: "build",
+      },
+      {
+        title: "Test & Refine",
+        description:
+          "I test the website across different screen sizes and check its navigation, forms, chatbot responses, and AI functionality. I refine the design and fix issues to make everything work smoothly.",
+        note: "Care lives in the details",
+        icon: "test",
+      },
+      {
+        title: "Launch & Optimize",
+        description:
+          "I deploy your website, connect your domain, and configure the required services. After launch, I can help monitor performance, improve the website, and update the chatbot as your business evolves.",
+        note: "Launch is a beginning",
+        icon: "launch",
+      },
+    ],
+  },
+  journey: {
+    eyebrow: "MY JOURNEY",
+    title: "From a Curious Kid\nto an Independent Developer",
+    intro:
+      "My journey began with curiosity: exploring different fields, learning the basics of Python, and experimenting with AI tools to understand what technology could make possible. Over time, I found myself drawn to web development—the ability to turn an idea into something people can actually use.",
+    note: "Still curious. Always building.",
+    chapters: [
+      {
+        title: "Discovering Web Development",
+        label: "CURIOSITY → CRAFT",
+        description:
+          "I started learning how websites are designed, developed, and brought to life. I experimented with different technologies, built projects, and gradually improved my skills through hands-on experience.",
+      },
+      {
+        title: "Working With Agencies",
+        label: "LEARNING THROUGH REAL WORK",
+        description:
+          "As my skills developed, I began working with agencies, helping them build websites and bring digital projects to life. Working on real projects taught me how to understand client requirements, solve practical problems, and deliver work that serves a purpose.",
+      },
+      {
+        title: "Becoming Independent",
+        label: "FINDING MY OWN DIRECTION",
+        description:
+          "With experience and confidence, I began taking on projects independently. I wanted more freedom to explore my own ideas, work directly on solutions, and build products around the problems I cared about.",
+      },
+      {
+        title: "Building My Own Startup",
+        label: "THE NEXT CHAPTER",
+        description:
+          "Today, I'm working toward building my own independent startup, combining my interest in web development and AI to create useful digital products. What started as curiosity has grown into a journey of learning, building, and creating something of my own.",
+      },
+    ],
+  },
+  tools: {
+    eyebrow: "HUMAN DIRECTION. INTELLIGENT TOOLS.",
+    title: "The tools are powerful.\nThe decisions are human.",
+    intro:
+      "AI can accelerate an idea. Clear prompts, technical understanding, testing and thoughtful refinement turn it into useful work.",
+    note: "Tools in the creative and development toolkit; selected to suit each project. Product names belong to their respective owners. No partnership or certification is implied.",
+    items: [
+      {
+        name: "Claude",
+        mark: "✳︎",
+        purpose: "Reasoning & code review",
+        color: "#d8a486",
+      },
+      {
+        name: "ChatGPT",
+        mark: "GPT",
+        purpose: "Ideas, prompts & problem-solving",
+        color: "#8cc9b1",
+      },
+      {
+        name: "Gemini",
+        mark: "✦",
+        purpose: "Research & exploration",
+        color: "#b5b3ff",
+      },
+      {
+        name: "GitHub Copilot",
+        mark: "GH",
+        purpose: "Development assistance",
+        color: "#c2c9d1",
+      },
+      {
+        name: "Botpress",
+        mark: "BP",
+        purpose: "Custom chatbot experiences",
+        color: "#aaa1ff",
+      },
+      {
+        name: "OpenAI API",
+        mark: "API",
+        purpose: "AI inside the product",
+        color: "#e4cc88",
+      },
+    ],
+  },
+  bunch: {
+    eyebrow: "A CLOSER LOOK AT THE CRAFT",
+    title: "My bunch of work.",
+    intro:
+      "A collection of interfaces, details and different design directions. Same care. A different world every time.",
+    note: "Actual screenshots of original concept websites. Fictional brands, generated hero imagery and local demo interactions; not commissioned client work.",
+    explore: "Explore concept",
+    view: "View all selected work",
+    views: [
+      "First impression",
+      "Made for the details",
+      "A different perspective",
+      "In your pocket",
+    ],
+  },
+  love: {
+    eyebrow: "WALL OF LOVE",
+    title: "Good work starts\nwith a good conversation.",
+    intro: "A space for the people behind the projects.",
+    previewLabel: "REVIEW LAYOUT PREVIEW",
+    notice:
+      "Genuine testimonials and approved portraits have not been supplied yet. These labeled entries preview the animation and are not client endorsements.",
+    previous: "Previous review",
+    next: "Next review",
+    play: "Play review rotation",
+    pause: "Pause review rotation",
+    personPlaceholder: "Approved client portrait pending",
+    quotePlaceholder:
+      "[PLACEHOLDER] A genuine client review will appear here, shared with their permission.",
+    rolePlaceholder: "[PLACEHOLDER] Client name & role",
+  },
+  ending: {
+    eyebrow: "YOUR IDEA DESERVES A THOUGHTFUL HOME",
+    title: "Let's make\nsomething matter.",
+    description:
+      "A website with character. AI with a purpose. An experience worth coming back to.",
+    action: "Tell me what you have in mind",
+    signature: "Made with curiosity. Refined with care.",
+    navigation: "Explore",
+    navLinks: [
+      { label: "Services", href: "#services" },
+      { label: "Work", href: "#work" },
+      { label: "About Me", href: "#experience" },
+      { label: "Workflow", href: "#workflow" },
+      { label: "Contact", href: "#contact" },
+    ],
+    connect: "Connect",
+    legal: "The details",
+    copyright: "All rights reserved.",
+    credit: "Designed & developed by Abdul Hafeez · Elvora",
+    legalLinks: [
+      { label: "Privacy Policy", href: "/privacy" },
+      { label: "Cookie Policy", href: "/cookies" },
+      { label: "Terms of Service", href: "/terms" },
+    ],
+  },
+  socials: [
+    {
+      name: "GitHub",
+      href: "https://github.com/AbdulHafeezAIEngineer",
+      icon: "github",
+    },
+    {
+      name: "Instagram",
+      href: "https://www.instagram.com/elvoraaistudio",
+      icon: "instagram",
+    },
+  ],
+} as const;
+
+export type Testimonial = {
+  id: string;
+  quote: string;
+  name: string;
+  role: string;
+  portrait: string | null;
+  placeholder: boolean;
+};
+// Publish only genuine, owner-approved reviews and portraits, with permission.
+export const testimonials: Testimonial[] = ["01", "02", "03"].map((id) => ({
+  id,
+  quote: studio.love.quotePlaceholder,
+  name: studio.love.rolePlaceholder,
+  role: `Review preview ${id}`,
+  portrait: null,
+  placeholder: true,
+}));
 ``````
 

@@ -21,6 +21,7 @@ export const site = {
   description:
     "Elvora is Abdul Hafeez's portfolio for thoughtful websites, AI chatbot concepts, and voice experiences. Explore the work and start a conversation.",
   nav: [
+    { label: "Services", href: "#services" },
     { label: "Work", href: "#work" },
     { label: "AI Bots", href: "#ai-bots" },
     { label: "About Me", href: "#experience" },

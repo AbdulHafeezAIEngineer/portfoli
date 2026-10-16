@@ -16,3 +16,7 @@ The trusted Botpress adapter runs in a dedicated same-origin frame with scripts,
 If the live widget does not appear, confirm the latest hosting deploy succeeded, publish the bot in Botpress, and check the provider's allowed website/domain settings if enabled. Permit the actual portfolio domain, including `portfolio3821.netlify.app` if that is the current site. Do not add API keys to these public script URLs.
 
 Local validation uses explicit Botpress SDK fixtures to check script order, initialization/opening, storage, close cleanup, mobile layout, errors and retry. The cloud network returned HTTP 403 for the real Botpress assets, so actual provider loading and AI replies still need verification in the owner's browser after deployment.
+
+## Privacy choice before embedding
+
+The public card still opens its in-page panel with one click. `BotEmbed` now waits for the visitor to allow third-party chat through the cookie banner, preferences, or the explicit in-panel permission button. Before permission no provider frame is created. Withdrawing permission removes an open frame and prevents future loading. Visitors who already accepted external chat reach the connected chat directly. Provider-side data already sent is not erased by this control. See `PRIVACY_SETUP.md`.

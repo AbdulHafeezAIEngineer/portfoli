@@ -1,4 +1,6 @@
 "use client";
+
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Turnstile } from "./turnstile";
 import { ArrowUpRight, CheckCircle2, LoaderCircle } from "lucide-react";
@@ -199,7 +201,9 @@ export function ContactForm() {
         />
       </div>
       <Turnstile onToken={setToken} resetKey={resetKey} />
-      <p className="contact-privacy">{copy.privacy}</p>
+      <p className="contact-privacy">
+        {copy.privacy} <Link href="/privacy">{copy.privacyLink}</Link>
+      </p>
       <button className="button button-gold" type="submit" disabled={sending}>
         {sending ? (
           <>

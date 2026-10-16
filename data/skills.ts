@@ -1,10 +1,16 @@
 export type Skill = { id: string; name: string; category: string };
 export const skills: Skill[] = [
-  {
-    id: "ai-tools",
-    name: "[PLACEHOLDER] Verified AI tool names",
-    category: "AI tools",
-  },
+  { id: "claude", name: "Claude", category: "AI tools" },
+  { id: "chatgpt", name: "ChatGPT", category: "AI tools" },
+  { id: "gemini", name: "Gemini", category: "AI tools" },
+  { id: "copilot", name: "GitHub Copilot", category: "AI tools" },
+  { id: "botpress", name: "Botpress", category: "AI tools" },
+  { id: "openai", name: "OpenAI API", category: "AI tools" },
+  { id: "python", name: "Python basics", category: "Development tools" },
+  { id: "github", name: "GitHub", category: "Development tools" },
+  { id: "git", name: "Git", category: "Development tools" },
+  { id: "html", name: "HTML", category: "Web interfaces" },
+  { id: "css", name: "CSS", category: "Web interfaces" },
   { id: "prompts", name: "Structured prompts", category: "Prompt engineering" },
   {
     id: "context",
@@ -37,12 +43,13 @@ export const skillContent = {
   title: "A toolkit with purpose.",
   description:
     "The technologies and topics behind web, chatbot, and voice experiences.",
-  note: "Toolkit topics are shown without proficiency scores or experience-duration claims. [PLACEHOLDER] Add verified hands-on examples and your actual AI tool names.",
+  note: "A toolkit for building, experimenting and refining. No proficiency percentages, project totals or outcome guarantees.",
   categories: [
     "AI tools",
     "Prompt engineering",
     "Web interfaces",
     "APIs & data",
     "Voice AI",
+    "Development tools",
   ],
 } as const;

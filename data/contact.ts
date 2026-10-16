@@ -22,6 +22,7 @@ export const contactContent = {
   characters: "characters",
   privacy:
     "Your name, email, and message are kept in a private inbox to respond to your enquiry. Please avoid confidential information.",
+  privacyLink: "Privacy Policy",
   success:
     "Your message was accepted by the mail server for delivery. Thank you for reaching out.",
   invalid: "Please check the highlighted fields.",

@@ -1,51 +1,11 @@
 export const experience = {
   eyebrow: "03 / THE PERSON BEHIND ELVORA",
   title: "About Me",
-  lead: "2+ years of experience. Thoughtful use of AI. An understanding of the full stack.",
+  lead: "Independent developer. Thoughtful AI. A human eye for the details.",
   paragraphs: [
-    "I'm Abdul Hafeez, the developer behind Elvora. With more than two years of experience, I work on websites and AI chatbot experiences that bring business ideas into a practical, usable form. I've invested a great deal of time in learning how to work with AI tools: understanding their strengths, recognizing their limits, and improving the results through clear direction and careful review.",
-    "It's easy to think that anyone can ask AI to build a website and receive a professional product. Getting a useful first draft is only the beginning. A strong result needs a well-structured prompt, the right context, sensible design decisions, and repeated testing. My contribution is in shaping the requirements, checking the generated work, and refining the details until the experience feels considered and works as intended.",
-    "I also believe in understanding what runs beneath the interface. Frontend code shapes how people interact with a website; backend logic handles requests and business rules; a database stores and organizes information; and deployment, security, and maintenance keep the product available and protected. AI can assist with each layer, but making them work together still takes technical understanding, judgment, and responsibility.",
-  ],
-  factsLabel: "HOW I WORK",
-  factsNote:
-    "Time spent learning the tools matters. The real value comes from the decisions, checks, and refinements made along the way.",
-  facts: [
-    {
-      label: "Experience",
-      value: "More than two years of experience, with time dedicated to learning and working with AI tools.",
-    },
-    {
-      label: "Prompting with purpose",
-      value: "Clear goals, relevant context, and specific constraints help turn a broad idea into useful output.",
-    },
-    {
-      label: "Engineering beyond the prompt",
-      value:
-        "Review the frontend, backend, data flow, and deployment together, then test and refine the complete experience.",
-    },
-  ],
-  process: [
-    {
-      title: "Structure the prompt",
-      description:
-        "Define the goal, context, constraints, and expected result before generating.",
-    },
-    {
-      title: "Validate the output",
-      description:
-        "Check assumptions, facts, requirements, and the behavior behind the interface.",
-    },
-    {
-      title: "Test the behavior",
-      description:
-        "Exercise real user flows, edge cases, accessibility, and failure states.",
-    },
-    {
-      title: "Refine with intent",
-      description:
-        "Resolve what testing reveals and improve clarity, reliability, and usability.",
-    },
+    "I'm Abdul Hafeez, the developer behind Elvora. My curiosity about Python and AI grew into a passion for web development. Through hands-on projects, agency work and independent development, I've learned to turn ideas into practical digital experiences. Today, I'm bringing that curiosity into a startup of my own.",
+    "I believe AI is a powerful tool, but access alone doesn't create professional work. The result depends on clear prompts, the right context, design judgment and patient testing. I've invested time in understanding how to guide these tools, check what they produce and refine the details until the work feels considered.",
+    "That means understanding the full stack: the frontend people use, the backend that handles requests, the database that keeps information organized, and the deployment and security that keep it running. My role is to connect those pieces with intention—not simply accept the first AI-generated draft.",
   ],
   fundamentals: {
     eyebrow: "THE ENGINEERING BEHIND THE INTERFACE",

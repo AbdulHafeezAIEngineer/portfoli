@@ -2,6 +2,7 @@ import { ArrowUpRight, Mail } from "lucide-react";
 import { contactContent as copy } from "@/data/contact";
 import { ContactForm } from "./contact-form";
 import { Reveal } from "./reveal";
+import { SocialLinks } from "./social-links";
 
 export function Contact({ email }: { email: string }) {
   return (
@@ -26,6 +27,7 @@ export function Contact({ email }: { email: string }) {
               <ArrowUpRight size={18} aria-hidden="true" />
             </a>
             <small>{copy.emailCta}</small>
+            <SocialLinks />
           </div>
         </Reveal>
         <Reveal delay={0.08}>

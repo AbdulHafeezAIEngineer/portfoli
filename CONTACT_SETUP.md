@@ -1,6 +1,6 @@
 # Elvora contact setup
 
-Public contact: **abdulhafeez@elvoraai.online**. There are no phone, WhatsApp, or social-profile links. Update public identity in `data/site.ts`, form copy and limits in `data/contact.ts`. The destination is fixed on the server; visitors only set the reply-to address. The public domain inbox is separate from the Gmail SMTP sender. Set `GMAIL_SMTP_USER` to the actual authenticated Gmail account (defaults to the existing `buildwithelvora@gmail.com`) and use its matching `GMAIL_APP_PASSWORD`. Changing the public email does not configure Hostinger SMTP. Verify the new inbox can receive mail. In database content mode, also update the email in admin site settings; existing records are preserved.
+Public contact: **abdulhafeez@elvoraai.online**. There are no phone or WhatsApp links. Owner-supplied GitHub and Instagram profiles are included. Update public identity in `data/site.ts`, form copy and limits in `data/contact.ts`. The destination is fixed on the server; visitors only set the reply-to address. The public domain inbox is separate from the Gmail SMTP sender. Set `GMAIL_SMTP_USER` to the actual authenticated Gmail account (defaults to the existing `buildwithelvora@gmail.com`) and use its matching `GMAIL_APP_PASSWORD`. Changing the public email does not configure Hostinger SMTP. Verify the new inbox can receive mail. In database content mode, also update the email in admin site settings; existing records are preserved.
 
 ## Gmail delivery
 

@@ -1,7 +1,7 @@
 # Elvora — Abdul Hafeez's portfolio
 
 **Launch status:** the requested Next.js 14 release still has reported critical advisories. This is a review build; a patched major-version exception is needed before production. See `SECURITY_STATUS.md`.
-Next.js 14 App Router, TypeScript, Tailwind CSS and Framer Motion. All application backend logic runs in Next.js route handlers. Selected Work contains four bespoke fictional websites: Solenne (hotel), Vanta Motors (automotive), Aster Care (private clinic) and Kovo Studio (architecture), each with a working demo and four actual browser-captured gallery images. CSS 3D laptop/phone cards present their desktop and mobile views. The featured Forte O Level Study Assistant card displays a chat preview and opens its connected Botpress chat with one click anywhere on the card. The portfolio retains three API chat demos, voice controls, About Me, the supplied Coursiv certificate, Gmail-only contact and the private PostgreSQL/Prisma/Auth.js admin. Older demos and the Elvora promotional asset are archived and are not selected work.
+Next.js 14 App Router, TypeScript, Tailwind CSS and Framer Motion. All application backend logic runs in Next.js route handlers. Selected Work contains four bespoke fictional websites: Solenne (hotel), Vanta Motors (automotive), Aster Care (private clinic) and Kovo Studio (architecture), each with a working demo and four actual browser-captured gallery images. CSS 3D laptop/phone cards present their desktop and mobile views. The featured Forte O Level Study Assistant card displays a chat preview and opens its in-page Botpress panel with one click anywhere on the card. External chat permission is required before the provider embed loads. The portfolio retains three API chat demos, voice controls, About Me, the supplied Coursiv certificate, domain-email contact and the private PostgreSQL/Prisma/Auth.js admin. Older demos and the Elvora promotional asset are archived and are not selected work.
 
 ## Run
 
@@ -45,12 +45,12 @@ All editable portfolio content starts in `data/`. `lib/content-loader.ts` is the
 - `data/site.ts`: Elvora identity, Abdul Hafeez's introduction, Gmail, navigation and shared UI text.
 - `data/projects.ts`, `concepts.ts`, `concept-images.ts`: the four selected concepts, page content, 16 screenshot paths, generated-image prompts and design details. `data/demos.ts` retains archived demos.
 - `data/bots.ts`: bot cards, disclosures, one `realBotConfig` object for iframe/script/API, and an optional `additionalBots` list for adding data-configured connections. The real slot connects the supplied Forte O Level Study Assistant Botpress scripts; see `BOTPRESS_SETUP.md`. `data/prompts/` contains the three server-only demo prompts.
-- `data/experience.ts`, `skills.ts`: About Me, the owner's supplied 2+ years of experience, AI workflow explanations and remaining tool-name placeholders; no invented client counts or testimonials.
+- `data/experience.ts`, `skills.ts`: About Me summary, AI workflow explanations and an expanded AI/development toolkit; no invented client counts or testimonials.
 - `data/certificates.ts`: supplied Master of ChatGPT certificate details and image, click-to-enlarge/zoom viewer.
 - `data/contact.ts`, `admin.ts`: validated form content and admin labels/field definitions.
 - `public/portrait-placeholder.svg`: replace with the owner's actual portrait and update its alt/placeholder wording in `data/site.ts`.
 
-The only public contact is **abdulhafeez@elvoraai.online**. No WhatsApp, phone or social profiles are displayed. The supplied Coursiv Master of ChatGPT certificate is displayed with its 31 October 2024 issue date and 6-hour course duration. About Me includes the owner's supplied 2+ years of experience and time invested in AI tools. Specific tool names and the portrait still need the owner's input. See `PART_3.md` for personalization.
+The only public contact is **abdulhafeez@elvoraai.online**. No WhatsApp or phone number is displayed. Owner-supplied GitHub and Instagram links are included. The supplied Coursiv Master of ChatGPT certificate is displayed with its 31 October 2024 issue date and 6-hour course duration. About Me summarizes the owner's supplied journey and thoughtful use of AI without metric cards. AI tool names are now included; the personal portrait and genuine testimonials are still pending. See `PART_3.md` for personalization.
 
 ## Backend setup
 
@@ -65,3 +65,9 @@ No production password, API key, database connection or provider token is includ
 ![Elvora project showcase](docs/preview.png)
 
 The complete file-by-file source snapshot, starting with the folder structure and Prisma schema, is available in [`delivery/README.md`](delivery/README.md). `VERIFICATION.md` records tested flows and remaining production requirements.
+
+## Studio design and privacy update
+
+Services, a separate My bunch of work contact sheet, a six-tool AI board, five-step workflow, the owner-supplied journey, one-at-a-time review preview, animated hero emblem and large footer wordmark are configured in `data/studio.ts`. The missing numbered reference images were not attached, and the external Framer reference was blocked in this environment, so these are original Elvora layouts rather than a claimed exact reference match.
+
+`data/privacy.ts` contains policy copy and consent settings. See `PRIVACY_SETUP.md` for actual behavior and owner review. Four consent parsing tests run with `node --import tsx --test tests/consent.test.ts`. Review/portrait placeholders are explicit; publish only genuine approved material.

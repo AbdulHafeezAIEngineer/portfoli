@@ -127,6 +127,10 @@ The trusted Botpress adapter runs in a dedicated same-origin frame with scripts,
 If the live widget does not appear, confirm the latest hosting deploy succeeded, publish the bot in Botpress, and check the provider's allowed website/domain settings if enabled. Permit the actual portfolio domain, including `portfolio3821.netlify.app` if that is the current site. Do not add API keys to these public script URLs.
 
 Local validation uses explicit Botpress SDK fixtures to check script order, initialization/opening, storage, close cleanup, mobile layout, errors and retry. The cloud network returned HTTP 403 for the real Botpress assets, so actual provider loading and AI replies still need verification in the owner's browser after deployment.
+
+## Privacy choice before embedding
+
+The public card still opens its in-page panel with one click. `BotEmbed` now waits for the visitor to allow third-party chat through the cookie banner, preferences, or the explicit in-panel permission button. Before permission no provider frame is created. Withdrawing permission removes an open frame and prevents future loading. Visitors who already accepted external chat reach the connected chat directly. Provider-side data already sent is not erased by this control. See `PRIVACY_SETUP.md`.
 ``````
 
 ## CHATBOT_SETUP.md
@@ -278,7 +282,7 @@ The default file content mode uses the new selection immediately. If an owner ha
 ``````markdown
 # Elvora contact setup
 
-Public contact: **abdulhafeez@elvoraai.online**. There are no phone, WhatsApp, or social-profile links. Update public identity in `data/site.ts`, form copy and limits in `data/contact.ts`. The destination is fixed on the server; visitors only set the reply-to address. The public domain inbox is separate from the Gmail SMTP sender. Set `GMAIL_SMTP_USER` to the actual authenticated Gmail account (defaults to the existing `buildwithelvora@gmail.com`) and use its matching `GMAIL_APP_PASSWORD`. Changing the public email does not configure Hostinger SMTP. Verify the new inbox can receive mail. In database content mode, also update the email in admin site settings; existing records are preserved.
+Public contact: **abdulhafeez@elvoraai.online**. There are no phone or WhatsApp links. Owner-supplied GitHub and Instagram profiles are included. Update public identity in `data/site.ts`, form copy and limits in `data/contact.ts`. The destination is fixed on the server; visitors only set the reply-to address. The public domain inbox is separate from the Gmail SMTP sender. Set `GMAIL_SMTP_USER` to the actual authenticated Gmail account (defaults to the existing `buildwithelvora@gmail.com`) and use its matching `GMAIL_APP_PASSWORD`. Changing the public email does not configure Hostinger SMTP. Verify the new inbox can receive mail. In database content mode, also update the email in admin site settings; existing records are preserved.
 
 ## Gmail delivery
 
@@ -426,6 +430,10 @@ Before launch:
 - [ ] Choose contact/chat retention, keep chat logging off unless needed, and remove test records.
 - [ ] Run `npm run test:chat`, `npm run test:contact`, `npm run lint`, `npm run typecheck`, `npm run build`; check keyboard/mobile flows and Lighthouse on the final host.
 - [ ] Review dependency security updates and provider usage/billing alerts. No particular Lighthouse score or absolute security guarantee is claimed.
+
+## Studio sections and privacy controls
+
+The services, supplied journey, workflow, AI toolkit, owner-supplied GitHub/Instagram links, separate screenshot contact sheet and animated ending use `data/studio.ts`. New policy pages are `/privacy`, `/cookies`, and `/terms`; they and the consent code require no extra credentials. Review those policies against the actual configured providers, retention/deletion practice and applicable legal requirements. Third-party chat is opt-in and consent can be withdrawn in the footer. No analytics or advertising tracking was added. Genuine review copy and approved portraits are still missing; the Wall of Love entries are explicitly labeled layout previews. The numbered reference images were not attached, and the external Framer reference was inaccessible here. See `PRIVACY_SETUP.md`.
 ``````
 
 ## PART_3.md
@@ -433,9 +441,9 @@ Before launch:
 ``````markdown
 # Elvora personalization
 
-Brand: **Elvora**. Owner: **Abdul Hafeez**. Public contact: **abdulhafeez@elvoraai.online** only. No phone, WhatsApp or social-profile links.
+Brand: **Elvora**. Owner: **Abdul Hafeez**. Public contact: **abdulhafeez@elvoraai.online** only. No phone or WhatsApp links. Owner-supplied GitHub and Instagram profiles are included.
 
-The About Me section now uses the owner's supplied **more than two years of experience** and time invested in AI tools. It explains structured prompts, review, testing, refinement and the frontend/backend/database/deployment fundamentals behind a working site. Specific AI-tool names remain `[PLACEHOLDER]` in `data/skills.ts`; no client totals, testimonials or named tools are invented.
+The About Me section now summarizes the owner's supplied Python/AI exploration, agency work, independent development and startup aspirations. It explains structured prompts, review, testing, refinement and the frontend/backend/database/deployment fundamentals. The latest design avoids experience/project/success metric cards. AI tools are included as a toolkit without proficiency percentages. Genuine testimonials and approved client portraits are pending and remain explicitly labeled previews.
 
 The supplied E-and-amber-dot logo is represented as a scalable SVG in `public/elvora-logo.svg` and the favicon in `app/icon.svg`. The navbar and footer pair it with the **Elvora** wordmark. The portrait caption also uses the brand instead of AH.
 
@@ -445,9 +453,35 @@ The supplied Coursiv certificate is now showcased: **Master of ChatGPT**, issued
 
 After database seeding, edit published content through `/admin`. File changes are the seed source; they do not overwrite existing database records. Choose `CONTENT_SOURCE=files` when using data-only edits.
 
-The About Me whitespace now contains a framed portrait area wired to the same `site.hero.portrait` and accessible description as the hero. The owner has not uploaded a personal photo, so the abstract image is explicitly labeled **Portrait placeholder**. Once supplied, put the real image in `public/`, update `portrait` and `portraitAlt` in `data/site.ts`, and clear `portraitStatus`; both portrait locations update together.
+The About Me whitespace now contains a framed portrait area wired to the same `site.hero.portrait` and accessible description in `data/site.ts`. The hero now displays the animated Elvora emblem. The owner has not uploaded a personal photo, so the abstract image is explicitly labeled **Portrait placeholder**. Once supplied, put the real image in `public/`, update `portrait` and `portraitAlt` in `data/site.ts`, and clear `portraitStatus`; the About Me portrait updates.
 
 `app/premium.css` adds gold lighting, violet atmosphere, reflective buttons, hover depth, portrait motion, card glows and a scroll progress line. It preserves keyboard focus, light theme, mobile layouts and reduced-motion preferences. The current four concept websites and their actual screenshots are documented in `SCREENSHOTS.md`; the earlier Elvora promotional card has been removed from Selected Work.
+``````
+
+## PRIVACY_SETUP.md
+
+``````markdown
+# Privacy controls and studio content
+
+The cookie banner presents **Accept All**, **Reject All**, and **Manage Preferences** with equal visual weight. Optional third-party chat defaults off. Essential storage is explained separately, and the only optional toggle corresponds to a real loaded feature. No analytics, advertising pixels or embedded social feeds have been added.
+
+`ConsentProvider` wraps the app. It stores a versioned decision and timestamp under `elvora-consent-v1` in local storage for 180 days. Invalid, future-dated, expired or superseded choices require another decision. Storage failures retain an in-page choice and give an honest status message. Storage events synchronize other tabs, and returning to the tab checks saved/expired consent. The preferences dialog uses native dialog semantics, keyboard focus containment, Escape and focus restoration.
+
+`BotEmbed` creates no provider iframe until third-party chat is permitted. The existing Forte card still opens its in-page panel with one click; if permission is missing, the panel gives a just-in-time explanation and explicit permission button. Accepting the banner ahead of time preserves the direct chat experience. Revocation unmounts the active iframe and stops future loading. It cannot delete provider-side data or third-party stored values, so the notice does not claim otherwise. The server-side AI API demos remain usable without external-embed permission; their submitted text still goes to the configured AI provider when used.
+
+Theme storage remembers an explicit theme choice. Sign-in and configured anti-abuse features are necessary security functions, explained in the policy. Contact form security may use Cloudflare Turnstile; it is not an advertising feature. No payment, analytics or social tracking SDK is installed.
+
+## Policies and owner responsibilities
+
+`/privacy`, `/cookies`, and `/terms` have readable responsive pages, independent titles/canonical URLs, footer navigation, and Cookie Settings. The policy copy describes the current architecture rather than promising integrations that have not been verified. The owner must review it against actual hosting/email/AI/anti-abuse providers, retention/deletion practice, business identity, served regions, and contractual/legal obligations before treating it as legal advice or a compliance guarantee. Update the policy and increment `consentContent.version` before introducing a new optional purpose. No universal legal-compliance certification is claimed.
+
+## Genuine reviews and personal data
+
+The Wall of Love currently contains three **explicit review layout previews**, not client testimonials. No real face or invented endorsement is used. Replace entries in `data/studio.ts` only after obtaining genuine review copy, the correct name/role, and permission to publish the portrait and review. Put approved portraits in `public/testimonials/`, use the local path in `portrait`, and set `placeholder: false`. The template renders one slide at a time, pauses on hover/focus or a hidden tab, supports manual controls, and disables autoplay under reduced-motion preferences.
+
+The owner supplied the journey copy, four services, GitHub and Instagram URLs and requested the AI-tool category. No client/project/success totals or new experience-duration claims are added. The missing personal photo remains honestly labeled in About Me. The hero uses the existing Elvora logo as a CSS sculpture. Tool tiles use custom typographic marks and product names without endorsement claims.
+
+All new section copy lives in `data/studio.ts`, `data/experience.ts`, `data/skills.ts`, and `data/privacy.ts`; no database migration is required for these sections. In database content mode, existing skills and site settings are preserved; update them through admin to match the file-based AI toolkit and email. Never seed destructive replacements over existing content.
 ``````
 
 ## README.md
@@ -456,7 +490,7 @@ The About Me whitespace now contains a framed portrait area wired to the same `s
 # Elvora — Abdul Hafeez's portfolio
 
 **Launch status:** the requested Next.js 14 release still has reported critical advisories. This is a review build; a patched major-version exception is needed before production. See `SECURITY_STATUS.md`.
-Next.js 14 App Router, TypeScript, Tailwind CSS and Framer Motion. All application backend logic runs in Next.js route handlers. Selected Work contains four bespoke fictional websites: Solenne (hotel), Vanta Motors (automotive), Aster Care (private clinic) and Kovo Studio (architecture), each with a working demo and four actual browser-captured gallery images. CSS 3D laptop/phone cards present their desktop and mobile views. The featured Forte O Level Study Assistant card displays a chat preview and opens its connected Botpress chat with one click anywhere on the card. The portfolio retains three API chat demos, voice controls, About Me, the supplied Coursiv certificate, Gmail-only contact and the private PostgreSQL/Prisma/Auth.js admin. Older demos and the Elvora promotional asset are archived and are not selected work.
+Next.js 14 App Router, TypeScript, Tailwind CSS and Framer Motion. All application backend logic runs in Next.js route handlers. Selected Work contains four bespoke fictional websites: Solenne (hotel), Vanta Motors (automotive), Aster Care (private clinic) and Kovo Studio (architecture), each with a working demo and four actual browser-captured gallery images. CSS 3D laptop/phone cards present their desktop and mobile views. The featured Forte O Level Study Assistant card displays a chat preview and opens its in-page Botpress panel with one click anywhere on the card. External chat permission is required before the provider embed loads. The portfolio retains three API chat demos, voice controls, About Me, the supplied Coursiv certificate, domain-email contact and the private PostgreSQL/Prisma/Auth.js admin. Older demos and the Elvora promotional asset are archived and are not selected work.
 
 ## Run
 
@@ -500,12 +534,12 @@ All editable portfolio content starts in `data/`. `lib/content-loader.ts` is the
 - `data/site.ts`: Elvora identity, Abdul Hafeez's introduction, Gmail, navigation and shared UI text.
 - `data/projects.ts`, `concepts.ts`, `concept-images.ts`: the four selected concepts, page content, 16 screenshot paths, generated-image prompts and design details. `data/demos.ts` retains archived demos.
 - `data/bots.ts`: bot cards, disclosures, one `realBotConfig` object for iframe/script/API, and an optional `additionalBots` list for adding data-configured connections. The real slot connects the supplied Forte O Level Study Assistant Botpress scripts; see `BOTPRESS_SETUP.md`. `data/prompts/` contains the three server-only demo prompts.
-- `data/experience.ts`, `skills.ts`: About Me, the owner's supplied 2+ years of experience, AI workflow explanations and remaining tool-name placeholders; no invented client counts or testimonials.
+- `data/experience.ts`, `skills.ts`: About Me summary, AI workflow explanations and an expanded AI/development toolkit; no invented client counts or testimonials.
 - `data/certificates.ts`: supplied Master of ChatGPT certificate details and image, click-to-enlarge/zoom viewer.
 - `data/contact.ts`, `admin.ts`: validated form content and admin labels/field definitions.
 - `public/portrait-placeholder.svg`: replace with the owner's actual portrait and update its alt/placeholder wording in `data/site.ts`.
 
-The only public contact is **abdulhafeez@elvoraai.online**. No WhatsApp, phone or social profiles are displayed. The supplied Coursiv Master of ChatGPT certificate is displayed with its 31 October 2024 issue date and 6-hour course duration. About Me includes the owner's supplied 2+ years of experience and time invested in AI tools. Specific tool names and the portrait still need the owner's input. See `PART_3.md` for personalization.
+The only public contact is **abdulhafeez@elvoraai.online**. No WhatsApp or phone number is displayed. Owner-supplied GitHub and Instagram links are included. The supplied Coursiv Master of ChatGPT certificate is displayed with its 31 October 2024 issue date and 6-hour course duration. About Me summarizes the owner's supplied journey and thoughtful use of AI without metric cards. AI tool names are now included; the personal portrait and genuine testimonials are still pending. See `PART_3.md` for personalization.
 
 ## Backend setup
 
@@ -520,6 +554,12 @@ No production password, API key, database connection or provider token is includ
 ![Elvora project showcase](docs/preview.png)
 
 The complete file-by-file source snapshot, starting with the folder structure and Prisma schema, is available in [`delivery/README.md`](delivery/README.md). `VERIFICATION.md` records tested flows and remaining production requirements.
+
+## Studio design and privacy update
+
+Services, a separate My bunch of work contact sheet, a six-tool AI board, five-step workflow, the owner-supplied journey, one-at-a-time review preview, animated hero emblem and large footer wordmark are configured in `data/studio.ts`. The missing numbered reference images were not attached, and the external Framer reference was blocked in this environment, so these are original Elvora layouts rather than a claimed exact reference match.
+
+`data/privacy.ts` contains policy copy and consent settings. See `PRIVACY_SETUP.md` for actual behavior and owner review. Four consent parsing tests run with `node --import tsx --test tests/consent.test.ts`. Review/portrait placeholders are explicit; publish only genuine approved material.
 ``````
 
 ## SCREENSHOTS.md
@@ -610,9 +650,20 @@ Audit advisories change over time. Once a patched framework upgrade is authorize
 ## VERIFICATION.md
 
 ``````markdown
-# Verification — 15 October 2026
+# Verification — 17 October 2026
 
 This is a **review build**, not a verified live deployment. `SECURITY_STATUS.md` records the remaining critical Next.js 14 dependency blocker and the pending major-version decision.
+
+## Latest studio design and privacy update
+
+- Built four service cards, a distinct eight-image My bunch of work contact sheet beneath Selected Work, a six-tool AI board, expanded AI/development skills, the supplied five-step workflow, the owner-supplied four-chapter journey, a short About Me summary, social links, a one-at-a-time review carousel, shining CSS hero logo and animated footer wordmark. Added no experience/project/client/success metric cards. The personal portrait remains labeled until supplied.
+- The numbered reference images were not attached. The external Framer reference returned HTTP/CONNECT 403 in this environment; these are original Elvora layouts, not a verified exact reference match. Review entries are explicit layout previews with neutral icons. No genuine testimonial or real client face has been fabricated.
+- Latest `npm run lint`, `npm run typecheck`, `npm run build`, 16 chat tests, and four new consent parsing tests passed. Contact/backend delivery was not modified; no new real email or AI request was sent. Earlier contact/security/database checks below are historical, not rerun for this UI change.
+- Browser checks against the final production build passed: consent defaults off, Reject All persistence after reload, an explicit permission before creating the provider frame, cross-tab revocation and frame teardown, blocked-storage fallback, and a 320px banner/preferences layout. The provider response in these browser checks was an explicit local iframe fixture; this does not establish real Botpress replies.
+- Dark and light homepage axe checks reported zero WCAG A/AA violations. The initial consent banner, preferences dialog, and all three policy pages also passed. Corrected persistent low-contrast opacity in the scroll workflow; body text now retains full contrast while moving. Layout checks passed at 320, 390, 768, 1024 and 1440 pixels with no document overflow.
+- Verified one review at a time, timed rotation, pause and next controls, honest placeholder labels, correct social profile URLs, and no browser page errors. Reduced motion makes the emblem static and disables review autoplay. Policy routes returned HTTP 200 with working settings controls and readable mobile layouts.
+- New screenshot previews: `docs/studio-hero-preview.png`, `studio-services-preview.png`, `studio-work-bunch-preview.png`, `studio-tools-preview.png`, `studio-workflow-preview.png`, `studio-journey-preview.png`, `studio-wall-of-love-preview.png`, `studio-footer-preview.png`, and `studio-mobile-consent-preview.png`. They are captures of the implemented website, not the missing reference images.
+- No new Lighthouse audit, legal-compliance certification or public deployment verification is claimed. Policy copy must be reviewed against actual provider configuration, retention practice and served regions; see `PRIVACY_SETUP.md`. Known Next.js 14 advisories remain recorded in `SECURITY_STATUS.md`.
 
 ## Public email update
 
@@ -664,7 +715,7 @@ The earlier build recorded 91 performance; the earlier premium visual update rec
 ## Still needs real owner configuration/verification
 
 - A patched framework-major decision before external production launch. Current production dependency audit: one critical affected package, Next.js 14; other reported production findings were resolved.
-- Specific AI-tool names and the owner's portrait remain clearly marked placeholders. The owner has now supplied 2+ years of experience and time invested in AI tools for About Me. The supplied Coursiv certificate and its award details are displayed; external issuer verification has not been performed.
+- The personal portrait, approved review text/client portraits, and numbered design-reference images are still missing. AI tools and the supplied journey are now included without metric cards. The supplied Coursiv certificate is displayed; external issuer verification has not been performed.
 - An owner-uploaded photo is needed to complete the About Me portrait area. The previous Elvora featured card has been removed; no screenshot of that external website is needed for the current selected-work grid.
 - Actual public HTTPS origin settings, external database/Redis/storage credentials, OpenAI key for the three API demos, Gmail App Password and Cloudflare Turnstile keys in private settings. The real Botpress connection uses the owner's supplied public scripts; verify its publishing state, domain permissions and live replies on the deployed site.
 - Live Gmail inbox delivery, real OpenAI/provider replies, actual Blob upload, real Redis REST service and real Turnstile challenge verification. Mock-based checks do not establish these integrations.

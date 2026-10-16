@@ -96,3 +96,7 @@ Before launch:
 - [ ] Choose contact/chat retention, keep chat logging off unless needed, and remove test records.
 - [ ] Run `npm run test:chat`, `npm run test:contact`, `npm run lint`, `npm run typecheck`, `npm run build`; check keyboard/mobile flows and Lighthouse on the final host.
 - [ ] Review dependency security updates and provider usage/billing alerts. No particular Lighthouse score or absolute security guarantee is claimed.
+
+## Studio sections and privacy controls
+
+The services, supplied journey, workflow, AI toolkit, owner-supplied GitHub/Instagram links, separate screenshot contact sheet and animated ending use `data/studio.ts`. New policy pages are `/privacy`, `/cookies`, and `/terms`; they and the consent code require no extra credentials. Review those policies against the actual configured providers, retention/deletion practice and applicable legal requirements. Third-party chat is opt-in and consent can be withdrawn in the footer. No analytics or advertising tracking was added. Genuine review copy and approved portraits are still missing; the Wall of Love entries are explicitly labeled layout previews. The numbered reference images were not attached, and the external Framer reference was inaccessible here. See `PRIVACY_SETUP.md`.
