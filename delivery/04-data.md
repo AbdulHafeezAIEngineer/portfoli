@@ -1985,43 +1985,43 @@ export const studio = {
   },
   workflow: {
     eyebrow: "WORKFLOW",
-    title: "How I Build\nAI-Powered Websites",
+    title: "How I Build\nWebsites.",
     intro:
-      "From understanding your business to launching a website with intelligent AI assistance.",
-    label: "A clear process. Room for better ideas.",
+      "From the first conversation to the final detail. A thoughtful process shaped around your business, your audience and your ideas.",
+    label: "Human direction. Considered design. The right tools for the task.",
     steps: [
       {
         title: "Understand Your Needs",
         description:
-          "I learn about your business, target audience, goals, and requirements. I identify what your website needs to achieve and how AI can improve your customers' experience.",
+          "I learn about your business, your audience and the experience you want to create. Together, we define what the website needs to do and what will make it feel distinctly yours.",
         note: "Listen before building",
         icon: "discover",
       },
       {
         title: "Plan & Design",
         description:
-          "I plan the website structure, page layouts, visual style, and user journey. I also define how the AI chatbot will work, what business information it needs, and how visitors will interact with it.",
+          "I map the pages, shape the user journey and explore the visual direction. Layout, typography, interaction and content come together before development begins.",
         note: "Give the idea a direction",
         icon: "design",
       },
       {
-        title: "Develop & Integrate AI",
+        title: "Build & Connect",
         description:
-          "I build your responsive website and integrate a custom AI chatbot trained on your business information. Depending on your requirements, I can add voice interaction, customer FAQs, and lead capture.",
-        note: "Make the pieces work together",
+          "I turn the design into a responsive website and connect the services it needs. For selected tasks, we use our own custom-trained AI assistants grounded in approved project information, with human review. Chatbots, voice and lead capture are added when they serve the project.",
+        note: "Custom AI where it adds value",
         icon: "build",
       },
       {
         title: "Test & Refine",
         description:
-          "I test the website across different screen sizes and check its navigation, forms, chatbot responses, and AI functionality. I refine the design and fix issues to make everything work smoothly.",
+          "I test the website on mobile and desktop, checking navigation, forms, accessibility and performance. Any custom AI features are reviewed too, and the details are refined before launch.",
         note: "Care lives in the details",
         icon: "test",
       },
       {
         title: "Launch & Optimize",
         description:
-          "I deploy your website, connect your domain, and configure the required services. After launch, I can help monitor performance, improve the website, and update the chatbot as your business evolves.",
+          "I deploy the website, connect your domain and configure the services behind it. After launch, I can help improve performance, update content and refine the experience as your business evolves.",
         note: "Launch is a beginning",
         icon: "launch",
       },

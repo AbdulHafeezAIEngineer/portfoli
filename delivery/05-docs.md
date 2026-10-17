@@ -72,6 +72,26 @@ Lighthouse 13.5 mobile: **95 performance, 100 accessibility, 100 best practices,
 5. Collect consent-aware real-user performance measurements before tuning effects for the actual audience.
 ``````
 
+## docs/SHOWCASE_UPDATE.md
+
+``````md
+# Curved work showcase and website workflow
+
+The supplied second image guides the new presentation: a curved, densely arranged wall of previews with a gentle tilt, soft edge fades and staggered vertical movement. This uses the existing original website and UI-study screenshots. It adds no outside artwork, fictitious clients or new project-count claims.
+
+The wall is CSS 3D, with nine columns and 54 visual tiles reusing the original browser views. Decorative repetition is excluded from screen-reader and keyboard navigation. A clearly labeled index below provides each of the ten unique project/study links once. The heading and exploration link sit above the wall, following the reference composition. Both dark and warm off-white themes inherit their actual background, text and accent tokens.
+
+Motion pauses outside the viewport and while the wall is hovered. The shared Motion Auto/On/Off preference remains functional on desktop and mobile; reduced motion stops the vertical drift while preserving the curved composition. Image sizes are bounded and loading remains lazy. The component uses the existing shared scroll subscriber, removing its separate Framer useScroll subscription. Home first-load JavaScript measured by the build is 169 kB, versus 171 kB in the previous build.
+
+The workflow heading is now **How I Build Websites.** Its five steps have a new editorial layout: a sticky introduction and numbered rows on desktop, with a single readable column on smaller screens. Build & Connect explains using custom-trained AI assistants for selected project tasks, grounded in approved information and with human review. AI is optional to the website process and no longer part of the heading.
+
+Only two reference images were attached to this request; no fourth image was available. The existing light/dark palette is retained while the presentation changes.
+
+Validation: production build, lint and type checking passed. Local production browser checks at 360,390,768,1024,1440,1920px in both themes verified the 3D wall, ten accessible destinations, motion On/Off, five workflow steps, the requested copy and no horizontal overflow. There were no runtime/hydration errors. Scoped axe WCAG A/AA scans passed for the sampled 1440px dark/light and 390px light sections. Actual screenshots are `showcase-*.png` and `workflow-*.png` in this folder. The previous Lighthouse report is retained as historical evidence; it was not rerun for this visual-only follow-up.
+
+Implementation: `components/work-bunch.tsx`, `app/showcase.css`, `components/studio-sections.tsx`, `data/studio.ts`, and the stylesheet import in `app/layout.tsx`.
+``````
+
 ## docs/about-preview.png
 
 Binary asset: 701410 bytes. SHA-256 `33c5edb3c85019d356f3a28d62f1e9c7e92f16e4bc07ae21adc08572118f030e`. Available in the repository and source ZIP.
@@ -417,6 +437,18 @@ Binary asset: 723689 bytes. SHA-256 `fe6849f1a3dc2c78769060ced64cc02a4bd4b0e2014
 
 Binary asset: 202277 bytes. SHA-256 `d0ce6a82ce67c89d56d9afa19fd5fc489c7480909978944267637f8fec950a4f`. Available in the repository and source ZIP.
 
+## docs/showcase-1440-dark.png
+
+Binary asset: 965434 bytes. SHA-256 `bc5417d4a301c1586f32b6585c880cd2401b86fd51b59b11b61704e68902677f`. Available in the repository and source ZIP.
+
+## docs/showcase-1440-light.png
+
+Binary asset: 974964 bytes. SHA-256 `7cbbcf6940ed2c554e9cbb4994e015d46741d5beb5849f70d294b865754c0c9d`. Available in the repository and source ZIP.
+
+## docs/showcase-390-light.png
+
+Binary asset: 244021 bytes. SHA-256 `128d1705f2a0c40911cc6f0ea49c218ddeea130ce1571dd04473bc9e14cadd25`. Available in the repository and source ZIP.
+
 ## docs/studio-footer-preview.png
 
 Binary asset: 348162 bytes. SHA-256 `c6e28917b071acc4f4dcf9353d0cad5e28cea4b962e17ef7d0adb08b3b517f43`. Available in the repository and source ZIP.
@@ -452,3 +484,15 @@ Binary asset: 845616 bytes. SHA-256 `8aabb777245d17af26d44e968a31fbab7a7be375d42
 ## docs/studio-workflow-preview.png
 
 Binary asset: 454501 bytes. SHA-256 `1735d85969122e959103186f9ec912ce159531221178846f220ec1dc757ecb77`. Available in the repository and source ZIP.
+
+## docs/workflow-1440-dark.png
+
+Binary asset: 203960 bytes. SHA-256 `ef1cc423d4f7dfac3fa7d4c99428dd1136e356c9becc912dd116bb96e06fc385`. Available in the repository and source ZIP.
+
+## docs/workflow-1440-light.png
+
+Binary asset: 208331 bytes. SHA-256 `ea4096008106000ff295b865dcb690610d244e7b8b3f4fda5dba7bb751f02c83`. Available in the repository and source ZIP.
+
+## docs/workflow-390-light.png
+
+Binary asset: 138289 bytes. SHA-256 `17037ca9a4433bafa1033601f1abf2b8b84fd4ffda81eea7e24d7dd734115b08`. Available in the repository and source ZIP.

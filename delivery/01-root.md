@@ -908,6 +908,10 @@ To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQ
 
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
+## Curved work wall and website workflow
+
+The newer visual-only follow-up replaces the flat bunch-of-work grid with a CSS 3D curved wall and an accessible ten-destination index, respecting existing motion preferences and both themes. The workflow is retitled **How I Build Websites.**, adds the requested custom-trained AI task explanation and uses a new editorial process layout. Production build, lint, types and six-width/both-theme browser checks passed; sampled section accessibility scans found zero WCAG A/AA violations. See [the specific change record and screenshots](docs/SHOWCASE_UPDATE.md). The previous Lighthouse measurement below was not rerun for this follow-up and must not be represented as its current measured score.
+
 ## Editorial/motion follow-up and reported Vercel failure
 
 The supplied production log confirms the terminating error is first-owner email/password validation, after successful migrations and an owner-table query. It is not the npm deprecation warnings or SSL compatibility warning. The updated private build script reports the unmet password rules separately from an invalid email. It validates copied connection URLs and emits only fixed, non-secret driver diagnostics. Existing owners/passwords remain untouched. Production still requires the owner to correct the private Production credential and redeploy; this workspace has no callable authenticated Vercel tool.

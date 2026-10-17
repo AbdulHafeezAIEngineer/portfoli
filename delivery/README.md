@@ -59,6 +59,7 @@ app/reference.css
 app/refinement.css
 app/robots.ts
 app/services/[slug]/page.tsx
+app/showcase.css
 app/sitemap.ts
 app/studies/[slug]/page.tsx
 app/studies/studies.css
@@ -125,6 +126,7 @@ data/studies.ts
 data/studio.ts
 data/tool-marks.ts
 docs/EDITORIAL_UPGRADE.md
+docs/SHOWCASE_UPDATE.md
 docs/about-preview.png
 docs/agency-about-desktop.png
 docs/agency-about-mobile.png
@@ -183,6 +185,9 @@ docs/reference-tools-preview.png
 docs/reference-wall-of-love-preview.png
 docs/reference-work-bunch-preview.png
 docs/reference-workflow-preview.png
+docs/showcase-1440-dark.png
+docs/showcase-1440-light.png
+docs/showcase-390-light.png
 docs/studio-footer-preview.png
 docs/studio-hero-preview.png
 docs/studio-journey-preview.png
@@ -192,6 +197,9 @@ docs/studio-tools-preview.png
 docs/studio-wall-of-love-preview.png
 docs/studio-work-bunch-preview.png
 docs/studio-workflow-preview.png
+docs/workflow-1440-dark.png
+docs/workflow-1440-light.png
+docs/workflow-390-light.png
 hooks/use-modal.ts
 hooks/use-voice.ts
 lib/admin/auth.ts

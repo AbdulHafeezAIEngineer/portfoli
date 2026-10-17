@@ -1,0 +1,411 @@
+/* A curved wall of actual project views, with one accessible index underneath. */
+.dome-showcase {
+  padding-block: clamp(70px, 8vw, 125px);
+  overflow: clip;
+}
+.dome-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+}
+.dome-heading h2 {
+  margin: 18px 0 20px;
+  font-size: clamp(36px, 4.6vw, 68px);
+  letter-spacing: -0.06em;
+}
+.dome-intro {
+  max-width: 63ch;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.9;
+}
+.dome-view-all {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 16px;
+  padding-block: 14px;
+  min-height: 44px;
+  font-size: 12px;
+  color: var(--gold);
+  border-bottom: 1px solid var(--line);
+}
+.dome-view-all svg {
+  transition: transform 0.3s var(--ease-editorial);
+}
+.dome-view-all:hover svg {
+  transform: translate(3px, -3px);
+}
+.dome-gallery {
+  --dome-radius: clamp(480px, 80vw, 1150px);
+  --dome-tile: clamp(100px, 16vw, 250px);
+  --wall-drift: 0px;
+  position: relative;
+  height: clamp(440px, 51vw, 800px);
+  margin-top: 30px;
+  overflow: hidden;
+  perspective: 1400px;
+  perspective-origin: 50% 45%;
+  isolation: isolate;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    color-mix(in srgb, var(--gold) 7%, transparent),
+    transparent 68%
+  );
+}
+.dome-cylinder {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: translateZ(calc(-1 * var(--dome-radius))) rotateZ(-4deg);
+}
+.dome-column {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--dome-tile);
+  margin-left: calc(var(--dome-tile) / -2);
+  transform-style: preserve-3d;
+  transform: translateY(-50%) rotateY(var(--column-angle))
+    translateZ(var(--dome-radius));
+}
+.dome-stack {
+  transform: translateY(calc(var(--column-offset) + var(--wall-drift)));
+}
+.dome-strip {
+  display: grid;
+  gap: 12px;
+  animation: dome-drift var(--column-duration) ease-in-out infinite;
+  animation-direction: var(--column-direction);
+  animation-play-state: paused;
+}
+.dome-gallery[data-visible="true"] .dome-strip {
+  animation-play-state: running;
+}
+.dome-gallery:hover .dome-strip {
+  animation-play-state: paused;
+}
+.dome-tile {
+  display: block;
+  position: relative;
+  aspect-ratio: 1.38;
+  overflow: hidden;
+  border-radius: clamp(7px, 1vw, 15px);
+  border: 1px solid color-mix(in srgb, var(--text) 13%, transparent);
+  background: var(--surface);
+  backface-visibility: hidden;
+  transition: transform 0.45s var(--ease-editorial);
+}
+.dome-tile img {
+  object-fit: cover;
+  object-position: top;
+}
+.dome-tile > span {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 19px 12px 9px;
+  color: #fff;
+  font-size: 10px;
+  background: linear-gradient(transparent, #000a);
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 0.25s,
+    transform 0.25s;
+}
+.dome-tile:hover {
+  transform: translateZ(10px) scale(1.025);
+}
+.dome-tile:hover > span {
+  opacity: 1;
+  transform: translateY(0);
+}
+.dome-vignette {
+  position: absolute;
+  inset: -1px;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--bg), transparent 16%, transparent 78%, var(--bg)),
+    linear-gradient(
+      90deg,
+      var(--bg),
+      transparent 9%,
+      transparent 91%,
+      var(--bg)
+    );
+}
+.dome-signature {
+  position: absolute;
+  inset: auto 0 25px;
+  z-index: 3;
+  text-align: center;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  pointer-events: none;
+}
+.dome-bottom {
+  padding-top: 20px;
+}
+.dome-bottom-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+}
+.dome-bottom-heading > span {
+  color: var(--muted);
+  font-size: 11px;
+}
+.dome-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 22px 0;
+}
+.dome-index a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  padding: 10px 14px;
+  min-height: 44px;
+  color: var(--text);
+  font-size: 11px;
+  transition:
+    background-color 0.25s,
+    transform 0.25s;
+}
+.dome-index a > span {
+  color: var(--muted);
+  font-size: 9px;
+}
+.dome-index a > svg {
+  color: var(--gold);
+}
+.dome-index a:hover {
+  background: var(--surface);
+  transform: translateY(-2px);
+}
+.dome-bottom > .studio-note {
+  max-width: 78ch;
+}
+@keyframes dome-drift {
+  from {
+    transform: translate3d(0, 24px, 0);
+  }
+  to {
+    transform: translate3d(0, -28px, 0);
+  }
+}
+.dome-gallery[data-still="true"] .dome-strip {
+  animation: none;
+}
+.dome-gallery[data-still="true"] .dome-stack {
+  transform: translateY(var(--column-offset));
+}
+
+/* A human-led process, presented as an editorial index in the same theme. */
+.website-workflow {
+  display: grid;
+  grid-template-columns: 0.9fr 1.2fr;
+  align-items: start;
+  gap: 0 clamp(40px, 7vw, 110px);
+  padding-block: clamp(75px, 9vw, 140px);
+}
+.website-workflow .reference-heading {
+  position: sticky;
+  top: 130px;
+  text-align: left;
+  margin: 0;
+  max-width: none;
+}
+.website-workflow .reference-heading h2 {
+  font-size: clamp(44px, 4.7vw, 70px);
+  letter-spacing: -0.065em;
+  margin: 20px 0;
+}
+.website-workflow .reference-heading > .motion-reveal > p:not(.eyebrow) {
+  max-width: 37ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.9;
+}
+.website-workflow .workflow-cards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--line);
+  margin: 0;
+}
+.website-workflow .workflow-cards > .motion-reveal {
+  position: relative;
+  top: auto;
+}
+.website-workflow .workflow-cards::before {
+  display: none;
+}
+.website-workflow .workflow-step {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-content: start;
+  gap: 8px 18px;
+  position: relative;
+  min-height: 0;
+  height: auto;
+  padding: 30px 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid var(--line);
+  box-shadow: none;
+  transform: none;
+  transition: none;
+}
+.website-workflow .workflow-step:hover {
+  transform: none;
+  box-shadow: none;
+}
+.website-workflow .workflow-number {
+  grid-column: 1;
+  grid-row: 1 / 4;
+  width: auto;
+  height: auto;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  color: var(--gold);
+  font-family: var(--font-space);
+  font-size: 14px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-top: 5px;
+}
+.website-workflow .workflow-card-icon {
+  position: absolute;
+  right: 0;
+  top: 34px;
+  color: var(--gold);
+  opacity: 0.8;
+}
+.website-workflow .workflow-step h3 {
+  grid-column: 2;
+  margin: 0;
+  padding-right: 28px;
+  font-size: clamp(20px, 2vw, 27px);
+  line-height: 1.25;
+  letter-spacing: -0.04em;
+}
+.website-workflow .workflow-step p {
+  grid-column: 2;
+  margin: 0;
+  padding: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.9;
+}
+.website-workflow .workflow-step small {
+  grid-column: 2;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  position: static;
+  border: none;
+  padding: 6px 0 0;
+  margin: 0;
+  color: var(--gold);
+  font-size: 10px;
+}
+.website-workflow > .motion-reveal {
+  grid-column: 2;
+}
+.website-workflow .workflow-caption {
+  text-align: left;
+  margin: 25px 0 0;
+  font-size: 10px;
+}
+@media (max-width: 850px) {
+  .dome-heading {
+    align-items: flex-start;
+    gap: 25px;
+  }
+  .dome-intro {
+    max-width: 50ch;
+  }
+  .dome-view-all {
+    font-size: 10px;
+  }
+  .website-workflow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 35px;
+  }
+  .website-workflow .reference-heading {
+    position: static;
+  }
+  .website-workflow .reference-heading > .motion-reveal > p:not(.eyebrow) {
+    max-width: 55ch;
+  }
+  .website-workflow > .motion-reveal {
+    grid-column: 1;
+  }
+}
+@media (max-width: 600px) {
+  .dome-heading {
+    display: block;
+  }
+  .dome-heading h2 {
+    font-size: 39px;
+  }
+  .dome-view-all {
+    margin-top: 12px;
+    font-size: 11px;
+  }
+  .dome-gallery {
+    margin-top: 0;
+    perspective: 850px;
+  }
+  .dome-strip {
+    gap: 8px;
+  }
+  .dome-cylinder {
+    transform: translateZ(calc(-1 * var(--dome-radius))) rotateZ(-5deg);
+  }
+  .dome-signature {
+    bottom: 15px;
+    font-size: 6px;
+  }
+  .dome-bottom-heading {
+    display: block;
+  }
+  .dome-bottom-heading > span {
+    display: block;
+    margin-top: 9px;
+  }
+  .dome-index {
+    gap: 7px;
+  }
+  .dome-index a {
+    padding: 9px 11px;
+    font-size: 10px;
+  }
+  .website-workflow .workflow-step {
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 9px 13px;
+    padding-block: 26px;
+  }
+  .website-workflow .workflow-number {
+    font-size: 12px;
+  }
+  .website-workflow .workflow-card-icon {
+    top: 30px;
+  }
+}

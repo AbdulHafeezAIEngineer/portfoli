@@ -72,7 +72,7 @@ export function Workflow() {
   return (
     <section
       id="workflow"
-      className="container studio-section reference-workflow"
+      className="container studio-section reference-workflow website-workflow"
       aria-labelledby="workflow-title"
     >
       <div className="reference-heading">
