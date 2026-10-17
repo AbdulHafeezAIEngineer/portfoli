@@ -757,9 +757,9 @@ export default async function AdminPage({
   transition-delay: var(--reveal-delay, 0s);
 }
 [data-motion-reveals="enabled"] [data-reveal="block"]:not(.is-revealed) {
-  opacity: 0;
-  transform: translateY(26px);
-  filter: blur(3px);
+  opacity: 1;
+  transform: none;
+  filter: none;
 }
 [data-motion-reveals="enabled"] [data-reveal="words"] .motion-word {
   transition: transform 0.65s cubic-bezier(0.18, 0.85, 0.25, 1.08);
@@ -768,7 +768,7 @@ export default async function AdminPage({
 [data-motion-reveals="enabled"]
   [data-reveal="words"]:not(.is-revealed)
   .motion-word {
-  transform: translateY(112%) rotate(3deg);
+  transform: none;
 }
 [data-consent-choice="saved"] .consent-banner {
   display: none;
@@ -1805,12 +1805,23 @@ export async function POST(request: Request) {
   fill: var(--inverse-surface);
 }
 
-/* Local media is mounted only on desktop without a reduced-motion preference. */
+/* Cinematic full-width loops. The shared Motion switch is the only playback UI. */
 .showcase-video {
+  --video-gutter: clamp(16px, 2vw, 40px);
+  width: calc(100vw - var(--video-gutter) - var(--video-gutter));
+  max-width: none;
   margin-block: 36px 44px;
+  margin-inline: calc(50% - 50vw + var(--video-gutter));
 }
 .showcase-video-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3.2 / 1;
+  min-height: 260px;
+  max-height: 680px;
+  overflow: hidden;
   border: 1px solid var(--line);
+  border-radius: clamp(12px, 1.3vw, 24px);
   background: var(--surface);
   isolation: isolate;
 }
@@ -1819,33 +1830,38 @@ export async function POST(request: Request) {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: contain;
-}
-.showcase-video-control {
-  position: absolute;
-  right: 16px;
-  bottom: 16px;
-  z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  min-height: 44px;
-  padding: 10px 14px;
-  border: 1px solid var(--inverse-muted);
-  border-radius: 999px;
-  background: var(--inverse-bg);
-  color: var(--inverse-text);
-  font-size: 11px;
-}
-.showcase-video-control:hover {
-  color: var(--inverse-accent);
+  object-fit: cover;
+  object-position: 50% 55%;
 }
 .showcase-video > figcaption {
-  margin-top: 14px;
+  width: min(1180px, calc(100% - 32px));
+  margin: 14px auto 0;
   color: var(--muted);
   font-size: 12px;
   line-height: 1.7;
+}
+.project-screenshots-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 8px 2px;
+  margin-top: 8px;
+  color: var(--muted);
+  background: transparent;
+  font-size: 11px;
+}
+.project-screenshots-link:hover {
+  color: var(--accent-text);
+}
+[data-velocity-marquee][data-scroll-visible="false"] {
+  animation-play-state: paused !important;
+}
+@media (max-width: 767px) {
+  .showcase-video-frame {
+    aspect-ratio: 16 / 10;
+    min-height: 0;
+  }
 }
 
 /* The reference's simple four-card composition; no carousel or empty invitation. */
@@ -2960,6 +2976,8 @@ import { demos, type DemoSlug } from "@/data/demos";
 import { DemoSite } from "@/components/demo-site";
 import { concepts, type ConceptSlug } from "@/data/concepts";
 import { ConceptSite } from "@/components/concept-site";
+import { DemoWindow } from "@/components/demo-window";
+import "../../demo-window.css";
 import "../demo.css";
 import "../concepts.css";
 export const dynamic = "force-dynamic";
@@ -2988,9 +3006,17 @@ export default async function DemoPage({
   params: Promise<{ slug: string }>;
 }) {
   if (Object.hasOwn(concepts, (await params).slug))
-    return <ConceptSite slug={(await params).slug as ConceptSlug} />;
+    return (
+      <DemoWindow title={concepts[(await params).slug as ConceptSlug].name}>
+        <ConceptSite slug={(await params).slug as ConceptSlug} />
+      </DemoWindow>
+    );
   if (!Object.hasOwn(demos, (await params).slug)) notFound();
-  return <DemoSite slug={(await params).slug as DemoSlug} />;
+  return (
+    <DemoWindow title={demos[(await params).slug as DemoSlug].name}>
+      <DemoSite slug={(await params).slug as DemoSlug} />
+    </DemoWindow>
+  );
 }
 ``````
 
@@ -4391,6 +4417,243 @@ export default async function DemoPage({
 .orbit-main .orbit-project-title {
   color: #dfebe4;
   font-weight: 500;
+}
+``````
+
+## app/demo-window.css
+
+``````css
+/* The reference's desktop/window composition, using the shared Elvora palette. */
+.demo-desktop {
+  height: 100svh;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 clamp(12px, 5vw, 100px) 14px;
+  background: var(--raised);
+  color: var(--text);
+  overflow: hidden;
+}
+.demo-desktop-menu {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.demo-desktop-menu a {
+  color: var(--text);
+  font-weight: 600;
+}
+.demo-desktop-menu > span:last-child {
+  margin-left: auto;
+}
+.demo-window {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: min(1450px, 100%);
+  margin-inline: auto;
+  overflow: hidden;
+  border: 1px solid var(--line-bright);
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: 0 26px 70px
+    color-mix(in srgb, var(--neutral-black) 22%, transparent);
+}
+.demo-window.is-maximized {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  width: 100%;
+  height: 100svh;
+  border-radius: 0;
+}
+.demo-window-toolbar {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-inline: 18px 8px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.demo-window-dots {
+  display: flex;
+  gap: 8px;
+}
+.demo-window-dots i {
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--line-bright);
+  border-radius: 50%;
+  background: var(--raised);
+}
+.demo-window-dots i:first-child {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.demo-window-breadcrumb {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.demo-window-breadcrumb strong {
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+.demo-window-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.demo-window-actions button,
+.demo-window-actions a {
+  min-height: 40px;
+  min-width: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  color: var(--text);
+  background: var(--surface);
+  font-size: 11px;
+}
+.demo-window-actions a {
+  padding-inline: 12px;
+}
+.demo-window-actions button:hover,
+.demo-window-actions a:hover {
+  color: var(--accent-text);
+  border-color: var(--accent);
+}
+.demo-window-content {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  scroll-padding-top: 20px;
+  background: var(--surface);
+}
+.demo-window-content:focus-visible {
+  outline-offset: -3px;
+}
+.demo-desktop-dock {
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 6px;
+  align-self: center;
+  border: 1px solid var(--line-bright);
+  border-radius: 20px;
+  background: var(--glass);
+  padding: 8px 12px 6px;
+  box-shadow: 0 8px 28px
+    color-mix(in srgb, var(--neutral-black) 10%, transparent);
+}
+.demo-desktop-dock a {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  width: 70px;
+  padding: 2px;
+  color: var(--muted);
+  font-size: 10px;
+}
+.demo-desktop-dock a > span {
+  display: grid;
+  place-items: center;
+  height: 38px;
+  width: 38px;
+  border: 1px solid var(--line-bright);
+  border-radius: 11px;
+  color: var(--text);
+  background: var(--surface);
+  font:
+    600 23px/1 var(--font-space),
+    sans-serif;
+}
+.demo-desktop-dock [aria-current="page"] > span {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+@media (hover: hover) and (pointer: fine) {
+  .demo-desktop-dock a:hover > span {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+  }
+}
+.demo-desktop-dock small {
+  font-size: 8px;
+}
+@media (max-width: 700px) {
+  .demo-desktop {
+    gap: 8px;
+    padding: 0 8px 8px;
+  }
+  .demo-desktop-menu {
+    gap: 10px;
+    font-size: 9px;
+    padding-inline: 6px;
+  }
+  .demo-desktop-menu > span:last-child {
+    display: none;
+  }
+  .demo-window {
+    border-radius: 12px;
+  }
+  .demo-window-toolbar {
+    gap: 8px;
+    padding-inline: 10px 6px;
+  }
+  .demo-window-dots {
+    gap: 4px;
+  }
+  .demo-window-dots i {
+    width: 6px;
+    height: 6px;
+  }
+  .demo-window-breadcrumb {
+    font-size: 10px;
+    gap: 6px;
+  }
+  .demo-window-breadcrumb > span {
+    display: none;
+  }
+  .demo-window-actions {
+    gap: 4px;
+  }
+  .demo-window-actions a {
+    padding-inline: 8px;
+    font-size: 9px;
+  }
+  .demo-desktop-dock {
+    gap: 3px;
+    padding: 6px;
+    border-radius: 15px;
+  }
+  .demo-desktop-dock a {
+    width: 60px;
+  }
+}
+html[data-motion="reduced"] .demo-window-content {
+  scroll-behavior: auto;
 }
 ``````
 
@@ -10521,7 +10784,7 @@ html[data-motion="reduced"] .motion-word {
 }
 [data-motion-reveals="enabled"] [data-reveal="block"]:not(.is-revealed) {
   filter: none;
-  transform: translateY(30px);
+  transform: none;
 }
 [data-motion-reveals="enabled"] [data-reveal="words"] .motion-word {
   transition-timing-function: var(--ease-editorial);
@@ -11510,6 +11773,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { studies } from "@/data/studies";
 import { DesignStudy } from "@/components/design-study";
+import { DemoWindow } from "@/components/demo-window";
+import "../../demo-window.css";
 import "../studies.css";
 export const dynamicParams = false;
 
@@ -11537,7 +11802,11 @@ export default async function Page({
   const { slug } = await params;
   const study = studies.find(({ id }) => id === slug);
   if (!study) notFound();
-  return <DesignStudy study={study} />;
+  return (
+    <DemoWindow title={study.name}>
+      <DesignStudy study={study} />
+    </DemoWindow>
+  );
 }
 ``````
 

@@ -1,0 +1,55 @@
+{
+  "method": "Local Chromium; 160 animation-frame scroll steps through the complete page after initial image readiness. Timings are single-run observations, not device FPS guarantees. Baseline mobile used video posters; current mobile uses loops.",
+  "before": [
+    {
+      "width": 1440,
+      "imagesBefore": 4,
+      "totalImages": 73,
+      "scrollResourceRequests": 37,
+      "scrollImageRequests": 33,
+      "scrollScriptRequests": 1,
+      "framesOver50ms": 1,
+      "worstFrameMs": 237,
+      "longTasks": 1,
+      "longTaskMs": 224
+    },
+    {
+      "width": 390,
+      "imagesBefore": 4,
+      "totalImages": 74,
+      "scrollResourceRequests": 37,
+      "scrollImageRequests": 34,
+      "scrollScriptRequests": 1,
+      "framesOver50ms": 0,
+      "worstFrameMs": 21,
+      "longTasks": 0,
+      "longTaskMs": 0
+    }
+  ],
+  "after": [
+    {
+      "width": 1440,
+      "imagesBefore": 67,
+      "totalImages": 67,
+      "scrollResourceRequests": 2,
+      "scrollImageRequests": 0,
+      "scrollScriptRequests": 0,
+      "framesOver50ms": 1,
+      "worstFrameMs": 206,
+      "longTasks": 1,
+      "longTaskMs": 194
+    },
+    {
+      "width": 390,
+      "imagesBefore": 67,
+      "totalImages": 67,
+      "scrollResourceRequests": 2,
+      "scrollImageRequests": 0,
+      "scrollScriptRequests": 0,
+      "framesOver50ms": 1,
+      "worstFrameMs": 67,
+      "longTasks": 1,
+      "longTaskMs": 51
+    }
+  ]
+}

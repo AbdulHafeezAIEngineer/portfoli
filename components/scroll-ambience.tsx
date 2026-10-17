@@ -14,6 +14,17 @@ export function ScrollAmbience() {
     const animations = [
       ...document.querySelectorAll<HTMLElement>("[data-velocity-marquee]"),
     ].flatMap((element) => element.getAnimations());
+    const marquees = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries)
+          (entry.target as HTMLElement).dataset.scrollVisible = String(
+            entry.isIntersecting,
+          );
+      },
+      { rootMargin: "120px" },
+    );
+    for (const element of document.querySelectorAll("[data-velocity-marquee]"))
+      marquees.observe(element);
     const visible = new Set<HTMLElement>();
     const watched = new Set<HTMLElement>();
     const images = new IntersectionObserver(
@@ -42,11 +53,6 @@ export function ScrollAmbience() {
       }
     };
     scan();
-    const mutation = new MutationObserver(scan);
-    mutation.observe(document.getElementById("work") || document.body, {
-      childList: true,
-      subtree: true,
-    });
     let reset: ReturnType<typeof setTimeout> | undefined;
     const unsubscribe = subscribeScroll(({ viewport, velocity }) => {
       const moves: [HTMLElement, number][] = [];
@@ -89,7 +95,11 @@ export function ScrollAmbience() {
     return () => {
       unsubscribe();
       images.disconnect();
-      mutation.disconnect();
+      marquees.disconnect();
+      for (const element of document.querySelectorAll<HTMLElement>(
+        "[data-scroll-visible]",
+      ))
+        delete element.dataset.scrollVisible;
       scenes.disconnect();
       clearTimeout(reset);
       for (const element of watched)

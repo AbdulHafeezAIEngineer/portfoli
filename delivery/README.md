@@ -43,6 +43,7 @@ app/cookies/page.tsx
 app/demo/[slug]/page.tsx
 app/demo/concepts.css
 app/demo/demo.css
+app/demo-window.css
 app/devices.css
 app/editorial.css
 app/error.tsx
@@ -87,6 +88,7 @@ components/consent-provider.tsx
 components/contact-form.tsx
 components/contact.tsx
 components/demo-site.tsx
+components/demo-window.tsx
 components/design-study.tsx
 components/editorial-effects.tsx
 components/experience.tsx
@@ -145,6 +147,7 @@ docs/BRIEF_COMPLETION.md
 docs/EDITORIAL_UPGRADE.md
 docs/PRESENTATION_UPDATE.md
 docs/PURPLE_VIDEO_UPDATE.md
+docs/READY_PLAYBACK_UPDATE.md
 docs/SHOWCASE_UPDATE.md
 docs/VIDEO_MOTION_UPDATE.md
 docs/about-preview.png
@@ -221,6 +224,12 @@ docs/reading-desktop-dark.png
 docs/reading-desktop-light.png
 docs/reading-mobile-dark.png
 docs/reading-mobile-light.png
+docs/ready-accessibility.json
+docs/ready-demo-mobile.png
+docs/ready-demo-window.png
+docs/ready-scroll-results.json
+docs/ready-video-1440.png
+docs/ready-video-390.png
 docs/reference-about-preview.png
 docs/reference-footer-preview.png
 docs/reference-hero-preview.png
@@ -367,9 +376,13 @@ public/tool-marks/python.svg
 public/tool-marks/react.svg
 public/tool-marks/tailwindcss.svg
 public/tool-marks/typescript.svg
+public/videos/ai-bot-mobile.mp4
+public/videos/ai-bot-mobile.webm
 public/videos/ai-bot-poster.webp
 public/videos/ai-bot.mp4
 public/videos/ai-bot.webm
+public/videos/work-showcase-mobile.mp4
+public/videos/work-showcase-mobile.webm
 public/videos/work-showcase-poster.webp
 public/videos/work-showcase.mp4
 public/videos/work-showcase.webm
@@ -392,12 +405,14 @@ tests/auth.integration.mjs
 tests/chat.test.mjs
 tests/consent.test.ts
 tests/contact.test.mjs
+tests/demo-windows.browser.mjs
 tests/editorial-motion.browser.mjs
 tests/finishing.browser.mjs
 tests/helpers/https-proxy.mjs
 tests/login-fields.browser.mjs
 tests/owner-setup.integration.mjs
 tests/review-motion.browser.mjs
+tests/scroll-readiness.browser.mjs
 tests/security.test.mjs
 tests/showcase-videos.browser.mjs
 tests/video-motion.browser.mjs

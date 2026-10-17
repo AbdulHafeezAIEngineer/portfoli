@@ -23,7 +23,7 @@ export function EditorialEffects() {
             autoRaf: true,
             smoothWheel: true,
             syncTouch: false,
-            duration: 1.15,
+            duration: 0.65,
             easing: (value: number) =>
               Math.min(1, 1.001 - Math.pow(2, -10 * value)),
             anchors: true,

@@ -8,152 +8,106 @@ const browser = await chromium.launch({
   args: ["--no-sandbox"],
 });
 try {
-  const page = await browser.newPage({
-    viewport: { width: 1440, height: 1000 },
-  });
-  const errors = [];
-  const requests = [];
-  page.on("pageerror", (e) => errors.push(e.message));
-  page.on("request", (r) => requests.push(r.url()));
-  await page.goto(base);
-  await page.getByRole("button", { name: "Reject All", exact: true }).click();
-  assert.equal(
-    await page.getByLabel("Animation preference").inputValue(),
-    "full",
-  );
-  const work = page.locator('[data-showcase-video="work-showcase"]');
-  await work.locator("video").waitFor();
-  assert.equal(
-    requests.filter((x) => /\.(webm|mp4)(\?|$)/.test(x)).length,
-    0,
-    "preload none does not fetch videos above the fold",
-  );
-  const attributes = await work.locator("video").evaluate((v) => ({
-    muted: v.muted,
-    loop: v.loop,
-    inline: v.playsInline,
-    preload: v.preload,
-    poster: v.getAttribute("poster"),
-    types: [...v.querySelectorAll("source")].map((s) => s.type),
-  }));
-  assert.deepEqual(attributes, {
-    muted: true,
-    loop: true,
-    inline: true,
-    preload: "none",
-    poster: "/videos/work-showcase-poster.webp",
-    types: ["video/webm", "video/mp4"],
-  });
-  await work.locator(".showcase-video-frame").scrollIntoViewIfNeeded();
-  await page.waitForFunction(() => {
-    const v = document.querySelector(
-      '[data-showcase-video="work-showcase"] video',
-    );
-    return v && !v.paused && v.currentTime > 0.1;
-  });
-  await work
-    .getByRole("button", { name: "Pause website showcase video" })
-    .click();
-  assert.equal(await work.locator("video").evaluate((v) => v.paused), true);
-  await work
-    .getByRole("button", { name: "Play website showcase video" })
-    .click();
-  await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
-  await page.waitForFunction(
-    () =>
-      document.querySelector('[data-showcase-video="work-showcase"] video')
-        .paused,
-  );
-  await work.locator(".showcase-video-frame").scrollIntoViewIfNeeded();
-  await page.waitForFunction(
-    () =>
-      !document.querySelector('[data-showcase-video="work-showcase"] video')
-        .paused,
-  );
-  await page.getByRole("tab", { name: /AI chatbots & demos/ }).click();
-  const bot = page.locator('[data-showcase-video="ai-bot"]');
-  await bot.locator(".showcase-video-frame").scrollIntoViewIfNeeded();
-  await page.waitForFunction(() => {
-    const v = document.querySelector('[data-showcase-video="ai-bot"] video');
-    return v && !v.paused && v.duration > 0;
-  });
-  assert.equal(await bot.locator("video").evaluate((v) => v.loop), false);
-  await bot.getByRole("button", { name: "Pause AI bot video" }).click();
-  await bot.getByRole("button", { name: "Play AI bot video" }).click();
-  await page.waitForFunction(
-    () =>
-      !document.querySelector('[data-showcase-video="ai-bot"] video').paused,
-  );
-  await bot
-    .locator("video")
-    .evaluate((v) => (v.currentTime = v.duration - 0.15));
-  await bot.getByRole("button", { name: "Replay AI bot video" }).waitFor();
-  await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
-  await bot.scrollIntoViewIfNeeded();
-  assert.equal(
-    await bot.locator("video").evaluate((v) => v.paused),
-    true,
-    "ended AI video never auto-restarts",
-  );
-  await bot.getByRole("button", { name: "Replay AI bot video" }).click();
-  await page.waitForFunction(() => {
-    const v = document.querySelector('[data-showcase-video="ai-bot"] video');
-    return !v.paused && v.currentTime < 3;
-  });
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await bot.locator("img").waitFor();
-  assert.equal(await page.locator(".showcase-video video").count(), 0);
-  assert.equal(
-    await page.getByLabel("Animation preference").inputValue(),
-    "full",
-    "videos respect OS independently of general On",
-  );
-  await page.emulateMedia({ reducedMotion: "no-preference" });
-  await bot.locator("video").waitFor();
-  await page.getByLabel("Animation preference").selectOption("reduced");
-  await bot.locator("img").waitFor();
-  assert.equal(await page.locator(".showcase-video video").count(), 0);
-  assert.equal(
-    requests.filter((x) => /botpress|api\.openai/.test(x)).length,
-    0,
-    "consent/Botpress unchanged",
-  );
-  assert.deepEqual(errors, []);
-  await page.close();
-  for (const config of [
-    { width: 390, reduce: false },
-    { width: 767, reduce: false },
-    { width: 1440, reduce: true },
+  for (const [width, osReduced] of [
+    [1440, false],
+    [390, false],
+    [1440, true],
+    [390, true],
   ]) {
-    const p = await browser.newPage({
-      viewport: { width: config.width, height: 900 },
-      reducedMotion: config.reduce ? "reduce" : "no-preference",
+    const page = await browser.newPage({
+      viewport: { width, height: 900 },
+      isMobile: width < 768,
+      hasTouch: width < 768,
+      reducedMotion: osReduced ? "reduce" : "no-preference",
     });
-    const media = [];
-    p.on("request", (r) => {
-      if (/\.(webm|mp4)(\?|$)/.test(r.url())) media.push(r.url());
+    const errors = [],
+      external = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    page.on("request", (request) => {
+      if (/botpress|api\.openai/.test(request.url()))
+        external.push(request.url());
     });
-    await p.goto(base);
-    await p.getByRole("button", { name: "Reject All", exact: true }).click();
-    await p
-      .locator('[data-showcase-video="work-showcase"] img')
+    await page.goto(base);
+    await page.getByRole("button", { name: "Reject All", exact: true }).click();
+    assert.equal(
+      await page.getByLabel("Animation preference").inputValue(),
+      "full",
+    );
+    for (const name of ["work-showcase", "ai-bot"]) {
+      const banner = page.locator(`[data-showcase-video="${name}"]`);
+      await banner.scrollIntoViewIfNeeded();
+      await page.waitForFunction((n) => {
+        const v = document.querySelector(`[data-showcase-video="${n}"] video`);
+        return v && !v.paused && v.currentTime > 0.1 && v.duration > 0;
+      }, name);
+      const state = await banner.locator("video").evaluate((v) => ({
+        loop: v.loop,
+        muted: v.muted,
+        inline: v.playsInline,
+        controls: v.controls,
+        preload: v.preload,
+        types: [...v.querySelectorAll("source")].map((s) => s.type),
+        cover: getComputedStyle(v).objectFit,
+      }));
+      assert.deepEqual(state, {
+        loop: true,
+        muted: true,
+        inline: true,
+        controls: false,
+        preload: "auto",
+        types: ["video/webm", "video/mp4", "video/webm", "video/mp4"],
+        cover: "cover",
+      });
+      assert.equal(
+        await banner.locator("video").evaluate((v) => v.videoWidth),
+        width < 768 ? 854 : 1280,
+      );
+      assert.equal(await banner.getByRole("button").count(), 0);
+      const box = await banner.boundingBox();
+      assert.ok(
+        box.width > width * 0.9 && box.x >= 0 && box.x < 45,
+        "Wide edge-to-edge frame",
+      );
+      await banner
+        .locator("video")
+        .evaluate((v) => (v.currentTime = v.duration - 0.12));
+      await page.waitForFunction((n) => {
+        const v = document.querySelector(`[data-showcase-video="${n}"] video`);
+        return v.currentTime < 2 && !v.paused && !v.ended;
+      }, name);
+    }
+    await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
+    await page.waitForFunction(() =>
+      [...document.querySelectorAll(".showcase-video video")].every(
+        (v) => v.paused,
+      ),
+    );
+    await page.getByLabel("Animation preference").selectOption("reduced");
+    await page.waitForFunction(
+      () => document.querySelectorAll(".showcase-video video").length === 0,
+    );
+    assert.equal(await page.locator(".showcase-video img").count(), 2);
+    await page.getByLabel("Animation preference").selectOption("full");
+    await page
+      .locator('[data-showcase-video="work-showcase"]')
       .scrollIntoViewIfNeeded();
-    await p.getByRole("tab", { name: /AI chatbots & demos/ }).click();
-    await p
-      .locator('[data-showcase-video="ai-bot"] img')
-      .scrollIntoViewIfNeeded();
-    assert.equal(await p.locator(".showcase-video video").count(), 0);
-    assert.deepEqual(media, []);
+    await page.waitForFunction(
+      () =>
+        !document.querySelector('[data-showcase-video="work-showcase"] video')
+          .paused,
+    );
     assert.ok(
-      await p.evaluate(
+      await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,
       ),
     );
-    await p.close();
+    assert.deepEqual(errors, []);
+    assert.deepEqual(external, []);
+    await page.close();
+    console.log(
+      `PASS ${width}px / OS reduced ${osReduced}: both wide silent loops, no controls, actual loop wrap, Off/On, offscreen pause and consent intact.`,
+    );
   }
-  console.log(
-    "PASS videos: deferred native playback, WebM/MP4 order, visible loop/pause, AI once/replay, OS/explicit reduced motion and mobile poster-only, no consent bypass.",
-  );
 } finally {
   await browser.close();
 }

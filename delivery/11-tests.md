@@ -1794,6 +1794,169 @@ test("optional fields reject unbounded and unsupported values before writing", a
 });
 ``````
 
+## tests/demo-windows.browser.mjs
+
+``````javascript
+import assert from "node:assert/strict";
+import { chromium } from "@playwright/test";
+import conceptData from "../data/concepts.ts";
+const { concepts, conceptUI: ui } = conceptData;
+const base = process.env.PUBLIC_TEST_URL || "http://127.0.0.1:3008";
+if (!/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(base))
+  throw Error("Local app required");
+const browser = await chromium.launch({
+  executablePath: "/usr/bin/chromium",
+  args: ["--no-sandbox"],
+});
+try {
+  for (const width of [1440, 390]) {
+    const page = await browser.newPage({
+      viewport: { width, height: 900 },
+      isMobile: width < 768,
+      hasTouch: width < 768,
+    });
+    const errors = [];
+    page.on("pageerror", (e) => errors.push(e.message));
+    await page.goto(base);
+    await page.getByRole("button", { name: "Reject All", exact: true }).click();
+    assert.equal(await page.getByRole("tab").count(), 3);
+    assert.equal(await page.locator(".interface-study-card").count(), 0);
+    assert.equal(
+      await page.locator("#ai-bots .bot-card").count(),
+      4,
+      "AI content exists before any tab click",
+    );
+    await page
+      .locator(".bot-card")
+      .first()
+      .evaluate((el) => (el.dataset.qaRetained = "yes"));
+    await page.getByRole("tab", { name: /Website concepts/ }).click();
+    await page.getByRole("tab", { name: /AI chatbots & demos/ }).click();
+    assert.equal(
+      await page.locator(".bot-card").first().getAttribute("data-qa-retained"),
+      "yes",
+    );
+    await page.getByRole("tab", { name: /^All/ }).click();
+    await page.waitForFunction(() =>
+      [...document.querySelectorAll('main img[loading="eager"]')].every(
+        (img) => img.complete && img.naturalWidth > 0,
+      ),
+    );
+    assert.ok((await page.locator("main img[loading=eager]").count()) > 50);
+    assert.equal(
+      await page.locator("[data-reveal]:not(.is-revealed)").count(),
+      0,
+    );
+    for (const [slug, concept] of Object.entries(concepts)) {
+      await page
+        .getByRole("link", {
+          name: `Explore website: ${concept.name}`,
+          exact: true,
+        })
+        .click();
+      await page.waitForURL(`**/demo/${slug}`);
+      const content = page.getByRole("region", {
+        name: `${concept.name} website content`,
+        exact: true,
+      });
+      await content.waitFor();
+      assert.equal(
+        await page.locator(".gallery").count(),
+        0,
+        "Card opens interactive website directly",
+      );
+      assert.equal(
+        await page
+          .getByRole("navigation", { name: "Explore website concepts" })
+          .getByRole("link")
+          .count(),
+        5,
+      );
+      await page
+        .getByRole("button", { name: "Maximize preview window", exact: true })
+        .click();
+      assert.ok(
+        await page
+          .locator(".demo-window")
+          .evaluate((el) => el.getBoundingClientRect().width >= innerWidth - 1),
+      );
+      await page.keyboard.press("Escape");
+      assert.equal(
+        await page
+          .getByRole("button", { name: "Maximize preview window", exact: true })
+          .getAttribute("aria-pressed"),
+        "false",
+      );
+      await page.locator("#plan").scrollIntoViewIfNeeded();
+      assert.ok(
+        await content.evaluate((el) => el.scrollTop > 100),
+        "Website scrolls inside the preview window",
+      );
+      assert.equal(
+        await page.evaluate(() => scrollY),
+        0,
+        "Desktop background stays fixed",
+      );
+      const future = (d) =>
+        new Date(Date.now() + d * 86400000).toISOString().slice(0, 10);
+      if (slug === "solenne") {
+        await page.locator("#solenne-arrival").fill(future(10));
+        await page.locator("#solenne-departure").fill(future(12));
+      } else if (slug === "aster")
+        await page.locator("#aster-date").fill(future(10));
+      else if (slug === "vanta") {
+        await page.locator("#vanta-choice").selectOption(concept.filters[1]);
+        await page
+          .locator(".vanta-finishes label")
+          .filter({ hasText: ui.finishes[1] })
+          .click();
+      } else
+        await page.locator("#kovo-choice").selectOption(concept.filters[2]);
+      await page.locator('.concept-plan-form button[type="submit"]').click();
+      await page.locator(".concept-summary").waitFor();
+      assert.ok(await page.locator(".concept-summary strong").innerText());
+      await page.getByRole("button", { name: ui.reset, exact: true }).click();
+      assert.equal(await page.locator(".concept-summary").count(), 0);
+      assert.ok(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      );
+      assert.ok(
+        await content.evaluate((el) => el.scrollWidth <= el.clientWidth + 1),
+      );
+      if (width === 1440 && slug === "solenne") {
+        await content.evaluate((el) =>
+          el.scrollTo({ top: 0, behavior: "instant" }),
+        );
+        await page
+          .locator(".concept-hero img")
+          .first()
+          .evaluate((img) => img.decode());
+        await page.screenshot({ path: "docs/ready-demo-window.png" });
+      }
+      await page
+        .getByRole("link", { name: "Back to website", exact: true })
+        .click();
+      await page.waitForURL("**/#work");
+      await page.getByRole("tab", { name: /^All/ }).click();
+    }
+    await page.goto(base + "/studies/noma");
+    await page
+      .getByRole("region", { name: "noma website content", exact: true })
+      .waitFor();
+    assert.ok(await page.locator(".study-dashboard").count());
+    assert.deepEqual(errors, []);
+    await page.close();
+    console.log(
+      `PASS ${width}px: removed category, initial/persistent AI content, ready imagery, four direct framed websites, nested scrolling, maximize/Escape/back, sample forms/reset and retained study route.`,
+    );
+  }
+} finally {
+  await browser.close();
+}
+``````
+
 ## tests/editorial-motion.browser.mjs
 
 ``````javascript
@@ -1841,7 +2004,7 @@ try {
       );
       for (const category of [
         "Website concepts",
-        "UI / interface studies",
+        "AI chatbots & demos",
         "All",
       ]) {
         await page
@@ -1857,8 +2020,9 @@ try {
         const panel = page.getByRole("tabpanel");
         if (category === "Website concepts")
           assert.equal(await panel.locator(".project-card").count(), 4);
-        if (category === "UI / interface studies")
-          assert.equal(await panel.locator(".interface-study-card").count(), 6);
+        if (category === "AI chatbots & demos")
+          assert.equal(await panel.locator(".bot-card").count(), 4);
+        assert.equal(await page.locator(".interface-study-card").count(), 0);
         assert.ok(
           await page.evaluate(
             () => document.documentElement.scrollWidth <= innerWidth + 1,
@@ -1951,7 +2115,7 @@ try {
   );
   await touch.close();
   console.log(
-    "PASS touch-native scroll, no custom cursor, four on-demand AI demos and retained form validation/honeypot.",
+    "PASS touch-native scroll, no custom cursor, four pre-rendered AI demos and retained form validation/honeypot.",
   );
   const nojs = await browser.newContext({ javaScriptEnabled: false });
   const page = await nojs.newPage();
@@ -1995,8 +2159,8 @@ try {
   await page.getByLabel("Animation preference").selectOption("full");
   assert.equal(
     await page.locator("#faq").getAttribute("data-faq-enhanced"),
-    null,
-    "FAQ code is not eagerly activated above the fold.",
+    "true",
+    "FAQ code is ready before scrolling.",
   );
   assert.equal(await page.locator("[data-velocity-marquee]").count(), 2);
   await page.mouse.wheel(0, 350);
@@ -2011,7 +2175,10 @@ try {
       ?.style.getPropertyValue("--image-drift"),
   );
   await page.getByRole("tab", { name: /Website concepts/ }).click();
-  await page.locator(".project-card").first().click();
+  await page
+    .getByRole("button", { name: /^View screenshots:/ })
+    .first()
+    .click();
   const gallery = page.getByRole("dialog");
   await gallery.waitFor();
   await page.waitForFunction(() => {
@@ -2095,7 +2262,7 @@ try {
   assert.ok(await native.locator(".faq-answer").isVisible());
   await bare.close();
   console.log(
-    "PASS velocity marquees, desktop parallax, project/certificate dialogs, lazy animated FAQ, rapid reversal, keyboard operation, reduced-motion cleanup, native no-JS FAQ and zero browser errors.",
+    "PASS velocity marquees, desktop parallax, project/certificate dialogs, ready animated FAQ, rapid reversal, keyboard operation, reduced-motion cleanup, native no-JS FAQ and zero browser errors.",
   );
 } finally {
   await browser.close();
@@ -2447,6 +2614,141 @@ try {
   await browser.close();
   await new Promise((r) => server.close(r));
 }
+``````
+
+## tests/scroll-readiness.browser.mjs
+
+``````javascript
+/** Local scroll/loading regression. Frame timings are observations, not a device FPS guarantee. */
+import fs from "node:fs";
+import assert from "node:assert/strict";
+import { chromium } from "@playwright/test";
+const b = await chromium.launch({
+  executablePath: "/usr/bin/chromium",
+  args: ["--no-sandbox"],
+});
+const results = [];
+try {
+  for (const width of [1440, 390]) {
+    const p = await b.newPage({
+      viewport: { width, height: 900 },
+      isMobile: width < 768,
+      hasTouch: width < 768,
+    });
+    await p.goto("http://127.0.0.1:3008");
+    await p.getByRole("button", { name: "Reject All", exact: true }).click();
+    await p.evaluate(() => document.fonts.ready);
+    await p.waitForTimeout(1200);
+    try {
+      await p.waitForFunction(
+        () =>
+          [...document.images].every((i) => i.complete && i.naturalWidth > 0),
+        null,
+        { polling: 100 },
+      );
+    } catch (error) {
+      console.error(
+        "Pending/broken images",
+        width,
+        await p.evaluate(() =>
+          [...document.images]
+            .filter((i) => !i.complete || !i.naturalWidth)
+            .map((i) => ({
+              src: i.currentSrc,
+              loading: i.loading,
+              complete: i.complete,
+              width: i.naturalWidth,
+            })),
+        ),
+      );
+      throw error;
+    }
+    const r = await p.evaluate(async () => {
+      const start = performance.now();
+      const before = [...document.images].filter(
+        (i) => i.complete && i.naturalWidth,
+      ).length;
+      const times = [];
+      const tasks = [];
+      const o = new PerformanceObserver((l) =>
+        tasks.push(
+          ...l
+            .getEntries()
+            .filter((e) => e.startTime >= start)
+            .map((e) => e.duration),
+        ),
+      );
+      o.observe({ type: "longtask", buffered: true });
+      let previous = performance.now();
+      for (let n = 0; n <= 160; n++) {
+        scrollTo({
+          top:
+            ((document.documentElement.scrollHeight - innerHeight) * n) / 160,
+          behavior: "instant",
+        });
+        await new Promise(requestAnimationFrame);
+        const now = performance.now();
+        times.push(now - previous);
+        previous = now;
+      }
+      await new Promise((r) => setTimeout(r, 500));
+      o.disconnect();
+      const resources = performance
+        .getEntriesByType("resource")
+        .filter((r) => r.startTime >= start);
+      return {
+        imagesBefore: before,
+        totalImages: document.images.length,
+        scrollResourceRequests: resources.length,
+        scrollImageRequests: resources.filter((r) => r.initiatorType === "img")
+          .length,
+        scrollScriptRequests: resources.filter(
+          (r) => r.initiatorType === "script",
+        ).length,
+        framesOver50ms: times.filter((t) => t > 50).length,
+        worstFrameMs: Math.round(Math.max(...times)),
+        longTasks: tasks.length,
+        longTaskMs: Math.round(tasks.reduce((a, b) => a + b, 0)),
+      };
+    });
+    assert.equal(
+      r.imagesBefore,
+      r.totalImages,
+      "All page images are loaded before scrolling",
+    );
+    assert.equal(r.scrollImageRequests, 0, "No image requests start on scroll");
+    assert.equal(
+      r.scrollScriptRequests,
+      0,
+      "No component scripts load on scroll",
+    );
+    results.push({ width, ...r });
+    const wall = p.locator(".dome-gallery");
+    assert.equal(await wall.locator(".dome-tile").count(), 54);
+    await wall.scrollIntoViewIfNeeded();
+    await p.waitForFunction(
+      () => document.querySelector(".dome-gallery").dataset.visible === "true",
+    );
+    await p.mouse.wheel(0, 10);
+    await p.waitForFunction(() =>
+      document
+        .querySelector(".dome-cylinder")
+        .style.transform.includes("translateY"),
+    );
+    await p.getByLabel("Animation preference").selectOption("reduced");
+    await p.waitForFunction(
+      () => !document.querySelector(".dome-cylinder").style.transform,
+    );
+    await p.close();
+  }
+} finally {
+  await b.close();
+}
+fs.writeFileSync(
+  process.argv[2] || "/tmp/elvora-scroll-readiness.json",
+  JSON.stringify(results, null, 2),
+);
+console.log(JSON.stringify(results));
 ``````
 
 ## tests/security.test.mjs
@@ -2881,152 +3183,106 @@ const browser = await chromium.launch({
   args: ["--no-sandbox"],
 });
 try {
-  const page = await browser.newPage({
-    viewport: { width: 1440, height: 1000 },
-  });
-  const errors = [];
-  const requests = [];
-  page.on("pageerror", (e) => errors.push(e.message));
-  page.on("request", (r) => requests.push(r.url()));
-  await page.goto(base);
-  await page.getByRole("button", { name: "Reject All", exact: true }).click();
-  assert.equal(
-    await page.getByLabel("Animation preference").inputValue(),
-    "full",
-  );
-  const work = page.locator('[data-showcase-video="work-showcase"]');
-  await work.locator("video").waitFor();
-  assert.equal(
-    requests.filter((x) => /\.(webm|mp4)(\?|$)/.test(x)).length,
-    0,
-    "preload none does not fetch videos above the fold",
-  );
-  const attributes = await work.locator("video").evaluate((v) => ({
-    muted: v.muted,
-    loop: v.loop,
-    inline: v.playsInline,
-    preload: v.preload,
-    poster: v.getAttribute("poster"),
-    types: [...v.querySelectorAll("source")].map((s) => s.type),
-  }));
-  assert.deepEqual(attributes, {
-    muted: true,
-    loop: true,
-    inline: true,
-    preload: "none",
-    poster: "/videos/work-showcase-poster.webp",
-    types: ["video/webm", "video/mp4"],
-  });
-  await work.locator(".showcase-video-frame").scrollIntoViewIfNeeded();
-  await page.waitForFunction(() => {
-    const v = document.querySelector(
-      '[data-showcase-video="work-showcase"] video',
-    );
-    return v && !v.paused && v.currentTime > 0.1;
-  });
-  await work
-    .getByRole("button", { name: "Pause website showcase video" })
-    .click();
-  assert.equal(await work.locator("video").evaluate((v) => v.paused), true);
-  await work
-    .getByRole("button", { name: "Play website showcase video" })
-    .click();
-  await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
-  await page.waitForFunction(
-    () =>
-      document.querySelector('[data-showcase-video="work-showcase"] video')
-        .paused,
-  );
-  await work.locator(".showcase-video-frame").scrollIntoViewIfNeeded();
-  await page.waitForFunction(
-    () =>
-      !document.querySelector('[data-showcase-video="work-showcase"] video')
-        .paused,
-  );
-  await page.getByRole("tab", { name: /AI chatbots & demos/ }).click();
-  const bot = page.locator('[data-showcase-video="ai-bot"]');
-  await bot.locator(".showcase-video-frame").scrollIntoViewIfNeeded();
-  await page.waitForFunction(() => {
-    const v = document.querySelector('[data-showcase-video="ai-bot"] video');
-    return v && !v.paused && v.duration > 0;
-  });
-  assert.equal(await bot.locator("video").evaluate((v) => v.loop), false);
-  await bot.getByRole("button", { name: "Pause AI bot video" }).click();
-  await bot.getByRole("button", { name: "Play AI bot video" }).click();
-  await page.waitForFunction(
-    () =>
-      !document.querySelector('[data-showcase-video="ai-bot"] video').paused,
-  );
-  await bot
-    .locator("video")
-    .evaluate((v) => (v.currentTime = v.duration - 0.15));
-  await bot.getByRole("button", { name: "Replay AI bot video" }).waitFor();
-  await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
-  await bot.scrollIntoViewIfNeeded();
-  assert.equal(
-    await bot.locator("video").evaluate((v) => v.paused),
-    true,
-    "ended AI video never auto-restarts",
-  );
-  await bot.getByRole("button", { name: "Replay AI bot video" }).click();
-  await page.waitForFunction(() => {
-    const v = document.querySelector('[data-showcase-video="ai-bot"] video');
-    return !v.paused && v.currentTime < 3;
-  });
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await bot.locator("img").waitFor();
-  assert.equal(await page.locator(".showcase-video video").count(), 0);
-  assert.equal(
-    await page.getByLabel("Animation preference").inputValue(),
-    "full",
-    "videos respect OS independently of general On",
-  );
-  await page.emulateMedia({ reducedMotion: "no-preference" });
-  await bot.locator("video").waitFor();
-  await page.getByLabel("Animation preference").selectOption("reduced");
-  await bot.locator("img").waitFor();
-  assert.equal(await page.locator(".showcase-video video").count(), 0);
-  assert.equal(
-    requests.filter((x) => /botpress|api\.openai/.test(x)).length,
-    0,
-    "consent/Botpress unchanged",
-  );
-  assert.deepEqual(errors, []);
-  await page.close();
-  for (const config of [
-    { width: 390, reduce: false },
-    { width: 767, reduce: false },
-    { width: 1440, reduce: true },
+  for (const [width, osReduced] of [
+    [1440, false],
+    [390, false],
+    [1440, true],
+    [390, true],
   ]) {
-    const p = await browser.newPage({
-      viewport: { width: config.width, height: 900 },
-      reducedMotion: config.reduce ? "reduce" : "no-preference",
+    const page = await browser.newPage({
+      viewport: { width, height: 900 },
+      isMobile: width < 768,
+      hasTouch: width < 768,
+      reducedMotion: osReduced ? "reduce" : "no-preference",
     });
-    const media = [];
-    p.on("request", (r) => {
-      if (/\.(webm|mp4)(\?|$)/.test(r.url())) media.push(r.url());
+    const errors = [],
+      external = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    page.on("request", (request) => {
+      if (/botpress|api\.openai/.test(request.url()))
+        external.push(request.url());
     });
-    await p.goto(base);
-    await p.getByRole("button", { name: "Reject All", exact: true }).click();
-    await p
-      .locator('[data-showcase-video="work-showcase"] img')
+    await page.goto(base);
+    await page.getByRole("button", { name: "Reject All", exact: true }).click();
+    assert.equal(
+      await page.getByLabel("Animation preference").inputValue(),
+      "full",
+    );
+    for (const name of ["work-showcase", "ai-bot"]) {
+      const banner = page.locator(`[data-showcase-video="${name}"]`);
+      await banner.scrollIntoViewIfNeeded();
+      await page.waitForFunction((n) => {
+        const v = document.querySelector(`[data-showcase-video="${n}"] video`);
+        return v && !v.paused && v.currentTime > 0.1 && v.duration > 0;
+      }, name);
+      const state = await banner.locator("video").evaluate((v) => ({
+        loop: v.loop,
+        muted: v.muted,
+        inline: v.playsInline,
+        controls: v.controls,
+        preload: v.preload,
+        types: [...v.querySelectorAll("source")].map((s) => s.type),
+        cover: getComputedStyle(v).objectFit,
+      }));
+      assert.deepEqual(state, {
+        loop: true,
+        muted: true,
+        inline: true,
+        controls: false,
+        preload: "auto",
+        types: ["video/webm", "video/mp4", "video/webm", "video/mp4"],
+        cover: "cover",
+      });
+      assert.equal(
+        await banner.locator("video").evaluate((v) => v.videoWidth),
+        width < 768 ? 854 : 1280,
+      );
+      assert.equal(await banner.getByRole("button").count(), 0);
+      const box = await banner.boundingBox();
+      assert.ok(
+        box.width > width * 0.9 && box.x >= 0 && box.x < 45,
+        "Wide edge-to-edge frame",
+      );
+      await banner
+        .locator("video")
+        .evaluate((v) => (v.currentTime = v.duration - 0.12));
+      await page.waitForFunction((n) => {
+        const v = document.querySelector(`[data-showcase-video="${n}"] video`);
+        return v.currentTime < 2 && !v.paused && !v.ended;
+      }, name);
+    }
+    await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
+    await page.waitForFunction(() =>
+      [...document.querySelectorAll(".showcase-video video")].every(
+        (v) => v.paused,
+      ),
+    );
+    await page.getByLabel("Animation preference").selectOption("reduced");
+    await page.waitForFunction(
+      () => document.querySelectorAll(".showcase-video video").length === 0,
+    );
+    assert.equal(await page.locator(".showcase-video img").count(), 2);
+    await page.getByLabel("Animation preference").selectOption("full");
+    await page
+      .locator('[data-showcase-video="work-showcase"]')
       .scrollIntoViewIfNeeded();
-    await p.getByRole("tab", { name: /AI chatbots & demos/ }).click();
-    await p
-      .locator('[data-showcase-video="ai-bot"] img')
-      .scrollIntoViewIfNeeded();
-    assert.equal(await p.locator(".showcase-video video").count(), 0);
-    assert.deepEqual(media, []);
+    await page.waitForFunction(
+      () =>
+        !document.querySelector('[data-showcase-video="work-showcase"] video')
+          .paused,
+    );
     assert.ok(
-      await p.evaluate(
+      await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,
       ),
     );
-    await p.close();
+    assert.deepEqual(errors, []);
+    assert.deepEqual(external, []);
+    await page.close();
+    console.log(
+      `PASS ${width}px / OS reduced ${osReduced}: both wide silent loops, no controls, actual loop wrap, Off/On, offscreen pause and consent intact.`,
+    );
   }
-  console.log(
-    "PASS videos: deferred native playback, WebM/MP4 order, visible loop/pause, AI once/replay, OS/explicit reduced motion and mobile poster-only, no consent bypass.",
-  );
 } finally {
   await browser.close();
 }

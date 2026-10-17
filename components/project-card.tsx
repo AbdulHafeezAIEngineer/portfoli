@@ -1,6 +1,7 @@
 "use client";
 import { useMotionPreference } from "./motion-preference";
 import Image from "next/image";
+import Link from "next/link";
 import { imagePreview } from "@/lib/image-preview";
 import { m, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -12,12 +13,10 @@ export function ProjectCard({
   project,
   index,
   total,
-  onOpen,
 }: {
   project: ProjectView;
   index: number;
   total: number;
-  onOpen: () => void;
 }) {
   const { reduced } = useMotionPreference();
   const [finePointer, setFinePointer] = useState(false);
@@ -36,11 +35,10 @@ export function ProjectCard({
   const presentation = projectPresentation(project.id);
   const mobile = project.screenshots[2] || project.screenshots[0];
   return (
-    <button
+    <Link
       className={`project-card device-project curated-project${presentation.artwork ? " artwork-project" : ""}`}
-      onClick={onOpen}
-      aria-haspopup="dialog"
-      aria-label={`${site.work.view}: ${project.title}`}
+      href={project.demoUrl || `/work/${project.id}`}
+      aria-label={`Explore website: ${project.title}`}
       onPointerMove={(event) => {
         if (!tilt) return;
         const rect = event.currentTarget.getBoundingClientRect();
@@ -86,6 +84,8 @@ export function ProjectCard({
             style={tilt ? { rotateX, rotateY } : undefined}
           >
             <Image
+              loading="eager"
+              fetchPriority="low"
               src={project.screenshots[0].src}
               {...imagePreview(project.screenshots[0].src)}
               alt={project.screenshots[0].alt}
@@ -107,6 +107,8 @@ export function ProjectCard({
                     <span className="device-camera" />
                     <div className="device-screen">
                       <Image
+                        loading="eager"
+                        fetchPriority="low"
                         src={project.screenshots[0].src}
                         {...imagePreview(project.screenshots[0].src)}
                         alt={project.screenshots[0].alt}
@@ -123,6 +125,8 @@ export function ProjectCard({
                 <div className="device-phone">
                   <div className="device-phone-screen">
                     <Image
+                      loading="eager"
+                      fetchPriority="low"
                       src={mobile.src}
                       {...imagePreview(mobile.src)}
                       alt={mobile.alt}
@@ -152,6 +156,6 @@ export function ProjectCard({
           {String(total).padStart(2, "0")}
         </span>
       </div>
-    </button>
+    </Link>
   );
 }

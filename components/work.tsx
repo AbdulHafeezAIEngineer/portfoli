@@ -1,37 +1,24 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import Image from "next/image";
-import { imagePreview } from "@/lib/image-preview";
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { getImageProps } from "next/image";
+import { concepts } from "@/data/concepts";
 import type { ProjectView } from "@/data/projects";
 import type { Bot as BotData } from "@/data/bots";
-import { studies } from "@/data/studies";
 import { site } from "@/data/site";
 import { Reveal } from "./reveal";
 import { ProjectCard } from "./project-card";
 import { TextReveal } from "./text-reveal";
 import { WorkShowcaseVideo } from "./WorkShowcaseVideo";
+import { BotServices } from "./bot-services";
+import Gallery from "./project-gallery";
 
-const BotServices = dynamic(
-  () => import("./bot-services").then((m) => m.BotServices),
-  {
-    ssr: false,
-    loading: () => (
-      <div id="ai-bots" className="bot-loading" role="status">
-        {site.ui.loading}
-      </div>
-    ),
-  },
-);
-const Gallery = dynamic(() => import("./project-gallery"), { ssr: false });
 const categories = [
   { id: "all", title: "All" },
   { id: "web", title: "Website concepts" },
-  { id: "studies", title: "UI / interface studies" },
   { id: "bots", title: "AI chatbots & demos" },
-];
+] as const;
 
 export function Work({
   projects,
@@ -40,29 +27,44 @@ export function Work({
   projects: ProjectView[];
   bots: BotData[];
 }) {
+  const router = useRouter();
+  useEffect(() => {
+    for (const item of projects) {
+      if (!item.demoUrl.startsWith("/demo/")) continue;
+      router.prefetch(item.demoUrl);
+      const slug = item.demoUrl.slice("/demo/".length) as keyof typeof concepts;
+      if (!Object.hasOwn(concepts, slug)) continue;
+      const { props } = getImageProps({
+        src: concepts[slug].image,
+        alt: "",
+        fill: true,
+        sizes: ["solenne", "vanta"].includes(slug)
+          ? "100vw"
+          : "(max-width:700px) 100vw, 70vw",
+      });
+      const image = new window.Image();
+      image.fetchPriority = "low";
+      image.decoding = "async";
+      image.sizes = props.sizes || "100vw";
+      image.srcset = props.srcSet || "";
+      image.src = props.src;
+    }
+  }, [projects, router]);
   const [tab, setTab] = useState(0);
-  const [botsVisited, setBotsVisited] = useState(false);
   const [project, setProject] = useState<ProjectView | null>(null);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
-  const counts = [
-    projects.length + studies.length + bots.length,
-    projects.length,
-    studies.length,
-    bots.length,
-  ];
+  const counts = [projects.length + bots.length, projects.length, bots.length];
   useEffect(() => {
     const sync = () => {
-      if (["#ai-bots", "#embed-methods"].includes(location.hash)) {
-        setTab(3);
-        setBotsVisited(true);
-      } else if (location.hash === "#work") setTab(0);
+      if (["#ai-bots", "#embed-methods"].includes(location.hash)) setTab(2);
+      else if (location.hash === "#work") setTab(0);
     };
     sync();
     window.addEventListener("hashchange", sync);
     return () => window.removeEventListener("hashchange", sync);
   }, []);
   useEffect(() => {
-    if (tab !== 3 || !["#ai-bots", "#embed-methods"].includes(location.hash))
+    if (tab !== 2 || !["#ai-bots", "#embed-methods"].includes(location.hash))
       return;
     const frame = requestAnimationFrame(() =>
       document.getElementById(location.hash.slice(1))?.scrollIntoView(),
@@ -71,8 +73,7 @@ export function Work({
   }, [tab]);
   function selectTab(next: number) {
     setTab(next);
-    if (next === 3) setBotsVisited(true);
-    else if (["#ai-bots", "#embed-methods"].includes(location.hash))
+    if (next !== 2 && ["#ai-bots", "#embed-methods"].includes(location.hash))
       history.replaceState(null, "", "#work");
   }
   return (
@@ -89,155 +90,94 @@ export function Work({
           </div>
           <p>{site.work.description}</p>
         </div>
-        <WorkShowcaseVideo />
-        <div
-          className="work-filters"
-          role="tablist"
-          aria-label="Portfolio categories"
-        >
-          {categories.map((item, index) => (
-            <button
-              key={item.id}
-              ref={(node) => {
-                tabs.current[index] = node;
-              }}
-              id={`tab-${item.id}`}
-              role="tab"
-              aria-selected={tab === index}
-              aria-controls={`panel-${item.id}`}
-              tabIndex={tab === index ? 0 : -1}
-              onClick={() => selectTab(index)}
-              onKeyDown={(event) => {
-                if (
-                  !["ArrowLeft", "ArrowRight", "Home", "End"].includes(
-                    event.key,
-                  )
-                )
-                  return;
-                event.preventDefault();
-                const next =
-                  event.key === "Home"
-                    ? 0
-                    : event.key === "End"
-                      ? 3
-                      : (tab + (event.key === "ArrowRight" ? 1 : 3)) % 4;
-                selectTab(next);
-                tabs.current[next]?.focus();
-              }}
-            >
-              {item.title}
-              <span>{String(counts[index]).padStart(2, "0")}</span>
-            </button>
-          ))}
-        </div>
       </Reveal>
-      {/* Hidden panels remain valid ARIA targets; only the active panel renders expensive content. */}
-      {categories.map((category, index) => (
-        <div
-          key={category.id}
-          role="tabpanel"
-          id={`panel-${category.id}`}
-          aria-labelledby={`tab-${category.id}`}
-          hidden={tab !== index}
-          tabIndex={0}
-          className="work-panel"
-        >
-          {tab === index && (
-            <>
-              {(index === 0 || index === 1) && (
-                <div className="work-filter-enter">
-                  <div className="work-collection-label">
-                    <span>THE WEBSITE EDIT</span>
-                    <span>
-                      {String(projects.length).padStart(2, "0")} / INDEPENDENT
-                      CONCEPTS
-                    </span>
-                  </div>
-                  <div className="projects-grid curated-projects-grid">
-                    {projects.map((item, number) => (
-                      <Reveal key={item.id} delay={(number % 2) * 0.06}>
-                        <ProjectCard
-                          project={item}
-                          index={number}
-                          total={projects.length}
-                          onOpen={() => setProject(item)}
-                        />
-                      </Reveal>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {(index === 0 || index === 2) && (
-                <div className="interface-study-section work-filter-enter">
-                  <p className="eyebrow">
-                    INTERFACE STUDIES / SIX DIFFERENT DIRECTIONS
-                  </p>
-                  <div className="interface-studies-grid">
-                    {studies.map((study, number) => (
-                      <Reveal key={study.id} delay={(number % 2) * 0.05}>
-                        <a
-                          className="interface-study-card"
-                          href={`/studies/${study.id}`}
-                        >
-                          <div
-                            className="interface-study-image"
-                            data-parallax="image"
-                          >
-                            <Image
-                              src={study.screenshot}
-                              {...imagePreview(study.screenshot)}
-                              alt={`${study.name}: ${study.industry.toLowerCase()} interface concept`}
-                              fill
-                              sizes="(max-width: 700px) 90vw, (max-width: 1100px) 45vw, 560px"
-                            />
-                          </div>
-                          <div>
-                            <span>
-                              <small>{study.industry}</small>
-                              <strong>{study.name}</strong>
-                            </span>
-                            <ArrowUpRight size={22} aria-hidden="true" />
-                          </div>
-                        </a>
-                      </Reveal>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {index === 0 && (
-                <div className="work-ai-invitation">
-                  <div>
-                    <p className="eyebrow">INTELLIGENCE / ON DEMAND</p>
-                    <h3>Meet the other side of the work.</h3>
-                    <p>
-                      Explore the custom chatbot and AI demos, with voice and
-                      consent-aware experiences.
-                    </p>
-                  </div>
-                  <button
-                    className="button button-outline"
-                    onClick={() => {
-                      selectTab(3);
-                      tabs.current[3]?.focus();
-                    }}
-                  >
-                    Explore AI demos{" "}
-                    <ArrowUpRight size={18} aria-hidden="true" />
-                  </button>
-                </div>
-              )}
-              {index !== 3 && (
-                <p className="work-disclaimer">
-                  {site.work.disclaimer}
-                  <br />
-                  <span>{site.work.screenshotNote}</span>
-                </p>
-              )}
-              {index === 3 && botsVisited && <BotServices bots={bots} />}
-            </>
-          )}
+      <WorkShowcaseVideo />
+      <div
+        className="work-filters"
+        role="tablist"
+        aria-label="Portfolio categories"
+      >
+        {categories.map((item, index) => (
+          <button
+            key={item.id}
+            ref={(node) => {
+              tabs.current[index] = node;
+            }}
+            id={`tab-${item.id}`}
+            role="tab"
+            aria-selected={tab === index}
+            aria-controls="work-results"
+            tabIndex={tab === index ? 0 : -1}
+            onClick={() => selectTab(index)}
+            onKeyDown={(event) => {
+              if (
+                !["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)
+              )
+                return;
+              event.preventDefault();
+              const next =
+                event.key === "Home"
+                  ? 0
+                  : event.key === "End"
+                    ? categories.length - 1
+                    : (tab +
+                        (event.key === "ArrowRight"
+                          ? 1
+                          : categories.length - 1)) %
+                      categories.length;
+              selectTab(next);
+              tabs.current[next]?.focus();
+            }}
+          >
+            {item.title}
+            <span>{String(counts[index]).padStart(2, "0")}</span>
+          </button>
+        ))}
+      </div>
+      {/* Content mounts once in the initial HTML. Filters change visibility only. */}
+      <div
+        role="tabpanel"
+        id="work-results"
+        aria-labelledby={`tab-${categories[tab].id}`}
+        tabIndex={0}
+        className="work-panel"
+      >
+        <div hidden={tab === 2}>
+          <div className="work-collection-label">
+            <span>THE WEBSITE EDIT</span>
+            <span>
+              {String(projects.length).padStart(2, "0")} / INDEPENDENT CONCEPTS
+            </span>
+          </div>
+          <div className="projects-grid curated-projects-grid">
+            {projects.map((item, number) => (
+              <Reveal key={item.id}>
+                <ProjectCard
+                  project={item}
+                  index={number}
+                  total={projects.length}
+                />
+                <button
+                  className="project-screenshots-link"
+                  aria-haspopup="dialog"
+                  aria-label={`View screenshots: ${item.title}`}
+                  onClick={() => setProject(item)}
+                >
+                  View screenshots <span aria-hidden="true">↗</span>
+                </button>
+              </Reveal>
+            ))}
+          </div>
+          <p className="work-disclaimer">
+            {site.work.disclaimer}
+            <br />
+            <span>{site.work.screenshotNote}</span>
+          </p>
         </div>
-      ))}
+        <div hidden={tab === 1}>
+          <BotServices bots={bots} />
+        </div>
+      </div>
       {project && (
         <Gallery project={project} onClose={() => setProject(null)} />
       )}

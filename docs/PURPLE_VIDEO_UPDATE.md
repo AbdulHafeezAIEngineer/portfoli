@@ -1,5 +1,7 @@
 # Purple UI and local showcase videos
 
+Playback, loading and navigation were later revised at the owner’s request: see [the latest update](READY_PLAYBACK_UPDATE.md). The palette and preserved custom artwork remain.
+
 The Work and AI Bots sections were located by searching the existing headings and rendering components: `components/work.tsx` and `components/bot-services.tsx`. The App Router layout imports the CSS cascade; Tailwind colors and the inline theme bootstrap were inspected before editing.
 
 The custom curved “bunch of work” wall, its photos/order, lower custom layouts, website concepts, device geometry, illustrations and project gallery interactions are preserved. Illustration and device colors were extracted unchanged into a separate artwork palette. Shared portfolio UI uses the requested purple palette. Toolkit brand marks retain their shapes and use neutral text color so they do not introduce extra UI accents. Existing saved light/dark choices and the dark default remain.

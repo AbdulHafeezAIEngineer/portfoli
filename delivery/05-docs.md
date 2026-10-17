@@ -191,6 +191,8 @@ Actual axe WCAG A/AA scans found zero violations on desktop/mobile in both theme
 ``````md
 # Purple UI and local showcase videos
 
+Playback, loading and navigation were later revised at the owner’s request: see [the latest update](READY_PLAYBACK_UPDATE.md). The palette and preserved custom artwork remain.
+
 The Work and AI Bots sections were located by searching the existing headings and rendering components: `components/work.tsx` and `components/bot-services.tsx`. The App Router layout imports the CSS cascade; Tailwind colors and the inline theme bootstrap were inspected before editing.
 
 The custom curved “bunch of work” wall, its photos/order, lower custom layouts, website concepts, device geometry, illustrations and project gallery interactions are preserved. Illustration and device colors were extracted unchanged into a separate artwork palette. Shared portfolio UI uses the requested purple palette. Toolkit brand marks retain their shapes and use neutral text color so they do not introduce extra UI accents. Existing saved light/dark choices and the dark default remain.
@@ -319,6 +321,76 @@ The list below includes source, media, verification artifacts and refreshed deli
 - [`tests/review-motion.browser.mjs`](../tests/review-motion.browser.mjs)
 - [`tests/showcase-videos.browser.mjs`](../tests/showcase-videos.browser.mjs)
 - [`tests/video-motion.browser.mjs`](../tests/video-motion.browser.mjs)
+``````
+
+## docs/READY_PLAYBACK_UPDATE.md
+
+``````md
+# Full-width playback, interactive windows and a ready page
+
+This update follows the owner's four new references and their explicit choice: both desktop and phone should loop the videos, with the website's Motion Off setting stopping playback.
+
+## Playback and presentation
+
+Both local videos now loop silently on desktop and mobile. The frames extend across the page with small viewport gutters and `object-fit: cover`, preserving the footage's proportions. Native controls and the separate playback/replay toolbar are removed. The global Motion setting controls both videos; Off pauses them and shows their posters. Videos buffer on page load, pause outside the visible area and in hidden tabs, and retry browser-restricted autoplay after a real user interaction.
+
+Desktop keeps 1280×720/30fps exports. Phones select 854×480/24fps WebM or MP4 copies through source media queries. The actual selected dimensions and loop wrap were tested in Chromium, including OS reduced-motion configurations: the explicitly requested website Motion On setting takes precedence. The two mobile WebM files total about 0.8 MB, roughly 43% less than their desktop counterparts. No audio track or player dependency was added.
+
+A sample website card opens its actual interactive website inside the supplied desktop/window composition. The frame has independently scrolling content, functional maximize/restore and Back to website controls, plus a dock linking the four concepts and the portfolio. Screenshot viewing remains available through a separate button. The original concept layouts, artwork, colors and sample forms are preserved; this is not an embedded screenshot or cross-origin iframe.
+
+The UI/interface-studies category and its six-card block are removed from Work. The remaining tabs are All, Website concepts and AI chatbots & demos. The curved photo wall, its 54 tiles, original artwork, order and linked study routes remain available.
+
+## Loading and motion
+
+The initial HTML contains both website and AI cards. Filters change visibility while keeping content mounted. Gallery, certificate, chat-panel and FAQ interface code is available before interaction; external providers still require the existing consent/user-action gates. Public images load eagerly with low scheduling priority, and the concept routes and matching hero image resources warm before a card click.
+
+Generic content no longer waits for a viewport reveal to become readable. Logo flipping, progressive reading emphasis, the curved wall and small interaction effects remain. Offscreen motion pauses, desktop wheel smoothing responds sooner, and the wall's scroll drift moves one composited cylinder instead of changing an inherited variable across all tiles. This preserves the original geometry while reducing style work. A tablet video-width overflow and sticky mobile dock hover were fixed during verification.
+
+## Measured local loading behavior
+
+| Check | Before | After |
+| --- | --- | --- |
+| Images ready before scrolling | 4 / 73–74 | 67 / 67 |
+| Image requests beginning during scroll | 33 desktop / 34 mobile | 0 / 0 |
+| Component script requests beginning during scroll | 1 / 1 | 0 / 0 |
+
+The image count changed because the separate six-card studies block was removed. Media range/stream requests are counted separately and can continue normally. [Raw before/after observations](ready-scroll-results.json) include frame/long-task timings. These are single local headless runs, not a physical-device or steady-60fps guarantee; mobile's baseline used posters, whereas this update enables the requested loops. The loading regression asserts that every page image is ready before scrolling and that scrolling starts no image or component-script requests.
+
+## Verification
+
+- Production build, lint and TypeScript passed.
+- Desktop/phone native video tests passed loop wrap, no controls, cover sizing, correct responsive sources, global Off/On, offscreen pause and consent boundaries, with and without OS reduced motion.
+- Four concept websites passed direct card navigation, window scrolling, maximize/Escape/restore, Back, sample form submission/reset and overflow checks at 1440px and 390px. The retained study route also passed.
+- Responsive checks passed at 360, 390, 768, 1024, 1440 and 1920px in both themes, including filtering, persistent settings, contact validation and no-JavaScript public content.
+- Screenshot/certificate dialogs, FAQ reversal/keyboard behavior, logo flip/shine, reading effects and Motion Off cleanup passed. All 54 wall tiles remain; the optimized transform and cleanup are checked.
+- Five consent unit tests passed. Optional provider requests remain absent before permission/action.
+- Automated WCAG A/AA scans found zero violations in the public portfolio and new window chrome at desktop/mobile sizes in both themes. Original concept artwork was excluded from the window-chrome scan. [Scan records](ready-accessibility.json).
+
+```sh
+npm run build
+npm start -- --port 3008
+# Run in another terminal after the local production server is ready:
+npm run test:showcase:browser
+npm run test:windows:browser
+npm run test:scroll:browser
+npm run test:motion:browser
+npm run test:finishing:browser
+npm run test:video-motion:browser
+```
+
+Previews: [wide desktop video](ready-video-1440.png), [phone video](ready-video-390.png), [desktop concept window](ready-demo-window.png), [phone concept window](ready-demo-mobile.png).
+
+Authentication, credentials, CMS records, cookie logic and Botpress settings were not changed. Actual production deployment/provider/owner-login success is not established by these local tests. This environment's public-domain check encountered DNS/HTTP proxy restrictions; no hosting/DNS failure is inferred from that result.
+
+## Changed source
+
+- `components/VisibilityVideo.tsx`, `WorkShowcaseVideo.tsx`, `AiBotVideo.tsx`: responsive, control-free loops.
+- `components/work.tsx`, `project-card.tsx`, `bot-services.tsx`, `certifications.tsx`: ready content, retained filters/dialogs, removed category and direct website navigation.
+- `components/demo-window.tsx`, `app/demo-window.css`, `app/demo/[slug]/page.tsx`, `app/studies/[slug]/page.tsx`: real interactive window presentation.
+- `components/reveal-observer.tsx`, `faq-enhancement.tsx`, `editorial-effects.tsx`, `logo-motion.tsx`, `scroll-ambience.tsx`, `work-bunch.tsx`, `app/agency.css`, `app/refinement.css`, `app/atelier.css`: readable initial content and lighter motion/loading behavior.
+- `public/videos/*-mobile.mp4` and `*-mobile.webm`: four phone-optimized exports.
+- `tests/showcase-videos.browser.mjs`, `demo-windows.browser.mjs`, `scroll-readiness.browser.mjs`, `editorial-motion.browser.mjs`, `finishing.browser.mjs` and `package.json`: updated behavior checks and reproducible commands.
+- This report, screenshots/JSON, README, verification notes and the refreshed `delivery/` source snapshot document the completed change.
 ``````
 
 ## docs/SHOWCASE_UPDATE.md
@@ -993,6 +1065,137 @@ Binary asset: 175344 bytes. SHA-256 `f16209c8027f274d49644d4452ec7151e2c56105d6b
 ## docs/reading-mobile-light.png
 
 Binary asset: 180239 bytes. SHA-256 `a8e0ec3890d29f22a24380692e63d0fe31bb1e85ad0b5460e8e8af273dc208ee`. Available in the repository and source ZIP.
+
+## docs/ready-accessibility.json
+
+``````json
+[
+  {
+    "width": 1440,
+    "theme": "dark",
+    "scope": "public portfolio",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "theme": "light",
+    "scope": "public portfolio",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "theme": "dark",
+    "scope": "preview window chrome; original concept artwork excluded",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "theme": "light",
+    "scope": "preview window chrome; original concept artwork excluded",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "theme": "dark",
+    "scope": "public portfolio",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "theme": "light",
+    "scope": "public portfolio",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "theme": "dark",
+    "scope": "preview window chrome; original concept artwork excluded",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "theme": "light",
+    "scope": "preview window chrome; original concept artwork excluded",
+    "violations": []
+  }
+]
+``````
+
+## docs/ready-demo-mobile.png
+
+Binary asset: 211372 bytes. SHA-256 `dfe15ed901f0c1846bb1bccdf2786fd9a933a0bf533f660c2a8564ccc9e4c919`. Available in the repository and source ZIP.
+
+## docs/ready-demo-window.png
+
+Binary asset: 941785 bytes. SHA-256 `ef2d805de8ed61cfcc8a63dccba799a6aed4a9e9ab3c4e4e410355ee794f880a`. Available in the repository and source ZIP.
+
+## docs/ready-scroll-results.json
+
+``````json
+{
+  "method": "Local Chromium; 160 animation-frame scroll steps through the complete page after initial image readiness. Timings are single-run observations, not device FPS guarantees. Baseline mobile used video posters; current mobile uses loops.",
+  "before": [
+    {
+      "width": 1440,
+      "imagesBefore": 4,
+      "totalImages": 73,
+      "scrollResourceRequests": 37,
+      "scrollImageRequests": 33,
+      "scrollScriptRequests": 1,
+      "framesOver50ms": 1,
+      "worstFrameMs": 237,
+      "longTasks": 1,
+      "longTaskMs": 224
+    },
+    {
+      "width": 390,
+      "imagesBefore": 4,
+      "totalImages": 74,
+      "scrollResourceRequests": 37,
+      "scrollImageRequests": 34,
+      "scrollScriptRequests": 1,
+      "framesOver50ms": 0,
+      "worstFrameMs": 21,
+      "longTasks": 0,
+      "longTaskMs": 0
+    }
+  ],
+  "after": [
+    {
+      "width": 1440,
+      "imagesBefore": 67,
+      "totalImages": 67,
+      "scrollResourceRequests": 2,
+      "scrollImageRequests": 0,
+      "scrollScriptRequests": 0,
+      "framesOver50ms": 1,
+      "worstFrameMs": 206,
+      "longTasks": 1,
+      "longTaskMs": 194
+    },
+    {
+      "width": 390,
+      "imagesBefore": 67,
+      "totalImages": 67,
+      "scrollResourceRequests": 2,
+      "scrollImageRequests": 0,
+      "scrollScriptRequests": 0,
+      "framesOver50ms": 1,
+      "worstFrameMs": 67,
+      "longTasks": 1,
+      "longTaskMs": 51
+    }
+  ]
+}
+``````
+
+## docs/ready-video-1440.png
+
+Binary asset: 455213 bytes. SHA-256 `fe5c6105795ce1c19afbd9579800b3e07f8cd814909fb80518732fb93fc250f7`. Available in the repository and source ZIP.
+
+## docs/ready-video-390.png
+
+Binary asset: 170774 bytes. SHA-256 `bf4bb3f08b958486baef3b2cc3867ade62bc248f6e591446c53d5db7592df712`. Available in the repository and source ZIP.
 
 ## docs/reference-about-preview.png
 

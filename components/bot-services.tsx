@@ -1,6 +1,5 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import {
   ArrowUpRight,
@@ -22,7 +21,7 @@ import { Reveal } from "./reveal";
 import { FortePreview } from "./forte-preview";
 import { AiBotVideo } from "./AiBotVideo";
 
-const ChatPanel = dynamic(() => import("./bot-chat-panel"), { ssr: false });
+import ChatPanel from "./bot-chat-panel";
 const icons = {
   real: Sparkles,
   support: Headphones,

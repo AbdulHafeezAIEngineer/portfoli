@@ -8,8 +8,6 @@ export function AiBotVideo() {
   return (
     <VisibilityVideo
       name="ai-bot"
-      threshold={0.5}
-      once
       caption="A customer asks. The bot answers. Instantly."
     />
   );
@@ -22,169 +20,104 @@ export function AiBotVideo() {
 "use client";
 
 import Image from "next/image";
-import { Pause, Play, RotateCcw } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useMotionPreference } from "./motion-preference";
 
+/** A background showcase, controlled by the site's single Motion switch. */
 export function VisibilityVideo({
   name,
   caption,
-  threshold,
-  once = false,
 }: {
   name: "work-showcase" | "ai-bot";
   caption: string;
-  threshold: number;
-  once?: boolean;
 }) {
   const { reduced } = useMotionPreference();
   const frame = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
-  const finished = useRef(false);
-  const visible = useRef(false);
-  const manuallyPaused = useRef(false);
-  const [eligible, setEligible] = useState(false);
-  const [ended, setEnded] = useState(false);
-  const [playing, setPlaying] = useState(false);
-  const [blocked, setBlocked] = useState(false);
   const poster = `/videos/${name}-poster.webp`;
 
   useEffect(() => {
-    const desktop = matchMedia("(min-width: 768px)");
-    const lessMotion = matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () =>
-      setEligible(desktop.matches && !lessMotion.matches && !reduced);
-    update();
-    desktop.addEventListener("change", update);
-    lessMotion.addEventListener("change", update);
-    return () => {
-      desktop.removeEventListener("change", update);
-      lessMotion.removeEventListener("change", update);
-    };
-  }, [reduced]);
-
-  useEffect(() => {
-    if (!eligible || !frame.current || !video.current) return;
     const media = video.current;
-    const play = () => {
+    const container = frame.current;
+    if (reduced || !media || !container) return;
+    let visible = false;
+    // Set both properties before play(): some mobile browsers check defaultMuted.
+    media.muted = true;
+    media.defaultMuted = true;
+    const resume = () => {
       if (
-        !visible.current ||
+        !visible ||
         document.hidden ||
-        manuallyPaused.current ||
-        (once && finished.current)
-      )
+        document.documentElement.dataset.motion === "reduced"
+      ) {
+        media.autoplay = false;
+        media.pause();
         return;
-      void media.play().catch((error) => {
-        if (error?.name !== "AbortError") setBlocked(true);
-      });
+      }
+      media.autoplay = true;
+      if (media.paused)
+        void media.play().catch(() => {
+          // A browser-level autoplay restriction is retried on the next real interaction.
+        });
     };
     const observer = new IntersectionObserver(
       ([entry]) => {
-        visible.current =
-          entry.isIntersecting && entry.intersectionRatio >= threshold;
-        if (visible.current) play();
-        else media.pause();
+        visible = entry.isIntersecting;
+        resume();
       },
-      { threshold: [0, threshold] },
+      { threshold: 0, rootMargin: "100px 0px" },
     );
-    const visibilityChange = () => {
-      if (document.hidden) media.pause();
-      else play();
-    };
-    observer.observe(frame.current);
-    document.addEventListener("visibilitychange", visibilityChange);
+    observer.observe(container);
+    media.addEventListener("canplay", resume);
+    document.addEventListener("visibilitychange", resume);
+    document.addEventListener("pointerdown", resume, { passive: true });
+    document.addEventListener("keydown", resume);
     return () => {
       observer.disconnect();
-      document.removeEventListener("visibilitychange", visibilityChange);
-      visible.current = false;
       media.pause();
+      media.removeEventListener("canplay", resume);
+      document.removeEventListener("visibilitychange", resume);
+      document.removeEventListener("pointerdown", resume);
+      document.removeEventListener("keydown", resume);
     };
-  }, [eligible, once, threshold]);
-
-  function toggle() {
-    const media = video.current;
-    if (!media) return;
-    if (!media.paused) {
-      manuallyPaused.current = true;
-      media.pause();
-      return;
-    }
-    if (!visible.current) return;
-    manuallyPaused.current = false;
-    if (ended) {
-      media.currentTime = 0;
-      finished.current = false;
-      setEnded(false);
-    }
-    setBlocked(false);
-    void media.play().catch(() => setBlocked(true));
-  }
+  }, [reduced]);
 
   return (
-    <figure
-      className="showcase-video mx-auto w-full max-w-6xl"
-      data-showcase-video={name}
-    >
-      <div
-        ref={frame}
-        className="showcase-video-frame relative aspect-video overflow-hidden rounded-3xl bg-black"
-      >
-        {eligible ? (
-          <video
-            ref={video}
-            muted
-            loop={!once}
-            playsInline
-            preload="none"
-            poster={poster}
-            aria-label={caption}
-            onPlaying={() => {
-              setPlaying(true);
-              setBlocked(false);
-            }}
-            onPause={() => setPlaying(false)}
-            onEnded={() => {
-              finished.current = true;
-              setEnded(true);
-              setPlaying(false);
-            }}
-            onError={() => setBlocked(true)}
-          >
-            <source src={`/videos/${name}.webm`} type="video/webm" />
-            <source src={`/videos/${name}.mp4`} type="video/mp4" />
-          </video>
-        ) : (
+    <figure className="showcase-video" data-showcase-video={name}>
+      <div ref={frame} className="showcase-video-frame">
+        {reduced ? (
           <Image
             src={poster}
             alt={caption}
             fill
-            sizes="(max-width: 767px) 90vw, (max-width: 1280px) 90vw, 1152px"
+            loading="eager"
+            sizes="100vw"
           />
+        ) : (
+          <video
+            ref={video}
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster={poster}
+            aria-label={caption}
+            disablePictureInPicture
+          >
+            <source
+              src={`/videos/${name}-mobile.webm`}
+              type="video/webm"
+              media="(max-width: 767px)"
+            />
+            <source
+              src={`/videos/${name}-mobile.mp4`}
+              type="video/mp4"
+              media="(max-width: 767px)"
+            />
+            <source src={`/videos/${name}.webm`} type="video/webm" />
+            <source src={`/videos/${name}.mp4`} type="video/mp4" />
+          </video>
         )}
-        {eligible &&
-          (!once || ended || blocked || playing || manuallyPaused.current) && (
-            <button
-              type="button"
-              className="showcase-video-control"
-              onClick={toggle}
-              aria-label={
-                ended
-                  ? "Replay AI bot video"
-                  : playing
-                    ? `Pause ${once ? "AI bot" : "website showcase"} video`
-                    : `Play ${once ? "AI bot" : "website showcase"} video`
-              }
-            >
-              {ended ? (
-                <RotateCcw size={15} aria-hidden="true" />
-              ) : playing ? (
-                <Pause size={15} aria-hidden="true" />
-              ) : (
-                <Play size={15} aria-hidden="true" />
-              )}
-              {ended ? "Replay" : playing ? "Pause" : "Play"}
-            </button>
-          )}
       </div>
       <figcaption>{caption}</figcaption>
     </figure>
@@ -202,7 +135,6 @@ export function WorkShowcaseVideo() {
   return (
     <VisibilityVideo
       name="work-showcase"
-      threshold={0.4}
       caption="A look at the concept websites, in motion."
     />
   );
@@ -1753,7 +1685,6 @@ export function BotEmbed({
 ``````tsx
 "use client";
 
-import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import {
   ArrowUpRight,
@@ -1775,7 +1706,7 @@ import { Reveal } from "./reveal";
 import { FortePreview } from "./forte-preview";
 import { AiBotVideo } from "./AiBotVideo";
 
-const ChatPanel = dynamic(() => import("./bot-chat-panel"), { ssr: false });
+import ChatPanel from "./bot-chat-panel";
 const icons = {
   real: Sparkles,
   support: Headphones,
@@ -2116,7 +2047,6 @@ export default function CertificateViewer({
 ``````tsx
 "use client";
 
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import { imagePreview } from "@/lib/image-preview";
 import { useState } from "react";
@@ -2127,9 +2057,7 @@ import {
 } from "@/data/certificates";
 import { Reveal } from "./reveal";
 
-const CertificateViewer = dynamic(() => import("./certificate-viewer"), {
-  ssr: false,
-});
+import CertificateViewer from "./certificate-viewer";
 
 export function Certifications({
   certificates,
@@ -2158,6 +2086,8 @@ export function Certifications({
               aria-label={`${copy.enlarge}: ${certificate.title}`}
             >
               <Image
+                loading="eager"
+                fetchPriority="low"
                 src={certificate.image}
                 {...imagePreview(certificate.image)}
                 alt={certificate.alt}
@@ -3437,6 +3367,100 @@ function Garment({ variant }: { variant: number }) {
 }
 ``````
 
+## components/demo-window.tsx
+
+``````tsx
+"use client";
+
+import Link from "next/link";
+import { useState, type ReactNode } from "react";
+import { ArrowLeft, Maximize2, Minimize2, PanelTop } from "lucide-react";
+import { concepts } from "@/data/concepts";
+
+/** Real interactive pages inside a desktop window, rather than an image/iframe. */
+export function DemoWindow({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactNode;
+}) {
+  const [maximized, setMaximized] = useState(false);
+  return (
+    <div className="demo-desktop">
+      <header className="demo-desktop-menu">
+        <Link href="/#work">Elvora Studio</Link>
+        <span>Website concepts</span>
+        <span>Interactive preview</span>
+      </header>
+      <section
+        className={`demo-window${maximized ? " is-maximized" : ""}`}
+        aria-label={`${title} preview window`}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") setMaximized(false);
+        }}
+      >
+        <div className="demo-window-toolbar">
+          <span className="demo-window-dots" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+          </span>
+          <span className="demo-window-breadcrumb">
+            Elvora <span aria-hidden="true">/</span> <strong>{title}</strong>
+          </span>
+          <div className="demo-window-actions">
+            <button
+              type="button"
+              onClick={() => setMaximized(!maximized)}
+              aria-label={
+                maximized ? "Restore preview window" : "Maximize preview window"
+              }
+              aria-pressed={maximized}
+            >
+              {maximized ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+            </button>
+            <Link href="/#work">
+              <ArrowLeft size={14} />
+              <span>Back to website</span>
+            </Link>
+          </div>
+        </div>
+        <div
+          className="demo-window-content"
+          data-native-scroll
+          tabIndex={0}
+          role="region"
+          aria-label={`${title} website content`}
+        >
+          {children}
+        </div>
+      </section>
+      <nav className="demo-desktop-dock" aria-label="Explore website concepts">
+        {Object.entries(concepts).map(([slug, concept]) => (
+          <Link
+            key={slug}
+            href={`/demo/${slug}`}
+            aria-current={concept.name === title ? "page" : undefined}
+          >
+            <span aria-hidden="true">
+              {concept.wordmark.slice(0, 1).toUpperCase()}
+            </span>
+            <small>{concept.name}</small>
+          </Link>
+        ))}
+        <Link href="/#work">
+          <span aria-hidden="true">
+            <PanelTop size={21} />
+          </span>
+          <small>All work</small>
+        </Link>
+      </nav>
+    </div>
+  );
+}
+``````
+
 ## components/design-study.tsx
 
 ``````tsx
@@ -3770,7 +3794,7 @@ export function EditorialEffects() {
             autoRaf: true,
             smoothWheel: true,
             syncTouch: false,
-            duration: 1.15,
+            duration: 0.65,
             easing: (value: number) =>
               Math.min(1, 1.001 - Math.pow(2, -10 * value)),
             anchors: true,
@@ -3979,38 +4003,16 @@ export function Experience() {
 
 ``````tsx
 "use client";
-
 import { useEffect } from "react";
+import { enhanceFaq } from "@/lib/faq-animation";
 import { useMotionPreference } from "./motion-preference";
 
-/** Native details render on the server; animation code arrives only near the FAQ. */
+/** Native FAQ content and its small enhancement are both ready on page load. */
 export function FaqEnhancement() {
   const { reduced } = useMotionPreference();
   useEffect(() => {
     const root = document.getElementById("faq");
-    if (!root || reduced) return;
-    let cancelled = false;
-    let cleanup: (() => void) | undefined;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (!entries.some((entry) => entry.isIntersecting)) return;
-        observer.disconnect();
-        void import("@/lib/faq-animation")
-          .then((module) => {
-            if (!cancelled) cleanup = module.enhanceFaq(root);
-          })
-          .catch(() => {
-            /* Native disclosure remains functional. */
-          });
-      },
-      { rootMargin: "300px" },
-    );
-    observer.observe(root);
-    return () => {
-      cancelled = true;
-      observer.disconnect();
-      cleanup?.();
-    };
+    if (root && !reduced) return enhanceFaq(root);
   }, [reduced]);
   return null;
 }
@@ -4391,11 +4393,14 @@ export function LogoMotion() {
   useEffect(() => {
     const logo = document.querySelector<HTMLElement>("[data-logo-flip]");
     if (!logo || reduced) return;
+    let visible = true;
     const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
       logo.dataset.logoVisible = String(entry.isIntersecting);
     });
     observer.observe(logo);
     const unsubscribe = subscribeScroll(({ y, viewport }) => {
+      if (!visible) return;
       const scene = logo.closest<HTMLElement>(".hero-emblem")!;
       const start = Math.max(
         0,
@@ -4678,6 +4683,7 @@ export function Navbar({
 "use client";
 import { useMotionPreference } from "./motion-preference";
 import Image from "next/image";
+import Link from "next/link";
 import { imagePreview } from "@/lib/image-preview";
 import { m, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -4689,12 +4695,10 @@ export function ProjectCard({
   project,
   index,
   total,
-  onOpen,
 }: {
   project: ProjectView;
   index: number;
   total: number;
-  onOpen: () => void;
 }) {
   const { reduced } = useMotionPreference();
   const [finePointer, setFinePointer] = useState(false);
@@ -4713,11 +4717,10 @@ export function ProjectCard({
   const presentation = projectPresentation(project.id);
   const mobile = project.screenshots[2] || project.screenshots[0];
   return (
-    <button
+    <Link
       className={`project-card device-project curated-project${presentation.artwork ? " artwork-project" : ""}`}
-      onClick={onOpen}
-      aria-haspopup="dialog"
-      aria-label={`${site.work.view}: ${project.title}`}
+      href={project.demoUrl || `/work/${project.id}`}
+      aria-label={`Explore website: ${project.title}`}
       onPointerMove={(event) => {
         if (!tilt) return;
         const rect = event.currentTarget.getBoundingClientRect();
@@ -4763,6 +4766,8 @@ export function ProjectCard({
             style={tilt ? { rotateX, rotateY } : undefined}
           >
             <Image
+              loading="eager"
+              fetchPriority="low"
               src={project.screenshots[0].src}
               {...imagePreview(project.screenshots[0].src)}
               alt={project.screenshots[0].alt}
@@ -4784,6 +4789,8 @@ export function ProjectCard({
                     <span className="device-camera" />
                     <div className="device-screen">
                       <Image
+                        loading="eager"
+                        fetchPriority="low"
                         src={project.screenshots[0].src}
                         {...imagePreview(project.screenshots[0].src)}
                         alt={project.screenshots[0].alt}
@@ -4800,6 +4807,8 @@ export function ProjectCard({
                 <div className="device-phone">
                   <div className="device-phone-screen">
                     <Image
+                      loading="eager"
+                      fetchPriority="low"
                       src={mobile.src}
                       {...imagePreview(mobile.src)}
                       alt={mobile.alt}
@@ -4829,7 +4838,7 @@ export function ProjectCard({
           {String(total).padStart(2, "0")}
         </span>
       </div>
-    </button>
+    </Link>
   );
 }
 ``````
@@ -5215,53 +5224,15 @@ export function ReadingText({
 "use client";
 import { useEffect } from "react";
 import { useMotionPreference } from "./motion-preference";
+
+/** Page content is present and readable immediately, never gated by scrolling. */
 export function RevealObserver() {
   const { reduced } = useMotionPreference();
   useEffect(() => {
-    if (!window.IntersectionObserver) return;
-    let observed = new WeakSet<Element>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries)
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-revealed");
-            observer.unobserve(entry.target);
-          }
-      },
-      { threshold: 0.08, rootMargin: "0px 0px -20px 0px" },
-    );
-    const scan = (root: Element) => {
-      const elements = [
-        ...root.querySelectorAll("[data-reveal]"),
-        ...(root.matches("[data-reveal]") ? [root] : []),
-      ];
-      for (const element of elements)
-        if (!observed.has(element)) {
-          observed.add(element);
-          observer.observe(element);
-        }
-    };
-    const change = () => {
-      observer.disconnect();
-      if (reduced) {
-        delete document.documentElement.dataset.motionReveals;
-        return;
-      }
-      document.documentElement.dataset.motionReveals = "enabled";
-      observed = new WeakSet<Element>();
-      scan(document.body);
-    };
-    change();
-    const mutation = new MutationObserver((records) => {
-      for (const record of records)
-        for (const node of record.addedNodes)
-          if (!reduced && node instanceof Element) scan(node);
-    });
-    mutation.observe(document.body, { childList: true, subtree: true });
-    return () => {
-      observer.disconnect();
-      mutation.disconnect();
-    };
+    if (reduced) delete document.documentElement.dataset.motionReveals;
+    else document.documentElement.dataset.motionReveals = "enabled";
+    for (const element of document.querySelectorAll("[data-reveal]"))
+      element.classList.add("is-revealed");
   }, [reduced]);
   return null;
 }
@@ -5311,6 +5282,17 @@ export function ScrollAmbience() {
     const animations = [
       ...document.querySelectorAll<HTMLElement>("[data-velocity-marquee]"),
     ].flatMap((element) => element.getAnimations());
+    const marquees = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries)
+          (entry.target as HTMLElement).dataset.scrollVisible = String(
+            entry.isIntersecting,
+          );
+      },
+      { rootMargin: "120px" },
+    );
+    for (const element of document.querySelectorAll("[data-velocity-marquee]"))
+      marquees.observe(element);
     const visible = new Set<HTMLElement>();
     const watched = new Set<HTMLElement>();
     const images = new IntersectionObserver(
@@ -5339,11 +5321,6 @@ export function ScrollAmbience() {
       }
     };
     scan();
-    const mutation = new MutationObserver(scan);
-    mutation.observe(document.getElementById("work") || document.body, {
-      childList: true,
-      subtree: true,
-    });
     let reset: ReturnType<typeof setTimeout> | undefined;
     const unsubscribe = subscribeScroll(({ viewport, velocity }) => {
       const moves: [HTMLElement, number][] = [];
@@ -5386,7 +5363,11 @@ export function ScrollAmbience() {
     return () => {
       unsubscribe();
       images.disconnect();
-      mutation.disconnect();
+      marquees.disconnect();
+      for (const element of document.querySelectorAll<HTMLElement>(
+        "[data-scroll-visible]",
+      ))
+        delete element.dataset.scrollVisible;
       scenes.disconnect();
       clearTimeout(reset);
       for (const element of watched)
@@ -6125,6 +6106,7 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
   useEffect(() => {
     const element = gallery.current;
     if (!element) return;
+    const cylinder = element.querySelector<HTMLElement>(".dome-cylinder");
     const observer = new IntersectionObserver(
       ([entry]) => {
         element.dataset.visible = String(entry.isIntersecting);
@@ -6135,18 +6117,19 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
     const unsubscribe = reduced
       ? undefined
       : subscribeScroll(({ viewport }) => {
+          if (element.dataset.visible !== "true") return;
           const rect = element.getBoundingClientRect();
           if (rect.bottom < 0 || rect.top > viewport) return;
           const amount =
             (viewport / 2 - (rect.top + rect.height / 2)) / viewport;
-          element.style.setProperty(
-            "--wall-drift",
-            `${Math.max(-20, Math.min(20, amount * 24))}px`,
-          );
+          // Move one composited surface; an inherited variable invalidated all 54 tiles.
+          if (cylinder)
+            cylinder.style.transform = `translateZ(calc(-1 * var(--dome-radius))) rotateZ(-4deg) translateY(${Math.max(-20, Math.min(20, amount * 24))}px)`;
         });
     return () => {
       observer.disconnect();
       unsubscribe?.();
+      cylinder?.style.removeProperty("transform");
     };
   }, [reduced]);
 
@@ -6205,6 +6188,8 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
                         tabIndex={-1}
                       >
                         <Image
+                          loading="eager"
+                          fetchPriority="low"
                           src={item.image}
                           {...imagePreview(item.image)}
                           alt=""
@@ -6257,38 +6242,25 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
 ``````tsx
 "use client";
 
-import dynamic from "next/dynamic";
-import Image from "next/image";
-import { imagePreview } from "@/lib/image-preview";
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { getImageProps } from "next/image";
+import { concepts } from "@/data/concepts";
 import type { ProjectView } from "@/data/projects";
 import type { Bot as BotData } from "@/data/bots";
-import { studies } from "@/data/studies";
 import { site } from "@/data/site";
 import { Reveal } from "./reveal";
 import { ProjectCard } from "./project-card";
 import { TextReveal } from "./text-reveal";
 import { WorkShowcaseVideo } from "./WorkShowcaseVideo";
+import { BotServices } from "./bot-services";
+import Gallery from "./project-gallery";
 
-const BotServices = dynamic(
-  () => import("./bot-services").then((m) => m.BotServices),
-  {
-    ssr: false,
-    loading: () => (
-      <div id="ai-bots" className="bot-loading" role="status">
-        {site.ui.loading}
-      </div>
-    ),
-  },
-);
-const Gallery = dynamic(() => import("./project-gallery"), { ssr: false });
 const categories = [
   { id: "all", title: "All" },
   { id: "web", title: "Website concepts" },
-  { id: "studies", title: "UI / interface studies" },
   { id: "bots", title: "AI chatbots & demos" },
-];
+] as const;
 
 export function Work({
   projects,
@@ -6297,29 +6269,44 @@ export function Work({
   projects: ProjectView[];
   bots: BotData[];
 }) {
+  const router = useRouter();
+  useEffect(() => {
+    for (const item of projects) {
+      if (!item.demoUrl.startsWith("/demo/")) continue;
+      router.prefetch(item.demoUrl);
+      const slug = item.demoUrl.slice("/demo/".length) as keyof typeof concepts;
+      if (!Object.hasOwn(concepts, slug)) continue;
+      const { props } = getImageProps({
+        src: concepts[slug].image,
+        alt: "",
+        fill: true,
+        sizes: ["solenne", "vanta"].includes(slug)
+          ? "100vw"
+          : "(max-width:700px) 100vw, 70vw",
+      });
+      const image = new window.Image();
+      image.fetchPriority = "low";
+      image.decoding = "async";
+      image.sizes = props.sizes || "100vw";
+      image.srcset = props.srcSet || "";
+      image.src = props.src;
+    }
+  }, [projects, router]);
   const [tab, setTab] = useState(0);
-  const [botsVisited, setBotsVisited] = useState(false);
   const [project, setProject] = useState<ProjectView | null>(null);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
-  const counts = [
-    projects.length + studies.length + bots.length,
-    projects.length,
-    studies.length,
-    bots.length,
-  ];
+  const counts = [projects.length + bots.length, projects.length, bots.length];
   useEffect(() => {
     const sync = () => {
-      if (["#ai-bots", "#embed-methods"].includes(location.hash)) {
-        setTab(3);
-        setBotsVisited(true);
-      } else if (location.hash === "#work") setTab(0);
+      if (["#ai-bots", "#embed-methods"].includes(location.hash)) setTab(2);
+      else if (location.hash === "#work") setTab(0);
     };
     sync();
     window.addEventListener("hashchange", sync);
     return () => window.removeEventListener("hashchange", sync);
   }, []);
   useEffect(() => {
-    if (tab !== 3 || !["#ai-bots", "#embed-methods"].includes(location.hash))
+    if (tab !== 2 || !["#ai-bots", "#embed-methods"].includes(location.hash))
       return;
     const frame = requestAnimationFrame(() =>
       document.getElementById(location.hash.slice(1))?.scrollIntoView(),
@@ -6328,8 +6315,7 @@ export function Work({
   }, [tab]);
   function selectTab(next: number) {
     setTab(next);
-    if (next === 3) setBotsVisited(true);
-    else if (["#ai-bots", "#embed-methods"].includes(location.hash))
+    if (next !== 2 && ["#ai-bots", "#embed-methods"].includes(location.hash))
       history.replaceState(null, "", "#work");
   }
   return (
@@ -6346,155 +6332,94 @@ export function Work({
           </div>
           <p>{site.work.description}</p>
         </div>
-        <WorkShowcaseVideo />
-        <div
-          className="work-filters"
-          role="tablist"
-          aria-label="Portfolio categories"
-        >
-          {categories.map((item, index) => (
-            <button
-              key={item.id}
-              ref={(node) => {
-                tabs.current[index] = node;
-              }}
-              id={`tab-${item.id}`}
-              role="tab"
-              aria-selected={tab === index}
-              aria-controls={`panel-${item.id}`}
-              tabIndex={tab === index ? 0 : -1}
-              onClick={() => selectTab(index)}
-              onKeyDown={(event) => {
-                if (
-                  !["ArrowLeft", "ArrowRight", "Home", "End"].includes(
-                    event.key,
-                  )
-                )
-                  return;
-                event.preventDefault();
-                const next =
-                  event.key === "Home"
-                    ? 0
-                    : event.key === "End"
-                      ? 3
-                      : (tab + (event.key === "ArrowRight" ? 1 : 3)) % 4;
-                selectTab(next);
-                tabs.current[next]?.focus();
-              }}
-            >
-              {item.title}
-              <span>{String(counts[index]).padStart(2, "0")}</span>
-            </button>
-          ))}
-        </div>
       </Reveal>
-      {/* Hidden panels remain valid ARIA targets; only the active panel renders expensive content. */}
-      {categories.map((category, index) => (
-        <div
-          key={category.id}
-          role="tabpanel"
-          id={`panel-${category.id}`}
-          aria-labelledby={`tab-${category.id}`}
-          hidden={tab !== index}
-          tabIndex={0}
-          className="work-panel"
-        >
-          {tab === index && (
-            <>
-              {(index === 0 || index === 1) && (
-                <div className="work-filter-enter">
-                  <div className="work-collection-label">
-                    <span>THE WEBSITE EDIT</span>
-                    <span>
-                      {String(projects.length).padStart(2, "0")} / INDEPENDENT
-                      CONCEPTS
-                    </span>
-                  </div>
-                  <div className="projects-grid curated-projects-grid">
-                    {projects.map((item, number) => (
-                      <Reveal key={item.id} delay={(number % 2) * 0.06}>
-                        <ProjectCard
-                          project={item}
-                          index={number}
-                          total={projects.length}
-                          onOpen={() => setProject(item)}
-                        />
-                      </Reveal>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {(index === 0 || index === 2) && (
-                <div className="interface-study-section work-filter-enter">
-                  <p className="eyebrow">
-                    INTERFACE STUDIES / SIX DIFFERENT DIRECTIONS
-                  </p>
-                  <div className="interface-studies-grid">
-                    {studies.map((study, number) => (
-                      <Reveal key={study.id} delay={(number % 2) * 0.05}>
-                        <a
-                          className="interface-study-card"
-                          href={`/studies/${study.id}`}
-                        >
-                          <div
-                            className="interface-study-image"
-                            data-parallax="image"
-                          >
-                            <Image
-                              src={study.screenshot}
-                              {...imagePreview(study.screenshot)}
-                              alt={`${study.name}: ${study.industry.toLowerCase()} interface concept`}
-                              fill
-                              sizes="(max-width: 700px) 90vw, (max-width: 1100px) 45vw, 560px"
-                            />
-                          </div>
-                          <div>
-                            <span>
-                              <small>{study.industry}</small>
-                              <strong>{study.name}</strong>
-                            </span>
-                            <ArrowUpRight size={22} aria-hidden="true" />
-                          </div>
-                        </a>
-                      </Reveal>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {index === 0 && (
-                <div className="work-ai-invitation">
-                  <div>
-                    <p className="eyebrow">INTELLIGENCE / ON DEMAND</p>
-                    <h3>Meet the other side of the work.</h3>
-                    <p>
-                      Explore the custom chatbot and AI demos, with voice and
-                      consent-aware experiences.
-                    </p>
-                  </div>
-                  <button
-                    className="button button-outline"
-                    onClick={() => {
-                      selectTab(3);
-                      tabs.current[3]?.focus();
-                    }}
-                  >
-                    Explore AI demos{" "}
-                    <ArrowUpRight size={18} aria-hidden="true" />
-                  </button>
-                </div>
-              )}
-              {index !== 3 && (
-                <p className="work-disclaimer">
-                  {site.work.disclaimer}
-                  <br />
-                  <span>{site.work.screenshotNote}</span>
-                </p>
-              )}
-              {index === 3 && botsVisited && <BotServices bots={bots} />}
-            </>
-          )}
+      <WorkShowcaseVideo />
+      <div
+        className="work-filters"
+        role="tablist"
+        aria-label="Portfolio categories"
+      >
+        {categories.map((item, index) => (
+          <button
+            key={item.id}
+            ref={(node) => {
+              tabs.current[index] = node;
+            }}
+            id={`tab-${item.id}`}
+            role="tab"
+            aria-selected={tab === index}
+            aria-controls="work-results"
+            tabIndex={tab === index ? 0 : -1}
+            onClick={() => selectTab(index)}
+            onKeyDown={(event) => {
+              if (
+                !["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)
+              )
+                return;
+              event.preventDefault();
+              const next =
+                event.key === "Home"
+                  ? 0
+                  : event.key === "End"
+                    ? categories.length - 1
+                    : (tab +
+                        (event.key === "ArrowRight"
+                          ? 1
+                          : categories.length - 1)) %
+                      categories.length;
+              selectTab(next);
+              tabs.current[next]?.focus();
+            }}
+          >
+            {item.title}
+            <span>{String(counts[index]).padStart(2, "0")}</span>
+          </button>
+        ))}
+      </div>
+      {/* Content mounts once in the initial HTML. Filters change visibility only. */}
+      <div
+        role="tabpanel"
+        id="work-results"
+        aria-labelledby={`tab-${categories[tab].id}`}
+        tabIndex={0}
+        className="work-panel"
+      >
+        <div hidden={tab === 2}>
+          <div className="work-collection-label">
+            <span>THE WEBSITE EDIT</span>
+            <span>
+              {String(projects.length).padStart(2, "0")} / INDEPENDENT CONCEPTS
+            </span>
+          </div>
+          <div className="projects-grid curated-projects-grid">
+            {projects.map((item, number) => (
+              <Reveal key={item.id}>
+                <ProjectCard
+                  project={item}
+                  index={number}
+                  total={projects.length}
+                />
+                <button
+                  className="project-screenshots-link"
+                  aria-haspopup="dialog"
+                  aria-label={`View screenshots: ${item.title}`}
+                  onClick={() => setProject(item)}
+                >
+                  View screenshots <span aria-hidden="true">↗</span>
+                </button>
+              </Reveal>
+            ))}
+          </div>
+          <p className="work-disclaimer">
+            {site.work.disclaimer}
+            <br />
+            <span>{site.work.screenshotNote}</span>
+          </p>
         </div>
-      ))}
+        <div hidden={tab === 1}>
+          <BotServices bots={bots} />
+        </div>
+      </div>
       {project && (
         <Gallery project={project} onClose={() => setProject(null)} />
       )}

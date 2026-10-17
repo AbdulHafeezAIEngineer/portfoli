@@ -260,9 +260,9 @@
   transition-delay: var(--reveal-delay, 0s);
 }
 [data-motion-reveals="enabled"] [data-reveal="block"]:not(.is-revealed) {
-  opacity: 0;
-  transform: translateY(26px);
-  filter: blur(3px);
+  opacity: 1;
+  transform: none;
+  filter: none;
 }
 [data-motion-reveals="enabled"] [data-reveal="words"] .motion-word {
   transition: transform 0.65s cubic-bezier(0.18, 0.85, 0.25, 1.08);
@@ -271,7 +271,7 @@
 [data-motion-reveals="enabled"]
   [data-reveal="words"]:not(.is-revealed)
   .motion-word {
-  transform: translateY(112%) rotate(3deg);
+  transform: none;
 }
 [data-consent-choice="saved"] .consent-banner {
   display: none;

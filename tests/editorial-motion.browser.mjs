@@ -42,7 +42,7 @@ try {
       );
       for (const category of [
         "Website concepts",
-        "UI / interface studies",
+        "AI chatbots & demos",
         "All",
       ]) {
         await page
@@ -58,8 +58,9 @@ try {
         const panel = page.getByRole("tabpanel");
         if (category === "Website concepts")
           assert.equal(await panel.locator(".project-card").count(), 4);
-        if (category === "UI / interface studies")
-          assert.equal(await panel.locator(".interface-study-card").count(), 6);
+        if (category === "AI chatbots & demos")
+          assert.equal(await panel.locator(".bot-card").count(), 4);
+        assert.equal(await page.locator(".interface-study-card").count(), 0);
         assert.ok(
           await page.evaluate(
             () => document.documentElement.scrollWidth <= innerWidth + 1,
@@ -152,7 +153,7 @@ try {
   );
   await touch.close();
   console.log(
-    "PASS touch-native scroll, no custom cursor, four on-demand AI demos and retained form validation/honeypot.",
+    "PASS touch-native scroll, no custom cursor, four pre-rendered AI demos and retained form validation/honeypot.",
   );
   const nojs = await browser.newContext({ javaScriptEnabled: false });
   const page = await nojs.newPage();

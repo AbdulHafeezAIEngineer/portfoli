@@ -49,6 +49,7 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
   useEffect(() => {
     const element = gallery.current;
     if (!element) return;
+    const cylinder = element.querySelector<HTMLElement>(".dome-cylinder");
     const observer = new IntersectionObserver(
       ([entry]) => {
         element.dataset.visible = String(entry.isIntersecting);
@@ -59,18 +60,19 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
     const unsubscribe = reduced
       ? undefined
       : subscribeScroll(({ viewport }) => {
+          if (element.dataset.visible !== "true") return;
           const rect = element.getBoundingClientRect();
           if (rect.bottom < 0 || rect.top > viewport) return;
           const amount =
             (viewport / 2 - (rect.top + rect.height / 2)) / viewport;
-          element.style.setProperty(
-            "--wall-drift",
-            `${Math.max(-20, Math.min(20, amount * 24))}px`,
-          );
+          // Move one composited surface; an inherited variable invalidated all 54 tiles.
+          if (cylinder)
+            cylinder.style.transform = `translateZ(calc(-1 * var(--dome-radius))) rotateZ(-4deg) translateY(${Math.max(-20, Math.min(20, amount * 24))}px)`;
         });
     return () => {
       observer.disconnect();
       unsubscribe?.();
+      cylinder?.style.removeProperty("transform");
     };
   }, [reduced]);
 
@@ -129,6 +131,8 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
                         tabIndex={-1}
                       >
                         <Image
+                          loading="eager"
+                          fetchPriority="low"
                           src={item.image}
                           {...imagePreview(item.image)}
                           alt=""

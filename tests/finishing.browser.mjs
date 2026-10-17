@@ -20,8 +20,8 @@ try {
   await page.getByLabel("Animation preference").selectOption("full");
   assert.equal(
     await page.locator("#faq").getAttribute("data-faq-enhanced"),
-    null,
-    "FAQ code is not eagerly activated above the fold.",
+    "true",
+    "FAQ code is ready before scrolling.",
   );
   assert.equal(await page.locator("[data-velocity-marquee]").count(), 2);
   await page.mouse.wheel(0, 350);
@@ -36,7 +36,10 @@ try {
       ?.style.getPropertyValue("--image-drift"),
   );
   await page.getByRole("tab", { name: /Website concepts/ }).click();
-  await page.locator(".project-card").first().click();
+  await page
+    .getByRole("button", { name: /^View screenshots:/ })
+    .first()
+    .click();
   const gallery = page.getByRole("dialog");
   await gallery.waitFor();
   await page.waitForFunction(() => {
@@ -120,7 +123,7 @@ try {
   assert.ok(await native.locator(".faq-answer").isVisible());
   await bare.close();
   console.log(
-    "PASS velocity marquees, desktop parallax, project/certificate dialogs, lazy animated FAQ, rapid reversal, keyboard operation, reduced-motion cleanup, native no-JS FAQ and zero browser errors.",
+    "PASS velocity marquees, desktop parallax, project/certificate dialogs, ready animated FAQ, rapid reversal, keyboard operation, reduced-motion cleanup, native no-JS FAQ and zero browser errors.",
   );
 } finally {
   await browser.close();

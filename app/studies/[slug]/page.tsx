@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { studies } from "@/data/studies";
 import { DesignStudy } from "@/components/design-study";
+import { DemoWindow } from "@/components/demo-window";
+import "../../demo-window.css";
 import "../studies.css";
 export const dynamicParams = false;
 
@@ -29,5 +31,9 @@ export default async function Page({
   const { slug } = await params;
   const study = studies.find(({ id }) => id === slug);
   if (!study) notFound();
-  return <DesignStudy study={study} />;
+  return (
+    <DemoWindow title={study.name}>
+      <DesignStudy study={study} />
+    </DemoWindow>
+  );
 }

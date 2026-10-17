@@ -9,11 +9,14 @@ export function LogoMotion() {
   useEffect(() => {
     const logo = document.querySelector<HTMLElement>("[data-logo-flip]");
     if (!logo || reduced) return;
+    let visible = true;
     const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
       logo.dataset.logoVisible = String(entry.isIntersecting);
     });
     observer.observe(logo);
     const unsubscribe = subscribeScroll(({ y, viewport }) => {
+      if (!visible) return;
       const scene = logo.closest<HTMLElement>(".hero-emblem")!;
       const start = Math.max(
         0,

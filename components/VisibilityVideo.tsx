@@ -1,169 +1,104 @@
 "use client";
 
 import Image from "next/image";
-import { Pause, Play, RotateCcw } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useMotionPreference } from "./motion-preference";
 
+/** A background showcase, controlled by the site's single Motion switch. */
 export function VisibilityVideo({
   name,
   caption,
-  threshold,
-  once = false,
 }: {
   name: "work-showcase" | "ai-bot";
   caption: string;
-  threshold: number;
-  once?: boolean;
 }) {
   const { reduced } = useMotionPreference();
   const frame = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
-  const finished = useRef(false);
-  const visible = useRef(false);
-  const manuallyPaused = useRef(false);
-  const [eligible, setEligible] = useState(false);
-  const [ended, setEnded] = useState(false);
-  const [playing, setPlaying] = useState(false);
-  const [blocked, setBlocked] = useState(false);
   const poster = `/videos/${name}-poster.webp`;
 
   useEffect(() => {
-    const desktop = matchMedia("(min-width: 768px)");
-    const lessMotion = matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () =>
-      setEligible(desktop.matches && !lessMotion.matches && !reduced);
-    update();
-    desktop.addEventListener("change", update);
-    lessMotion.addEventListener("change", update);
-    return () => {
-      desktop.removeEventListener("change", update);
-      lessMotion.removeEventListener("change", update);
-    };
-  }, [reduced]);
-
-  useEffect(() => {
-    if (!eligible || !frame.current || !video.current) return;
     const media = video.current;
-    const play = () => {
+    const container = frame.current;
+    if (reduced || !media || !container) return;
+    let visible = false;
+    // Set both properties before play(): some mobile browsers check defaultMuted.
+    media.muted = true;
+    media.defaultMuted = true;
+    const resume = () => {
       if (
-        !visible.current ||
+        !visible ||
         document.hidden ||
-        manuallyPaused.current ||
-        (once && finished.current)
-      )
+        document.documentElement.dataset.motion === "reduced"
+      ) {
+        media.autoplay = false;
+        media.pause();
         return;
-      void media.play().catch((error) => {
-        if (error?.name !== "AbortError") setBlocked(true);
-      });
+      }
+      media.autoplay = true;
+      if (media.paused)
+        void media.play().catch(() => {
+          // A browser-level autoplay restriction is retried on the next real interaction.
+        });
     };
     const observer = new IntersectionObserver(
       ([entry]) => {
-        visible.current =
-          entry.isIntersecting && entry.intersectionRatio >= threshold;
-        if (visible.current) play();
-        else media.pause();
+        visible = entry.isIntersecting;
+        resume();
       },
-      { threshold: [0, threshold] },
+      { threshold: 0, rootMargin: "100px 0px" },
     );
-    const visibilityChange = () => {
-      if (document.hidden) media.pause();
-      else play();
-    };
-    observer.observe(frame.current);
-    document.addEventListener("visibilitychange", visibilityChange);
+    observer.observe(container);
+    media.addEventListener("canplay", resume);
+    document.addEventListener("visibilitychange", resume);
+    document.addEventListener("pointerdown", resume, { passive: true });
+    document.addEventListener("keydown", resume);
     return () => {
       observer.disconnect();
-      document.removeEventListener("visibilitychange", visibilityChange);
-      visible.current = false;
       media.pause();
+      media.removeEventListener("canplay", resume);
+      document.removeEventListener("visibilitychange", resume);
+      document.removeEventListener("pointerdown", resume);
+      document.removeEventListener("keydown", resume);
     };
-  }, [eligible, once, threshold]);
-
-  function toggle() {
-    const media = video.current;
-    if (!media) return;
-    if (!media.paused) {
-      manuallyPaused.current = true;
-      media.pause();
-      return;
-    }
-    if (!visible.current) return;
-    manuallyPaused.current = false;
-    if (ended) {
-      media.currentTime = 0;
-      finished.current = false;
-      setEnded(false);
-    }
-    setBlocked(false);
-    void media.play().catch(() => setBlocked(true));
-  }
+  }, [reduced]);
 
   return (
-    <figure
-      className="showcase-video mx-auto w-full max-w-6xl"
-      data-showcase-video={name}
-    >
-      <div
-        ref={frame}
-        className="showcase-video-frame relative aspect-video overflow-hidden rounded-3xl bg-black"
-      >
-        {eligible ? (
-          <video
-            ref={video}
-            muted
-            loop={!once}
-            playsInline
-            preload="none"
-            poster={poster}
-            aria-label={caption}
-            onPlaying={() => {
-              setPlaying(true);
-              setBlocked(false);
-            }}
-            onPause={() => setPlaying(false)}
-            onEnded={() => {
-              finished.current = true;
-              setEnded(true);
-              setPlaying(false);
-            }}
-            onError={() => setBlocked(true)}
-          >
-            <source src={`/videos/${name}.webm`} type="video/webm" />
-            <source src={`/videos/${name}.mp4`} type="video/mp4" />
-          </video>
-        ) : (
+    <figure className="showcase-video" data-showcase-video={name}>
+      <div ref={frame} className="showcase-video-frame">
+        {reduced ? (
           <Image
             src={poster}
             alt={caption}
             fill
-            sizes="(max-width: 767px) 90vw, (max-width: 1280px) 90vw, 1152px"
+            loading="eager"
+            sizes="100vw"
           />
+        ) : (
+          <video
+            ref={video}
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster={poster}
+            aria-label={caption}
+            disablePictureInPicture
+          >
+            <source
+              src={`/videos/${name}-mobile.webm`}
+              type="video/webm"
+              media="(max-width: 767px)"
+            />
+            <source
+              src={`/videos/${name}-mobile.mp4`}
+              type="video/mp4"
+              media="(max-width: 767px)"
+            />
+            <source src={`/videos/${name}.webm`} type="video/webm" />
+            <source src={`/videos/${name}.mp4`} type="video/mp4" />
+          </video>
         )}
-        {eligible &&
-          (!once || ended || blocked || playing || manuallyPaused.current) && (
-            <button
-              type="button"
-              className="showcase-video-control"
-              onClick={toggle}
-              aria-label={
-                ended
-                  ? "Replay AI bot video"
-                  : playing
-                    ? `Pause ${once ? "AI bot" : "website showcase"} video`
-                    : `Play ${once ? "AI bot" : "website showcase"} video`
-              }
-            >
-              {ended ? (
-                <RotateCcw size={15} aria-hidden="true" />
-              ) : playing ? (
-                <Pause size={15} aria-hidden="true" />
-              ) : (
-                <Play size={15} aria-hidden="true" />
-              )}
-              {ended ? "Replay" : playing ? "Pause" : "Play"}
-            </button>
-          )}
       </div>
       <figcaption>{caption}</figcaption>
     </figure>

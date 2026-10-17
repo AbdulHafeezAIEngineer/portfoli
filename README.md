@@ -6,6 +6,8 @@ Next.js 15 App Router, TypeScript, Tailwind CSS and Framer Motion. All applicati
 
 Current UI/video update: [purple palette, preserved custom designs, visibility-controlled showcases, Testimonials and complete changed-file list](docs/PURPLE_VIDEO_UPDATE.md).
 
+Latest playback/navigation update: [wide looping videos, interactive desktop windows and measured page readiness](docs/READY_PLAYBACK_UPDATE.md).
+
 ## Agency features
 
 Services and project-note routes, native FAQs, a private service/FAQ/review CMS, searchable paginated inquiries with status and private notes, actual dashboard counts and audit history. Contact acceptance distinguishes database storage from optional SMTP notification. Genuine approved reviews appear only after publication; the About section uses original Elvora brand artwork.

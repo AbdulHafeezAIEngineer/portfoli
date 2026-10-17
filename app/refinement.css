@@ -71,7 +71,7 @@
 }
 [data-motion-reveals="enabled"] [data-reveal="block"]:not(.is-revealed) {
   filter: none;
-  transform: translateY(30px);
+  transform: none;
 }
 [data-motion-reveals="enabled"] [data-reveal="words"] .motion-word {
   transition-timing-function: var(--ease-editorial);

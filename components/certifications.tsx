@@ -1,6 +1,5 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import { imagePreview } from "@/lib/image-preview";
 import { useState } from "react";
@@ -11,9 +10,7 @@ import {
 } from "@/data/certificates";
 import { Reveal } from "./reveal";
 
-const CertificateViewer = dynamic(() => import("./certificate-viewer"), {
-  ssr: false,
-});
+import CertificateViewer from "./certificate-viewer";
 
 export function Certifications({
   certificates,
@@ -42,6 +39,8 @@ export function Certifications({
               aria-label={`${copy.enlarge}: ${certificate.title}`}
             >
               <Image
+                loading="eager"
+                fetchPriority="low"
                 src={certificate.image}
                 {...imagePreview(certificate.image)}
                 alt={certificate.alt}

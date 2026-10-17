@@ -4,6 +4,8 @@ import { demos, type DemoSlug } from "@/data/demos";
 import { DemoSite } from "@/components/demo-site";
 import { concepts, type ConceptSlug } from "@/data/concepts";
 import { ConceptSite } from "@/components/concept-site";
+import { DemoWindow } from "@/components/demo-window";
+import "../../demo-window.css";
 import "../demo.css";
 import "../concepts.css";
 export const dynamic = "force-dynamic";
@@ -32,7 +34,15 @@ export default async function DemoPage({
   params: Promise<{ slug: string }>;
 }) {
   if (Object.hasOwn(concepts, (await params).slug))
-    return <ConceptSite slug={(await params).slug as ConceptSlug} />;
+    return (
+      <DemoWindow title={concepts[(await params).slug as ConceptSlug].name}>
+        <ConceptSite slug={(await params).slug as ConceptSlug} />
+      </DemoWindow>
+    );
   if (!Object.hasOwn(demos, (await params).slug)) notFound();
-  return <DemoSite slug={(await params).slug as DemoSlug} />;
+  return (
+    <DemoWindow title={demos[(await params).slug as DemoSlug].name}>
+      <DemoSite slug={(await params).slug as DemoSlug} />
+    </DemoWindow>
+  );
 }

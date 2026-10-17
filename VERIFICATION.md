@@ -2,6 +2,10 @@
 
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
+## Latest playback, window navigation and page readiness
+
+Both videos now loop without player controls on desktop and phones, with responsive phone encodes and global Motion Off. This follows the owner's explicit update and supersedes the previous mobile-poster/AI-once behavior. Sample cards open actual interactive framed websites; the separate Work studies category is removed while the custom photo wall and study routes remain. Core content, images and interface code load before scrolling/interactions; viewport entrance gating is removed. Native video, all four demo forms/window controls, dialogs/FAQ, both themes and six widths passed. The loading check found all 67 images ready before scrolling and zero scroll-started image/component-script requests. Raw frame observations include occasional long frames; no physical-device 60fps claim is made. Public portfolio/window-chrome A/AA scans found zero violations. See [current evidence, previews and reproduction commands](docs/READY_PLAYBACK_UPDATE.md). Public-domain verification was blocked by this environment's DNS/HTTP proxy; live hosting/provider/owner-login success remains unverified.
+
 ## Current purple palette and local showcase videos
 
 The shared UI now uses the owner-specified purple tokens in both themes, with neutral large typography and no purple gradients. Custom project artwork, device designs, lower layouts and the curved photo wall retain their geometry/content/colors. Work and AI Bots have local WebM/MP4 showcases with visibility-based play/pause, an AI once/replay flow, and poster-only behavior below 768px or under reduced motion. No new library or consent/Botpress changes were introduced.
