@@ -2,7 +2,15 @@
 
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
-## Uploaded brief completion — latest local build
+## Password typing and optional authenticator correction
+
+The reported disabled-password behavior was reproduced: all login inputs were disabled when aggregate server configuration was incomplete. Email and password now stay editable, with password show/hide and a separate website-password hint. Submission remains guarded until setup is ready. The optional authenticator field is collapsed behind a native disclosure, with explicit instructions that it only applies after enabling 2FA in Security. Server-side password and TOTP validation remain unchanged.
+
+Connected Upstash integrations supplied `KV_REST_API_URL` and `KV_REST_API_TOKEN`, while owner readiness, build setup and login rate limiting previously recognized only custom AUTH/CHAT names. All three now share one server-side resolver supporting AUTH, CHAT, KV and native UPSTASH pairs, in that order. Partial explicit pairs do not fall back or borrow tokens; read-only tokens are not accepted. No variables, passwords, owners or 2FA settings were overwritten.
+
+Production build (including lint/types), 12 security tests and 5 login tests passed. A real Chromium production check at 360/1440px verifies typing, password reveal, optional code, unavailable-setup submission guard, no overflow and zero browser errors. A separate local dummy KV-only runtime enables the form, permits submission with a blank authenticator and preserves typed details on a simulated infrastructure error. This is not a successful real provider/owner login. Mobile login axe scan found zero WCAG A/AA violations; screenshot: `docs/login-fields-mobile.png`. `npm run test:login-fields:browser` reproduces the unconfigured UI regression check. Hosting deployment and real owner activation remain unverified.
+
+## Uploaded brief completion — prior public frontend measurement
 
 This is the newest frontend measurement and supersedes earlier scores below for the current build. See [the complete brief report](docs/BRIEF_COMPLETION.md) and [measured data](docs/brief-performance.json).
 

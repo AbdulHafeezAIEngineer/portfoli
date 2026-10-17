@@ -194,13 +194,13 @@ export const authOptions: NextAuthOptions = {
 
 ``````ts
 import "server-only";
+import { loginRedisConfiguration } from "./redis-configuration";
 
 /** Safe to expose only the aggregate readiness, never individual secret values. */
 export function adminConfigurationReady(env: NodeJS.ProcessEnv = process.env) {
   if (!env.DATABASE_URL?.trim() || !env.NEXTAUTH_SECRET?.trim()) return false;
   if (env.NODE_ENV !== "production") return true;
-  const redisUrl = env.AUTH_REDIS_REST_URL || env.CHAT_REDIS_REST_URL;
-  const redisToken = env.AUTH_REDIS_REST_TOKEN || env.CHAT_REDIS_REST_TOKEN;
+  const { url: redisUrl, token: redisToken } = loginRedisConfiguration(env);
   // A partial shared-store configuration must not silently use memory.
   if (redisUrl || redisToken) return Boolean(redisUrl && redisToken);
   return env.AUTH_ALLOW_IN_MEMORY_LIMITER === "true";
@@ -365,6 +365,7 @@ export function passwordRequirements(password: string | undefined): string[] {
 import "server-only";
 import { createHash } from "node:crypto";
 import { ChatError, publicHttpsUrl } from "@/lib/chat/http";
+import { loginRedisConfiguration } from "./redis-configuration";
 const runtime = globalThis as typeof globalThis & {
   elvoraLoginCounters?: Map<string, { count: number; until: number }>;
 };
@@ -390,10 +391,7 @@ export async function limitLogin(
   const window = Math.floor(now / 60000);
   const key = `elvora:login:${window}:${createHash("sha256").update(identity).digest("hex").slice(0, 32)}`;
   const ttl = Math.max(1, Math.ceil(((window + 1) * 60000 - now) / 1000));
-  const url =
-    process.env.AUTH_REDIS_REST_URL || process.env.CHAT_REDIS_REST_URL;
-  const token =
-    process.env.AUTH_REDIS_REST_TOKEN || process.env.CHAT_REDIS_REST_TOKEN;
+  const { url, token } = loginRedisConfiguration();
   if (url && token) {
     try {
       const response = await fetch(publicHttpsUrl(url), {
@@ -447,6 +445,27 @@ export async function limitLogin(
     count: (current?.count || 0) + 1,
     until: now + ttl * 1000,
   });
+}
+``````
+
+## lib/admin/redis-configuration.ts
+
+``````ts
+/** Server-side only: use one complete provider pair, never combine unrelated credentials. */
+export function loginRedisConfiguration(env: NodeJS.ProcessEnv = process.env) {
+  const pairs = [
+    ["AUTH_REDIS_REST_URL", "AUTH_REDIS_REST_TOKEN"],
+    ["CHAT_REDIS_REST_URL", "CHAT_REDIS_REST_TOKEN"],
+    ["KV_REST_API_URL", "KV_REST_API_TOKEN"],
+    ["UPSTASH_REDIS_REST_URL", "UPSTASH_REDIS_REST_TOKEN"],
+  ] as const;
+  for (const [urlKey, tokenKey] of pairs) {
+    const url = env[urlKey]?.trim();
+    const token = env[tokenKey]?.trim();
+    // Explicit partial configuration is an error; don't silently switch providers.
+    if (url || token) return { url, token };
+  }
+  return { url: undefined, token: undefined };
 }
 ``````
 

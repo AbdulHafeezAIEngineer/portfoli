@@ -176,6 +176,7 @@ docs/elvora-project-preview.png
 docs/forte-bot-card.png
 docs/image-optimization.json
 docs/lighthouse-summary.json
+docs/login-fields-mobile.png
 docs/mobile-about-preview.png
 docs/new-work-preview.png
 docs/preview.png
@@ -215,6 +216,7 @@ lib/admin/images.ts
 lib/admin/login-client.ts
 lib/admin/password.ts
 lib/admin/rate-limit.ts
+lib/admin/redis-configuration.ts
 lib/admin/schemas.ts
 lib/admin/security.ts
 lib/admin/session.ts
@@ -341,6 +343,7 @@ tests/contact.test.mjs
 tests/editorial-motion.browser.mjs
 tests/finishing.browser.mjs
 tests/helpers/https-proxy.mjs
+tests/login-fields.browser.mjs
 tests/owner-setup.integration.mjs
 tests/security.test.mjs
 tsconfig.json

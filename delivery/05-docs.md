@@ -629,6 +629,10 @@ Binary asset: 56227 bytes. SHA-256 `7fd938fd1da1dbc92babcd12adae4062f6fe3a1e7db3
 }
 ``````
 
+## docs/login-fields-mobile.png
+
+Binary asset: 78961 bytes. SHA-256 `97e805e6864f01d06f02cd5933c6a5d2d6fa69ea077bc0cfb08476a48a76e2ee`. Available in the repository and source ZIP.
+
 ## docs/mobile-about-preview.png
 
 Binary asset: 139652 bytes. SHA-256 `c43073f9bda4da3745f6961c2a17d66e594bc231607c7332fa0499ee5dd13e8a`. Available in the repository and source ZIP.

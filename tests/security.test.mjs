@@ -338,6 +338,24 @@ test("admin setup readiness requires private auth/database settings and producti
     }),
     true,
   );
+  for (const prefix of ["KV_REST_API", "UPSTASH_REDIS_REST"]) {
+    assert.equal(
+      adminConfigurationReady({
+        ...base,
+        [`${prefix}_URL`]: "https://fixture.example",
+        [`${prefix}_TOKEN`]: "test-only",
+      }),
+      true,
+    );
+  }
+  assert.equal(
+    adminConfigurationReady({
+      ...base,
+      KV_REST_API_URL: "https://fixture.example",
+      KV_REST_API_READ_ONLY_TOKEN: "read-only-is-not-a-write-token",
+    }),
+    false,
+  );
   assert.equal(
     adminConfigurationReady({
       ...base,
@@ -346,4 +364,51 @@ test("admin setup readiness requires private auth/database settings and producti
     }),
     false,
   );
+});
+
+test("login Redis provider pairs preserve explicit settings without mixing or partial fallback", () => {
+  const { loginRedisConfiguration } = fixture().load(
+    "lib/admin/redis-configuration.ts",
+  );
+  const resolved = loginRedisConfiguration({
+    AUTH_REDIS_REST_URL: " https://auth.example ",
+    AUTH_REDIS_REST_TOKEN: " explicit-test-token ",
+    KV_REST_API_URL: "https://kv.example",
+    KV_REST_API_TOKEN: "other-test-token",
+  });
+  assert.equal(resolved.url, "https://auth.example");
+  assert.equal(resolved.token, "explicit-test-token");
+  const partial = loginRedisConfiguration({
+    AUTH_REDIS_REST_URL: "https://auth.example",
+    CHAT_REDIS_REST_TOKEN: "unrelated-test-token",
+    KV_REST_API_URL: "https://kv.example",
+    KV_REST_API_TOKEN: "other-test-token",
+  });
+  assert.equal(partial.url, "https://auth.example");
+  assert.equal(partial.token, undefined);
+});
+
+test("login limiter uses provisioned KV REST credentials and enforces shared limits", async () => {
+  const requests = [];
+  let count = 1;
+  const { limitLogin } = fixture({
+    env: {
+      NODE_ENV: "production",
+      KV_REST_API_URL: "https://fixture.example",
+      KV_REST_API_TOKEN: "explicit-test-token",
+    },
+    fetch: async (url, init) => {
+      requests.push({ url, init });
+      return Response.json({ result: count });
+    },
+  }).load("lib/admin/rate-limit.ts");
+  await limitLogin({});
+  assert.equal(String(requests[0].url), "https://fixture.example/");
+  assert.equal(
+    requests[0].init.headers.Authorization,
+    "Bearer explicit-test-token",
+  );
+  assert.equal(JSON.parse(requests[0].init.body)[0], "EVAL");
+  count = 6;
+  await assert.rejects(limitLogin({}), (error) => error.status === 429);
 });

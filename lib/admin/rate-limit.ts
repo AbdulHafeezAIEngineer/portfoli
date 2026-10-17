@@ -1,6 +1,7 @@
 import "server-only";
 import { createHash } from "node:crypto";
 import { ChatError, publicHttpsUrl } from "@/lib/chat/http";
+import { loginRedisConfiguration } from "./redis-configuration";
 const runtime = globalThis as typeof globalThis & {
   elvoraLoginCounters?: Map<string, { count: number; until: number }>;
 };
@@ -26,10 +27,7 @@ export async function limitLogin(
   const window = Math.floor(now / 60000);
   const key = `elvora:login:${window}:${createHash("sha256").update(identity).digest("hex").slice(0, 32)}`;
   const ttl = Math.max(1, Math.ceil(((window + 1) * 60000 - now) / 1000));
-  const url =
-    process.env.AUTH_REDIS_REST_URL || process.env.CHAT_REDIS_REST_URL;
-  const token =
-    process.env.AUTH_REDIS_REST_TOKEN || process.env.CHAT_REDIS_REST_TOKEN;
+  const { url, token } = loginRedisConfiguration();
   if (url && token) {
     try {
       const response = await fetch(publicHttpsUrl(url), {

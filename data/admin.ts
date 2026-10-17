@@ -5,16 +5,27 @@ export const adminContent = {
   loginDescription: "Sign in to manage your portfolio.",
   email: "Admin email",
   password: "Password",
+  passwordHelp:
+    "Use your website admin password, not your Neon or email password.",
+  showPassword: "Show password",
+  hidePassword: "Hide password",
+  codeToggle: "Use an authenticator code (optional)",
+  codeHelp:
+    "Leave this blank unless you enabled two-factor authentication in your dashboard's Security settings. If enabled, enter the six-digit code from your authenticator app.",
   code: "Authenticator code (if enabled)",
   signIn: "Sign in",
   signOut: "Sign out",
   signingIn: "Signing in…",
-  loginError: "Sign-in details were not accepted. Check your admin email, password and authenticator code if enabled.",
-  loginUnavailable: "Owner sign-in is temporarily unavailable. The deployment needs its private authentication/database configuration checked. Your details have not been cleared.",
+  loginError:
+    "Sign-in details were not accepted. Check your admin email, password and authenticator code if enabled.",
+  loginUnavailable:
+    "Owner sign-in is temporarily unavailable. The deployment needs its private authentication/database configuration checked. Your details have not been cleared.",
   loginLimited: "Too many sign-in attempts. Wait a minute, then try again.",
-  loginSessionError: "Your sign-in session could not be saved. Allow essential cookies and open the website using its HTTPS address, then try again.",
+  loginSessionError:
+    "Your sign-in session could not be saved. Allow essential cookies and open the website using its HTTPS address, then try again.",
   setupTitle: "Owner sign-in needs setup",
-  setupDescription: "The private authentication settings are incomplete on this deployment. Finish the database, authentication and first-owner setup in the hosting dashboard, then check again.",
+  setupDescription:
+    "Sign-in is unavailable because this deployment's private login configuration is incomplete. You can type your details, but signing in stays unavailable until setup is complete. Your password is not the cause of this notice.",
   checkSetup: "Check again",
   save: "Save changes",
   create: "Create record",

@@ -90,6 +90,8 @@ try {
   const bare = await browser.newContext();
   const bp = await bare.newPage();
   await bp.goto(unconfigured + "/admin/login");
+  const reject = bp.getByRole("button", { name: "Reject All", exact: true });
+  if (await reject.isVisible()) await reject.click();
   assert.equal(
     await bp
       .getByRole("heading", { name: "Owner sign-in needs setup" })
@@ -103,6 +105,24 @@ try {
   assert.equal(
     await bp.getByLabel("Admin email", { exact: true }).inputValue(),
     "abdulhafeez@elvoraai.online",
+  );
+  const password = bp.getByLabel("Password", { exact: true });
+  await password.fill("Explicit-test-fixture-only!9");
+  assert.equal(await password.inputValue(), "Explicit-test-fixture-only!9");
+  await bp.getByRole("button", { name: "Show password", exact: true }).click();
+  assert.equal(await password.getAttribute("type"), "text");
+  await bp.getByRole("button", { name: "Hide password", exact: true }).click();
+  assert.equal(await password.getAttribute("type"), "password");
+  assert.equal(
+    await bp.getByLabel("Authenticator code (if enabled)").isVisible(),
+    false,
+  );
+  await bp
+    .getByText("Use an authenticator code (optional)", { exact: true })
+    .click();
+  assert.equal(
+    await bp.getByLabel("Authenticator code (if enabled)").isVisible(),
+    true,
   );
   await bp.getByRole("button", { name: "Check again", exact: true }).click();
   assert.equal(new URL(bp.url()).pathname, "/admin/login");
@@ -2154,6 +2174,88 @@ for (const signal of ["SIGINT", "SIGTERM"])
   process.on(signal, () => server.close(() => process.exit(0)));
 ``````
 
+## tests/login-fields.browser.mjs
+
+``````javascript
+import assert from "node:assert/strict";
+import { chromium } from "@playwright/test";
+
+const base = process.env.PUBLIC_TEST_URL || "http://127.0.0.1:3008";
+if (!/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(base))
+  throw new Error("Local unconfigured production app required.");
+const browser = await chromium.launch({
+  executablePath:
+    process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE || "/usr/bin/chromium",
+  args: ["--no-sandbox"],
+});
+try {
+  for (const width of [360, 1440]) {
+    const page = await browser.newPage({ viewport: { width, height: 1000 } });
+    const errors = [];
+    const submissions = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    page.on("request", (request) => {
+      if (request.url().includes("/api/auth/callback/credentials"))
+        submissions.push(request.url());
+    });
+    await page.goto(base + "/admin/login");
+    const reject = page.getByRole("button", { name: "Reject All", exact: true });
+    if (await reject.isVisible()) await reject.click();
+    await page
+      .getByRole("heading", { name: "Owner sign-in needs setup" })
+      .waitFor();
+    const email = page.getByLabel("Admin email", { exact: true });
+    const password = page.getByLabel("Password", { exact: true });
+    await email.fill("owner@example.test");
+    await password.fill("Explicit-test-fixture-only!9");
+    assert.equal(await password.inputValue(), "Explicit-test-fixture-only!9");
+    assert.equal(await password.getAttribute("type"), "password");
+    await page
+      .getByRole("button", { name: "Show password", exact: true })
+      .click();
+    assert.equal(await password.getAttribute("type"), "text");
+    await page
+      .getByRole("button", { name: "Hide password", exact: true })
+      .click();
+    assert.equal(await password.getAttribute("type"), "password");
+    const code = page.getByLabel("Authenticator code (if enabled)");
+    assert.equal(await code.isVisible(), false);
+    await page
+      .getByText("Use an authenticator code (optional)", { exact: true })
+      .click();
+    assert.ok(await code.isVisible());
+    assert.equal(await code.getAttribute("required"), null);
+    assert.equal(await code.inputValue(), "");
+    assert.equal(
+      await page
+        .getByRole("button", { name: "Sign in", exact: true })
+        .isDisabled(),
+      true,
+    );
+    await password.press("Enter");
+    assert.equal(new URL(page.url()).pathname, "/admin/login");
+    assert.equal(
+      submissions.length,
+      0,
+      "Incomplete setup must not submit credentials.",
+    );
+    assert.equal(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+      true,
+    );
+    assert.deepEqual(errors, []);
+    await page.close();
+    console.log(
+      `PASS ${width}px: editable credentials, password reveal, optional authenticator, setup submission guard, no overflow or browser errors.`,
+    );
+  }
+} finally {
+  await browser.close();
+}
+``````
+
 ## tests/owner-setup.integration.mjs
 
 ``````javascript
@@ -2582,6 +2684,24 @@ test("admin setup readiness requires private auth/database settings and producti
     }),
     true,
   );
+  for (const prefix of ["KV_REST_API", "UPSTASH_REDIS_REST"]) {
+    assert.equal(
+      adminConfigurationReady({
+        ...base,
+        [`${prefix}_URL`]: "https://fixture.example",
+        [`${prefix}_TOKEN`]: "test-only",
+      }),
+      true,
+    );
+  }
+  assert.equal(
+    adminConfigurationReady({
+      ...base,
+      KV_REST_API_URL: "https://fixture.example",
+      KV_REST_API_READ_ONLY_TOKEN: "read-only-is-not-a-write-token",
+    }),
+    false,
+  );
   assert.equal(
     adminConfigurationReady({
       ...base,
@@ -2590,5 +2710,52 @@ test("admin setup readiness requires private auth/database settings and producti
     }),
     false,
   );
+});
+
+test("login Redis provider pairs preserve explicit settings without mixing or partial fallback", () => {
+  const { loginRedisConfiguration } = fixture().load(
+    "lib/admin/redis-configuration.ts",
+  );
+  const resolved = loginRedisConfiguration({
+    AUTH_REDIS_REST_URL: " https://auth.example ",
+    AUTH_REDIS_REST_TOKEN: " explicit-test-token ",
+    KV_REST_API_URL: "https://kv.example",
+    KV_REST_API_TOKEN: "other-test-token",
+  });
+  assert.equal(resolved.url, "https://auth.example");
+  assert.equal(resolved.token, "explicit-test-token");
+  const partial = loginRedisConfiguration({
+    AUTH_REDIS_REST_URL: "https://auth.example",
+    CHAT_REDIS_REST_TOKEN: "unrelated-test-token",
+    KV_REST_API_URL: "https://kv.example",
+    KV_REST_API_TOKEN: "other-test-token",
+  });
+  assert.equal(partial.url, "https://auth.example");
+  assert.equal(partial.token, undefined);
+});
+
+test("login limiter uses provisioned KV REST credentials and enforces shared limits", async () => {
+  const requests = [];
+  let count = 1;
+  const { limitLogin } = fixture({
+    env: {
+      NODE_ENV: "production",
+      KV_REST_API_URL: "https://fixture.example",
+      KV_REST_API_TOKEN: "explicit-test-token",
+    },
+    fetch: async (url, init) => {
+      requests.push({ url, init });
+      return Response.json({ result: count });
+    },
+  }).load("lib/admin/rate-limit.ts");
+  await limitLogin({});
+  assert.equal(String(requests[0].url), "https://fixture.example/");
+  assert.equal(
+    requests[0].init.headers.Authorization,
+    "Bearer explicit-test-token",
+  );
+  assert.equal(JSON.parse(requests[0].init.body)[0], "EVAL");
+  count = 6;
+  await assert.rejects(limitLogin({}), (error) => error.status === 429);
 });
 ``````

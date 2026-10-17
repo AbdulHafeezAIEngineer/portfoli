@@ -510,6 +510,7 @@ export function AdminApp({
 }
 function AdminLogin({ ready }: { ready: boolean }) {
   const [busy, setBusy] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const locked = useRef(false);
   const alert = useRef<HTMLParagraphElement>(null);
@@ -584,28 +585,50 @@ function AdminLogin({ ready }: { ready: boolean }) {
           autoComplete="username"
           maxLength={254}
           defaultValue={site.email}
-          disabled={busy || !ready}
+          disabled={busy}
         />
         <label htmlFor="admin-password">{copy.password}</label>
-        <input
-          id="admin-password"
-          name="password"
-          type="password"
-          required
-          autoComplete="current-password"
-          maxLength={128}
-          disabled={busy || !ready}
-        />
-        <label htmlFor="admin-code">{copy.code}</label>
-        <input
-          id="admin-code"
-          name="code"
-          inputMode="numeric"
-          autoComplete="one-time-code"
-          pattern="[0-9]{6}"
-          maxLength={6}
-          disabled={busy || !ready}
-        />
+        <div className="admin-password-field">
+          <input
+            id="admin-password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            required
+            autoComplete="current-password"
+            aria-describedby="admin-password-help"
+            maxLength={128}
+            disabled={busy}
+          />
+          <button
+            type="button"
+            className="admin-password-toggle"
+            aria-controls="admin-password"
+            onClick={() => setShowPassword((visible) => !visible)}
+            disabled={busy}
+          >
+            {showPassword ? copy.hidePassword : copy.showPassword}
+          </button>
+        </div>
+        <p id="admin-password-help" className="admin-login-help">
+          {copy.passwordHelp}
+        </p>
+        <details className="admin-authenticator">
+          <summary>{copy.codeToggle}</summary>
+          <p id="admin-code-help" className="admin-login-help">
+            {copy.codeHelp}
+          </p>
+          <label htmlFor="admin-code">{copy.code}</label>
+          <input
+            id="admin-code"
+            name="code"
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            aria-describedby="admin-code-help"
+            pattern="[0-9]{6}"
+            maxLength={6}
+            disabled={busy}
+          />
+        </details>
         {error && (
           <p ref={alert} tabIndex={-1} role="alert" className="field-error">
             {error}

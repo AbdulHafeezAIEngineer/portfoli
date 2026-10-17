@@ -448,6 +448,48 @@ export default async function AdminPage({
     font-size: 32px;
   }
 }
+.admin-password-field {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+.admin-password-field input {
+  min-width: 0;
+  flex: 1;
+}
+.admin-password-toggle {
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--raised);
+  color: var(--text);
+  font-size: 11px;
+}
+.admin-login .admin-login-help {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.admin-authenticator {
+  margin-top: 24px;
+}
+.admin-authenticator summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text);
+}
+.admin-authenticator summary::before {
+  content: "+";
+  margin-right: 10px;
+}
+.admin-authenticator[open] summary::before {
+  content: "−";
+}
 ``````
 
 ## app/agency.css

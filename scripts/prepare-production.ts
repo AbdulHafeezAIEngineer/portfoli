@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { hash } from "bcryptjs";
 import { passwordRequirements } from "../lib/admin/password";
+import { loginRedisConfiguration } from "../lib/admin/redis-configuration";
 import { site } from "../data/site";
 import {
   databaseSetupFailure,
@@ -66,10 +67,7 @@ async function main() {
     throw new SetupError(
       "NEXTAUTH_URL and NEXT_PUBLIC_SITE_URL must use the same canonical HTTPS origin.",
     );
-  const redisUrl =
-    process.env.AUTH_REDIS_REST_URL || process.env.CHAT_REDIS_REST_URL;
-  const redisToken =
-    process.env.AUTH_REDIS_REST_TOKEN || process.env.CHAT_REDIS_REST_TOKEN;
+  const { url: redisUrl, token: redisToken } = loginRedisConfiguration();
   if (
     redisUrl || redisToken
       ? !(redisUrl && redisToken)
@@ -77,7 +75,7 @@ async function main() {
         process.env.AUTH_ALLOW_IN_MEMORY_LIMITER !== "true"
   )
     throw new SetupError(
-      "Configure shared AUTH_REDIS_REST_URL and AUTH_REDIS_REST_TOKEN for owner login protection.",
+      "Configure a complete shared Redis REST URL/token pair for owner login protection (AUTH_REDIS_REST_*, KV_REST_API_* or UPSTASH_REDIS_REST_*).",
     );
   const migration = spawnSync(
     process.execPath,

@@ -30,6 +30,7 @@
     "test:motion:browser": "node tests/editorial-motion.browser.mjs",
     "test:owner:setup": "node tests/owner-setup.integration.mjs",
     "test:finishing:browser": "node tests/finishing.browser.mjs",
+    "test:login-fields:browser": "node tests/login-fields.browser.mjs",
     "images:previews": "node scripts/generate-image-previews.mjs"
   },
   "dependencies": {

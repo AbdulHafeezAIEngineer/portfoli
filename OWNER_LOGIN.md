@@ -23,7 +23,7 @@ Open the **elvora-studio** Vercel project → **Settings → Environment Variabl
 | `ADMIN_PASSWORD`           | Your new strong admin password: 14+ characters with upper/lowercase, number and symbol; maximum 72 UTF-8 bytes |
 | `ADMIN_BOOTSTRAP_ON_BUILD` | `true` for the first production deployment                                                                     |
 
-Vercel's connected storage integrations can provision the required PostgreSQL and Redis accounts; map their actual connection variables to the names above. Use verified provider URLs and TLS. Do not replace missing values with examples. A serverless Vercel deployment requires shared login protection; do not use an in-memory override to bypass this requirement.
+Vercel's connected Upstash integration variables `KV_REST_API_URL` and `KV_REST_API_TOKEN` are now read directly for owner login protection; no duplicate mapping is needed. Native `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` also work. Explicit `AUTH_REDIS_REST_*` settings take precedence, followed by `CHAT_REDIS_REST_*`, KV and native Upstash. A partial higher-priority pair stops setup rather than borrowing another provider's token. Read-only tokens cannot replace the write token. Use verified provider URLs and TLS. Do not replace missing values with examples. A serverless Vercel deployment requires shared login protection; do not use an in-memory override to bypass this requirement.
 
 Redeploy the current GitHub main branch using the repository's normal `npm run build` command. With the private flag enabled, the build applies the reviewed additive migrations and creates **only the first owner**. It does not seed demonstration data, expose a web registration/setup endpoint or change existing accounts/passwords. Preview deployments skip owner creation. Setup failures stop the flagged deployment with a safe message in its private build logs; no credentials or database URLs are printed.
 
@@ -39,7 +39,9 @@ The supplied production log reached `Reviewed database migrations applied.` and 
 
 The `.env.local not found` notice is expected on Vercel when settings are supplied through environment variables. PostgreSQL's SSL-mode compatibility warning is not the credential error; do not disable TLS verification to suppress it.
 
-- Incomplete private configuration shows **Owner sign-in needs setup** and a Check again button, rather than submitting into a redirect loop.
+- Incomplete private configuration shows **Owner sign-in needs setup** and a Check again button. Email/password remain editable with a show/hide password control, while submission stays unavailable until private setup is ready. The notice does not indicate a wrong password.
+- The password is the website administrator password chosen during first-owner setup, not a Neon/PostgreSQL or email mailbox password. There is no default password.
+- The authenticator field is collapsed by default and optional for accounts without 2FA. Open it only if you enabled two-factor authentication in the dashboard Security settings, then use the six-digit code from your authenticator app. Neither the database integration nor this UI change enables 2FA automatically. Accounts with 2FA continue to require a valid code on the server.
 - Wrong credentials show a clear inline error and preserve entered details.
 - Infrastructure failures and request throttling have separate safe messages.
 - A successful callback must also establish an authorized session before navigating to the dashboard. Missing/blocked session cookies leave a visible explanation on the login page.

@@ -37,6 +37,8 @@ try {
   const bare = await browser.newContext();
   const bp = await bare.newPage();
   await bp.goto(unconfigured + "/admin/login");
+  const reject = bp.getByRole("button", { name: "Reject All", exact: true });
+  if (await reject.isVisible()) await reject.click();
   assert.equal(
     await bp
       .getByRole("heading", { name: "Owner sign-in needs setup" })
@@ -50,6 +52,24 @@ try {
   assert.equal(
     await bp.getByLabel("Admin email", { exact: true }).inputValue(),
     "abdulhafeez@elvoraai.online",
+  );
+  const password = bp.getByLabel("Password", { exact: true });
+  await password.fill("Explicit-test-fixture-only!9");
+  assert.equal(await password.inputValue(), "Explicit-test-fixture-only!9");
+  await bp.getByRole("button", { name: "Show password", exact: true }).click();
+  assert.equal(await password.getAttribute("type"), "text");
+  await bp.getByRole("button", { name: "Hide password", exact: true }).click();
+  assert.equal(await password.getAttribute("type"), "password");
+  assert.equal(
+    await bp.getByLabel("Authenticator code (if enabled)").isVisible(),
+    false,
+  );
+  await bp
+    .getByText("Use an authenticator code (optional)", { exact: true })
+    .click();
+  assert.equal(
+    await bp.getByLabel("Authenticator code (if enabled)").isVisible(),
+    true,
   );
   await bp.getByRole("button", { name: "Check again", exact: true }).click();
   assert.equal(new URL(bp.url()).pathname, "/admin/login");
