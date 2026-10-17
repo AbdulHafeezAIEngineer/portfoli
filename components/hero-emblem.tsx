@@ -4,6 +4,7 @@ export function HeroEmblem() {
   return (
     <div
       className="hero-emblem"
+      data-parallax="hero"
       aria-label={`${site.brand}: websites and AI experiences`}
       role="img"
     >

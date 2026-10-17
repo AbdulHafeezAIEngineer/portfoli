@@ -3,14 +3,12 @@
 import { useEffect, useState } from "react";
 import { ArrowUp } from "lucide-react";
 import { site } from "@/data/site";
+import { subscribeScroll } from "@/lib/scroll";
 
 export function BackToTop() {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
-    const update = () => setVisible(window.scrollY > 600);
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    return () => window.removeEventListener("scroll", update);
+    return subscribeScroll(({ y }) => setVisible(y > 600));
   }, []);
   if (!visible) return null;
   return (

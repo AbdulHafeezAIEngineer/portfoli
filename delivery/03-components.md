@@ -1030,14 +1030,12 @@ function LeadEditor({
 import { useEffect, useState } from "react";
 import { ArrowUp } from "lucide-react";
 import { site } from "@/data/site";
+import { subscribeScroll } from "@/lib/scroll";
 
 export function BackToTop() {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
-    const update = () => setVisible(window.scrollY > 600);
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    return () => window.removeEventListener("scroll", update);
+    return subscribeScroll(({ y }) => setVisible(y > 600));
   }, []);
   if (!visible) return null;
   return (
@@ -1732,6 +1730,7 @@ export function BrandMark({ brand }: { brand: string }) {
 "use client";
 
 import Image from "next/image";
+import { imagePreview } from "@/lib/image-preview";
 import { useRef, useState } from "react";
 import { LoaderCircle, RotateCcw, X, ZoomIn, ZoomOut } from "lucide-react";
 import {
@@ -1853,10 +1852,11 @@ export default function CertificateViewer({
             >
               <Image
                 src={certificate.image}
+                {...imagePreview(certificate.image)}
                 alt={certificate.alt}
                 fill
                 sizes="(max-width: 700px) 200vw, 2400px"
-                priority
+                loading="eager"
                 onLoad={() => setLoaded(true)}
                 onError={() => {
                   setLoaded(true);
@@ -1882,6 +1882,7 @@ export default function CertificateViewer({
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { imagePreview } from "@/lib/image-preview";
 import { useState } from "react";
 import { Expand } from "lucide-react";
 import {
@@ -1922,6 +1923,7 @@ export function Certifications({
             >
               <Image
                 src={certificate.image}
+                {...imagePreview(certificate.image)}
                 alt={certificate.alt}
                 width={1600}
                 height={1120}
@@ -3554,7 +3556,7 @@ export function EditorialEffects() {
         frame = requestAnimationFrame(() => {
           const target = event.target instanceof Element ? event.target : null;
           const view = target?.closest(
-            ".project-card, .interface-study-card, .bunch-piece",
+            ".project-card, .interface-study-card, .dome-tile, .dome-index a",
           );
           const button =
             target?.closest<HTMLElement>(
@@ -3732,11 +3734,53 @@ export function Experience() {
 }
 ``````
 
+## components/faq-enhancement.tsx
+
+``````tsx
+"use client";
+
+import { useEffect } from "react";
+import { useMotionPreference } from "./motion-preference";
+
+/** Native details render on the server; animation code arrives only near the FAQ. */
+export function FaqEnhancement() {
+  const { reduced } = useMotionPreference();
+  useEffect(() => {
+    const root = document.getElementById("faq");
+    if (!root || reduced) return;
+    let cancelled = false;
+    let cleanup: (() => void) | undefined;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        void import("@/lib/faq-animation")
+          .then((module) => {
+            if (!cancelled) cleanup = module.enhanceFaq(root);
+          })
+          .catch(() => {
+            /* Native disclosure remains functional. */
+          });
+      },
+      { rootMargin: "300px" },
+    );
+    observer.observe(root);
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+      cleanup?.();
+    };
+  }, [reduced]);
+  return null;
+}
+``````
+
 ## components/faq-section.tsx
 
 ``````tsx
 import type { Faq } from "@/data/agency";
 import { TextReveal } from "./text-reveal";
+import { FaqEnhancement } from "./faq-enhancement";
 export function FaqSection({ faqs }: { faqs: Faq[] }) {
   if (!faqs.length) return null;
   return (
@@ -3745,6 +3789,7 @@ export function FaqSection({ faqs }: { faqs: Faq[] }) {
       className="container studio-section agency-faq"
       aria-labelledby="faq-title"
     >
+      <FaqEnhancement />
       <div>
         <p className="eyebrow">BEFORE WE BUILD</p>
         <TextReveal id="faq-title" text={"Good questions.\nClear answers."} />
@@ -3759,7 +3804,9 @@ export function FaqSection({ faqs }: { faqs: Faq[] }) {
               <span>{String(index + 1).padStart(2, "0")}</span>
               {faq.question}
             </summary>
-            <p>{faq.answer}</p>
+            <div className="faq-answer">
+              <p>{faq.answer}</p>
+            </div>
           </details>
         ))}
       </div>
@@ -3921,6 +3968,7 @@ export function HeroEmblem() {
   return (
     <div
       className="hero-emblem"
+      data-parallax="hero"
       aria-label={`${site.brand}: websites and AI experiences`}
       role="img"
     >
@@ -3989,10 +4037,24 @@ export function Hero() {
         <HeroEmblem />
       </div>
       <div className="hero-bottom">
-        <div className="expertise-list">
-          {site.expertise.map((item) => (
-            <span key={item}>{item}</span>
-          ))}
+        <div
+          className="expertise-marquee"
+          role="group"
+          aria-label={site.expertise.join(", ")}
+        >
+          <div
+            className="expertise-marquee-track"
+            data-velocity-marquee
+            aria-hidden="true"
+          >
+            {[0, 1].map((copy) => (
+              <div className="expertise-list" key={copy}>
+                {site.expertise.map((item) => (
+                  <span key={item}>{item}</span>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
         <a href="#work" className="scroll-link" aria-label={site.hero.primary}>
           <span aria-hidden="true">SCROLL TO EXPLORE</span>
@@ -4328,6 +4390,7 @@ export function Navbar({
 "use client";
 import { useMotionPreference } from "./motion-preference";
 import Image from "next/image";
+import { imagePreview } from "@/lib/image-preview";
 import { m, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
@@ -4390,6 +4453,7 @@ export function ProjectCard({
     >
       <div
         className="device-stage"
+        data-parallax="image"
         style={{ "--project-accent": project.accent } as React.CSSProperties}
       >
         <span className="device-project-number" aria-hidden="true">
@@ -4402,6 +4466,7 @@ export function ProjectCard({
           >
             <Image
               src={project.screenshots[0].src}
+              {...imagePreview(project.screenshots[0].src)}
               alt={project.screenshots[0].alt}
               fill
               sizes="(max-width:700px) 90vw, 580px"
@@ -4422,6 +4487,7 @@ export function ProjectCard({
                     <div className="device-screen">
                       <Image
                         src={project.screenshots[0].src}
+                        {...imagePreview(project.screenshots[0].src)}
                         alt={project.screenshots[0].alt}
                         fill
                         sizes="(max-width:700px) 80vw, 480px"
@@ -4437,6 +4503,7 @@ export function ProjectCard({
                   <div className="device-phone-screen">
                     <Image
                       src={mobile.src}
+                      {...imagePreview(mobile.src)}
                       alt={mobile.alt}
                       fill
                       sizes="(max-width:700px) 23vw, 145px"
@@ -4482,6 +4549,7 @@ export function ProjectCard({
 "use client";
 
 import Image from "next/image";
+import { imagePreview } from "@/lib/image-preview";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, LoaderCircle, X } from "lucide-react";
@@ -4621,11 +4689,12 @@ export default function ProjectGallery({
             <Image
               key={image.src}
               src={image.src}
+              {...imagePreview(image.src)}
               alt={image.alt}
               fill
               sizes="(max-width: 700px) 100vw, 1200px"
               className={loaded ? "loaded" : ""}
-              priority
+              loading="eager"
               onLoad={() => setLoaded(true)}
               onError={() => {
                 setFailed(true);
@@ -4678,29 +4747,50 @@ export default function ProjectGallery({
               aria-pressed={i === index}
               onClick={() => go(i)}
             >
-              <Image src={screenshot.src} alt="" fill sizes="100px" />
+              <Image
+                src={screenshot.src}
+                {...imagePreview(screenshot.src)}
+                alt=""
+                fill
+                sizes="100px"
+              />
               <span>{String(i + 1).padStart(2, "0")}</span>
             </button>
           ))}
         </div>
         <div className="gallery-details">
           <div>
-            <Link className="gallery-demo-link" href={`/work/${project.id}`}>Read project notes</Link>
+            <Link className="gallery-demo-link" href={`/work/${project.id}`}>
+              Read project notes
+            </Link>
             <p id="gallery-description">{project.description}</p>
             {project.demoUrl && (
-              <Link className="gallery-demo-link" href={project.demoUrl} target={project.demoUrl.startsWith("https://") ? "_blank" : undefined} rel={project.demoUrl.startsWith("https://") ? "noopener noreferrer" : undefined}>
+              <Link
+                className="gallery-demo-link"
+                href={project.demoUrl}
+                target={
+                  project.demoUrl.startsWith("https://") ? "_blank" : undefined
+                }
+                rel={
+                  project.demoUrl.startsWith("https://")
+                    ? "noopener noreferrer"
+                    : undefined
+                }
+              >
                 {presentation.visitLabel} ↗
               </Link>
             )}
           </div>
-          {project.stack.length > 0 && <div>
-            <span className="eyebrow">{site.ui.stack}</span>
-            <ul>
-              {project.stack.map((tech) => (
-                <li key={tech}>{tech}</li>
-              ))}
-            </ul>
-          </div>}
+          {project.stack.length > 0 && (
+            <div>
+              <span className="eyebrow">{site.ui.stack}</span>
+              <ul>
+                {project.stack.map((tech) => (
+                  <li key={tech}>{tech}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
         <div className="gallery-highlights">
           <span className="eyebrow">{site.ui.highlights}</span>
@@ -4710,7 +4800,11 @@ export default function ProjectGallery({
             ))}
           </ul>
         </div>
-        <p className="gallery-help">{presentation.visualNote}<br />{count > 1 ? site.ui.galleryHelp : site.ui.gallerySingleHelp}</p>
+        <p className="gallery-help">
+          {presentation.visualNote}
+          <br />
+          {count > 1 ? site.ui.galleryHelp : site.ui.gallerySingleHelp}
+        </p>
       </div>
     </dialog>
   );
@@ -4797,6 +4891,113 @@ export function Reveal({
       {children}
     </div>
   );
+}
+``````
+
+## components/scroll-ambience.tsx
+
+``````tsx
+"use client";
+
+import { useEffect, useRef } from "react";
+import { subscribeScroll } from "@/lib/scroll";
+import { useMotionPreference } from "./motion-preference";
+
+export function ScrollAmbience() {
+  const wash = useRef<HTMLDivElement>(null);
+  const { reduced } = useMotionPreference();
+  useEffect(() => {
+    if (reduced) return;
+    const scene = wash.current;
+    const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const animations = [
+      ...document.querySelectorAll<HTMLElement>("[data-velocity-marquee]"),
+    ].flatMap((element) => element.getAnimations());
+    const visible = new Set<HTMLElement>();
+    const watched = new Set<HTMLElement>();
+    const images = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) visible.add(entry.target as HTMLElement);
+          else visible.delete(entry.target as HTMLElement);
+        }
+      },
+      { rootMargin: "80px" },
+    );
+    const scan = () => {
+      for (const element of watched)
+        if (!element.isConnected) {
+          images.unobserve(element);
+          watched.delete(element);
+          visible.delete(element);
+        }
+      for (const element of document.querySelectorAll<HTMLElement>(
+        "[data-parallax]",
+      )) {
+        if (!watched.has(element)) {
+          watched.add(element);
+          images.observe(element);
+        }
+      }
+    };
+    scan();
+    const mutation = new MutationObserver(scan);
+    mutation.observe(document.getElementById("work") || document.body, {
+      childList: true,
+      subtree: true,
+    });
+    let reset: ReturnType<typeof setTimeout> | undefined;
+    const unsubscribe = subscribeScroll(({ viewport, velocity }) => {
+      const moves: [HTMLElement, number][] = [];
+      if (fine.matches)
+        for (const element of visible) {
+          if (!element.isConnected) {
+            visible.delete(element);
+            continue;
+          }
+          const rect = element.getBoundingClientRect();
+          const distance = Math.max(
+            -1,
+            Math.min(1, (viewport / 2 - rect.top - rect.height / 2) / viewport),
+          );
+          moves.push([element, distance * Math.min(28, rect.height * 0.035)]);
+        }
+      for (const [element, distance] of moves)
+        element.style.setProperty("--image-drift", `${distance}px`);
+      const rate = 1 + Math.min(1.2, Math.abs(velocity) * 0.3);
+      for (const animation of animations) animation.updatePlaybackRate(rate);
+      clearTimeout(reset);
+      reset = setTimeout(() => {
+        for (const animation of animations) animation.updatePlaybackRate(1);
+      }, 180);
+    });
+    const scenes = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries)
+          if (entry.isIntersecting && scene)
+            scene.style.opacity = ["work", "work-bunch", "contact"].includes(
+              entry.target.id,
+            )
+              ? ".12"
+              : ".035";
+      },
+      { rootMargin: "-25% 0px -55% 0px" },
+    );
+    for (const element of document.querySelectorAll("main > section[id]"))
+      scenes.observe(element);
+    return () => {
+      unsubscribe();
+      images.disconnect();
+      mutation.disconnect();
+      scenes.disconnect();
+      clearTimeout(reset);
+      for (const element of watched)
+        element.style.removeProperty("--image-drift");
+      for (const animation of animations) animation.updatePlaybackRate(1);
+      if (scene) scene.style.opacity = "0";
+    };
+  }, [reduced]);
+  return <div ref={wash} className="scene-wash" aria-hidden="true" />;
 }
 ``````
 
@@ -4933,7 +5134,7 @@ export function Skills({ skills }: { skills: Skill[] }) {
         })}
       </div>
       <div className="tool-marquee" aria-hidden="true">
-        <div>
+        <div data-velocity-marquee>
           {[0, 1].map((duplicate) => (
             <span key={duplicate}>
               {studio.tools.items.map((tool) => (
@@ -5590,6 +5791,7 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
 "use client";
 
 import Image from "next/image";
+import { imagePreview } from "@/lib/image-preview";
 import { useEffect, useRef, type CSSProperties } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { studio } from "@/data/studio";
@@ -5718,6 +5920,7 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
                       >
                         <Image
                           src={item.image}
+                          {...imagePreview(item.image)}
                           alt=""
                           fill
                           sizes="(max-width: 600px) 112px, (max-width: 1100px) 180px, 260px"
@@ -5770,6 +5973,7 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { imagePreview } from "@/lib/image-preview";
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import type { ProjectView } from "@/data/projects";
@@ -5935,9 +6139,13 @@ export function Work({
                           className="interface-study-card"
                           href={`/studies/${study.id}`}
                         >
-                          <div className="interface-study-image">
+                          <div
+                            className="interface-study-image"
+                            data-parallax="image"
+                          >
                             <Image
                               src={study.screenshot}
+                              {...imagePreview(study.screenshot)}
                               alt={`${study.name}: ${study.industry.toLowerCase()} interface concept`}
                               fill
                               sizes="(max-width: 700px) 90vw, (max-width: 1100px) 45vw, 560px"

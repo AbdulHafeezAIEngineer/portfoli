@@ -21,6 +21,7 @@ import { Certifications } from "@/components/certifications";
 import { Contact } from "@/components/contact";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { EditorialEffects } from "@/components/editorial-effects";
+import { ScrollAmbience } from "@/components/scroll-ambience";
 
 import {
   Services,
@@ -85,6 +86,7 @@ export default async function Home() {
     <div id="top">
       <ScrollProgress />
       <EditorialEffects />
+      <ScrollAmbience />
       <div className="ambient-background" aria-hidden="true">
         <span />
         <span />
@@ -98,8 +100,8 @@ export default async function Home() {
         <Experience />
         <Journey />
         <Skills skills={skills} />
-        <Workflow />
         <Certifications certificates={certificates} />
+        <Workflow />
         <WallOfLove testimonials={reviews} />
         <FaqSection faqs={faqs} />
         <Contact email={identity.email} />

@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { imagePreview } from "@/lib/image-preview";
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import type { ProjectView } from "@/data/projects";
@@ -167,9 +168,13 @@ export function Work({
                           className="interface-study-card"
                           href={`/studies/${study.id}`}
                         >
-                          <div className="interface-study-image">
+                          <div
+                            className="interface-study-image"
+                            data-parallax="image"
+                          >
                             <Image
                               src={study.screenshot}
+                              {...imagePreview(study.screenshot)}
                               alt={`${study.name}: ${study.industry.toLowerCase()} interface concept`}
                               fill
                               sizes="(max-width: 700px) 90vw, (max-width: 1100px) 45vw, 560px"

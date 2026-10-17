@@ -1,5 +1,6 @@
 import type { Faq } from "@/data/agency";
 import { TextReveal } from "./text-reveal";
+import { FaqEnhancement } from "./faq-enhancement";
 export function FaqSection({ faqs }: { faqs: Faq[] }) {
   if (!faqs.length) return null;
   return (
@@ -8,6 +9,7 @@ export function FaqSection({ faqs }: { faqs: Faq[] }) {
       className="container studio-section agency-faq"
       aria-labelledby="faq-title"
     >
+      <FaqEnhancement />
       <div>
         <p className="eyebrow">BEFORE WE BUILD</p>
         <TextReveal id="faq-title" text={"Good questions.\nClear answers."} />
@@ -22,7 +24,9 @@ export function FaqSection({ faqs }: { faqs: Faq[] }) {
               <span>{String(index + 1).padStart(2, "0")}</span>
               {faq.question}
             </summary>
-            <p>{faq.answer}</p>
+            <div className="faq-answer">
+              <p>{faq.answer}</p>
+            </div>
           </details>
         ))}
       </div>

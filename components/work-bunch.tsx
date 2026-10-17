@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { imagePreview } from "@/lib/image-preview";
 import { useEffect, useRef, type CSSProperties } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { studio } from "@/data/studio";
@@ -129,6 +130,7 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
                       >
                         <Image
                           src={item.image}
+                          {...imagePreview(item.image)}
                           alt=""
                           fill
                           sizes="(max-width: 600px) 112px, (max-width: 1100px) 180px, 260px"

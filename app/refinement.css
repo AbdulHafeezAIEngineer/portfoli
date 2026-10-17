@@ -93,10 +93,7 @@
   background: transparent;
   color: var(--muted);
   font-size: 12px;
-  transition:
-    color 0.25s,
-    background-color 0.25s,
-    transform 0.25s var(--ease-editorial);
+  transition: transform 0.25s var(--ease-editorial);
 }
 .work-filters button span {
   font-family: var(--font-space);
@@ -449,9 +446,7 @@ html.lenis body {
   margin: 0;
   pointer-events: none;
   transform-origin: left top;
-  transition:
-    transform 0.25s var(--ease-editorial),
-    color 0.25s;
+  transition: transform 0.25s var(--ease-editorial);
 }
 .form-field > input,
 .form-field > textarea {

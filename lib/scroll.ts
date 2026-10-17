@@ -1,14 +1,29 @@
 "use client";
 
-type Metrics = { y: number; height: number; viewport: number };
+type Metrics = {
+  y: number;
+  height: number;
+  viewport: number;
+  velocity: number;
+};
 const listeners = new Set<(metrics: Metrics) => void>();
 let frame = 0;
+let previousY = 0;
+let previousTime = 0;
 function update() {
   frame = 0;
+  const now = performance.now();
+  const y = window.scrollY;
+  const elapsed = now - previousTime;
+  const velocity =
+    previousTime && elapsed < 200 ? (y - previousY) / Math.max(1, elapsed) : 0;
+  previousY = y;
+  previousTime = now;
   const metrics = {
-    y: window.scrollY,
+    y,
     height: document.documentElement.scrollHeight,
     viewport: window.innerHeight,
+    velocity,
   };
   for (const listener of listeners) listener(metrics);
 }
@@ -30,6 +45,7 @@ export function subscribeScroll(listener: (metrics: Metrics) => void) {
       window.removeEventListener("resize", schedule);
       cancelAnimationFrame(frame);
       frame = 0;
+      previousTime = 0;
     }
   };
 }

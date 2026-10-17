@@ -53,19 +53,19 @@ Binary asset: 163716 bytes. SHA-256 `2b3b950f71ca6e7a581d4b1f942bd0429e3ee165d5b
 
 ## public/projects/aster-1.webp
 
-Binary asset: 235952 bytes. SHA-256 `447459aabea60ae94ef02cbd171c95661fc64434bf76b6f9d50d1ddfd4098d3a`. Available in the repository and source ZIP.
+Binary asset: 83292 bytes. SHA-256 `2f983eb9b8cc592d53602ba5e0fe82d195bcc1d9e2eb61f2fba68749a8885d0e`. Available in the repository and source ZIP.
 
 ## public/projects/aster-2.webp
 
-Binary asset: 106390 bytes. SHA-256 `4227e1c54bc2d8ecc01b2a61258e1c8dbf05c9db55411ed2cf02a023ad315468`. Available in the repository and source ZIP.
+Binary asset: 41188 bytes. SHA-256 `48341cc044d87ab009eb09cb4b4db03238b2d0de0f44a9d6be39d9fce2d24b72`. Available in the repository and source ZIP.
 
 ## public/projects/aster-3.webp
 
-Binary asset: 96896 bytes. SHA-256 `30d02c5f75afa31d0ec1a858a93b2090f2fabd4c8d4e0b82eff5b768126f7f35`. Available in the repository and source ZIP.
+Binary asset: 81368 bytes. SHA-256 `e1e1c166f94c1f7ed5a745bece09ce2d450634a4bede35ee1d5d7892049fb8b0`. Available in the repository and source ZIP.
 
 ## public/projects/aster-4.webp
 
-Binary asset: 293288 bytes. SHA-256 `5368cbd4cea43a83d6d488d624af3db537f2cb4806136ded9e1ae27cba48b6af`. Available in the repository and source ZIP.
+Binary asset: 101860 bytes. SHA-256 `bcf2e66f63928ebc0b5356ea38d8d58079491cc43bc0d97a6c42776d34f940b7`. Available in the repository and source ZIP.
 
 ## public/projects/aster-capture.json
 
@@ -91,19 +91,19 @@ Binary asset: 224804 bytes. SHA-256 `0d2057b8f7a13076671f6ef08f39c183133de780ffd
 
 ## public/projects/kovo-1.webp
 
-Binary asset: 321498 bytes. SHA-256 `61d65093cd8a471639799ed9fa73ef226d5047ec2db4fa3fbc063ef491402844`. Available in the repository and source ZIP.
+Binary asset: 118558 bytes. SHA-256 `3bac58dff5790ff3c223c684a9d549e580e11c23c103b6f25207cd0e4de281f5`. Available in the repository and source ZIP.
 
 ## public/projects/kovo-2.webp
 
-Binary asset: 87428 bytes. SHA-256 `e85a71b86a43a3c2905d9ffd5c95509a5b7fb7b92f9b8a274d80dac210521957`. Available in the repository and source ZIP.
+Binary asset: 37842 bytes. SHA-256 `8a468a4aae1e2297cdd4624ca85b8665a23ac7c6095e9f219580079a66fcd5e8`. Available in the repository and source ZIP.
 
 ## public/projects/kovo-3.webp
 
-Binary asset: 95934 bytes. SHA-256 `89508e4bd9316d1be34a8d0af45d0d87dd050925538f2d020351938b6182598d`. Available in the repository and source ZIP.
+Binary asset: 83894 bytes. SHA-256 `511c05e0f31d291f46ff2c4d48517387a21b53f8e351252c6442a80a4c8e52e0`. Available in the repository and source ZIP.
 
 ## public/projects/kovo-4.webp
 
-Binary asset: 67930 bytes. SHA-256 `c7f7033023965bb3f4d53d2d867a9e20a8064b0f1d7361b095cd5703e4008c17`. Available in the repository and source ZIP.
+Binary asset: 30794 bytes. SHA-256 `d6c7f4400bb3e26221da1a2f89e30c0cb5b64c1df41318df3c96d0a6681179b5`. Available in the repository and source ZIP.
 
 ## public/projects/kovo-capture.json
 
@@ -227,19 +227,19 @@ Binary asset: 76460 bytes. SHA-256 `98d7b52574f797ef83d05f6503efd583ab5d45814b38
 
 ## public/projects/solenne-1.webp
 
-Binary asset: 311386 bytes. SHA-256 `c967249c9035aed4316920cf9ef8fe44f521a71acd83ab17d9dde9a6633eaf05`. Available in the repository and source ZIP.
+Binary asset: 116226 bytes. SHA-256 `7e16c55f2bb7b156f1d53d41cd4b0be8cd1ef6fccc5d7d70d2f0c0059841adaa`. Available in the repository and source ZIP.
 
 ## public/projects/solenne-2.webp
 
-Binary asset: 73266 bytes. SHA-256 `86c8d5bc14522248b6b813fcf6b6f3b766b6461156aa274cfe46f4a102557e1f`. Available in the repository and source ZIP.
+Binary asset: 32396 bytes. SHA-256 `dd1867c30d35a6ed0534ffbcd4fc019032ffde109cfe4ea4794c15888938e4cd`. Available in the repository and source ZIP.
 
 ## public/projects/solenne-3.webp
 
-Binary asset: 80346 bytes. SHA-256 `14e34047176aeae482f1b8b39741ce5fa35bd1ce877d3506cdb197504f7d52fd`. Available in the repository and source ZIP.
+Binary asset: 67900 bytes. SHA-256 `db05c4387f53caf294c1e0720d50a832081817101a916be529d25b63dff0a3e9`. Available in the repository and source ZIP.
 
 ## public/projects/solenne-4.webp
 
-Binary asset: 248062 bytes. SHA-256 `2099226e09be256b37350111ce716d44af96bcdb2d4bfaaeb025a8e2c53fa7a5`. Available in the repository and source ZIP.
+Binary asset: 89390 bytes. SHA-256 `33e51a44640afedd3ce94c2ba2951ff65be633d20ee95a5f3d87504dc2c20837`. Available in the repository and source ZIP.
 
 ## public/projects/solenne-capture.json
 
@@ -295,19 +295,19 @@ Binary asset: 49518 bytes. SHA-256 `f4545839a7e64b4816c534b7e51a744cf6698d1f0653
 
 ## public/projects/vanta-1.webp
 
-Binary asset: 180002 bytes. SHA-256 `d99512996f0a313ce14f7d274e5f3e56865ddacbabe9244c1bfc0e0fb0e8bfc5`. Available in the repository and source ZIP.
+Binary asset: 70756 bytes. SHA-256 `0c2b71f8d20d11520110fd54ed9bc1af5370d8ead829729851d8e8659234bbac`. Available in the repository and source ZIP.
 
 ## public/projects/vanta-2.webp
 
-Binary asset: 74376 bytes. SHA-256 `e337bbdac85f69188489c1391cc57ab13f0d3dcb37fdb2e8c007fb5cc0a40870`. Available in the repository and source ZIP.
+Binary asset: 30972 bytes. SHA-256 `1390e78308114111cf5668b498a0ee5b5591ab37d8ec61c9ee75c6ca8fcab6ca`. Available in the repository and source ZIP.
 
 ## public/projects/vanta-3.webp
 
-Binary asset: 59656 bytes. SHA-256 `4ecd47a4890bd8b7a2c260aded1e30b4c58daeeb82f763de27f1ed5adda9d20b`. Available in the repository and source ZIP.
+Binary asset: 51860 bytes. SHA-256 `e953cbb5861d7a02fad562f4b01550783ea165bb8e9e46b35ebd86cb9203c322`. Available in the repository and source ZIP.
 
 ## public/projects/vanta-4.webp
 
-Binary asset: 172958 bytes. SHA-256 `381650964eb8163d90fb9469897ddd0de8e20953b7663cac3b5ab74da7f06a82`. Available in the repository and source ZIP.
+Binary asset: 67900 bytes. SHA-256 `cb3be68e02779b2242af80355850da1ffb0d66681264be0036db07489c8bce37`. Available in the repository and source ZIP.
 
 ## public/projects/vanta-capture.json
 
@@ -329,7 +329,7 @@ Binary asset: 172958 bytes. SHA-256 `381650964eb8163d90fb9469897ddd0de8e20953b76
 
 ## public/studies/aura.webp
 
-Binary asset: 65846 bytes. SHA-256 `84e38391b7930041d5fa22b535fd64d095e5bb23bbc2d684b8feb127821d70f9`. Available in the repository and source ZIP.
+Binary asset: 26308 bytes. SHA-256 `4ffef5b3f3f52e8ecf1016204f2cc62df5b5c01e4c0eee51aa6a53f3f0d337c4`. Available in the repository and source ZIP.
 
 ## public/studies/capture.json
 
@@ -355,23 +355,23 @@ Binary asset: 65846 bytes. SHA-256 `84e38391b7930041d5fa22b535fd64d095e5bb23bbc2
 
 ## public/studies/elsewhere.webp
 
-Binary asset: 297080 bytes. SHA-256 `feb82e16c39386e6e2dee4ff9e9db18154cd1a35d9e859a7d396dce2d75f3155`. Available in the repository and source ZIP.
+Binary asset: 98902 bytes. SHA-256 `517a6ca66ba694abdb095a3e7b39c1c7b0c1b3b10060e4e5ab2184a67f2c5814`. Available in the repository and source ZIP.
 
 ## public/studies/form.webp
 
-Binary asset: 66070 bytes. SHA-256 `bc07aae4784fdae878e3e6f511bad1ac9b41c2da22ccfe871b898aaa192a8728`. Available in the repository and source ZIP.
+Binary asset: 26666 bytes. SHA-256 `dac7f84382a75db0123674171eebeee6cc5953d94317c5ca6e284514dcaa5118`. Available in the repository and source ZIP.
 
 ## public/studies/noma.webp
 
-Binary asset: 82876 bytes. SHA-256 `d9b556dada16212d64345055156dbc29ce72711797efff487ad5d178a7f224d4`. Available in the repository and source ZIP.
+Binary asset: 33704 bytes. SHA-256 `e1513a986b3334a0bfceeeb7e235b7a4d7c986bf5bfa0e61c8d5fe34daf6bf7e`. Available in the repository and source ZIP.
 
 ## public/studies/offscript.webp
 
-Binary asset: 107188 bytes. SHA-256 `5c343ba3b4cb810669af5a0fc37201edf8cf1151e1e71a51c1440721e5e964c0`. Available in the repository and source ZIP.
+Binary asset: 43486 bytes. SHA-256 `14cf85d4a9dfb241a112901424b16cdca3ed9704729641f0e5f54f7780a59e90`. Available in the repository and source ZIP.
 
 ## public/studies/orbit.webp
 
-Binary asset: 79418 bytes. SHA-256 `d8d231ef5cc6eddc648e9c38d88801fffe174fcff88bd706197e146fd51d55e0`. Available in the repository and source ZIP.
+Binary asset: 32372 bytes. SHA-256 `748c3bbdb5636da6cf37fea3dd26374d24e890a5333e34a7ba45eac97db731a6`. Available in the repository and source ZIP.
 
 ## public/tool-marks/SOURCES.md
 

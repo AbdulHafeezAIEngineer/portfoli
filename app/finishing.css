@@ -1,0 +1,187 @@
+/* Small, shared additions complete the motion brief without another animation library. */
+:root {
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-6: 48px;
+  --space-8: 64px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --shadow-soft: 0 12px 36px #0000000c;
+  --shadow-deep: 0 20px 60px #0000001a;
+}
+.expertise-marquee {
+  width: min(600px, 65%);
+  overflow: hidden;
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 4%,
+    #000 94%,
+    transparent
+  );
+}
+.expertise-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: expertise-travel 30s linear infinite;
+}
+.expertise-marquee-track .expertise-list {
+  flex-shrink: 0;
+  display: flex;
+  width: auto;
+  gap: 28px;
+  padding-right: 28px;
+}
+.expertise-marquee-track .expertise-list span {
+  white-space: nowrap;
+}
+.expertise-marquee:hover .expertise-marquee-track {
+  animation-play-state: paused;
+}
+@keyframes expertise-travel {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.hero-visual {
+  position: relative;
+  overflow: clip;
+}
+.hero-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: var(--bg);
+  pointer-events: none;
+  transform: translateY(-110%);
+  animation: hero-curtain 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes hero-curtain {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-110%);
+  }
+}
+.scene-wash {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 78% 30%, var(--gold), transparent 65%);
+  opacity: 0;
+  transition: opacity 0.75s var(--ease-editorial);
+}
+.faq-answer {
+  overflow: hidden;
+}
+.faq-list summary {
+  min-height: 64px;
+  align-items: baseline;
+}
+.faq-list summary::after {
+  flex-shrink: 0;
+}
+@media (hover: hover) and (pointer: fine) {
+  [data-parallax="hero"] {
+    translate: 0 var(--image-drift, 0px);
+  }
+  [data-parallax="image"] img {
+    translate: 0 var(--image-drift, 0px);
+    scale: 1.08;
+  }
+}
+[data-motion-reveals="enabled"] .motion-reveal .interface-study-image img {
+  transition: transform 0.8s var(--ease-editorial);
+}
+[data-motion-reveals="enabled"]
+  .motion-reveal:not(.is-revealed)
+  .interface-study-image
+  img {
+  transform: scale(1.15);
+}
+[data-motion-reveals="enabled"]
+  .motion-reveal.is-revealed
+  .interface-study-image
+  img {
+  transform: scale(1);
+}
+[data-motion-reveals="enabled"]
+  .motion-reveal.is-revealed
+  .interface-study-card:hover
+  img {
+  transform: scale(1.035);
+}
+.button-ghost {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text);
+}
+@media (min-width: 1024px) {
+  .hero {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .hero-copy {
+    grid-column: span 7;
+  }
+  .hero-visual {
+    grid-column: span 5;
+  }
+  .hero-bottom {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 700px) {
+  .expertise-marquee {
+    width: min(100%, 460px);
+  }
+  .hero-bottom {
+    row-gap: 24px;
+  }
+  .motion-control select {
+    max-width: 66px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion="full"]) .expertise-marquee-track {
+    animation: none;
+  }
+  html:not([data-motion="full"]) [data-parallax] img,
+  html:not([data-motion="full"]) [data-parallax="hero"] {
+    translate: none;
+    scale: none;
+  }
+}
+html[data-motion="reduced"] .expertise-marquee-track {
+  animation: none;
+}
+html[data-motion="reduced"] [data-parallax] img,
+html[data-motion="reduced"] [data-parallax="hero"] {
+  translate: none;
+  scale: none;
+}
+/* Marquee tracks must not contribute their intrinsic width to the mobile grid. */
+.hero > * {
+  min-width: 0;
+}
+.expertise-marquee {
+  min-width: 0;
+  max-width: 100%;
+}
+.hero-visual {
+  max-width: 100%;
+}
+@media (max-width: 1023px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.hero-visual {
+  animation-duration: 0.9s;
+  animation-delay: 0s;
+}

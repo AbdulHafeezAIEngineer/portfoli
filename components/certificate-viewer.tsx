@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { imagePreview } from "@/lib/image-preview";
 import { useRef, useState } from "react";
 import { LoaderCircle, RotateCcw, X, ZoomIn, ZoomOut } from "lucide-react";
 import {
@@ -122,10 +123,11 @@ export default function CertificateViewer({
             >
               <Image
                 src={certificate.image}
+                {...imagePreview(certificate.image)}
                 alt={certificate.alt}
                 fill
                 sizes="(max-width: 700px) 200vw, 2400px"
-                priority
+                loading="eager"
                 onLoad={() => setLoaded(true)}
                 onError={() => {
                   setLoaded(true);

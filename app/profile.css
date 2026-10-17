@@ -649,8 +649,8 @@
   }
 }
 html[data-motion="reduced"] .certificate-preview img {
-    transition: none;
-  }
+  transition: none;
+}
 
 .contact-security {
   margin: 0 0 20px;

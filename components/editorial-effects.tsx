@@ -49,7 +49,7 @@ export function EditorialEffects() {
         frame = requestAnimationFrame(() => {
           const target = event.target instanceof Element ? event.target : null;
           const view = target?.closest(
-            ".project-card, .interface-study-card, .bunch-piece",
+            ".project-card, .interface-study-card, .dome-tile, .dome-index a",
           );
           const button =
             target?.closest<HTMLElement>(

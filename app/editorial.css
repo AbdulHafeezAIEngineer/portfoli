@@ -176,9 +176,7 @@
   border: 1px solid var(--line);
   box-shadow: inset 0 1px 0 var(--soft);
   flex-shrink: 0;
-  transition:
-    transform 0.35s,
-    border-color 0.35s;
+  transition: transform 0.35s;
 }
 .premium-tool-logo .tool-brand-mark {
   width: 31px;
@@ -256,9 +254,7 @@
   height: 100%;
   position: relative;
   overflow: hidden;
-  transition:
-    border-color 0.3s,
-    background 0.3s;
+  transition: none;
 }
 .domain-card:hover {
   border-color: var(--line-bright);
@@ -625,10 +621,7 @@
   border: 1px solid var(--line);
   border-radius: 10px;
   background: var(--raised);
-  transition:
-    color 0.25s,
-    background 0.25s,
-    transform 0.25s;
+  transition: transform 0.25s;
 }
 .social-icons a:hover {
   transform: translateY(-3px);
@@ -759,9 +752,7 @@
   border-radius: 7px;
   background: var(--text);
   color: var(--bg);
-  transition:
-    background 0.25s,
-    color 0.25s;
+  transition: none;
 }
 .footer-quick-links a:hover {
   background: var(--gold);
@@ -804,7 +795,7 @@
   text-align: center;
   text-transform: uppercase;
   font:
-    600 clamp(100px, 27vw, 480px)/0.88 var(--font-space),
+    600 clamp(100px, 27vw, 480px) / 0.88 var(--font-space),
     sans-serif;
   letter-spacing: -0.08em;
   padding-right: 0.07em;
@@ -1423,11 +1414,11 @@
   }
 }
 html[data-motion="reduced"] .premium-tool-item:hover .premium-tool-logo,
-  html[data-motion="reduced"] .social-icons a:hover {
-    transform: none;
-  }
+html[data-motion="reduced"] .social-icons a:hover {
+  transform: none;
+}
 html[data-motion="reduced"] .footer-wordmark-window > span,
-  html[data-motion="reduced"] .footer-waves path,
-  html[data-motion="reduced"] .footer-emblem > span::after {
-    animation: none;
-  }
+html[data-motion="reduced"] .footer-waves path,
+html[data-motion="reduced"] .footer-emblem > span::after {
+  animation: none;
+}

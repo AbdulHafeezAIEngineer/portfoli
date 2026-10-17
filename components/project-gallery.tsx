@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { imagePreview } from "@/lib/image-preview";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, LoaderCircle, X } from "lucide-react";
@@ -140,11 +141,12 @@ export default function ProjectGallery({
             <Image
               key={image.src}
               src={image.src}
+              {...imagePreview(image.src)}
               alt={image.alt}
               fill
               sizes="(max-width: 700px) 100vw, 1200px"
               className={loaded ? "loaded" : ""}
-              priority
+              loading="eager"
               onLoad={() => setLoaded(true)}
               onError={() => {
                 setFailed(true);
@@ -197,29 +199,50 @@ export default function ProjectGallery({
               aria-pressed={i === index}
               onClick={() => go(i)}
             >
-              <Image src={screenshot.src} alt="" fill sizes="100px" />
+              <Image
+                src={screenshot.src}
+                {...imagePreview(screenshot.src)}
+                alt=""
+                fill
+                sizes="100px"
+              />
               <span>{String(i + 1).padStart(2, "0")}</span>
             </button>
           ))}
         </div>
         <div className="gallery-details">
           <div>
-            <Link className="gallery-demo-link" href={`/work/${project.id}`}>Read project notes</Link>
+            <Link className="gallery-demo-link" href={`/work/${project.id}`}>
+              Read project notes
+            </Link>
             <p id="gallery-description">{project.description}</p>
             {project.demoUrl && (
-              <Link className="gallery-demo-link" href={project.demoUrl} target={project.demoUrl.startsWith("https://") ? "_blank" : undefined} rel={project.demoUrl.startsWith("https://") ? "noopener noreferrer" : undefined}>
+              <Link
+                className="gallery-demo-link"
+                href={project.demoUrl}
+                target={
+                  project.demoUrl.startsWith("https://") ? "_blank" : undefined
+                }
+                rel={
+                  project.demoUrl.startsWith("https://")
+                    ? "noopener noreferrer"
+                    : undefined
+                }
+              >
                 {presentation.visitLabel} ↗
               </Link>
             )}
           </div>
-          {project.stack.length > 0 && <div>
-            <span className="eyebrow">{site.ui.stack}</span>
-            <ul>
-              {project.stack.map((tech) => (
-                <li key={tech}>{tech}</li>
-              ))}
-            </ul>
-          </div>}
+          {project.stack.length > 0 && (
+            <div>
+              <span className="eyebrow">{site.ui.stack}</span>
+              <ul>
+                {project.stack.map((tech) => (
+                  <li key={tech}>{tech}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
         <div className="gallery-highlights">
           <span className="eyebrow">{site.ui.highlights}</span>
@@ -229,7 +252,11 @@ export default function ProjectGallery({
             ))}
           </ul>
         </div>
-        <p className="gallery-help">{presentation.visualNote}<br />{count > 1 ? site.ui.galleryHelp : site.ui.gallerySingleHelp}</p>
+        <p className="gallery-help">
+          {presentation.visualNote}
+          <br />
+          {count > 1 ? site.ui.galleryHelp : site.ui.gallerySingleHelp}
+        </p>
       </div>
     </dialog>
   );

@@ -1,6 +1,7 @@
 "use client";
 import { useMotionPreference } from "./motion-preference";
 import Image from "next/image";
+import { imagePreview } from "@/lib/image-preview";
 import { m, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
@@ -63,6 +64,7 @@ export function ProjectCard({
     >
       <div
         className="device-stage"
+        data-parallax="image"
         style={{ "--project-accent": project.accent } as React.CSSProperties}
       >
         <span className="device-project-number" aria-hidden="true">
@@ -75,6 +77,7 @@ export function ProjectCard({
           >
             <Image
               src={project.screenshots[0].src}
+              {...imagePreview(project.screenshots[0].src)}
               alt={project.screenshots[0].alt}
               fill
               sizes="(max-width:700px) 90vw, 580px"
@@ -95,6 +98,7 @@ export function ProjectCard({
                     <div className="device-screen">
                       <Image
                         src={project.screenshots[0].src}
+                        {...imagePreview(project.screenshots[0].src)}
                         alt={project.screenshots[0].alt}
                         fill
                         sizes="(max-width:700px) 80vw, 480px"
@@ -110,6 +114,7 @@ export function ProjectCard({
                   <div className="device-phone-screen">
                     <Image
                       src={mobile.src}
+                      {...imagePreview(mobile.src)}
                       alt={mobile.alt}
                       fill
                       sizes="(max-width:700px) 23vw, 145px"

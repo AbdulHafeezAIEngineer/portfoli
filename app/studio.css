@@ -193,10 +193,7 @@
   min-height: 370px;
   display: flex;
   flex-direction: column;
-  transition:
-    border-color 0.4s,
-    transform 0.4s,
-    box-shadow 0.4s;
+  transition: transform 0.4s;
   isolation: isolate;
   width: 100%;
 }
@@ -268,9 +265,7 @@
   flex-shrink: 0;
   border: 1px solid var(--line);
   border-radius: 50%;
-  transition:
-    background 0.3s,
-    color 0.3s;
+  transition: none;
 }
 .service-bottom a:hover {
   color: #0a0a12;
@@ -450,7 +445,7 @@
   padding: 40px 10px;
   border-bottom: 1px solid var(--line);
   align-items: start;
-  transition: background 0.4s;
+  transition: none;
 }
 .journey-chapter:hover {
   background: var(--soft);
@@ -563,9 +558,7 @@
   background: linear-gradient(145deg, #262331, #14131c);
   color: #f3f1eb;
   box-shadow: 0 10px 30px #0003;
-  transition:
-    transform 0.45s,
-    border-color 0.4s;
+  transition: transform 0.45s;
 }
 .tool-tile-0,
 .tool-tile-4 {
@@ -637,9 +630,7 @@
   overflow: hidden;
   background: var(--surface);
   box-shadow: 0 20px 45px #0003;
-  transition:
-    transform 0.5s,
-    box-shadow 0.5s;
+  transition: transform 0.5s;
   transform: rotate(-4deg);
 }
 .bunch-piece:nth-child(2n) {
@@ -828,9 +819,7 @@
   height: 3px;
   border-radius: 3px;
   background: var(--line);
-  transition:
-    background 0.4s,
-    width 0.4s;
+  transition: none;
 }
 .love-progress .current {
   background: var(--gold);
@@ -991,7 +980,7 @@
   display: block;
   text-transform: uppercase;
   font:
-    600 clamp(75px, 19.3vw, 265px)/1 var(--font-space),
+    600 clamp(75px, 19.3vw, 265px) / 1 var(--font-space),
     sans-serif;
   text-align: center;
   letter-spacing: -0.075em;
@@ -1082,9 +1071,7 @@
   border-radius: 8px;
   font-size: 11px;
   font-weight: 500;
-  transition:
-    border-color 0.2s,
-    background 0.2s;
+  transition: none;
 }
 .consent-actions button:hover {
   border-color: var(--gold);
@@ -1744,37 +1731,37 @@
   }
 }
 html[data-motion="reduced"] .studio-service:hover,
-  html[data-motion="reduced"] .journey-chapter:hover > svg {
-    transform: none;
-  }
+html[data-motion="reduced"] .journey-chapter:hover > svg {
+  transform: none;
+}
 html[data-motion="reduced"] .bunch-piece:nth-child(n),
-  html[data-motion="reduced"] .bunch-piece:hover,
-  html[data-motion="reduced"] .bunch-piece:focus-visible,
-  html[data-motion="reduced"] .tool-tile:nth-child(n),
-  html[data-motion="reduced"] .tool-tile:hover {
-    transform: none;
-  }
+html[data-motion="reduced"] .bunch-piece:hover,
+html[data-motion="reduced"] .bunch-piece:focus-visible,
+html[data-motion="reduced"] .tool-tile:nth-child(n),
+html[data-motion="reduced"] .tool-tile:hover {
+  transform: none;
+}
 html[data-motion="reduced"] .bunch-piece,
-  html[data-motion="reduced"] .studio-service,
-  html[data-motion="reduced"] .service-orbit,
-  html[data-motion="reduced"] .journey-chapter > svg,
-  html[data-motion="reduced"] .tool-tile,
-  html[data-motion="reduced"] .love-progress span {
-    transition: none;
-  }
+html[data-motion="reduced"] .studio-service,
+html[data-motion="reduced"] .service-orbit,
+html[data-motion="reduced"] .journey-chapter > svg,
+html[data-motion="reduced"] .tool-tile,
+html[data-motion="reduced"] .love-progress span {
+  transition: none;
+}
 html[data-motion="reduced"] .footer-art > span {
-    background-position: 45% 50%;
-  }
+  background-position: 45% 50%;
+}
 html[data-motion="reduced"] .emblem-shine {
-    display: none;
-  }
+  display: none;
+}
 html[data-motion="reduced"] .emblem-object,
-  html[data-motion="reduced"] .emblem-shine,
-  html[data-motion="reduced"] .emblem-ring,
-  html[data-motion="reduced"] .workflow-art-core,
-  html[data-motion="reduced"] .footer-art > span {
-    animation: none;
-  }
+html[data-motion="reduced"] .emblem-shine,
+html[data-motion="reduced"] .emblem-ring,
+html[data-motion="reduced"] .workflow-art-core,
+html[data-motion="reduced"] .footer-art > span {
+  animation: none;
+}
 
 .contact-privacy a {
   color: var(--text);

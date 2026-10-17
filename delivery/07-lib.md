@@ -2237,6 +2237,74 @@ if (process.env.NODE_ENV !== "production") runtime.elvoraPrisma = db;
 export const databaseContent = () => process.env.CONTENT_SOURCE === "database";
 ``````
 
+## lib/faq-animation.ts
+
+``````ts
+/** The FAQ is the brief's deliberate height-animation exception; other effects use transforms/opacity. */
+export function enhanceFaq(root: HTMLElement) {
+  root.dataset.faqEnhanced = "true";
+  const active = new Map<
+    HTMLDetailsElement,
+    { animation: Animation; expanded: boolean }
+  >();
+  const cleanups: (() => void)[] = [];
+  for (const details of root.querySelectorAll("details")) {
+    const summary = details.querySelector("summary");
+    const answer = details.querySelector<HTMLElement>(".faq-answer");
+    if (!summary || !answer || !answer.animate) continue;
+    const click = (event: MouseEvent) => {
+      event.preventDefault();
+      const prior = active.get(details);
+      const expanded = !(prior?.expanded ?? details.open);
+      const currentHeight = details.open
+        ? answer.getBoundingClientRect().height
+        : 0;
+      prior?.animation.cancel();
+      details.open = true;
+      const fullHeight = answer.getBoundingClientRect().height;
+      const animation = answer.animate(
+        [
+          { height: `${currentHeight}px`, opacity: expanded && !prior ? 0 : 1 },
+          {
+            height: `${expanded ? fullHeight : 0}px`,
+            opacity: expanded ? 1 : 0,
+          },
+        ],
+        { duration: 280, easing: "cubic-bezier(.22,1,.36,1)" },
+      );
+      active.set(details, { animation, expanded });
+      animation.onfinish = () => {
+        if (active.get(details)?.animation !== animation) return;
+        details.open = expanded;
+        active.delete(details);
+      };
+    };
+    summary.addEventListener("click", click);
+    cleanups.push(() => summary.removeEventListener("click", click));
+  }
+  return () => {
+    delete root.dataset.faqEnhanced;
+    for (const [details, { animation, expanded }] of active) {
+      animation.cancel();
+      details.open = expanded;
+    }
+    for (const cleanup of cleanups) cleanup();
+    active.clear();
+  };
+}
+``````
+
+## lib/image-preview.ts
+
+``````ts
+import { imagePreviews } from "@/data/image-previews";
+
+export function imagePreview(src: string) {
+  const blurDataURL = imagePreviews[src];
+  return blurDataURL ? { placeholder: "blur" as const, blurDataURL } : {};
+}
+``````
+
 ## lib/records.ts
 
 ``````ts
@@ -2280,15 +2348,30 @@ export async function recordChat(
 ``````ts
 "use client";
 
-type Metrics = { y: number; height: number; viewport: number };
+type Metrics = {
+  y: number;
+  height: number;
+  viewport: number;
+  velocity: number;
+};
 const listeners = new Set<(metrics: Metrics) => void>();
 let frame = 0;
+let previousY = 0;
+let previousTime = 0;
 function update() {
   frame = 0;
+  const now = performance.now();
+  const y = window.scrollY;
+  const elapsed = now - previousTime;
+  const velocity =
+    previousTime && elapsed < 200 ? (y - previousY) / Math.max(1, elapsed) : 0;
+  previousY = y;
+  previousTime = now;
   const metrics = {
-    y: window.scrollY,
+    y,
     height: document.documentElement.scrollHeight,
     viewport: window.innerHeight,
+    velocity,
   };
   for (const listener of listeners) listener(metrics);
 }
@@ -2310,6 +2393,7 @@ export function subscribeScroll(listener: (metrics: Metrics) => void) {
       window.removeEventListener("resize", schedule);
       cancelAnimationFrame(frame);
       frame = 0;
+      previousTime = 0;
     }
   };
 }

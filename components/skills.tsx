@@ -91,7 +91,7 @@ export function Skills({ skills }: { skills: Skill[] }) {
         })}
       </div>
       <div className="tool-marquee" aria-hidden="true">
-        <div>
+        <div data-velocity-marquee>
           {[0, 1].map((duplicate) => (
             <span key={duplicate}>
               {studio.tools.items.map((tool) => (

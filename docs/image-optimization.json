@@ -1,0 +1,118 @@
+{
+  "beforeBytes": 3203846,
+  "afterBytes": 1367634,
+  "reductionPercent": 57,
+  "maxWidth": 1600,
+  "files": [
+    {
+      "file": "public/projects/aster-1.webp",
+      "before": 235952,
+      "after": 83292
+    },
+    {
+      "file": "public/projects/aster-2.webp",
+      "before": 106390,
+      "after": 41188
+    },
+    {
+      "file": "public/projects/aster-3.webp",
+      "before": 96896,
+      "after": 81368
+    },
+    {
+      "file": "public/projects/aster-4.webp",
+      "before": 293288,
+      "after": 101860
+    },
+    {
+      "file": "public/projects/kovo-1.webp",
+      "before": 321498,
+      "after": 118558
+    },
+    {
+      "file": "public/projects/kovo-2.webp",
+      "before": 87428,
+      "after": 37842
+    },
+    {
+      "file": "public/projects/kovo-3.webp",
+      "before": 95934,
+      "after": 83894
+    },
+    {
+      "file": "public/projects/kovo-4.webp",
+      "before": 67930,
+      "after": 30794
+    },
+    {
+      "file": "public/projects/solenne-1.webp",
+      "before": 311386,
+      "after": 116226
+    },
+    {
+      "file": "public/projects/solenne-2.webp",
+      "before": 73266,
+      "after": 32396
+    },
+    {
+      "file": "public/projects/solenne-3.webp",
+      "before": 80346,
+      "after": 67900
+    },
+    {
+      "file": "public/projects/solenne-4.webp",
+      "before": 248062,
+      "after": 89390
+    },
+    {
+      "file": "public/projects/vanta-1.webp",
+      "before": 180002,
+      "after": 70756
+    },
+    {
+      "file": "public/projects/vanta-2.webp",
+      "before": 74376,
+      "after": 30972
+    },
+    {
+      "file": "public/projects/vanta-3.webp",
+      "before": 59656,
+      "after": 51860
+    },
+    {
+      "file": "public/projects/vanta-4.webp",
+      "before": 172958,
+      "after": 67900
+    },
+    {
+      "file": "public/studies/aura.webp",
+      "before": 65846,
+      "after": 26308
+    },
+    {
+      "file": "public/studies/elsewhere.webp",
+      "before": 297080,
+      "after": 98902
+    },
+    {
+      "file": "public/studies/form.webp",
+      "before": 66070,
+      "after": 26666
+    },
+    {
+      "file": "public/studies/noma.webp",
+      "before": 82876,
+      "after": 33704
+    },
+    {
+      "file": "public/studies/offscript.webp",
+      "before": 107188,
+      "after": 43486
+    },
+    {
+      "file": "public/studies/orbit.webp",
+      "before": 79418,
+      "after": 32372
+    }
+  ]
+}

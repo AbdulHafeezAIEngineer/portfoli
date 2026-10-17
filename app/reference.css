@@ -29,7 +29,6 @@
 .motion-word {
   display: inline-block;
   transform-origin: 0 100%;
-  will-change: transform;
 }
 .hero-title-reveal .text-reveal-line:nth-child(2) {
   color: var(--gold);
@@ -160,9 +159,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  transition:
-    transform 0.4s,
-    border-color 0.4s;
+  transition: transform 0.4s;
 }
 .reference-workflow .workflow-step:hover {
   transform: translateY(-6px);
@@ -862,20 +859,20 @@
   }
 }
 html[data-motion="reduced"] .reference-bunch .bunch-piece:nth-child(n) {
-    transform: none;
-  }
+  transform: none;
+}
 html[data-motion="reduced"] .reference-services .studio-service:hover,
-  html[data-motion="reduced"] .reference-workflow .workflow-step:hover,
-  html[data-motion="reduced"] .service-learn:hover svg {
-    transform: none;
-  }
+html[data-motion="reduced"] .reference-workflow .workflow-step:hover,
+html[data-motion="reduced"] .service-learn:hover svg {
+  transform: none;
+}
 html[data-motion="reduced"] .reference-workflow .workflow-step,
-  html[data-motion="reduced"] .service-learn svg {
-    transition: none;
-  }
+html[data-motion="reduced"] .service-learn svg {
+  transition: none;
+}
 html[data-motion="reduced"] .motion-reveal,
-  html[data-motion="reduced"] .motion-word {
-    opacity: 1 !important;
-    transform: none !important;
-    filter: none !important;
-  }
+html[data-motion="reduced"] .motion-word {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+}

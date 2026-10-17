@@ -39,10 +39,24 @@ export function Hero() {
         <HeroEmblem />
       </div>
       <div className="hero-bottom">
-        <div className="expertise-list">
-          {site.expertise.map((item) => (
-            <span key={item}>{item}</span>
-          ))}
+        <div
+          className="expertise-marquee"
+          role="group"
+          aria-label={site.expertise.join(", ")}
+        >
+          <div
+            className="expertise-marquee-track"
+            data-velocity-marquee
+            aria-hidden="true"
+          >
+            {[0, 1].map((copy) => (
+              <div className="expertise-list" key={copy}>
+                {site.expertise.map((item) => (
+                  <span key={item}>{item}</span>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
         <a href="#work" className="scroll-link" aria-label={site.hero.primary}>
           <span aria-hidden="true">SCROLL TO EXPLORE</span>

@@ -908,6 +908,17 @@ To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQ
 
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
+## Uploaded brief completion — latest local build
+
+This is the newest frontend measurement and supersedes earlier scores below for the current build. See [the complete brief report](docs/BRIEF_COMPLETION.md) and [measured data](docs/brief-performance.json).
+
+- 22 active project/study WebP sources reduced from 3,203,846 to 1,367,634 bytes (57%), with 23 tiny local blur placeholders; certificate source unchanged.
+- Shared scroll stream now includes velocity and back-to-top. Desktop parallax, velocity marquees, background wash and short visual curtain respect motion settings. Native touch scrolling and the curved work wall remain.
+- Native, server-rendered FAQ progressively loads its animation module near the viewport, with keyboard, rapid-reversal, reduced-motion and no-JavaScript coverage. All other new animation uses transforms/opacity; FAQ height is the brief's explicit exception.
+- Production build, lint/type checks and both browser suites passed. Six widths (360–1920px), both themes, desktop and touch, category filters, four on-demand demos, forms, dialogs and motion preference changes passed. Desktop/mobile axe scans found zero WCAG A/AA violations.
+- Latest isolated Lighthouse mobile run: **93 performance / 100 accessibility / 100 best practices / 100 SEO**; FCP **1.4s**, LCP **3.2s**, TBT **10ms**, CLS **0**, speed index **1.7s**. Inline CSS removed render-blocking stylesheet requests. The requested 95+ and LCP <2s targets remain unmet; field INP and physical-device 60fps are unmeasured.
+- No provider credentials or live hosting configuration were changed. Real owner login, production build activation and provider delivery remain unverified here.
+
 ## Curved work wall and website workflow
 
 The newer visual-only follow-up replaces the flat bunch-of-work grid with a CSS 3D curved wall and an accessible ten-destination index, respecting existing motion preferences and both themes. The workflow is retitled **How I Build Websites.**, adds the requested custom-trained AI task explanation and uses a new editorial process layout. Production build, lint, types and six-width/both-theme browser checks passed; sampled section accessibility scans found zero WCAG A/AA violations. See [the specific change record and screenshots](docs/SHOWCASE_UPDATE.md). The previous Lighthouse measurement below was not rerun for this follow-up and must not be represented as its current measured score.
@@ -1092,6 +1103,8 @@ export const config = {
 ``````javascript
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Supported by the pinned Next version; avoids render-blocking stylesheet requests.
+  experimental: { inlineCss: true },
   outputFileTracingIncludes: {
     "/**": ["./node_modules/.prisma/client/query_compiler_bg.wasm"],
   },
@@ -9549,7 +9562,9 @@ export default nextConfig;
     "test:login": "node --import tsx --test tests/admin-login.test.ts",
     "test:login:browser": "node tests/admin-login.browser.mjs",
     "test:motion:browser": "node tests/editorial-motion.browser.mjs",
-    "test:owner:setup": "node tests/owner-setup.integration.mjs"
+    "test:owner:setup": "node tests/owner-setup.integration.mjs",
+    "test:finishing:browser": "node tests/finishing.browser.mjs",
+    "images:previews": "node scripts/generate-image-previews.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "5.3.0",

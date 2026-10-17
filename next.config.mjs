@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Supported by the pinned Next version; avoids render-blocking stylesheet requests.
+  experimental: { inlineCss: true },
   outputFileTracingIncludes: {
     "/**": ["./node_modules/.prisma/client/query_compiler_bg.wasm"],
   },

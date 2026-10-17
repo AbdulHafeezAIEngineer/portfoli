@@ -45,6 +45,7 @@ app/demo/demo.css
 app/devices.css
 app/editorial.css
 app/error.tsx
+app/finishing.css
 app/global-error.tsx
 app/globals.css
 app/icon.svg
@@ -82,6 +83,7 @@ components/demo-site.tsx
 components/design-study.tsx
 components/editorial-effects.tsx
 components/experience.tsx
+components/faq-enhancement.tsx
 components/faq-section.tsx
 components/footer.tsx
 components/forte-preview.tsx
@@ -95,6 +97,7 @@ components/project-card.tsx
 components/project-gallery.tsx
 components/reveal-observer.tsx
 components/reveal.tsx
+components/scroll-ambience.tsx
 components/scroll-progress.tsx
 components/skills.tsx
 components/social-links.tsx
@@ -114,6 +117,7 @@ data/concepts.ts
 data/contact.ts
 data/demos.ts
 data/experience.ts
+data/image-previews.ts
 data/privacy.ts
 data/project-presentation.ts
 data/projects.ts
@@ -125,6 +129,7 @@ data/skills.ts
 data/studies.ts
 data/studio.ts
 data/tool-marks.ts
+docs/BRIEF_COMPLETION.md
 docs/EDITORIAL_UPGRADE.md
 docs/SHOWCASE_UPDATE.md
 docs/about-preview.png
@@ -146,6 +151,7 @@ docs/agency-project-mobile.png
 docs/agency-service-desktop.png
 docs/agency-service-mobile.png
 docs/brand-preview.png
+docs/brief-performance.json
 docs/certificate-showcase.png
 docs/editorial-contact-desktop.png
 docs/editorial-contact-mobile.png
@@ -168,6 +174,7 @@ docs/editorial-tools-desktop.png
 docs/editorial-tools-mobile.png
 docs/elvora-project-preview.png
 docs/forte-bot-card.png
+docs/image-optimization.json
 docs/lighthouse-summary.json
 docs/mobile-about-preview.png
 docs/new-work-preview.png
@@ -228,6 +235,8 @@ lib/contact/turnstile.ts
 lib/content-loader.ts
 lib/content.ts
 lib/db.ts
+lib/faq-animation.ts
+lib/image-preview.ts
 lib/records.ts
 lib/scroll.ts
 middleware.ts
@@ -316,6 +325,7 @@ scripts/capture-studies.ts
 scripts/capture.ts
 scripts/generate-certificate.mjs
 scripts/generate-client.mjs
+scripts/generate-image-previews.mjs
 scripts/package-source.py
 scripts/prepare-production.ts
 scripts/reset-admin.ts
@@ -329,6 +339,7 @@ tests/chat.test.mjs
 tests/consent.test.ts
 tests/contact.test.mjs
 tests/editorial-motion.browser.mjs
+tests/finishing.browser.mjs
 tests/helpers/https-proxy.mjs
 tests/owner-setup.integration.mjs
 tests/security.test.mjs

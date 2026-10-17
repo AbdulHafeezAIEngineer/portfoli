@@ -310,17 +310,17 @@
   }
 }
 html[data-motion="reduced"] .gallery-media img.loaded {
-    animation: none;
-  }
+  animation: none;
+}
 html[data-motion="reduced"] .device-phone {
-    box-shadow: -5px 5px 12px #0004;
-  }
+  box-shadow: -5px 5px 12px #0004;
+}
 html[data-motion="reduced"] .device-float,
-  html[data-motion="reduced"] .device-composition,
-  html[data-motion="reduced"] .device-laptop,
-  html[data-motion="reduced"] .device-phone,
-  html[data-motion="reduced"] .gallery-media {
-    transform: none !important;
-    animation: none !important;
-    translate: none !important;
-  }
+html[data-motion="reduced"] .device-composition,
+html[data-motion="reduced"] .device-laptop,
+html[data-motion="reduced"] .device-phone,
+html[data-motion="reduced"] .gallery-media {
+  transform: none !important;
+  animation: none !important;
+  translate: none !important;
+}

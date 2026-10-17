@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { imagePreview } from "@/lib/image-preview";
 import { useState } from "react";
 import { Expand } from "lucide-react";
 import {
@@ -42,6 +43,7 @@ export function Certifications({
             >
               <Image
                 src={certificate.image}
+                {...imagePreview(certificate.image)}
                 alt={certificate.alt}
                 width={1600}
                 height={1120}
