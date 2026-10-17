@@ -278,14 +278,21 @@
   display: none;
 }
 @media (prefers-reduced-motion: reduce) {
-  [data-reveal],
-  [data-reveal] .motion-word {
+  html:not([data-motion="full"]) [data-reveal],
+  html:not([data-motion="full"]) [data-reveal] .motion-word {
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;
     transition: none !important;
   }
 }
+html[data-motion="reduced"] [data-reveal],
+  html[data-motion="reduced"] [data-reveal] .motion-word {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
 
 .agency-case-shot {
   position: relative;

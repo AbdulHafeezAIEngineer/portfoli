@@ -20,12 +20,12 @@ import { Skills } from "@/components/skills";
 import { Certifications } from "@/components/certifications";
 import { Contact } from "@/components/contact";
 import { ScrollProgress } from "@/components/scroll-progress";
+import { EditorialEffects } from "@/components/editorial-effects";
 
 import {
   Services,
   Workflow,
   Journey,
-  ToolOrbit,
   WorkBunch,
 } from "@/components/studio-sections";
 import { WallOfLove } from "@/components/wall-of-love";
@@ -84,6 +84,7 @@ export default async function Home() {
   return (
     <div id="top">
       <ScrollProgress />
+      <EditorialEffects />
       <div className="ambient-background" aria-hidden="true">
         <span />
         <span />
@@ -95,10 +96,9 @@ export default async function Home() {
         <Work projects={projects} bots={bots} />
         <WorkBunch projects={projects} />
         <Experience />
-        <ToolOrbit />
+        <Journey />
         <Skills skills={skills} />
         <Workflow />
-        <Journey />
         <Certifications certificates={certificates} />
         <WallOfLove testimonials={reviews} />
         <FaqSection faqs={faqs} />

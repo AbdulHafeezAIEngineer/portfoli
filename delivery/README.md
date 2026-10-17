@@ -56,6 +56,7 @@ app/premium.css
 app/privacy/page.tsx
 app/profile.css
 app/reference.css
+app/refinement.css
 app/robots.ts
 app/services/[slug]/page.tsx
 app/sitemap.ts
@@ -78,6 +79,7 @@ components/contact-form.tsx
 components/contact.tsx
 components/demo-site.tsx
 components/design-study.tsx
+components/editorial-effects.tsx
 components/experience.tsx
 components/faq-section.tsx
 components/footer.tsx
@@ -85,6 +87,7 @@ components/forte-preview.tsx
 components/hero-emblem.tsx
 components/hero.tsx
 components/legal-page.tsx
+components/motion-preference.tsx
 components/motion-provider.tsx
 components/navbar.tsx
 components/project-card.tsx
@@ -121,6 +124,7 @@ data/skills.ts
 data/studies.ts
 data/studio.ts
 data/tool-marks.ts
+docs/EDITORIAL_UPGRADE.md
 docs/about-preview.png
 docs/agency-about-desktop.png
 docs/agency-about-mobile.png
@@ -143,12 +147,17 @@ docs/brand-preview.png
 docs/certificate-showcase.png
 docs/editorial-contact-desktop.png
 docs/editorial-contact-mobile.png
+docs/editorial-desktop-hero.png
+docs/editorial-desktop-work.png
 docs/editorial-domains-desktop.png
 docs/editorial-domains-mobile.png
 docs/editorial-footer-desktop.png
 docs/editorial-footer-mobile.png
 docs/editorial-journey-desktop.png
 docs/editorial-journey-mobile.png
+docs/editorial-mobile-hero.png
+docs/editorial-mobile-work.png
+docs/editorial-performance.json
 docs/editorial-reviews-desktop.png
 docs/editorial-reviews-mobile.png
 docs/editorial-skills-desktop.png
@@ -194,6 +203,7 @@ lib/admin/rate-limit.ts
 lib/admin/schemas.ts
 lib/admin/security.ts
 lib/admin/session.ts
+lib/admin/setup-errors.ts
 lib/admin/totp.ts
 lib/bot-runtime.ts
 lib/chat/embed.ts
@@ -211,6 +221,7 @@ lib/content-loader.ts
 lib/content.ts
 lib/db.ts
 lib/records.ts
+lib/scroll.ts
 middleware.ts
 netlify.toml
 next.config.mjs
@@ -309,7 +320,9 @@ tests/auth.integration.mjs
 tests/chat.test.mjs
 tests/consent.test.ts
 tests/contact.test.mjs
+tests/editorial-motion.browser.mjs
 tests/helpers/https-proxy.mjs
+tests/owner-setup.integration.mjs
 tests/security.test.mjs
 tsconfig.json
 types/gmail-smtp.d.ts

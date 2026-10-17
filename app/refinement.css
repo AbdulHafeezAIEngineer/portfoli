@@ -1,0 +1,491 @@
+/* Refined motion remains native: no second scrolling engine or page-load gate. */
+:root {
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+  --section-space: clamp(72px, 9vw, 144px);
+  --radius-editorial: 18px;
+}
+.studio-section,
+.work-section,
+.experience-section,
+.skills-section {
+  scroll-margin-top: 104px;
+}
+.site-header {
+  transition: transform 0.35s var(--ease-editorial);
+}
+.site-header.is-scroll-hidden:not(:focus-within) {
+  transform: translateY(-110%);
+}
+.desktop-nav a[aria-current="location"] {
+  color: var(--gold);
+}
+.desktop-nav a[aria-current="location"]::after {
+  transform: scaleX(1);
+}
+.motion-control {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 10px;
+}
+.motion-control select {
+  min-height: 44px;
+  max-width: 66px;
+  padding: 0 6px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  background: var(--surface);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+.motion-control:focus-within {
+  color: var(--gold);
+}
+.nav-row {
+  gap: 18px;
+}
+.desktop-nav {
+  gap: clamp(12px, 1.6vw, 26px);
+}
+.hero-title-reveal .motion-word {
+  display: inline-block;
+  animation: editorial-line-in 0.8s var(--ease-editorial) both;
+  animation-delay: calc(100ms + var(--word-delay, 0s));
+}
+@keyframes editorial-line-in {
+  from {
+    transform: translateY(105%);
+    opacity: 0.1;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+[data-motion-reveals="enabled"] [data-reveal="block"] {
+  transition-property: opacity, transform;
+  transition-timing-function: var(--ease-editorial);
+}
+[data-motion-reveals="enabled"] [data-reveal="block"]:not(.is-revealed) {
+  filter: none;
+  transform: translateY(30px);
+}
+[data-motion-reveals="enabled"] [data-reveal="words"] .motion-word {
+  transition-timing-function: var(--ease-editorial);
+}
+.work-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 24px 0 36px;
+}
+.work-filters button {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  padding: 11px 19px;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  transition:
+    color 0.25s,
+    background-color 0.25s,
+    transform 0.25s var(--ease-editorial);
+}
+.work-filters button span {
+  font-family: var(--font-space);
+  opacity: 0.65;
+  font-size: 10px;
+}
+.work-filters button[aria-selected="true"] {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
+}
+.work-filters button:hover {
+  transform: translateY(-2px);
+}
+.work-panel {
+  min-height: min(70vh, 680px);
+}
+.work-filter-enter {
+  animation: work-filter-enter 0.45s var(--ease-editorial) both;
+}
+@keyframes work-filter-enter {
+  from {
+    opacity: 0.2;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.interface-study-section {
+  margin-top: 55px;
+}
+.interface-study-section > .eyebrow {
+  margin-bottom: 25px;
+}
+.interface-studies-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 36px 26px;
+}
+.interface-study-card {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius-editorial);
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.interface-study-image {
+  position: relative;
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  background: var(--bg);
+}
+.interface-study-image img {
+  object-fit: cover;
+  object-position: top;
+  transition: transform 0.8s var(--ease-editorial);
+}
+.interface-study-card > div:last-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+}
+.interface-study-card small {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.interface-study-card strong {
+  display: block;
+  font-family: var(--font-space);
+  font-size: clamp(24px, 3vw, 36px);
+}
+.interface-study-card:hover img,
+.interface-study-card:focus-visible img {
+  transform: scale(1.035);
+}
+.work-ai-invitation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  border-block: 1px solid var(--line);
+  padding: 38px 0;
+  margin-top: 50px;
+}
+.work-ai-invitation h3 {
+  font-size: clamp(22px, 3vw, 36px);
+  margin: 10px 0;
+  letter-spacing: -0.04em;
+}
+.work-ai-invitation p:not(.eyebrow) {
+  font-size: 13px;
+  color: var(--muted);
+  max-width: 48ch;
+}
+.work-ai-invitation .button {
+  flex-shrink: 0;
+}
+.tool-purpose {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 3px;
+  font-weight: 400;
+}
+.toolkit-row li {
+  align-items: center;
+}
+.section-anchor {
+  scroll-margin-top: 110px;
+}
+.tool-marquee {
+  overflow: hidden;
+  margin: 42px 0 24px;
+  padding: 22px 0;
+  border-block: 1px solid var(--line);
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+}
+.tool-marquee > div {
+  display: flex;
+  width: max-content;
+  animation: toolkit-travel 38s linear infinite;
+}
+.tool-marquee > div > span {
+  display: flex;
+  flex-shrink: 0;
+}
+.tool-marquee span span {
+  display: inline-flex;
+  align-items: center;
+  gap: 36px;
+  padding-right: 36px;
+  font-family: var(--font-space);
+  font-size: clamp(20px, 3vw, 34px);
+  color: var(--muted);
+}
+.tool-marquee i {
+  font-style: normal;
+  color: var(--gold);
+  font-size: 18px;
+}
+.tool-marquee:hover > div {
+  animation-play-state: paused;
+}
+@keyframes toolkit-travel {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.journey-editorial-list {
+  position: relative;
+}
+.journey-editorial-list::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 -20px;
+  width: 2px;
+  background: var(--line);
+}
+@media (max-width: 1023px) {
+  .mobile-nav:not([hidden]) {
+    min-height: calc(100dvh - 82px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 24px max(25px, 6vw) 80px;
+  }
+  .mobile-nav a {
+    font-family: var(--font-space);
+    font-size: clamp(22px, 5vw, 38px);
+    color: var(--text);
+    animation: work-filter-enter 0.5s var(--ease-editorial) both;
+  }
+  .mobile-nav a:nth-child(2) {
+    animation-delay: 40ms;
+  }
+  .mobile-nav a:nth-child(3) {
+    animation-delay: 80ms;
+  }
+  .mobile-nav a:nth-child(4) {
+    animation-delay: 120ms;
+  }
+  .mobile-nav a:nth-child(5) {
+    animation-delay: 160ms;
+  }
+  .mobile-nav a:nth-child(6) {
+    animation-delay: 200ms;
+  }
+  .mobile-nav a:nth-child(7) {
+    animation-delay: 240ms;
+  }
+}
+@media (max-width: 700px) {
+  .interface-studies-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+  }
+  .work-filters {
+    gap: 8px;
+  }
+  .work-filters button {
+    padding: 10px 13px;
+    font-size: 11px;
+    gap: 10px;
+  }
+  .work-ai-invitation {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .motion-control > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .motion-control select {
+    max-width: 56px;
+  }
+  .nav-row {
+    gap: 10px;
+  }
+  .journey-editorial-list::before,
+  .journey-editorial-list::after {
+    left: -9px;
+  }
+  .workflow-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .workflow-cards > .motion-reveal {
+    position: sticky;
+    top: 105px;
+  }
+  .workflow-cards > .motion-reveal:nth-child(2) {
+    top: 119px;
+  }
+  .workflow-cards > .motion-reveal:nth-child(3) {
+    top: 133px;
+  }
+  .workflow-cards > .motion-reveal:nth-child(4) {
+    top: 147px;
+  }
+  .workflow-cards > .motion-reveal:nth-child(5) {
+    top: 161px;
+  }
+  .reference-workflow .workflow-step {
+    min-height: 250px;
+  }
+}
+/* Auto honors the OS. On is an explicit user override, Off always stops motion. */
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion="full"]) .hero-title-reveal .motion-word,
+  html:not([data-motion="full"]) .tool-marquee > div,
+  html:not([data-motion="full"]) .journey-editorial-list::after {
+    animation: none;
+    transform: none;
+  }
+}
+html[data-motion="reduced"] .hero-title-reveal .motion-word,
+html[data-motion="reduced"] .tool-marquee > div,
+html[data-motion="reduced"] .journey-editorial-list::after {
+  animation: none;
+  transform: none;
+}
+.scroll-progress {
+  animation: none !important;
+}
+.journey-editorial-list::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 -20px;
+  width: 2px;
+  background: var(--gold);
+  transform-origin: top;
+  transform: scaleY(var(--journey-progress, 0));
+}
+@media (max-width: 700px) {
+  .journey-editorial-list::after {
+    left: -9px;
+  }
+}
+.project-view-cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 80;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+@media (hover: none), (pointer: coarse) {
+  .project-view-cursor {
+    display: none;
+  }
+}
+/* Keep the wordmark light alive without repainting its gradient each frame. */
+.footer-wordmark-window > span {
+  animation: wordmark-breathe 10s ease-in-out infinite alternate;
+}
+@keyframes wordmark-breathe {
+  from {
+    opacity: 0.65;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.form-field {
+  position: relative;
+}
+.form-field:has(> input) > label,
+.form-field:has(> textarea) > label {
+  position: absolute;
+  left: 15px;
+  top: 19px;
+  z-index: 1;
+  margin: 0;
+  pointer-events: none;
+  transform-origin: left top;
+  transition:
+    transform 0.25s var(--ease-editorial),
+    color 0.25s;
+}
+.form-field > input,
+.form-field > textarea {
+  padding-top: 27px;
+  padding-bottom: 10px;
+}
+.form-field:has(> input:focus) > label,
+.form-field:has(> input:not(:placeholder-shown)) > label,
+.form-field:has(> textarea:focus) > label,
+.form-field:has(> textarea:not(:placeholder-shown)) > label {
+  transform: translateY(-12px) scale(0.8);
+  color: var(--muted);
+}
+.form-field > input::placeholder,
+.form-field > textarea::placeholder {
+  color: transparent;
+}
+.form-field > input:focus::placeholder,
+.form-field > textarea:focus::placeholder {
+  color: var(--muted);
+}
+.contact-form .form-success {
+  animation: work-filter-enter 0.4s var(--ease-editorial) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion="full"]) .footer-wordmark-window > span {
+    animation: none;
+  }
+}
+html[data-motion="reduced"] .footer-wordmark-window > span {
+  animation: none;
+}
+/* Privacy controls are usable immediately, independently of branded font downloads. */
+.consent-banner,
+.privacy-dialog {
+  font-family: system-ui, sans-serif;
+}

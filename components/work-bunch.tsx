@@ -1,7 +1,8 @@
 "use client";
+import { useMotionPreference } from "./motion-preference";
 import Image from "next/image";
 import { useRef } from "react";
-import { m, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { m, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { studio } from "@/data/studio";
 import { studies } from "@/data/studies";
@@ -10,7 +11,7 @@ import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
 export function WorkBunch({ projects }: { projects: ProjectView[] }) {
   const ref = useRef<HTMLElement>(null);
-  const reduced = useReducedMotion();
+  const { reduced } = useMotionPreference();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],

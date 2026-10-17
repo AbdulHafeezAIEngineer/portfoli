@@ -471,18 +471,18 @@ The admin dashboard and database-backed authentication are implemented. The depl
 
 Open the **elvora-studio** Vercel project → **Settings → Environment Variables**. Use the **Production** environment. Never put secrets in NEXT_PUBLIC variables, source code, screenshots or chat.
 
-| Variable | Set privately in Vercel |
-| --- | --- |
-| `DATABASE_URL` | Application connection URL from your PostgreSQL provider |
-| `DIRECT_URL` | Direct migration connection URL from the same provider |
-| `NEXTAUTH_SECRET` | Securely generated random secret, at least 32 characters; keep it stable |
-| `NEXTAUTH_URL` | `https://www.elvoraai.online` |
-| `NEXT_PUBLIC_SITE_URL` | `https://www.elvoraai.online` |
-| `AUTH_REDIS_REST_URL` | Shared Redis REST endpoint for login rate protection |
-| `AUTH_REDIS_REST_TOKEN` | Matching private Redis REST token |
-| `ADMIN_EMAIL` | `abdulhafeez@elvoraai.online` |
-| `ADMIN_PASSWORD` | Your new strong admin password: 14+ characters with upper/lowercase, number and symbol; maximum 72 UTF-8 bytes |
-| `ADMIN_BOOTSTRAP_ON_BUILD` | `true` for the first production deployment |
+| Variable                   | Set privately in Vercel                                                                                        |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`             | Application connection URL from your PostgreSQL provider                                                       |
+| `DIRECT_URL`               | Direct migration connection URL from the same provider                                                         |
+| `NEXTAUTH_SECRET`          | Securely generated random secret, at least 32 characters; keep it stable                                       |
+| `NEXTAUTH_URL`             | `https://www.elvoraai.online`                                                                                  |
+| `NEXT_PUBLIC_SITE_URL`     | `https://www.elvoraai.online`                                                                                  |
+| `AUTH_REDIS_REST_URL`      | Shared Redis REST endpoint for login rate protection                                                           |
+| `AUTH_REDIS_REST_TOKEN`    | Matching private Redis REST token                                                                              |
+| `ADMIN_EMAIL`              | `abdulhafeez@elvoraai.online`                                                                                  |
+| `ADMIN_PASSWORD`           | Your new strong admin password: 14+ characters with upper/lowercase, number and symbol; maximum 72 UTF-8 bytes |
+| `ADMIN_BOOTSTRAP_ON_BUILD` | `true` for the first production deployment                                                                     |
 
 Vercel's connected storage integrations can provision the required PostgreSQL and Redis accounts; map their actual connection variables to the names above. Use verified provider URLs and TLS. Do not replace missing values with examples. A serverless Vercel deployment requires shared login protection; do not use an in-memory override to bypass this requirement.
 
@@ -493,6 +493,12 @@ After a successful first deployment, remove `ADMIN_PASSWORD`, set `ADMIN_BOOTSTR
 If an account already exists, the setup operation preserves it. It will not turn a newly entered environment password into a password reset. Existing-account recovery is the deliberate private `npm run admin:reset` procedure in `DEPLOYMENT.md`; no public reset endpoint exists.
 
 ## Login feedback
+
+### Build stops after migrations with a credential requirement
+
+The supplied production log reached `Reviewed database migrations applied.` and then rejected the first-owner email/password. This is not an npm-install failure. Verify `ADMIN_EMAIL` privately and replace the manually added `ADMIN_PASSWORD` Secret in Vercel Production with a password satisfying all rules above. Do not use the Neon database password. Redeploy the latest main commit after saving; the updated script reports only the specific missing requirements, never the password. An existing owner is always preserved.
+
+The `.env.local not found` notice is expected on Vercel when settings are supplied through environment variables. PostgreSQL's SSL-mode compatibility warning is not the credential error; do not disable TLS verification to suppress it.
 
 - Incomplete private configuration shows **Owner sign-in needs setup** and a Check again button, rather than submitting into a redirect loop.
 - Wrong credentials show a clear inline error and preserve entered details.
@@ -652,6 +658,8 @@ Services, a separate My bunch of work contact sheet, eight-tool creative directo
 The separate My bunch of work collage includes four website concepts plus six new coded UI studies at `/studies/[slug]`. Their snapshots are actual browser captures with fictional data clearly identified. `data/studies.ts` configures the studies and `npx tsx scripts/capture-studies.ts` refreshes their WebP images.
 
 Latest previews: [footer](docs/editorial-footer-desktop.png), [contact](docs/editorial-contact-desktop.png), [skills](docs/editorial-skills-desktop.png), [tools](docs/editorial-tools-desktop.png), [technical domains](docs/editorial-domains-desktop.png), [journey](docs/editorial-journey-desktop.png) and [review layout](docs/editorial-reviews-desktop.png). Matching mobile captures use the same names with `-mobile.png`.
+
+Latest follow-up: [editorial motion, responsive work filters and production setup diagnostics](docs/EDITORIAL_UPGRADE.md). Actual current checks and deployment limits are in [VERIFICATION.md](VERIFICATION.md).
 ``````
 
 ## REFERENCE_DESIGN.md
@@ -885,6 +893,12 @@ Owner login regression checks cover missing setup, safe credential/outage/rate e
 For `npm run test:login:browser`, provide the guarded isolated HTTPS fixture environment and `AGENCY_TEST_UNCONFIGURED_URL` pointing to a separate ordinary loopback app without auth settings. It verifies the setup notice, business-email prefill, wrong password, real owner dashboard login/logout, an explicitly dropped session cookie, safe failure messaging and old error-query handling. It uses system Chromium or `PLAYWRIGHT_CHROMIUM_EXECUTABLE`. No real credential is embedded in the test.
 
 To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQL instance while its fixture app/proxy remain running, then run `AGENCY_TEST_DATABASE_UNAVAILABLE=true node --env-file=/private/path/test.env tests/admin-database-outage.browser.mjs`. This must still render sign-in and report its actual database failure inline; restart the fixture database before other suites. Never stop a production database for this check.
+
+## Editorial motion and private setup regression
+
+`npm run test:motion:browser` uses `PUBLIC_TEST_URL` (default loopback port 3008) and system Chromium. It checks six viewport widths, themes, actual filter contents, live OS motion changes, explicit animation preference persistence, native touch behavior, lazy AI demos, form validation, overflow, no-JavaScript content and browser errors. It refuses nonlocal targets.
+
+`node --env-file=/private/path/local-test.env tests/owner-setup.integration.mjs` requires `AGENCY_TEST_DATABASE=isolated` and an explicitly local PostgreSQL connection on port 55432. It creates/drops its own disposable database, runs real private build setup, verifies weak credential diagnostics, first-owner creation and repeat-run preservation, and never prints generated fixture secrets. It must never be run against a real production database.
 ``````
 
 ## VERIFICATION.md
@@ -893,6 +907,24 @@ To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQ
 # Verification — 17 October 2026
 
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
+
+## Editorial/motion follow-up and reported Vercel failure
+
+The supplied production log confirms the terminating error is first-owner email/password validation, after successful migrations and an owner-table query. It is not the npm deprecation warnings or SSL compatibility warning. The updated private build script reports the unmet password rules separately from an invalid email. It validates copied connection URLs and emits only fixed, non-secret driver diagnostics. Existing owners/passwords remain untouched. Production still requires the owner to correct the private Production credential and redeploy; this workspace has no callable authenticated Vercel tool.
+
+The current front end has four work categories, a combined skills/toolkit, accessible Motion Auto/On/Off controls, responsive reveals, lazy fine-pointer Lenis enhancement, native touch scrolling, desktop View/magnetic effects, direction-aware/active navigation, stacked mobile workflow, journey/reading progress and floating form labels. CSS scroll-linked timelines that hung Chromium during preference changes have been replaced by one shared passive listener/frame. Native OS reduced motion is the default; full motion requires explicit On when the OS requests less. Two variable font files replace five initial files from the same two families. Privacy controls use system fonts so they do not wait on branded downloads.
+
+Validation for this follow-up:
+
+- Production build, lint and type checking passed.
+- Security **10**, login **5**, chat **16**, contact **13**, consent **5** unit tests: **49 passed**.
+- Separate disposable PostgreSQL test verified actual migrations and owner creation, weak/missing requirements, invalid email/URL diagnostics, no password output and repeat-run preservation of exact existing password hashes. The disposable database was removed after the test.
+- Responsive production browser suite covers **360,390,768,1024,1440,1920px**, both themes, filtering, live reduced-motion changes, explicit On/Off, persisted choice after reload, navigation/overflow, no-JavaScript text, no unsolicited AI traffic and no runtime/hydration errors. Additional touch-native, AI demo and form-validation checks are included in the same script.
+- Desktop and mobile axe WCAG A/AA checks: **0 violations**. Screenshots are `docs/editorial-*-hero.png` and `docs/editorial-*-work.png`.
+- Local Lighthouse 13.5 mobile, fresh consent state: **95 performance / 100 accessibility / 100 best practices / 100 SEO**; FCP **1.4s**, LCP **2.9s**, TBT **30ms**, CLS **0**, speed index **1.6s**. See `docs/editorial-performance.json`. An intermediate follow-up build measured 90 performance before font/privacy-rendering changes. This is lab evidence, not a live score or measured field INP/60fps guarantee. The requested LCP below 2s remains unmet.
+- Production dependency audit remains clean; no claim that the separate development-tool findings disappeared.
+
+See [the implementation audit, full file map and test instructions](docs/EDITORIAL_UPGRADE.md). Earlier evidence below describes the previous agency/login implementation and must not be substituted for current metrics.
 
 ## Owner sign-in follow-up
 
@@ -942,12 +974,12 @@ The tracked loopback-only HTTPS proxy was exercised for these checks so applicat
 
 Fresh ordinary file-mode production server; Lighthouse 13.5.0, simulated mobile throttling, no concurrent browser/capture workload:
 
-| Category | Score |
-| --- | ---: |
-| Performance | 92 |
-| Accessibility | 100 |
-| Best practices | 100 |
-| SEO | 100 |
+| Category       | Score |
+| -------------- | ----: |
+| Performance    |    92 |
+| Accessibility  |   100 |
+| Best practices |   100 |
+| SEO            |   100 |
 
 FCP **1.2 s**, LCP **3.3 s**, total blocking time **20 ms**, CLS **0**, speed index **1.2 s**. Shared CSS/observer reveals and initial consent rendering reduce hydration work. LCP remains above the 2.5-second good threshold in this simulated run. See `docs/agency-performance.json` for settings and numeric metrics. Scores vary with devices, CPU, network, content, providers and the production host; they are neither a security nor a legal certification. Earlier scores/captures describe older builds.
 
@@ -1066,6 +1098,8 @@ const nextConfig = {
     "gmail-smtp",
   ],
   images: {
+    formats: ["image/avif", "image/webp"],
+    deviceSizes: [360, 390, 640, 768, 1024, 1280, 1536, 1920],
     remotePatterns: process.env.BLOB_PUBLIC_HOST
       ? [{ protocol: "https", hostname: process.env.BLOB_PUBLIC_HOST }]
       : [],
@@ -1092,14 +1126,15 @@ export default nextConfig;
       "version": "1.0.0",
       "hasInstallScript": true,
       "dependencies": {
-        "@fontsource/inter": "5.2.8",
-        "@fontsource/space-grotesk": "5.2.10",
+        "@fontsource-variable/inter": "5.3.0",
+        "@fontsource-variable/space-grotesk": "5.3.0",
         "@prisma/adapter-pg": "6.19.3",
         "@prisma/client": "6.19.3",
         "@vercel/blob": "2.8.2",
         "bcryptjs": "3.0.2",
         "framer-motion": "11.18.2",
         "gmail-smtp": "npm:nodemailer@10.1.1",
+        "lenis": "1.3.23",
         "lucide-react": "0.468.0",
         "next": "15.5.28",
         "next-auth": "4.24.15",
@@ -1688,19 +1723,19 @@ export default nextConfig;
         "node": "^12.22.0 || ^14.17.0 || >=16.0.0"
       }
     },
-    "node_modules/@fontsource/inter": {
-      "version": "5.2.8",
-      "resolved": "https://registry.npmjs.org/@fontsource/inter/-/inter-5.2.8.tgz",
-      "integrity": "sha512-P6r5WnJoKiNVV+zvW2xM13gNdFhAEpQ9dQJHt3naLvfg+LkF2ldgSLiF4T41lf1SQCM9QmkqPTn4TH568IRagg==",
+    "node_modules/@fontsource-variable/inter": {
+      "version": "5.3.0",
+      "resolved": "https://registry.npmjs.org/@fontsource-variable/inter/-/inter-5.3.0.tgz",
+      "integrity": "sha512-OupL48va4JNofb97w6NYeF9S7W/kHNKM0Er8Dem5nqi4jeOLrVJDoE8tZEpnMJmtkvNbB1EIPPwHcdkF6b1oUA==",
       "license": "OFL-1.1",
       "funding": {
         "url": "https://github.com/sponsors/ayuhito"
       }
     },
-    "node_modules/@fontsource/space-grotesk": {
-      "version": "5.2.10",
-      "resolved": "https://registry.npmjs.org/@fontsource/space-grotesk/-/space-grotesk-5.2.10.tgz",
-      "integrity": "sha512-XNXEbT74OIITPqw2H6HXwPDp85fy43uxfBwFR5PU+9sLnjuLj12KlhVM9nZVN6q6dlKjkuN8JisW/OBxwxgUew==",
+    "node_modules/@fontsource-variable/space-grotesk": {
+      "version": "5.3.0",
+      "resolved": "https://registry.npmjs.org/@fontsource-variable/space-grotesk/-/space-grotesk-5.3.0.tgz",
+      "integrity": "sha512-2IxmvfB08i9vnGB3Ym/AXvhRE+8XOjWMXIyDum03c+tPwH0FUoMNQfGpU8NXPxjbws0Vvss3AH0Zqt4oJBBAdw==",
       "license": "OFL-1.1",
       "funding": {
         "url": "https://github.com/sponsors/ayuhito"
@@ -6629,6 +6664,37 @@ export default nextConfig;
         "node": ">=0.10"
       }
     },
+    "node_modules/lenis": {
+      "version": "1.3.23",
+      "resolved": "https://registry.npmjs.org/lenis/-/lenis-1.3.23.tgz",
+      "integrity": "sha512-YxYq3TJqj9sJNv0V9SkyQHejt14xwyIwgDaaMK89Uf9SxQfIszu+gTQSSphh6BWlLTNVKvvXAGkg+Zf+oFIevg==",
+      "license": "MIT",
+      "workspaces": [
+        "packages/*",
+        "playground",
+        "playground/*"
+      ],
+      "funding": {
+        "type": "github",
+        "url": "https://github.com/sponsors/darkroomengineering"
+      },
+      "peerDependencies": {
+        "@nuxt/kit": ">=3.0.0",
+        "react": ">=17.0.0",
+        "vue": ">=3.0.0"
+      },
+      "peerDependenciesMeta": {
+        "@nuxt/kit": {
+          "optional": true
+        },
+        "react": {
+          "optional": true
+        },
+        "vue": {
+          "optional": true
+        }
+      }
+    },
     "node_modules/levn": {
       "version": "0.4.1",
       "resolved": "https://registry.npmjs.org/levn/-/levn-0.4.1.tgz",
@@ -9477,16 +9543,20 @@ export default nextConfig;
     "test:proxy": "node tests/helpers/https-proxy.mjs",
     "admin:prepare": "node --env-file-if-exists=.env.local --import tsx scripts/prepare-production.ts",
     "test:login": "node --import tsx --test tests/admin-login.test.ts",
-    "test:login:browser": "node tests/admin-login.browser.mjs"
+    "test:login:browser": "node tests/admin-login.browser.mjs",
+    "test:motion:browser": "node tests/editorial-motion.browser.mjs",
+    "test:owner:setup": "node tests/owner-setup.integration.mjs"
   },
   "dependencies": {
-    "@fontsource/inter": "5.2.8",
-    "@fontsource/space-grotesk": "5.2.10",
+    "@fontsource-variable/inter": "5.3.0",
+    "@fontsource-variable/space-grotesk": "5.3.0",
     "@prisma/adapter-pg": "6.19.3",
     "@prisma/client": "6.19.3",
     "@vercel/blob": "2.8.2",
     "bcryptjs": "3.0.2",
     "framer-motion": "11.18.2",
+    "gmail-smtp": "npm:nodemailer@10.1.1",
+    "lenis": "1.3.23",
     "lucide-react": "0.468.0",
     "next": "15.5.28",
     "next-auth": "4.24.15",
@@ -9495,8 +9565,7 @@ export default nextConfig;
     "react-dom": "18.3.1",
     "server-only": "0.0.1",
     "sharp": "0.35.5",
-    "zod": "3.25.76",
-    "gmail-smtp": "npm:nodemailer@10.1.1"
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "5.16.2",

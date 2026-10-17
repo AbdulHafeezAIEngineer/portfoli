@@ -447,8 +447,12 @@ import { spawnSync } from "node:child_process";
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { hash } from "bcryptjs";
-import { strongPassword } from "../lib/admin/password";
+import { passwordRequirements } from "../lib/admin/password";
 import { site } from "../data/site";
+import {
+  databaseSetupFailure,
+  validPostgresConnection,
+} from "../lib/admin/setup-errors";
 
 class SetupError extends Error {}
 
@@ -471,6 +475,11 @@ async function main() {
     throw new SetupError(
       `Private owner setup needs: ${missing.join(", ")}. Add them in hosting environment settings.`,
     );
+  for (const key of ["DATABASE_URL", "DIRECT_URL"] as const)
+    if (!validPostgresConnection(process.env[key]!))
+      throw new SetupError(
+        `${key} must contain only the complete PostgreSQL URL, not the variable name, quotes, a password alone or masked asterisks. No credentials were printed.`,
+      );
   if ((process.env.NEXTAUTH_SECRET?.length || 0) < 32)
     throw new SetupError(
       "NEXTAUTH_SECRET must contain at least 32 random characters.",
@@ -534,7 +543,13 @@ async function main() {
   });
   try {
     // Existing owners/passwords are always preserved, even if the flag remains enabled.
-    if (await db.adminUser.count()) {
+    let existingOwners: number;
+    try {
+      existingOwners = await db.adminUser.count();
+    } catch (error) {
+      throw new SetupError(databaseSetupFailure(error));
+    }
+    if (existingOwners) {
       console.log(
         "Existing administrator preserved. Private owner setup complete.",
       );
@@ -542,16 +557,16 @@ async function main() {
     }
     const email = (process.env.ADMIN_EMAIL || site.email).trim().toLowerCase();
     const password = process.env.ADMIN_PASSWORD;
-    if (
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
-      email.length > 254 ||
-      !password ||
-      !strongPassword(password)
-    )
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254)
       throw new SetupError(
-        "Set ADMIN_EMAIL and a new ADMIN_PASSWORD: 14+ characters, upper/lowercase, number and symbol, maximum 72 UTF-8 bytes.",
+        "ADMIN_EMAIL must contain a valid owner email address. Set it privately in Vercel Production environment variables.",
       );
-    const passwordHash = await hash(password, 12);
+    const requirements = passwordRequirements(password);
+    if (requirements.length)
+      throw new SetupError(
+        `ADMIN_PASSWORD needs ${requirements.join(", ")}. Update the Secret in Vercel Production and redeploy. No credentials were printed.`,
+      );
+    const passwordHash = await hash(password!, 12);
     await db.$transaction(
       async (tx) => {
         if (await tx.adminUser.count())

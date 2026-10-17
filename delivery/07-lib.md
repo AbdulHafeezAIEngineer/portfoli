@@ -344,6 +344,19 @@ export function strongPassword(password: string): boolean {
     /[^A-Za-z0-9]/.test(password)
   );
 }
+
+/** Return requirements only, never the submitted password or its contents. */
+export function passwordRequirements(password: string | undefined): string[] {
+  if (!password) return ["a privately chosen ADMIN_PASSWORD"];
+  return [
+    password.length < 14 ? "at least 14 characters" : "",
+    Buffer.byteLength(password, "utf8") > 72 ? "at most 72 UTF-8 bytes" : "",
+    !/[a-z]/.test(password) ? "a lowercase letter" : "",
+    !/[A-Z]/.test(password) ? "an uppercase letter" : "",
+    !/\d/.test(password) ? "a number" : "",
+    !/[^A-Za-z0-9]/.test(password) ? "a symbol" : "",
+  ].filter(Boolean);
+}
 ``````
 
 ## lib/admin/rate-limit.ts
@@ -809,6 +822,49 @@ export async function requireAdmin() {
   if (!user || user.passwordVersion !== session.passwordVersion)
     throw new ChatError(401, "Please sign in again.");
   return user;
+}
+``````
+
+## lib/admin/setup-errors.ts
+
+``````ts
+/** Deployment diagnostics use fixed messages; never serialize driver errors or URLs. */
+export function databaseSetupFailure(error: unknown): string {
+  const codes = new Set<string>();
+  const visit = (value: unknown, depth = 0) => {
+    if (!value || typeof value !== "object" || depth > 5) return;
+    const record = value as Record<string, unknown>;
+    for (const key of ["code", "originalCode"])
+      if (typeof record[key] === "string") codes.add(record[key]);
+    for (const key of ["cause", "meta", "driverAdapterError", "error"])
+      visit(record[key], depth + 1);
+  };
+  visit(error);
+  if (["28P01", "28000", "P1000"].some((code) => codes.has(code)))
+    return "DATABASE_URL authentication failed. After a Neon password reset, synchronize the integration connection values with the new password. DIRECT_URL migrations succeeding does not verify DATABASE_URL. No credentials were printed.";
+  if (["42P01", "P2021"].some((code) => codes.has(code)))
+    return "The application tables were not found through DATABASE_URL. DATABASE_URL and DIRECT_URL must point to the same Neon branch and database. No credentials were printed.";
+  if (
+    ["ENOTFOUND", "EAI_AGAIN", "ECONNREFUSED", "ETIMEDOUT", "P1001"].some(
+      (code) => codes.has(code),
+    )
+  )
+    return "DATABASE_URL could not reach PostgreSQL. Check the Neon endpoint, network access and connection settings. No credentials were printed.";
+  return "Private owner setup could not query DATABASE_URL. Check its current credentials, TLS settings and that it targets the same database as DIRECT_URL. No credentials were printed.";
+}
+
+export function validPostgresConnection(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return (
+      ["postgres:", "postgresql:"].includes(url.protocol) &&
+      Boolean(url.hostname && url.username && url.pathname.length > 1) &&
+      !/^\*+$/.test(decodeURIComponent(url.password)) &&
+      !value.includes("\n")
+    );
+  } catch {
+    return false;
+  }
 }
 ``````
 
@@ -2216,5 +2272,45 @@ export async function recordChat(
   });
   if (settings?.chatLogging)
     await db.chatLog.create({ data: { botId, userMessage, reply } });
+}
+``````
+
+## lib/scroll.ts
+
+``````ts
+"use client";
+
+type Metrics = { y: number; height: number; viewport: number };
+const listeners = new Set<(metrics: Metrics) => void>();
+let frame = 0;
+function update() {
+  frame = 0;
+  const metrics = {
+    y: window.scrollY,
+    height: document.documentElement.scrollHeight,
+    viewport: window.innerHeight,
+  };
+  for (const listener of listeners) listener(metrics);
+}
+function schedule() {
+  if (!frame) frame = requestAnimationFrame(update);
+}
+/** One passive listener and one animation frame shared by all public scroll effects. */
+export function subscribeScroll(listener: (metrics: Metrics) => void) {
+  if (!listeners.size) {
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule, { passive: true });
+  }
+  listeners.add(listener);
+  schedule();
+  return () => {
+    listeners.delete(listener);
+    if (!listeners.size) {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      cancelAnimationFrame(frame);
+      frame = 0;
+    }
+  };
 }
 ``````

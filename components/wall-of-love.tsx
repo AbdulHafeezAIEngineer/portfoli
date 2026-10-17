@@ -1,8 +1,9 @@
 "use client";
+import { useMotionPreference } from "./motion-preference";
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, m, useInView, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useInView } from "framer-motion";
 import {
   ArrowLeft,
   ArrowRight,
@@ -19,7 +20,7 @@ import { TextReveal } from "./text-reveal";
 export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { amount: 0.2 });
-  const reduced = useReducedMotion();
+  const { reduced } = useMotionPreference();
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [hydrated, setHydrated] = useState(false);

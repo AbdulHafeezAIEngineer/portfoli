@@ -90,3 +90,5 @@ Services, a separate My bunch of work contact sheet, eight-tool creative directo
 The separate My bunch of work collage includes four website concepts plus six new coded UI studies at `/studies/[slug]`. Their snapshots are actual browser captures with fictional data clearly identified. `data/studies.ts` configures the studies and `npx tsx scripts/capture-studies.ts` refreshes their WebP images.
 
 Latest previews: [footer](docs/editorial-footer-desktop.png), [contact](docs/editorial-contact-desktop.png), [skills](docs/editorial-skills-desktop.png), [tools](docs/editorial-tools-desktop.png), [technical domains](docs/editorial-domains-desktop.png), [journey](docs/editorial-journey-desktop.png) and [review layout](docs/editorial-reviews-desktop.png). Matching mobile captures use the same names with `-mobile.png`.
+
+Latest follow-up: [editorial motion, responsive work filters and production setup diagnostics](docs/EDITORIAL_UPGRADE.md). Actual current checks and deployment limits are in [VERIFICATION.md](VERIFICATION.md).

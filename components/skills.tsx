@@ -2,6 +2,7 @@ import { skillContent as copy, type Skill } from "@/data/skills";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
 import { ToolMark } from "./tool-mark";
+import { studio } from "@/data/studio";
 import {
   Braces,
   CheckCheck,
@@ -14,12 +15,16 @@ import {
 const categoryIcons = [Waypoints, CheckCheck, Braces, Database, Mic, GitBranch];
 
 export function Skills({ skills }: { skills: Skill[] }) {
+  const purpose = new Map<string, string>(
+    studio.tools.items.map((tool) => [tool.name, tool.purpose]),
+  );
   return (
     <section
       id="skills"
       className="container skills-section toolkit-section"
       aria-labelledby="skills-title"
     >
+      <span id="creative-toolkit" className="section-anchor" />
       <div className="toolkit-heading">
         <div>
           <Reveal>
@@ -28,7 +33,11 @@ export function Skills({ skills }: { skills: Skill[] }) {
           <TextReveal id="skills-title" text={copy.title} />
         </div>
         <Reveal>
-          <p>{copy.description}</p>
+          <p>
+            {copy.description}
+            <br />
+            {studio.tools.intro}
+          </p>
         </Reveal>
       </div>
       <div className="toolkit-rows">
@@ -65,7 +74,14 @@ export function Skills({ skills }: { skills: Skill[] }) {
                             <Icon size={23} strokeWidth={1.3} />
                           </span>
                         )}
-                        {skill.name}
+                        <span>
+                          {skill.name}
+                          {purpose.has(skill.name) && (
+                            <small className="tool-purpose">
+                              {purpose.get(skill.name)}
+                            </small>
+                          )}
+                        </span>
                       </li>
                     ))}
                 </ul>
@@ -74,7 +90,24 @@ export function Skills({ skills }: { skills: Skill[] }) {
           );
         })}
       </div>
+      <div className="tool-marquee" aria-hidden="true">
+        <div>
+          {[0, 1].map((duplicate) => (
+            <span key={duplicate}>
+              {studio.tools.items.map((tool) => (
+                <span key={tool.name}>
+                  {tool.name}
+                  <i>✳</i>
+                </span>
+              ))}
+            </span>
+          ))}
+        </div>
+      </div>
       <p className="skills-note">{copy.note}</p>
+      <p className="studio-note">
+        {studio.tools.note} The tools are powerful. The decisions are human.
+      </p>
     </section>
   );
 }

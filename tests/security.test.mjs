@@ -74,6 +74,58 @@ test("strong passwords enforce bcrypt byte limits and character diversity", () =
   assert.equal(strongPassword(`Aa1!${"界".repeat(24)}`), false);
 });
 
+test("owner setup diagnoses password requirements without exposing credentials", () => {
+  const { passwordRequirements } = fixture().load("lib/admin/password.ts");
+  assert.deepEqual(Array.from(passwordRequirements(undefined)), [
+    "a privately chosen ADMIN_PASSWORD",
+  ]);
+  assert.deepEqual(Array.from(passwordRequirements("lowercasepassword")), [
+    "an uppercase letter",
+    "a number",
+    "a symbol",
+  ]);
+  assert.equal(passwordRequirements("A-long-random-passphrase-92!").length, 0);
+});
+
+test("deployment database diagnostics never serialize driver credentials", () => {
+  const { databaseSetupFailure, validPostgresConnection } = fixture().load(
+    "lib/admin/setup-errors.ts",
+  );
+  const secret = "do-not-print-this-password";
+  const result = databaseSetupFailure({
+    meta: {
+      driverAdapterError: { cause: { originalCode: "28P01", message: secret } },
+    },
+  });
+  assert.match(result, /DATABASE_URL authentication failed/);
+  assert.ok(!result.includes(secret));
+  assert.match(databaseSetupFailure({ code: "P2021" }), /same Neon branch/);
+  assert.match(
+    databaseSetupFailure({ code: "ECONNREFUSED" }),
+    /could not reach/,
+  );
+  assert.equal(
+    validPostgresConnection(
+      "postgresql://fixture:private@localhost:55432/elvora_test",
+    ),
+    true,
+  );
+  assert.equal(
+    validPostgresConnection(
+      "postgresql://fixture:private*symbol@localhost/elvora_test",
+    ),
+    true,
+  );
+  for (const value of [
+    "DATABASE_URL=postgresql://u:p@localhost/db",
+    "********",
+    "postgresql://u:****@localhost/db",
+    "password-alone",
+    "https://localhost/db",
+  ])
+    assert.equal(validPostgresConnection(value), false);
+});
+
 test("TOTP matches RFC 6238 vectors; malformed/incorrect codes fail", () => {
   const f = fixture();
   vm.runInContext("Date.now=()=>59000", f.context);

@@ -842,22 +842,40 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .motion-reveal,
-  .motion-word {
+  html:not([data-motion="full"]) .motion-reveal,
+  html:not([data-motion="full"]) .motion-word {
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;
   }
-  .reference-workflow .workflow-step,
-  .service-learn svg {
+  html:not([data-motion="full"]) .reference-workflow .workflow-step,
+  html:not([data-motion="full"]) .service-learn svg {
     transition: none;
   }
-  .reference-services .studio-service:hover,
-  .reference-workflow .workflow-step:hover,
-  .service-learn:hover svg {
+  html:not([data-motion="full"]) .reference-services .studio-service:hover,
+  html:not([data-motion="full"]) .reference-workflow .workflow-step:hover,
+  html:not([data-motion="full"]) .service-learn:hover svg {
     transform: none;
   }
-  .reference-bunch .bunch-piece:nth-child(n) {
+  html:not([data-motion="full"]) .reference-bunch .bunch-piece:nth-child(n) {
     transform: none;
   }
 }
+html[data-motion="reduced"] .reference-bunch .bunch-piece:nth-child(n) {
+    transform: none;
+  }
+html[data-motion="reduced"] .reference-services .studio-service:hover,
+  html[data-motion="reduced"] .reference-workflow .workflow-step:hover,
+  html[data-motion="reduced"] .service-learn:hover svg {
+    transform: none;
+  }
+html[data-motion="reduced"] .reference-workflow .workflow-step,
+  html[data-motion="reduced"] .service-learn svg {
+    transition: none;
+  }
+html[data-motion="reduced"] .motion-reveal,
+  html[data-motion="reduced"] .motion-word {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }

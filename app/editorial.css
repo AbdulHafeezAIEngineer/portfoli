@@ -1412,13 +1412,22 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .footer-wordmark-window > span,
-  .footer-waves path,
-  .footer-emblem > span::after {
+  html:not([data-motion="full"]) .footer-wordmark-window > span,
+  html:not([data-motion="full"]) .footer-waves path,
+  html:not([data-motion="full"]) .footer-emblem > span::after {
     animation: none;
   }
-  .premium-tool-item:hover .premium-tool-logo,
-  .social-icons a:hover {
+  html:not([data-motion="full"]) .premium-tool-item:hover .premium-tool-logo,
+  html:not([data-motion="full"]) .social-icons a:hover {
     transform: none;
   }
 }
+html[data-motion="reduced"] .premium-tool-item:hover .premium-tool-logo,
+  html[data-motion="reduced"] .social-icons a:hover {
+    transform: none;
+  }
+html[data-motion="reduced"] .footer-wordmark-window > span,
+  html[data-motion="reduced"] .footer-waves path,
+  html[data-motion="reduced"] .footer-emblem > span::after {
+    animation: none;
+  }

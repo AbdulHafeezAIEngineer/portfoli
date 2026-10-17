@@ -742,12 +742,17 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .bot-card,
-  .typing-indicator i {
+  html:not([data-motion="full"]) .bot-card,
+  html:not([data-motion="full"]) .typing-indicator i {
     animation: none;
     transition: none;
   }
 }
+html[data-motion="reduced"] .bot-card,
+  html[data-motion="reduced"] .typing-indicator i {
+    animation: none;
+    transition: none;
+  }
 
 .bot-loading {
   padding: 60px 20px;
@@ -781,4 +786,6 @@
 .forte-preview-composer > div { display: flex; gap: 13px; margin-top: 16px; color: #747f91; }
 .forte-preview-powered { padding: 8px 12px; color: #778397; font-size: 7px; text-align: center; }
 @media (max-width: 700px) { .forte-preview-header > div > span { max-width: 160px; }.forte-preview-body > strong { font-size: 22px; }.bot-card-top.forte-card-top { padding: 12px; }.forte-preview-header { gap: 7px; padding: 12px 9px; }.forte-preview-header > svg:last-child { display: none; } }
-@media (prefers-reduced-motion: reduce) { .forte-preview { transition: none; }.bot-card-real:hover .forte-preview { transform: none; } }
+@media (prefers-reduced-motion: reduce) { html:not([data-motion="full"]) .forte-preview { transition: none; }html:not([data-motion="full"]) .bot-card-real:hover .forte-preview { transform: none; } }
+html[data-motion="reduced"] .bot-card-real:hover .forte-preview { transform: none; }
+html[data-motion="reduced"] .forte-preview { transition: none; }

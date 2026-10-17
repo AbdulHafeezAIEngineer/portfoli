@@ -4,12 +4,47 @@ import { useEffect, useRef, useState } from "react";
 import { Menu, Moon, Sun, X } from "lucide-react";
 import { site } from "@/data/site";
 import { BrandMark } from "./brand-mark";
+import { MotionControl } from "./motion-preference";
+import { subscribeScroll } from "@/lib/scroll";
 
-export function Navbar({ identity, rootLinks = false }: { identity: { brand: string }; rootLinks?: boolean }) {
+export function Navbar({
+  identity,
+  rootLinks = false,
+}: {
+  identity: { brand: string };
+  rootLinks?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const [theme, setTheme] = useState("dark");
+  const [hidden, setHidden] = useState(false);
+  const [active, setActive] = useState("");
   const menuButton = useRef<HTMLButtonElement>(null);
   const menu = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let previous = window.scrollY;
+    const unsubscribe = subscribeScroll(({ y: current }) => {
+      if (Math.abs(current - previous) > 8) {
+        setHidden(current > 160 && current > previous);
+        previous = current;
+      }
+    });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries)
+          if (entry.isIntersecting) setActive(`#${entry.target.id}`);
+      },
+      { rootMargin: "-15% 0px -65% 0px", threshold: 0 },
+    );
+    for (const item of site.nav) {
+      const element = document.querySelector(item.href);
+      if (element) observer.observe(element);
+    }
+    return () => {
+      unsubscribe();
+      observer.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     setTheme(document.documentElement.dataset.theme || "dark");
@@ -54,7 +89,9 @@ export function Navbar({ identity, rootLinks = false }: { identity: { brand: str
   }
 
   return (
-    <header className="site-header">
+    <header
+      className={`site-header${hidden && !open ? " is-scroll-hidden" : ""}`}
+    >
       <nav className="container nav-row" aria-label="Main navigation">
         <a
           href={rootLinks ? "/#top" : "#top"}
@@ -66,12 +103,19 @@ export function Navbar({ identity, rootLinks = false }: { identity: { brand: str
         </a>
         <div className="desktop-nav">
           {site.nav.map((item) => (
-            <a key={item.href} href={rootLinks ? `/${item.href}` : item.href}>
+            <a
+              key={item.href}
+              href={rootLinks ? `/${item.href}` : item.href}
+              aria-current={
+                !rootLinks && active === item.href ? "location" : undefined
+              }
+            >
               {item.label}
             </a>
           ))}
         </div>
         <div className="nav-actions">
+          <MotionControl />
           <button
             className="icon-button theme-toggle"
             onClick={toggleTheme}
@@ -105,7 +149,11 @@ export function Navbar({ identity, rootLinks = false }: { identity: { brand: str
           }}
         >
           {site.nav.map((item) => (
-            <a key={item.href} href={rootLinks ? `/${item.href}` : item.href} onClick={() => setOpen(false)}>
+            <a
+              key={item.href}
+              href={rootLinks ? `/${item.href}` : item.href}
+              onClick={() => setOpen(false)}
+            >
               {item.label}
             </a>
           ))}

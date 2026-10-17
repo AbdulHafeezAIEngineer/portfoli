@@ -27,7 +27,7 @@ export function Services({ services }: { services: Service[] }) {
     >
       <div className="reference-heading">
         <Reveal>
-          <p className="eyebrow">{studio.services.eyebrow}</p>
+          <p className="eyebrow">01 / {studio.services.eyebrow}</p>
         </Reveal>
         <TextReveal id="services-title" text={studio.services.title} />
         <Reveal>

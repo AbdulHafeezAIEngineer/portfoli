@@ -293,19 +293,34 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .device-float,
-  .device-composition,
-  .device-laptop,
-  .device-phone,
-  .gallery-media {
+  html:not([data-motion="full"]) .device-float,
+  html:not([data-motion="full"]) .device-composition,
+  html:not([data-motion="full"]) .device-laptop,
+  html:not([data-motion="full"]) .device-phone,
+  html:not([data-motion="full"]) .gallery-media {
     transform: none !important;
     animation: none !important;
     translate: none !important;
   }
-  .device-phone {
+  html:not([data-motion="full"]) .device-phone {
     box-shadow: -5px 5px 12px #0004;
   }
-  .gallery-media img.loaded {
+  html:not([data-motion="full"]) .gallery-media img.loaded {
     animation: none;
   }
 }
+html[data-motion="reduced"] .gallery-media img.loaded {
+    animation: none;
+  }
+html[data-motion="reduced"] .device-phone {
+    box-shadow: -5px 5px 12px #0004;
+  }
+html[data-motion="reduced"] .device-float,
+  html[data-motion="reduced"] .device-composition,
+  html[data-motion="reduced"] .device-laptop,
+  html[data-motion="reduced"] .device-phone,
+  html[data-motion="reduced"] .gallery-media {
+    transform: none !important;
+    animation: none !important;
+    translate: none !important;
+  }

@@ -178,9 +178,6 @@ h1 { font-size: clamp(46px, 5vw, 70px); letter-spacing: -3.5px; line-height: 1.0
 .footer { margin-top: 35px; padding-block: 35px; }
 @keyframes introduction-in { from { transform: translateY(18px); } to { transform: translateY(0); } }
 @keyframes reading-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-@supports (animation-timeline: scroll()) {
-  .scroll-progress { animation: reading-progress linear both; animation-timeline: scroll(root block); }
-}
 @keyframes gold-light { 0%,100% { background-position: 0 50%; } 50% { background-position: 100% 50%; } }
 @keyframes portrait-drift { 0%,100% { transform: perspective(1200px) rotateY(-4deg) rotateZ(3deg) translateY(0); } 50% { transform: perspective(1200px) rotateY(1deg) rotateZ(1deg) translateY(-9px); } }
 @keyframes orbit-turn { to { transform: rotate(360deg); } }
@@ -199,10 +196,16 @@ h1 { font-size: clamp(46px, 5vw, 70px); letter-spacing: -3.5px; line-height: 1.0
   .portrait-card { animation: none; }
 }
 @media (prefers-reduced-motion:reduce) {
-  .artwork-composition { transform: none !important; }
-  .hero-copy, .hero-visual, .portrait-card, .portrait-orbit::after, .gold-text { animation: none; }
-  .about-portrait, .about-portrait:hover { transform: none; }
-  .brand-symbol, .button, .button::before, .desktop-nav a::after, .project-card, .artwork-composition > img, .device-stage::after, .about-portrait, .about-portrait-image img, .process-card, .skill-group, .skill-group li, .bot-card, .certificate-card, .contact-form, .fundamental-card::before, .fundamental-card > svg { transition: none; }
-  .project-card:hover, .process-card:hover, .skill-group:hover, .skill-group li:hover, .wordmark:hover .brand-symbol, .fundamental-card:hover > svg, .button:hover { transform: none; }
-  .artwork-project:hover .artwork-composition > img, .about-portrait:hover img { scale: 1; }
+  html:not([data-motion="full"]) .artwork-composition { transform: none !important; }
+  html:not([data-motion="full"]) .hero-copy, html:not([data-motion="full"]) .hero-visual, html:not([data-motion="full"]) .portrait-card, html:not([data-motion="full"]) .portrait-orbit::after, html:not([data-motion="full"]) .gold-text { animation: none; }
+  html:not([data-motion="full"]) .about-portrait, html:not([data-motion="full"]) .about-portrait:hover { transform: none; }
+  html:not([data-motion="full"]) .brand-symbol, html:not([data-motion="full"]) .button, html:not([data-motion="full"]) .button::before, html:not([data-motion="full"]) .desktop-nav a::after, html:not([data-motion="full"]) .project-card, html:not([data-motion="full"]) .artwork-composition > img, html:not([data-motion="full"]) .device-stage::after, html:not([data-motion="full"]) .about-portrait, html:not([data-motion="full"]) .about-portrait-image img, html:not([data-motion="full"]) .process-card, html:not([data-motion="full"]) .skill-group, html:not([data-motion="full"]) .skill-group li, html:not([data-motion="full"]) .bot-card, html:not([data-motion="full"]) .certificate-card, html:not([data-motion="full"]) .contact-form, html:not([data-motion="full"]) .fundamental-card::before, html:not([data-motion="full"]) .fundamental-card > svg { transition: none; }
+  html:not([data-motion="full"]) .project-card:hover, html:not([data-motion="full"]) .process-card:hover, html:not([data-motion="full"]) .skill-group:hover, html:not([data-motion="full"]) .skill-group li:hover, html:not([data-motion="full"]) .wordmark:hover .brand-symbol, html:not([data-motion="full"]) .fundamental-card:hover > svg, html:not([data-motion="full"]) .button:hover { transform: none; }
+  html:not([data-motion="full"]) .artwork-project:hover .artwork-composition > img, html:not([data-motion="full"]) .about-portrait:hover img { scale: 1; }
 }
+html[data-motion="reduced"] .artwork-project:hover .artwork-composition > img, html[data-motion="reduced"] .about-portrait:hover img { scale: 1; }
+html[data-motion="reduced"] .project-card:hover, html[data-motion="reduced"] .process-card:hover, html[data-motion="reduced"] .skill-group:hover, html[data-motion="reduced"] .skill-group li:hover, html[data-motion="reduced"] .wordmark:hover .brand-symbol, html[data-motion="reduced"] .fundamental-card:hover > svg, html[data-motion="reduced"] .button:hover { transform: none; }
+html[data-motion="reduced"] .brand-symbol, html[data-motion="reduced"] .button, html[data-motion="reduced"] .button::before, html[data-motion="reduced"] .desktop-nav a::after, html[data-motion="reduced"] .project-card, html[data-motion="reduced"] .artwork-composition > img, html[data-motion="reduced"] .device-stage::after, html[data-motion="reduced"] .about-portrait, html[data-motion="reduced"] .about-portrait-image img, html[data-motion="reduced"] .process-card, html[data-motion="reduced"] .skill-group, html[data-motion="reduced"] .skill-group li, html[data-motion="reduced"] .bot-card, html[data-motion="reduced"] .certificate-card, html[data-motion="reduced"] .contact-form, html[data-motion="reduced"] .fundamental-card::before, html[data-motion="reduced"] .fundamental-card > svg { transition: none; }
+html[data-motion="reduced"] .about-portrait, html[data-motion="reduced"] .about-portrait:hover { transform: none; }
+html[data-motion="reduced"] .hero-copy, html[data-motion="reduced"] .hero-visual, html[data-motion="reduced"] .portrait-card, html[data-motion="reduced"] .portrait-orbit::after, html[data-motion="reduced"] .gold-text { animation: none; }
+html[data-motion="reduced"] .artwork-composition { transform: none !important; }

@@ -733,14 +733,21 @@ export default async function AdminPage({
   display: none;
 }
 @media (prefers-reduced-motion: reduce) {
-  [data-reveal],
-  [data-reveal] .motion-word {
+  html:not([data-motion="full"]) [data-reveal],
+  html:not([data-motion="full"]) [data-reveal] .motion-word {
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;
     transition: none !important;
   }
 }
+html[data-motion="reduced"] [data-reveal],
+  html[data-motion="reduced"] [data-reveal] .motion-word {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
 
 .agency-case-shot {
   position: relative;
@@ -2417,12 +2424,17 @@ export async function POST(request: Request) {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .bot-card,
-  .typing-indicator i {
+  html:not([data-motion="full"]) .bot-card,
+  html:not([data-motion="full"]) .typing-indicator i {
     animation: none;
     transition: none;
   }
 }
+html[data-motion="reduced"] .bot-card,
+  html[data-motion="reduced"] .typing-indicator i {
+    animation: none;
+    transition: none;
+  }
 
 .bot-loading {
   padding: 60px 20px;
@@ -2456,7 +2468,9 @@ export async function POST(request: Request) {
 .forte-preview-composer > div { display: flex; gap: 13px; margin-top: 16px; color: #747f91; }
 .forte-preview-powered { padding: 8px 12px; color: #778397; font-size: 7px; text-align: center; }
 @media (max-width: 700px) { .forte-preview-header > div > span { max-width: 160px; }.forte-preview-body > strong { font-size: 22px; }.bot-card-top.forte-card-top { padding: 12px; }.forte-preview-header { gap: 7px; padding: 12px 9px; }.forte-preview-header > svg:last-child { display: none; } }
-@media (prefers-reduced-motion: reduce) { .forte-preview { transition: none; }.bot-card-real:hover .forte-preview { transform: none; } }
+@media (prefers-reduced-motion: reduce) { html:not([data-motion="full"]) .forte-preview { transition: none; }html:not([data-motion="full"]) .bot-card-real:hover .forte-preview { transform: none; } }
+html[data-motion="reduced"] .bot-card-real:hover .forte-preview { transform: none; }
+html[data-motion="reduced"] .forte-preview { transition: none; }
 ``````
 
 ## app/cookies/page.tsx
@@ -4214,22 +4228,37 @@ export default async function DemoPage({
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .device-float,
-  .device-composition,
-  .device-laptop,
-  .device-phone,
-  .gallery-media {
+  html:not([data-motion="full"]) .device-float,
+  html:not([data-motion="full"]) .device-composition,
+  html:not([data-motion="full"]) .device-laptop,
+  html:not([data-motion="full"]) .device-phone,
+  html:not([data-motion="full"]) .gallery-media {
     transform: none !important;
     animation: none !important;
     translate: none !important;
   }
-  .device-phone {
+  html:not([data-motion="full"]) .device-phone {
     box-shadow: -5px 5px 12px #0004;
   }
-  .gallery-media img.loaded {
+  html:not([data-motion="full"]) .gallery-media img.loaded {
     animation: none;
   }
 }
+html[data-motion="reduced"] .gallery-media img.loaded {
+    animation: none;
+  }
+html[data-motion="reduced"] .device-phone {
+    box-shadow: -5px 5px 12px #0004;
+  }
+html[data-motion="reduced"] .device-float,
+  html[data-motion="reduced"] .device-composition,
+  html[data-motion="reduced"] .device-laptop,
+  html[data-motion="reduced"] .device-phone,
+  html[data-motion="reduced"] .gallery-media {
+    transform: none !important;
+    animation: none !important;
+    translate: none !important;
+  }
 ``````
 
 ## app/editorial.css
@@ -5649,16 +5678,25 @@ export default async function DemoPage({
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .footer-wordmark-window > span,
-  .footer-waves path,
-  .footer-emblem > span::after {
+  html:not([data-motion="full"]) .footer-wordmark-window > span,
+  html:not([data-motion="full"]) .footer-waves path,
+  html:not([data-motion="full"]) .footer-emblem > span::after {
     animation: none;
   }
-  .premium-tool-item:hover .premium-tool-logo,
-  .social-icons a:hover {
+  html:not([data-motion="full"]) .premium-tool-item:hover .premium-tool-logo,
+  html:not([data-motion="full"]) .social-icons a:hover {
     transform: none;
   }
 }
+html[data-motion="reduced"] .premium-tool-item:hover .premium-tool-logo,
+  html[data-motion="reduced"] .social-icons a:hover {
+    transform: none;
+  }
+html[data-motion="reduced"] .footer-wordmark-window > span,
+  html[data-motion="reduced"] .footer-waves path,
+  html[data-motion="reduced"] .footer-emblem > span::after {
+    animation: none;
+  }
 ``````
 
 ## app/error.tsx
@@ -7061,16 +7099,25 @@ h2 {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  html {
+  html:not([data-motion="full"]) {
     scroll-behavior: auto;
   }
-  *,
-  *::before,
-  *::after {
+  html:not([data-motion="full"]) *,
+  html:not([data-motion="full"]) *::before,
+  html:not([data-motion="full"]) *::after {
     animation: none !important;
     transition: none !important;
   }
 }
+html[data-motion="reduced"] *,
+  html[data-motion="reduced"] *::before,
+  html[data-motion="reduced"] *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+html[data-motion="reduced"] {
+    scroll-behavior: auto;
+  }
 ``````
 
 ## app/icon.svg
@@ -7106,37 +7153,18 @@ import "./studio.css";
 import "./reference.css";
 import "./editorial.css";
 import "./agency.css";
+import "./refinement.css";
 import { ConsentProvider } from "@/components/consent-provider";
 
 const inter = localFont({
-  src: [
-    {
-      path: "../node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2",
-      weight: "400",
-    },
-    {
-      path: "../node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2",
-      weight: "500",
-    },
-    {
-      path: "../node_modules/@fontsource/inter/files/inter-latin-600-normal.woff2",
-      weight: "600",
-    },
-  ],
+  src: "../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2",
+  weight: "100 900",
   variable: "--font-inter",
   display: "swap",
 });
 const space = localFont({
-  src: [
-    {
-      path: "../node_modules/@fontsource/space-grotesk/files/space-grotesk-latin-500-normal.woff2",
-      weight: "500",
-    },
-    {
-      path: "../node_modules/@fontsource/space-grotesk/files/space-grotesk-latin-600-normal.woff2",
-      weight: "600",
-    },
-  ],
+  src: "../node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2",
+  weight: "300 700",
   variable: "--font-space",
   display: "swap",
 });
@@ -7185,7 +7213,7 @@ export const viewport: Viewport = {
   ],
 };
 
-const themeScript = `(function(){var t='dark';try{var s=localStorage.getItem('portfolio-theme');if(s==='light'||s==='dark')t=s;}catch(e){}document.documentElement.dataset.theme=t;if(window.IntersectionObserver&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.dataset.motionReveals='enabled';})();`;
+const themeScript = `(function(){var t='dark',m='system';try{var s=localStorage.getItem('portfolio-theme');if(s==='light'||s==='dark')t=s;var p=localStorage.getItem('elvora-motion');if(p==='full'||p==='reduced')m=p;}catch(e){}document.documentElement.dataset.theme=t;document.documentElement.dataset.motion=m;if(window.IntersectionObserver&&(m==='full'||(m==='system'&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches)))document.documentElement.dataset.motionReveals='enabled';})();`;
 
 export default async function RootLayout({
   children,
@@ -7346,12 +7374,12 @@ import { Skills } from "@/components/skills";
 import { Certifications } from "@/components/certifications";
 import { Contact } from "@/components/contact";
 import { ScrollProgress } from "@/components/scroll-progress";
+import { EditorialEffects } from "@/components/editorial-effects";
 
 import {
   Services,
   Workflow,
   Journey,
-  ToolOrbit,
   WorkBunch,
 } from "@/components/studio-sections";
 import { WallOfLove } from "@/components/wall-of-love";
@@ -7410,6 +7438,7 @@ export default async function Home() {
   return (
     <div id="top">
       <ScrollProgress />
+      <EditorialEffects />
       <div className="ambient-background" aria-hidden="true">
         <span />
         <span />
@@ -7421,10 +7450,9 @@ export default async function Home() {
         <Work projects={projects} bots={bots} />
         <WorkBunch projects={projects} />
         <Experience />
-        <ToolOrbit />
+        <Journey />
         <Skills skills={skills} />
         <Workflow />
-        <Journey />
         <Certifications certificates={certificates} />
         <WallOfLove testimonials={reviews} />
         <FaqSection faqs={faqs} />
@@ -7619,9 +7647,6 @@ h1 { font-size: clamp(46px, 5vw, 70px); letter-spacing: -3.5px; line-height: 1.0
 .footer { margin-top: 35px; padding-block: 35px; }
 @keyframes introduction-in { from { transform: translateY(18px); } to { transform: translateY(0); } }
 @keyframes reading-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-@supports (animation-timeline: scroll()) {
-  .scroll-progress { animation: reading-progress linear both; animation-timeline: scroll(root block); }
-}
 @keyframes gold-light { 0%,100% { background-position: 0 50%; } 50% { background-position: 100% 50%; } }
 @keyframes portrait-drift { 0%,100% { transform: perspective(1200px) rotateY(-4deg) rotateZ(3deg) translateY(0); } 50% { transform: perspective(1200px) rotateY(1deg) rotateZ(1deg) translateY(-9px); } }
 @keyframes orbit-turn { to { transform: rotate(360deg); } }
@@ -7640,13 +7665,19 @@ h1 { font-size: clamp(46px, 5vw, 70px); letter-spacing: -3.5px; line-height: 1.0
   .portrait-card { animation: none; }
 }
 @media (prefers-reduced-motion:reduce) {
-  .artwork-composition { transform: none !important; }
-  .hero-copy, .hero-visual, .portrait-card, .portrait-orbit::after, .gold-text { animation: none; }
-  .about-portrait, .about-portrait:hover { transform: none; }
-  .brand-symbol, .button, .button::before, .desktop-nav a::after, .project-card, .artwork-composition > img, .device-stage::after, .about-portrait, .about-portrait-image img, .process-card, .skill-group, .skill-group li, .bot-card, .certificate-card, .contact-form, .fundamental-card::before, .fundamental-card > svg { transition: none; }
-  .project-card:hover, .process-card:hover, .skill-group:hover, .skill-group li:hover, .wordmark:hover .brand-symbol, .fundamental-card:hover > svg, .button:hover { transform: none; }
-  .artwork-project:hover .artwork-composition > img, .about-portrait:hover img { scale: 1; }
+  html:not([data-motion="full"]) .artwork-composition { transform: none !important; }
+  html:not([data-motion="full"]) .hero-copy, html:not([data-motion="full"]) .hero-visual, html:not([data-motion="full"]) .portrait-card, html:not([data-motion="full"]) .portrait-orbit::after, html:not([data-motion="full"]) .gold-text { animation: none; }
+  html:not([data-motion="full"]) .about-portrait, html:not([data-motion="full"]) .about-portrait:hover { transform: none; }
+  html:not([data-motion="full"]) .brand-symbol, html:not([data-motion="full"]) .button, html:not([data-motion="full"]) .button::before, html:not([data-motion="full"]) .desktop-nav a::after, html:not([data-motion="full"]) .project-card, html:not([data-motion="full"]) .artwork-composition > img, html:not([data-motion="full"]) .device-stage::after, html:not([data-motion="full"]) .about-portrait, html:not([data-motion="full"]) .about-portrait-image img, html:not([data-motion="full"]) .process-card, html:not([data-motion="full"]) .skill-group, html:not([data-motion="full"]) .skill-group li, html:not([data-motion="full"]) .bot-card, html:not([data-motion="full"]) .certificate-card, html:not([data-motion="full"]) .contact-form, html:not([data-motion="full"]) .fundamental-card::before, html:not([data-motion="full"]) .fundamental-card > svg { transition: none; }
+  html:not([data-motion="full"]) .project-card:hover, html:not([data-motion="full"]) .process-card:hover, html:not([data-motion="full"]) .skill-group:hover, html:not([data-motion="full"]) .skill-group li:hover, html:not([data-motion="full"]) .wordmark:hover .brand-symbol, html:not([data-motion="full"]) .fundamental-card:hover > svg, html:not([data-motion="full"]) .button:hover { transform: none; }
+  html:not([data-motion="full"]) .artwork-project:hover .artwork-composition > img, html:not([data-motion="full"]) .about-portrait:hover img { scale: 1; }
 }
+html[data-motion="reduced"] .artwork-project:hover .artwork-composition > img, html[data-motion="reduced"] .about-portrait:hover img { scale: 1; }
+html[data-motion="reduced"] .project-card:hover, html[data-motion="reduced"] .process-card:hover, html[data-motion="reduced"] .skill-group:hover, html[data-motion="reduced"] .skill-group li:hover, html[data-motion="reduced"] .wordmark:hover .brand-symbol, html[data-motion="reduced"] .fundamental-card:hover > svg, html[data-motion="reduced"] .button:hover { transform: none; }
+html[data-motion="reduced"] .brand-symbol, html[data-motion="reduced"] .button, html[data-motion="reduced"] .button::before, html[data-motion="reduced"] .desktop-nav a::after, html[data-motion="reduced"] .project-card, html[data-motion="reduced"] .artwork-composition > img, html[data-motion="reduced"] .device-stage::after, html[data-motion="reduced"] .about-portrait, html[data-motion="reduced"] .about-portrait-image img, html[data-motion="reduced"] .process-card, html[data-motion="reduced"] .skill-group, html[data-motion="reduced"] .skill-group li, html[data-motion="reduced"] .bot-card, html[data-motion="reduced"] .certificate-card, html[data-motion="reduced"] .contact-form, html[data-motion="reduced"] .fundamental-card::before, html[data-motion="reduced"] .fundamental-card > svg { transition: none; }
+html[data-motion="reduced"] .about-portrait, html[data-motion="reduced"] .about-portrait:hover { transform: none; }
+html[data-motion="reduced"] .hero-copy, html[data-motion="reduced"] .hero-visual, html[data-motion="reduced"] .portrait-card, html[data-motion="reduced"] .portrait-orbit::after, html[data-motion="reduced"] .gold-text { animation: none; }
+html[data-motion="reduced"] .artwork-composition { transform: none !important; }
 ``````
 
 ## app/privacy/page.tsx
@@ -8312,10 +8343,13 @@ export default function Page() {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .certificate-preview img {
+  html:not([data-motion="full"]) .certificate-preview img {
     transition: none;
   }
 }
+html[data-motion="reduced"] .certificate-preview img {
+    transition: none;
+  }
 
 .contact-security {
   margin: 0 0 20px;
@@ -9190,24 +9224,538 @@ export default function Page() {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .motion-reveal,
-  .motion-word {
+  html:not([data-motion="full"]) .motion-reveal,
+  html:not([data-motion="full"]) .motion-word {
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;
   }
-  .reference-workflow .workflow-step,
-  .service-learn svg {
+  html:not([data-motion="full"]) .reference-workflow .workflow-step,
+  html:not([data-motion="full"]) .service-learn svg {
     transition: none;
   }
-  .reference-services .studio-service:hover,
-  .reference-workflow .workflow-step:hover,
-  .service-learn:hover svg {
+  html:not([data-motion="full"]) .reference-services .studio-service:hover,
+  html:not([data-motion="full"]) .reference-workflow .workflow-step:hover,
+  html:not([data-motion="full"]) .service-learn:hover svg {
     transform: none;
   }
-  .reference-bunch .bunch-piece:nth-child(n) {
+  html:not([data-motion="full"]) .reference-bunch .bunch-piece:nth-child(n) {
     transform: none;
   }
+}
+html[data-motion="reduced"] .reference-bunch .bunch-piece:nth-child(n) {
+    transform: none;
+  }
+html[data-motion="reduced"] .reference-services .studio-service:hover,
+  html[data-motion="reduced"] .reference-workflow .workflow-step:hover,
+  html[data-motion="reduced"] .service-learn:hover svg {
+    transform: none;
+  }
+html[data-motion="reduced"] .reference-workflow .workflow-step,
+  html[data-motion="reduced"] .service-learn svg {
+    transition: none;
+  }
+html[data-motion="reduced"] .motion-reveal,
+  html[data-motion="reduced"] .motion-word {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+``````
+
+## app/refinement.css
+
+``````css
+/* Refined motion remains native: no second scrolling engine or page-load gate. */
+:root {
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+  --section-space: clamp(72px, 9vw, 144px);
+  --radius-editorial: 18px;
+}
+.studio-section,
+.work-section,
+.experience-section,
+.skills-section {
+  scroll-margin-top: 104px;
+}
+.site-header {
+  transition: transform 0.35s var(--ease-editorial);
+}
+.site-header.is-scroll-hidden:not(:focus-within) {
+  transform: translateY(-110%);
+}
+.desktop-nav a[aria-current="location"] {
+  color: var(--gold);
+}
+.desktop-nav a[aria-current="location"]::after {
+  transform: scaleX(1);
+}
+.motion-control {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 10px;
+}
+.motion-control select {
+  min-height: 44px;
+  max-width: 66px;
+  padding: 0 6px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  background: var(--surface);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+.motion-control:focus-within {
+  color: var(--gold);
+}
+.nav-row {
+  gap: 18px;
+}
+.desktop-nav {
+  gap: clamp(12px, 1.6vw, 26px);
+}
+.hero-title-reveal .motion-word {
+  display: inline-block;
+  animation: editorial-line-in 0.8s var(--ease-editorial) both;
+  animation-delay: calc(100ms + var(--word-delay, 0s));
+}
+@keyframes editorial-line-in {
+  from {
+    transform: translateY(105%);
+    opacity: 0.1;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+[data-motion-reveals="enabled"] [data-reveal="block"] {
+  transition-property: opacity, transform;
+  transition-timing-function: var(--ease-editorial);
+}
+[data-motion-reveals="enabled"] [data-reveal="block"]:not(.is-revealed) {
+  filter: none;
+  transform: translateY(30px);
+}
+[data-motion-reveals="enabled"] [data-reveal="words"] .motion-word {
+  transition-timing-function: var(--ease-editorial);
+}
+.work-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 24px 0 36px;
+}
+.work-filters button {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  padding: 11px 19px;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  transition:
+    color 0.25s,
+    background-color 0.25s,
+    transform 0.25s var(--ease-editorial);
+}
+.work-filters button span {
+  font-family: var(--font-space);
+  opacity: 0.65;
+  font-size: 10px;
+}
+.work-filters button[aria-selected="true"] {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
+}
+.work-filters button:hover {
+  transform: translateY(-2px);
+}
+.work-panel {
+  min-height: min(70vh, 680px);
+}
+.work-filter-enter {
+  animation: work-filter-enter 0.45s var(--ease-editorial) both;
+}
+@keyframes work-filter-enter {
+  from {
+    opacity: 0.2;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.interface-study-section {
+  margin-top: 55px;
+}
+.interface-study-section > .eyebrow {
+  margin-bottom: 25px;
+}
+.interface-studies-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 36px 26px;
+}
+.interface-study-card {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius-editorial);
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.interface-study-image {
+  position: relative;
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  background: var(--bg);
+}
+.interface-study-image img {
+  object-fit: cover;
+  object-position: top;
+  transition: transform 0.8s var(--ease-editorial);
+}
+.interface-study-card > div:last-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+}
+.interface-study-card small {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.interface-study-card strong {
+  display: block;
+  font-family: var(--font-space);
+  font-size: clamp(24px, 3vw, 36px);
+}
+.interface-study-card:hover img,
+.interface-study-card:focus-visible img {
+  transform: scale(1.035);
+}
+.work-ai-invitation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  border-block: 1px solid var(--line);
+  padding: 38px 0;
+  margin-top: 50px;
+}
+.work-ai-invitation h3 {
+  font-size: clamp(22px, 3vw, 36px);
+  margin: 10px 0;
+  letter-spacing: -0.04em;
+}
+.work-ai-invitation p:not(.eyebrow) {
+  font-size: 13px;
+  color: var(--muted);
+  max-width: 48ch;
+}
+.work-ai-invitation .button {
+  flex-shrink: 0;
+}
+.tool-purpose {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 3px;
+  font-weight: 400;
+}
+.toolkit-row li {
+  align-items: center;
+}
+.section-anchor {
+  scroll-margin-top: 110px;
+}
+.tool-marquee {
+  overflow: hidden;
+  margin: 42px 0 24px;
+  padding: 22px 0;
+  border-block: 1px solid var(--line);
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+}
+.tool-marquee > div {
+  display: flex;
+  width: max-content;
+  animation: toolkit-travel 38s linear infinite;
+}
+.tool-marquee > div > span {
+  display: flex;
+  flex-shrink: 0;
+}
+.tool-marquee span span {
+  display: inline-flex;
+  align-items: center;
+  gap: 36px;
+  padding-right: 36px;
+  font-family: var(--font-space);
+  font-size: clamp(20px, 3vw, 34px);
+  color: var(--muted);
+}
+.tool-marquee i {
+  font-style: normal;
+  color: var(--gold);
+  font-size: 18px;
+}
+.tool-marquee:hover > div {
+  animation-play-state: paused;
+}
+@keyframes toolkit-travel {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.journey-editorial-list {
+  position: relative;
+}
+.journey-editorial-list::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 -20px;
+  width: 2px;
+  background: var(--line);
+}
+@media (max-width: 1023px) {
+  .mobile-nav:not([hidden]) {
+    min-height: calc(100dvh - 82px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 24px max(25px, 6vw) 80px;
+  }
+  .mobile-nav a {
+    font-family: var(--font-space);
+    font-size: clamp(22px, 5vw, 38px);
+    color: var(--text);
+    animation: work-filter-enter 0.5s var(--ease-editorial) both;
+  }
+  .mobile-nav a:nth-child(2) {
+    animation-delay: 40ms;
+  }
+  .mobile-nav a:nth-child(3) {
+    animation-delay: 80ms;
+  }
+  .mobile-nav a:nth-child(4) {
+    animation-delay: 120ms;
+  }
+  .mobile-nav a:nth-child(5) {
+    animation-delay: 160ms;
+  }
+  .mobile-nav a:nth-child(6) {
+    animation-delay: 200ms;
+  }
+  .mobile-nav a:nth-child(7) {
+    animation-delay: 240ms;
+  }
+}
+@media (max-width: 700px) {
+  .interface-studies-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+  }
+  .work-filters {
+    gap: 8px;
+  }
+  .work-filters button {
+    padding: 10px 13px;
+    font-size: 11px;
+    gap: 10px;
+  }
+  .work-ai-invitation {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .motion-control > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .motion-control select {
+    max-width: 56px;
+  }
+  .nav-row {
+    gap: 10px;
+  }
+  .journey-editorial-list::before,
+  .journey-editorial-list::after {
+    left: -9px;
+  }
+  .workflow-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .workflow-cards > .motion-reveal {
+    position: sticky;
+    top: 105px;
+  }
+  .workflow-cards > .motion-reveal:nth-child(2) {
+    top: 119px;
+  }
+  .workflow-cards > .motion-reveal:nth-child(3) {
+    top: 133px;
+  }
+  .workflow-cards > .motion-reveal:nth-child(4) {
+    top: 147px;
+  }
+  .workflow-cards > .motion-reveal:nth-child(5) {
+    top: 161px;
+  }
+  .reference-workflow .workflow-step {
+    min-height: 250px;
+  }
+}
+/* Auto honors the OS. On is an explicit user override, Off always stops motion. */
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion="full"]) .hero-title-reveal .motion-word,
+  html:not([data-motion="full"]) .tool-marquee > div,
+  html:not([data-motion="full"]) .journey-editorial-list::after {
+    animation: none;
+    transform: none;
+  }
+}
+html[data-motion="reduced"] .hero-title-reveal .motion-word,
+html[data-motion="reduced"] .tool-marquee > div,
+html[data-motion="reduced"] .journey-editorial-list::after {
+  animation: none;
+  transform: none;
+}
+.scroll-progress {
+  animation: none !important;
+}
+.journey-editorial-list::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 -20px;
+  width: 2px;
+  background: var(--gold);
+  transform-origin: top;
+  transform: scaleY(var(--journey-progress, 0));
+}
+@media (max-width: 700px) {
+  .journey-editorial-list::after {
+    left: -9px;
+  }
+}
+.project-view-cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 80;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+@media (hover: none), (pointer: coarse) {
+  .project-view-cursor {
+    display: none;
+  }
+}
+/* Keep the wordmark light alive without repainting its gradient each frame. */
+.footer-wordmark-window > span {
+  animation: wordmark-breathe 10s ease-in-out infinite alternate;
+}
+@keyframes wordmark-breathe {
+  from {
+    opacity: 0.65;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.form-field {
+  position: relative;
+}
+.form-field:has(> input) > label,
+.form-field:has(> textarea) > label {
+  position: absolute;
+  left: 15px;
+  top: 19px;
+  z-index: 1;
+  margin: 0;
+  pointer-events: none;
+  transform-origin: left top;
+  transition:
+    transform 0.25s var(--ease-editorial),
+    color 0.25s;
+}
+.form-field > input,
+.form-field > textarea {
+  padding-top: 27px;
+  padding-bottom: 10px;
+}
+.form-field:has(> input:focus) > label,
+.form-field:has(> input:not(:placeholder-shown)) > label,
+.form-field:has(> textarea:focus) > label,
+.form-field:has(> textarea:not(:placeholder-shown)) > label {
+  transform: translateY(-12px) scale(0.8);
+  color: var(--muted);
+}
+.form-field > input::placeholder,
+.form-field > textarea::placeholder {
+  color: transparent;
+}
+.form-field > input:focus::placeholder,
+.form-field > textarea:focus::placeholder {
+  color: var(--muted);
+}
+.contact-form .form-success {
+  animation: work-filter-enter 0.4s var(--ease-editorial) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion="full"]) .footer-wordmark-window > span {
+    animation: none;
+  }
+}
+html[data-motion="reduced"] .footer-wordmark-window > span {
+  animation: none;
+}
+/* Privacy controls are usable immediately, independently of branded font downloads. */
+.consent-banner,
+.privacy-dialog {
+  font-family: system-ui, sans-serif;
 }
 ``````
 
@@ -12235,39 +12783,71 @@ export default async function Page({
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .emblem-object,
-  .emblem-shine,
-  .emblem-ring,
-  .workflow-art-core,
-  .footer-art > span {
+  html:not([data-motion="full"]) .emblem-object,
+  html:not([data-motion="full"]) .emblem-shine,
+  html:not([data-motion="full"]) .emblem-ring,
+  html:not([data-motion="full"]) .workflow-art-core,
+  html:not([data-motion="full"]) .footer-art > span {
     animation: none;
   }
-  .emblem-shine {
+  html:not([data-motion="full"]) .emblem-shine {
     display: none;
   }
-  .footer-art > span {
+  html:not([data-motion="full"]) .footer-art > span {
     background-position: 45% 50%;
   }
-  .bunch-piece,
-  .studio-service,
-  .service-orbit,
-  .journey-chapter > svg,
-  .tool-tile,
-  .love-progress span {
+  html:not([data-motion="full"]) .bunch-piece,
+  html:not([data-motion="full"]) .studio-service,
+  html:not([data-motion="full"]) .service-orbit,
+  html:not([data-motion="full"]) .journey-chapter > svg,
+  html:not([data-motion="full"]) .tool-tile,
+  html:not([data-motion="full"]) .love-progress span {
     transition: none;
   }
-  .bunch-piece:nth-child(n),
-  .bunch-piece:hover,
-  .bunch-piece:focus-visible,
-  .tool-tile:nth-child(n),
-  .tool-tile:hover {
+  html:not([data-motion="full"]) .bunch-piece:nth-child(n),
+  html:not([data-motion="full"]) .bunch-piece:hover,
+  html:not([data-motion="full"]) .bunch-piece:focus-visible,
+  html:not([data-motion="full"]) .tool-tile:nth-child(n),
+  html:not([data-motion="full"]) .tool-tile:hover {
     transform: none;
   }
-  .studio-service:hover,
-  .journey-chapter:hover > svg {
+  html:not([data-motion="full"]) .studio-service:hover,
+  html:not([data-motion="full"]) .journey-chapter:hover > svg {
     transform: none;
   }
 }
+html[data-motion="reduced"] .studio-service:hover,
+  html[data-motion="reduced"] .journey-chapter:hover > svg {
+    transform: none;
+  }
+html[data-motion="reduced"] .bunch-piece:nth-child(n),
+  html[data-motion="reduced"] .bunch-piece:hover,
+  html[data-motion="reduced"] .bunch-piece:focus-visible,
+  html[data-motion="reduced"] .tool-tile:nth-child(n),
+  html[data-motion="reduced"] .tool-tile:hover {
+    transform: none;
+  }
+html[data-motion="reduced"] .bunch-piece,
+  html[data-motion="reduced"] .studio-service,
+  html[data-motion="reduced"] .service-orbit,
+  html[data-motion="reduced"] .journey-chapter > svg,
+  html[data-motion="reduced"] .tool-tile,
+  html[data-motion="reduced"] .love-progress span {
+    transition: none;
+  }
+html[data-motion="reduced"] .footer-art > span {
+    background-position: 45% 50%;
+  }
+html[data-motion="reduced"] .emblem-shine {
+    display: none;
+  }
+html[data-motion="reduced"] .emblem-object,
+  html[data-motion="reduced"] .emblem-shine,
+  html[data-motion="reduced"] .emblem-ring,
+  html[data-motion="reduced"] .workflow-art-core,
+  html[data-motion="reduced"] .footer-art > span {
+    animation: none;
+  }
 
 .contact-privacy a {
   color: var(--text);

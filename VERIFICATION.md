@@ -2,6 +2,24 @@
 
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
+## Editorial/motion follow-up and reported Vercel failure
+
+The supplied production log confirms the terminating error is first-owner email/password validation, after successful migrations and an owner-table query. It is not the npm deprecation warnings or SSL compatibility warning. The updated private build script reports the unmet password rules separately from an invalid email. It validates copied connection URLs and emits only fixed, non-secret driver diagnostics. Existing owners/passwords remain untouched. Production still requires the owner to correct the private Production credential and redeploy; this workspace has no callable authenticated Vercel tool.
+
+The current front end has four work categories, a combined skills/toolkit, accessible Motion Auto/On/Off controls, responsive reveals, lazy fine-pointer Lenis enhancement, native touch scrolling, desktop View/magnetic effects, direction-aware/active navigation, stacked mobile workflow, journey/reading progress and floating form labels. CSS scroll-linked timelines that hung Chromium during preference changes have been replaced by one shared passive listener/frame. Native OS reduced motion is the default; full motion requires explicit On when the OS requests less. Two variable font files replace five initial files from the same two families. Privacy controls use system fonts so they do not wait on branded downloads.
+
+Validation for this follow-up:
+
+- Production build, lint and type checking passed.
+- Security **10**, login **5**, chat **16**, contact **13**, consent **5** unit tests: **49 passed**.
+- Separate disposable PostgreSQL test verified actual migrations and owner creation, weak/missing requirements, invalid email/URL diagnostics, no password output and repeat-run preservation of exact existing password hashes. The disposable database was removed after the test.
+- Responsive production browser suite covers **360,390,768,1024,1440,1920px**, both themes, filtering, live reduced-motion changes, explicit On/Off, persisted choice after reload, navigation/overflow, no-JavaScript text, no unsolicited AI traffic and no runtime/hydration errors. Additional touch-native, AI demo and form-validation checks are included in the same script.
+- Desktop and mobile axe WCAG A/AA checks: **0 violations**. Screenshots are `docs/editorial-*-hero.png` and `docs/editorial-*-work.png`.
+- Local Lighthouse 13.5 mobile, fresh consent state: **95 performance / 100 accessibility / 100 best practices / 100 SEO**; FCP **1.4s**, LCP **2.9s**, TBT **30ms**, CLS **0**, speed index **1.6s**. See `docs/editorial-performance.json`. An intermediate follow-up build measured 90 performance before font/privacy-rendering changes. This is lab evidence, not a live score or measured field INP/60fps guarantee. The requested LCP below 2s remains unmet.
+- Production dependency audit remains clean; no claim that the separate development-tool findings disappeared.
+
+See [the implementation audit, full file map and test instructions](docs/EDITORIAL_UPGRADE.md). Earlier evidence below describes the previous agency/login implementation and must not be substituted for current metrics.
+
 ## Owner sign-in follow-up
 
 The reported return-to-login behavior was reproduced locally with missing private authentication settings. Auth.js's client helper can navigate to its error route when provider discovery fails, leaving the custom login screen apparently unchanged. The public hosting request was blocked by this cloud network's CONNECT policy; production variables/database/account state were not inspected or changed.
@@ -50,12 +68,12 @@ The tracked loopback-only HTTPS proxy was exercised for these checks so applicat
 
 Fresh ordinary file-mode production server; Lighthouse 13.5.0, simulated mobile throttling, no concurrent browser/capture workload:
 
-| Category | Score |
-| --- | ---: |
-| Performance | 92 |
-| Accessibility | 100 |
-| Best practices | 100 |
-| SEO | 100 |
+| Category       | Score |
+| -------------- | ----: |
+| Performance    |    92 |
+| Accessibility  |   100 |
+| Best practices |   100 |
+| SEO            |   100 |
 
 FCP **1.2 s**, LCP **3.3 s**, total blocking time **20 ms**, CLS **0**, speed index **1.2 s**. Shared CSS/observer reveals and initial consent rendering reduce hydration work. LCP remains above the 2.5-second good threshold in this simulated run. See `docs/agency-performance.json` for settings and numeric metrics. Scores vary with devices, CPU, network, content, providers and the production host; they are neither a security nor a legal certification. Earlier scores/captures describe older builds.
 

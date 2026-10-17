@@ -13,37 +13,18 @@ import "./studio.css";
 import "./reference.css";
 import "./editorial.css";
 import "./agency.css";
+import "./refinement.css";
 import { ConsentProvider } from "@/components/consent-provider";
 
 const inter = localFont({
-  src: [
-    {
-      path: "../node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2",
-      weight: "400",
-    },
-    {
-      path: "../node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2",
-      weight: "500",
-    },
-    {
-      path: "../node_modules/@fontsource/inter/files/inter-latin-600-normal.woff2",
-      weight: "600",
-    },
-  ],
+  src: "../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2",
+  weight: "100 900",
   variable: "--font-inter",
   display: "swap",
 });
 const space = localFont({
-  src: [
-    {
-      path: "../node_modules/@fontsource/space-grotesk/files/space-grotesk-latin-500-normal.woff2",
-      weight: "500",
-    },
-    {
-      path: "../node_modules/@fontsource/space-grotesk/files/space-grotesk-latin-600-normal.woff2",
-      weight: "600",
-    },
-  ],
+  src: "../node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2",
+  weight: "300 700",
   variable: "--font-space",
   display: "swap",
 });
@@ -92,7 +73,7 @@ export const viewport: Viewport = {
   ],
 };
 
-const themeScript = `(function(){var t='dark';try{var s=localStorage.getItem('portfolio-theme');if(s==='light'||s==='dark')t=s;}catch(e){}document.documentElement.dataset.theme=t;if(window.IntersectionObserver&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.dataset.motionReveals='enabled';})();`;
+const themeScript = `(function(){var t='dark',m='system';try{var s=localStorage.getItem('portfolio-theme');if(s==='light'||s==='dark')t=s;var p=localStorage.getItem('elvora-motion');if(p==='full'||p==='reduced')m=p;}catch(e){}document.documentElement.dataset.theme=t;document.documentElement.dataset.motion=m;if(window.IntersectionObserver&&(m==='full'||(m==='system'&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches)))document.documentElement.dataset.motionReveals='enabled';})();`;
 
 export default async function RootLayout({
   children,

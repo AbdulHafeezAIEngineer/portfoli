@@ -644,10 +644,13 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .certificate-preview img {
+  html:not([data-motion="full"]) .certificate-preview img {
     transition: none;
   }
 }
+html[data-motion="reduced"] .certificate-preview img {
+    transition: none;
+  }
 
 .contact-security {
   margin: 0 0 20px;

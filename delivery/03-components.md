@@ -3500,6 +3500,108 @@ export function DesignStudy({ study }: { study: Study }) {
 }
 ``````
 
+## components/editorial-effects.tsx
+
+``````tsx
+"use client";
+
+import { useEffect, useRef } from "react";
+import { useMotionPreference } from "./motion-preference";
+
+/** Optional desktop enhancements; touch and reduced motion keep native scrolling. */
+export function EditorialEffects() {
+  const { reduced } = useMotionPreference();
+  const cursor = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (reduced) return;
+    const media = window.matchMedia("(hover: hover) and (pointer: fine)");
+    let cleanup: (() => void) | undefined;
+    const enable = () => {
+      cleanup?.();
+      if (!media.matches) return;
+      let cancelled = false;
+      let scroll: { destroy: () => void } | undefined;
+      void import("lenis")
+        .then(({ default: Lenis }) => {
+          if (cancelled) return;
+          scroll = new Lenis({
+            autoRaf: true,
+            smoothWheel: true,
+            syncTouch: false,
+            duration: 1.15,
+            easing: (value: number) =>
+              Math.min(1, 1.001 - Math.pow(2, -10 * value)),
+            anchors: true,
+            prevent: (node) =>
+              Boolean(
+                node.closest("dialog, .mobile-nav, [data-native-scroll]"),
+              ),
+          });
+        })
+        .catch(() => {
+          /* Native scrolling remains available if the enhancement cannot load. */
+        });
+      let frame = 0;
+      let magnetic: HTMLElement | null = null;
+      const clear = () => {
+        if (cursor.current) cursor.current.style.opacity = "0";
+        magnetic?.style.removeProperty("translate");
+        magnetic = null;
+      };
+      const move = (event: PointerEvent) => {
+        if (event.pointerType !== "mouse") return;
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(() => {
+          const target = event.target instanceof Element ? event.target : null;
+          const view = target?.closest(
+            ".project-card, .interface-study-card, .bunch-piece",
+          );
+          const button =
+            target?.closest<HTMLElement>(
+              ".hero-actions .button, .footer-brief-link",
+            ) || null;
+          if (magnetic !== button) {
+            magnetic?.style.removeProperty("translate");
+            magnetic = button;
+          }
+          if (button) {
+            const rect = button.getBoundingClientRect();
+            button.style.translate = `${(event.clientX - rect.left - rect.width / 2) * 0.06}px ${(event.clientY - rect.top - rect.height / 2) * 0.06}px`;
+          }
+          if (cursor.current) {
+            cursor.current.style.opacity = view ? "1" : "0";
+            cursor.current.style.transform = `translate3d(${event.clientX + 16}px, ${event.clientY + 16}px, 0)`;
+          }
+        });
+      };
+      document.addEventListener("pointermove", move, { passive: true });
+      document.addEventListener("pointerleave", clear);
+      window.addEventListener("blur", clear);
+      cleanup = () => {
+        cancelled = true;
+        scroll?.destroy();
+        cancelAnimationFrame(frame);
+        clear();
+        document.removeEventListener("pointermove", move);
+        document.removeEventListener("pointerleave", clear);
+        window.removeEventListener("blur", clear);
+      };
+    };
+    enable();
+    media.addEventListener("change", enable);
+    return () => {
+      cleanup?.();
+      media.removeEventListener("change", enable);
+    };
+  }, [reduced]);
+  return (
+    <div ref={cursor} className="project-view-cursor" aria-hidden="true">
+      View ↗
+    </div>
+  );
+}
+``````
+
 ## components/experience.tsx
 
 ``````tsx
@@ -3963,6 +4065,43 @@ export function LegalPage({ page }: { page: keyof typeof legal.pages }) {
 }
 ``````
 
+## components/motion-preference.tsx
+
+``````tsx
+"use client";
+
+import { createContext, useContext } from "react";
+
+export type MotionPreference = "system" | "full" | "reduced";
+export const MotionPreferenceContext = createContext<{
+  preference: MotionPreference;
+  reduced: boolean;
+  setPreference: (value: MotionPreference) => void;
+}>({ preference: "system", reduced: true, setPreference: () => {} });
+
+export const useMotionPreference = () => useContext(MotionPreferenceContext);
+
+export function MotionControl() {
+  const { preference, setPreference } = useMotionPreference();
+  return (
+    <label className="motion-control">
+      <span>Motion</span>
+      <select
+        aria-label="Animation preference"
+        value={preference}
+        onChange={(event) =>
+          setPreference(event.target.value as MotionPreference)
+        }
+      >
+        <option value="system">Auto</option>
+        <option value="full">On</option>
+        <option value="reduced">Off</option>
+      </select>
+    </label>
+  );
+}
+``````
+
 ## components/motion-provider.tsx
 
 ``````tsx
@@ -3970,12 +4109,46 @@ export function LegalPage({ page }: { page: keyof typeof legal.pages }) {
 
 import { RevealObserver } from "./reveal-observer";
 import { LazyMotion, domAnimation, MotionConfig } from "framer-motion";
+import { useEffect, useState } from "react";
+import {
+  MotionPreferenceContext,
+  type MotionPreference,
+} from "./motion-preference";
 
 export function MotionProvider({ children }: { children: React.ReactNode }) {
+  const [preference, setPreference] = useState<MotionPreference>("system");
+  const [systemReduced, setSystemReduced] = useState(true);
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setSystemReduced(media.matches);
+    sync();
+    const saved = document.documentElement.dataset.motion;
+    if (saved === "full" || saved === "reduced") setPreference(saved);
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
+  const reduced =
+    preference === "reduced" || (preference === "system" && systemReduced);
+  function updatePreference(value: MotionPreference) {
+    setPreference(value);
+    document.documentElement.dataset.motion = value;
+    try {
+      localStorage.setItem("elvora-motion", value);
+    } catch {
+      /* Optional persistence. */
+    }
+  }
   return (
-    <LazyMotion features={domAnimation} strict>
-      <MotionConfig reducedMotion="user"><RevealObserver />{children}</MotionConfig>
-    </LazyMotion>
+    <MotionPreferenceContext.Provider
+      value={{ preference, reduced, setPreference: updatePreference }}
+    >
+      <LazyMotion features={domAnimation} strict>
+        <MotionConfig reducedMotion={reduced ? "always" : "never"}>
+          <RevealObserver />
+          {children}
+        </MotionConfig>
+      </LazyMotion>
+    </MotionPreferenceContext.Provider>
   );
 }
 ``````
@@ -3989,12 +4162,47 @@ import { useEffect, useRef, useState } from "react";
 import { Menu, Moon, Sun, X } from "lucide-react";
 import { site } from "@/data/site";
 import { BrandMark } from "./brand-mark";
+import { MotionControl } from "./motion-preference";
+import { subscribeScroll } from "@/lib/scroll";
 
-export function Navbar({ identity, rootLinks = false }: { identity: { brand: string }; rootLinks?: boolean }) {
+export function Navbar({
+  identity,
+  rootLinks = false,
+}: {
+  identity: { brand: string };
+  rootLinks?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const [theme, setTheme] = useState("dark");
+  const [hidden, setHidden] = useState(false);
+  const [active, setActive] = useState("");
   const menuButton = useRef<HTMLButtonElement>(null);
   const menu = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let previous = window.scrollY;
+    const unsubscribe = subscribeScroll(({ y: current }) => {
+      if (Math.abs(current - previous) > 8) {
+        setHidden(current > 160 && current > previous);
+        previous = current;
+      }
+    });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries)
+          if (entry.isIntersecting) setActive(`#${entry.target.id}`);
+      },
+      { rootMargin: "-15% 0px -65% 0px", threshold: 0 },
+    );
+    for (const item of site.nav) {
+      const element = document.querySelector(item.href);
+      if (element) observer.observe(element);
+    }
+    return () => {
+      unsubscribe();
+      observer.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     setTheme(document.documentElement.dataset.theme || "dark");
@@ -4039,7 +4247,9 @@ export function Navbar({ identity, rootLinks = false }: { identity: { brand: str
   }
 
   return (
-    <header className="site-header">
+    <header
+      className={`site-header${hidden && !open ? " is-scroll-hidden" : ""}`}
+    >
       <nav className="container nav-row" aria-label="Main navigation">
         <a
           href={rootLinks ? "/#top" : "#top"}
@@ -4051,12 +4261,19 @@ export function Navbar({ identity, rootLinks = false }: { identity: { brand: str
         </a>
         <div className="desktop-nav">
           {site.nav.map((item) => (
-            <a key={item.href} href={rootLinks ? `/${item.href}` : item.href}>
+            <a
+              key={item.href}
+              href={rootLinks ? `/${item.href}` : item.href}
+              aria-current={
+                !rootLinks && active === item.href ? "location" : undefined
+              }
+            >
               {item.label}
             </a>
           ))}
         </div>
         <div className="nav-actions">
+          <MotionControl />
           <button
             className="icon-button theme-toggle"
             onClick={toggleTheme}
@@ -4090,7 +4307,11 @@ export function Navbar({ identity, rootLinks = false }: { identity: { brand: str
           }}
         >
           {site.nav.map((item) => (
-            <a key={item.href} href={rootLinks ? `/${item.href}` : item.href} onClick={() => setOpen(false)}>
+            <a
+              key={item.href}
+              href={rootLinks ? `/${item.href}` : item.href}
+              onClick={() => setOpen(false)}
+            >
               {item.label}
             </a>
           ))}
@@ -4105,8 +4326,9 @@ export function Navbar({ identity, rootLinks = false }: { identity: { brand: str
 
 ``````tsx
 "use client";
+import { useMotionPreference } from "./motion-preference";
 import Image from "next/image";
-import { m, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
+import { m, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import type { ProjectView } from "@/data/projects";
@@ -4123,7 +4345,7 @@ export function ProjectCard({
   total: number;
   onOpen: () => void;
 }) {
-  const reduced = useReducedMotion();
+  const { reduced } = useMotionPreference();
   const [finePointer, setFinePointer] = useState(false);
   const x = useMotionValue(0),
     y = useMotionValue(0);
@@ -4148,8 +4370,14 @@ export function ProjectCard({
       onPointerMove={(event) => {
         if (!tilt) return;
         const rect = event.currentTarget.getBoundingClientRect();
-        event.currentTarget.style.setProperty("--pointer-x", `${((event.clientX - rect.left) / rect.width) * 100}%`);
-        event.currentTarget.style.setProperty("--pointer-y", `${((event.clientY - rect.top) / rect.height) * 100}%`);
+        event.currentTarget.style.setProperty(
+          "--pointer-x",
+          `${((event.clientX - rect.left) / rect.width) * 100}%`,
+        );
+        event.currentTarget.style.setProperty(
+          "--pointer-y",
+          `${((event.clientY - rect.top) / rect.height) * 100}%`,
+        );
         x.set(
           (-(event.clientY - rect.top - rect.height / 2) / rect.height) * 10,
         );
@@ -4168,47 +4396,59 @@ export function ProjectCard({
           0{index + 1}
         </span>
         {presentation.artwork ? (
-          <m.div className="artwork-composition" style={tilt ? { rotateX, rotateY } : undefined}>
-            <Image src={project.screenshots[0].src} alt={project.screenshots[0].alt} fill sizes="(max-width:700px) 90vw, 580px" />
-            <span className="artwork-light" aria-hidden="true" />
-          </m.div>
-        ) : <><div className="device-floor" />
-        <div className="device-float">
           <m.div
-            className="device-composition"
+            className="artwork-composition"
             style={tilt ? { rotateX, rotateY } : undefined}
           >
-            <div className="device-laptop">
-              <div className="device-laptop-lid">
-                <span className="device-camera" />
-                <div className="device-screen">
-                  <Image
-                    src={project.screenshots[0].src}
-                    alt={project.screenshots[0].alt}
-                    fill
-                    sizes="(max-width:700px) 80vw, 480px"
-                  />
-                  <span className="device-reflection" />
-                </div>
-              </div>
-              <div className="device-laptop-base">
-                <i />
-              </div>
-            </div>
-            <div className="device-phone">
-              <div className="device-phone-screen">
-                <Image
-                  src={mobile.src}
-                  alt={mobile.alt}
-                  fill
-                  sizes="(max-width:700px) 23vw, 145px"
-                />
-                <span className="device-reflection" />
-              </div>
-              <span className="device-phone-notch" />
-            </div>
+            <Image
+              src={project.screenshots[0].src}
+              alt={project.screenshots[0].alt}
+              fill
+              sizes="(max-width:700px) 90vw, 580px"
+            />
+            <span className="artwork-light" aria-hidden="true" />
           </m.div>
-        </div></>}
+        ) : (
+          <>
+            <div className="device-floor" />
+            <div className="device-float">
+              <m.div
+                className="device-composition"
+                style={tilt ? { rotateX, rotateY } : undefined}
+              >
+                <div className="device-laptop">
+                  <div className="device-laptop-lid">
+                    <span className="device-camera" />
+                    <div className="device-screen">
+                      <Image
+                        src={project.screenshots[0].src}
+                        alt={project.screenshots[0].alt}
+                        fill
+                        sizes="(max-width:700px) 80vw, 480px"
+                      />
+                      <span className="device-reflection" />
+                    </div>
+                  </div>
+                  <div className="device-laptop-base">
+                    <i />
+                  </div>
+                </div>
+                <div className="device-phone">
+                  <div className="device-phone-screen">
+                    <Image
+                      src={mobile.src}
+                      alt={mobile.alt}
+                      fill
+                      sizes="(max-width:700px) 23vw, 145px"
+                    />
+                    <span className="device-reflection" />
+                  </div>
+                  <span className="device-phone-notch" />
+                </div>
+              </m.div>
+            </div>
+          </>
+        )}
         <span className="device-view">
           {site.work.view}
           <ArrowUpRight size={18} />
@@ -4482,14 +4722,12 @@ export default function ProjectGallery({
 ``````tsx
 "use client";
 import { useEffect } from "react";
+import { useMotionPreference } from "./motion-preference";
 export function RevealObserver() {
+  const { reduced } = useMotionPreference();
   useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (media.matches || !window.IntersectionObserver) {
-      delete document.documentElement.dataset.motionReveals;
-      return;
-    }
-    const observed = new WeakSet<Element>();
+    if (!window.IntersectionObserver) return;
+    let observed = new WeakSet<Element>();
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries)
@@ -4511,26 +4749,28 @@ export function RevealObserver() {
           observer.observe(element);
         }
     };
-    scan(document.body);
+    const change = () => {
+      observer.disconnect();
+      if (reduced) {
+        delete document.documentElement.dataset.motionReveals;
+        return;
+      }
+      document.documentElement.dataset.motionReveals = "enabled";
+      observed = new WeakSet<Element>();
+      scan(document.body);
+    };
+    change();
     const mutation = new MutationObserver((records) => {
       for (const record of records)
         for (const node of record.addedNodes)
-          if (node instanceof Element) scan(node);
+          if (!reduced && node instanceof Element) scan(node);
     });
     mutation.observe(document.body, { childList: true, subtree: true });
-    const change = () => {
-      if (media.matches) {
-        delete document.documentElement.dataset.motionReveals;
-        observer.disconnect();
-      }
-    };
-    media.addEventListener("change", change);
     return () => {
       observer.disconnect();
       mutation.disconnect();
-      media.removeEventListener("change", change);
     };
-  }, []);
+  }, [reduced]);
   return null;
 }
 ``````
@@ -4563,8 +4803,37 @@ export function Reveal({
 ## components/scroll-progress.tsx
 
 ``````tsx
+"use client";
+
+import { useEffect, useRef } from "react";
+import { subscribeScroll } from "@/lib/scroll";
+import { useMotionPreference } from "./motion-preference";
+
 export function ScrollProgress() {
-  return <div className="scroll-progress" aria-hidden="true" />;
+  const progress = useRef<HTMLDivElement>(null);
+  const { reduced } = useMotionPreference();
+  useEffect(() => {
+    const journey = document.querySelector<HTMLElement>(
+      ".journey-editorial-list",
+    );
+    return subscribeScroll(({ y, height, viewport }) => {
+      const amount = Math.min(
+        1,
+        Math.max(0, y / Math.max(1, height - viewport)),
+      );
+      const rect = journey?.getBoundingClientRect();
+      const journeyAmount = rect
+        ? Math.min(1, Math.max(0, (viewport * 0.7 - rect.top) / rect.height))
+        : 0;
+      if (progress.current)
+        progress.current.style.transform = `scaleX(${amount})`;
+      journey?.style.setProperty(
+        "--journey-progress",
+        String(reduced ? 1 : journeyAmount),
+      );
+    });
+  }, [reduced]);
+  return <div ref={progress} className="scroll-progress" aria-hidden="true" />;
 }
 ``````
 
@@ -4575,6 +4844,7 @@ import { skillContent as copy, type Skill } from "@/data/skills";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
 import { ToolMark } from "./tool-mark";
+import { studio } from "@/data/studio";
 import {
   Braces,
   CheckCheck,
@@ -4587,12 +4857,16 @@ import {
 const categoryIcons = [Waypoints, CheckCheck, Braces, Database, Mic, GitBranch];
 
 export function Skills({ skills }: { skills: Skill[] }) {
+  const purpose = new Map<string, string>(
+    studio.tools.items.map((tool) => [tool.name, tool.purpose]),
+  );
   return (
     <section
       id="skills"
       className="container skills-section toolkit-section"
       aria-labelledby="skills-title"
     >
+      <span id="creative-toolkit" className="section-anchor" />
       <div className="toolkit-heading">
         <div>
           <Reveal>
@@ -4601,7 +4875,11 @@ export function Skills({ skills }: { skills: Skill[] }) {
           <TextReveal id="skills-title" text={copy.title} />
         </div>
         <Reveal>
-          <p>{copy.description}</p>
+          <p>
+            {copy.description}
+            <br />
+            {studio.tools.intro}
+          </p>
         </Reveal>
       </div>
       <div className="toolkit-rows">
@@ -4638,7 +4916,14 @@ export function Skills({ skills }: { skills: Skill[] }) {
                             <Icon size={23} strokeWidth={1.3} />
                           </span>
                         )}
-                        {skill.name}
+                        <span>
+                          {skill.name}
+                          {purpose.has(skill.name) && (
+                            <small className="tool-purpose">
+                              {purpose.get(skill.name)}
+                            </small>
+                          )}
+                        </span>
                       </li>
                     ))}
                 </ul>
@@ -4647,7 +4932,24 @@ export function Skills({ skills }: { skills: Skill[] }) {
           );
         })}
       </div>
+      <div className="tool-marquee" aria-hidden="true">
+        <div>
+          {[0, 1].map((duplicate) => (
+            <span key={duplicate}>
+              {studio.tools.items.map((tool) => (
+                <span key={tool.name}>
+                  {tool.name}
+                  <i>✳</i>
+                </span>
+              ))}
+            </span>
+          ))}
+        </div>
+      </div>
       <p className="skills-note">{copy.note}</p>
+      <p className="studio-note">
+        {studio.tools.note} The tools are powerful. The decisions are human.
+      </p>
     </section>
   );
 }
@@ -4721,7 +5023,7 @@ export function Services({ services }: { services: Service[] }) {
     >
       <div className="reference-heading">
         <Reveal>
-          <p className="eyebrow">{studio.services.eyebrow}</p>
+          <p className="eyebrow">01 / {studio.services.eyebrow}</p>
         </Reveal>
         <TextReveal id="services-title" text={studio.services.title} />
         <Reveal>
@@ -5064,10 +5366,11 @@ export function Turnstile({
 
 ``````tsx
 "use client";
+import { useMotionPreference } from "./motion-preference";
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, m, useInView, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useInView } from "framer-motion";
 import {
   ArrowLeft,
   ArrowRight,
@@ -5084,7 +5387,7 @@ import { TextReveal } from "./text-reveal";
 export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { amount: 0.2 });
-  const reduced = useReducedMotion();
+  const { reduced } = useMotionPreference();
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [hydrated, setHydrated] = useState(false);
@@ -5285,9 +5588,10 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
 
 ``````tsx
 "use client";
+import { useMotionPreference } from "./motion-preference";
 import Image from "next/image";
 import { useRef } from "react";
-import { m, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { m, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { studio } from "@/data/studio";
 import { studies } from "@/data/studies";
@@ -5296,7 +5600,7 @@ import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
 export function WorkBunch({ projects }: { projects: ProjectView[] }) {
   const ref = useRef<HTMLElement>(null);
-  const reduced = useReducedMotion();
+  const { reduced } = useMotionPreference();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
@@ -5390,17 +5694,19 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
 "use client";
 
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { Bot, Code2 } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import type { ProjectView } from "@/data/projects";
+import type { Bot as BotData } from "@/data/bots";
+import { studies } from "@/data/studies";
 import { site } from "@/data/site";
 import { Reveal } from "./reveal";
 import { ProjectCard } from "./project-card";
-
-import type { Bot as BotData } from "@/data/bots";
+import { TextReveal } from "./text-reveal";
 
 const BotServices = dynamic(
-  () => import("./bot-services").then((module) => module.BotServices),
+  () => import("./bot-services").then((m) => m.BotServices),
   {
     ssr: false,
     loading: () => (
@@ -5410,8 +5716,13 @@ const BotServices = dynamic(
     ),
   },
 );
-
 const Gallery = dynamic(() => import("./project-gallery"), { ssr: false });
+const categories = [
+  { id: "all", title: "All" },
+  { id: "web", title: "Website concepts" },
+  { id: "studies", title: "UI / interface studies" },
+  { id: "bots", title: "AI chatbots & demos" },
+];
 
 export function Work({
   projects,
@@ -5424,39 +5735,37 @@ export function Work({
   const [botsVisited, setBotsVisited] = useState(false);
   const [project, setProject] = useState<ProjectView | null>(null);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
-
+  const counts = [
+    projects.length + studies.length + bots.length,
+    projects.length,
+    studies.length,
+    bots.length,
+  ];
   useEffect(() => {
     const sync = () => {
-      if (["#ai-bots", "#embed-methods"].includes(window.location.hash)) {
-        setTab(1);
+      if (["#ai-bots", "#embed-methods"].includes(location.hash)) {
+        setTab(3);
         setBotsVisited(true);
-      } else if (window.location.hash === "#work") setTab(0);
+      } else if (location.hash === "#work") setTab(0);
     };
     sync();
     window.addEventListener("hashchange", sync);
     return () => window.removeEventListener("hashchange", sync);
   }, []);
   useEffect(() => {
-    if (
-      tab !== 1 ||
-      !["#ai-bots", "#embed-methods"].includes(window.location.hash)
-    )
+    if (tab !== 3 || !["#ai-bots", "#embed-methods"].includes(location.hash))
       return;
     const frame = requestAnimationFrame(() =>
-      document.getElementById(window.location.hash.slice(1))?.scrollIntoView(),
+      document.getElementById(location.hash.slice(1))?.scrollIntoView(),
     );
     return () => cancelAnimationFrame(frame);
   }, [tab]);
   function selectTab(next: number) {
     setTab(next);
-    if (next === 1) setBotsVisited(true);
-    if (
-      next === 0 &&
-      ["#ai-bots", "#embed-methods"].includes(window.location.hash)
-    )
-      window.history.replaceState(null, "", "#work");
+    if (next === 3) setBotsVisited(true);
+    else if (["#ai-bots", "#embed-methods"].includes(location.hash))
+      history.replaceState(null, "", "#work");
   }
-
   return (
     <section
       id="work"
@@ -5466,17 +5775,17 @@ export function Work({
       <Reveal>
         <div className="section-heading">
           <div>
-            <p className="eyebrow">{site.work.eyebrow}</p>
-            <h2 id="work-title">{site.work.title}</h2>
+            <p className="eyebrow">02 / SELECTED EXPLORATIONS</p>
+            <TextReveal id="work-title" text={site.work.title} />
           </div>
           <p>{site.work.description}</p>
         </div>
         <div
-          className="service-tabs"
+          className="work-filters"
           role="tablist"
           aria-label="Portfolio categories"
         >
-          {site.work.tabs.map((item, index) => (
+          {categories.map((item, index) => (
             <button
               key={item.id}
               ref={(node) => {
@@ -5497,57 +5806,115 @@ export function Work({
                   return;
                 event.preventDefault();
                 const next =
-                  event.key === "Home" ? 0 : event.key === "End" ? 1 : 1 - tab;
+                  event.key === "Home"
+                    ? 0
+                    : event.key === "End"
+                      ? 3
+                      : (tab + (event.key === "ArrowRight" ? 1 : 3)) % 4;
                 selectTab(next);
                 tabs.current[next]?.focus();
               }}
             >
-              <span className="tab-icon">
-                {index === 0 ? <Code2 size={21} /> : <Bot size={21} />}
-              </span>
-              <span>
-                <strong>{item.title}</strong>
-                <small>{item.detail}</small>
-              </span>
-              <span className="tab-count">04</span>
+              {item.title}
+              <span>{String(counts[index]).padStart(2, "0")}</span>
             </button>
           ))}
         </div>
       </Reveal>
-      <div
-        role="tabpanel"
-        id="panel-web"
-        aria-labelledby="tab-web"
-        hidden={tab !== 0}
-        tabIndex={0}
-      >
-        <div className="projects-grid">
-          {projects.map((item, index) => (
-            <Reveal key={item.id} delay={(index % 2) * 0.06}>
-              <ProjectCard
-                project={item}
-                index={index}
-                total={projects.length}
-                onOpen={() => setProject(item)}
-              />
-            </Reveal>
-          ))}
+      {/* Hidden panels remain valid ARIA targets; only the active panel renders expensive content. */}
+      {categories.map((category, index) => (
+        <div
+          key={category.id}
+          role="tabpanel"
+          id={`panel-${category.id}`}
+          aria-labelledby={`tab-${category.id}`}
+          hidden={tab !== index}
+          tabIndex={0}
+          className="work-panel"
+        >
+          {tab === index && (
+            <>
+              {(index === 0 || index === 1) && (
+                <div className="projects-grid work-filter-enter">
+                  {projects.map((item, number) => (
+                    <Reveal key={item.id} delay={(number % 2) * 0.06}>
+                      <ProjectCard
+                        project={item}
+                        index={number}
+                        total={projects.length}
+                        onOpen={() => setProject(item)}
+                      />
+                    </Reveal>
+                  ))}
+                </div>
+              )}
+              {(index === 0 || index === 2) && (
+                <div className="interface-study-section work-filter-enter">
+                  <p className="eyebrow">
+                    INTERFACE STUDIES / SIX DIFFERENT DIRECTIONS
+                  </p>
+                  <div className="interface-studies-grid">
+                    {studies.map((study, number) => (
+                      <Reveal key={study.id} delay={(number % 2) * 0.05}>
+                        <a
+                          className="interface-study-card"
+                          href={`/studies/${study.id}`}
+                        >
+                          <div className="interface-study-image">
+                            <Image
+                              src={study.screenshot}
+                              alt={`${study.name}: ${study.industry.toLowerCase()} interface concept`}
+                              fill
+                              sizes="(max-width: 700px) 90vw, (max-width: 1100px) 45vw, 560px"
+                            />
+                          </div>
+                          <div>
+                            <span>
+                              <small>{study.industry}</small>
+                              <strong>{study.name}</strong>
+                            </span>
+                            <ArrowUpRight size={22} aria-hidden="true" />
+                          </div>
+                        </a>
+                      </Reveal>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {index === 0 && (
+                <div className="work-ai-invitation">
+                  <div>
+                    <p className="eyebrow">INTELLIGENCE / ON DEMAND</p>
+                    <h3>Meet the other side of the work.</h3>
+                    <p>
+                      Explore the custom chatbot and AI demos, with voice and
+                      consent-aware experiences.
+                    </p>
+                  </div>
+                  <button
+                    className="button button-outline"
+                    onClick={() => {
+                      selectTab(3);
+                      tabs.current[3]?.focus();
+                    }}
+                  >
+                    Explore AI demos{" "}
+                    <ArrowUpRight size={18} aria-hidden="true" />
+                  </button>
+                </div>
+              )}
+              {index !== 3 && (
+                <p className="work-disclaimer">
+                  {site.work.disclaimer}
+                  <br />
+                  <span>{site.work.screenshotNote}</span>
+                </p>
+              )}
+              {index === 3 && botsVisited && <BotServices bots={bots} />}
+            </>
+          )}
         </div>
-        <p className="work-disclaimer">
-          {site.work.disclaimer}
-          <br />
-          <span>{site.work.screenshotNote}</span>
-        </p>
-      </div>
-      <div
-        role="tabpanel"
-        id="panel-bots"
-        aria-labelledby="tab-bots"
-        hidden={tab !== 1}
-        tabIndex={0}
-      >
-        {botsVisited && <BotServices bots={bots} />}
-      </div>
+      ))}
       {project && (
         <Gallery project={project} onClose={() => setProject(null)} />
       )}

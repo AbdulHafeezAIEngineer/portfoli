@@ -1,6 +1,7 @@
 "use client";
+import { useMotionPreference } from "./motion-preference";
 import Image from "next/image";
-import { m, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
+import { m, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import type { ProjectView } from "@/data/projects";
@@ -17,7 +18,7 @@ export function ProjectCard({
   total: number;
   onOpen: () => void;
 }) {
-  const reduced = useReducedMotion();
+  const { reduced } = useMotionPreference();
   const [finePointer, setFinePointer] = useState(false);
   const x = useMotionValue(0),
     y = useMotionValue(0);
@@ -42,8 +43,14 @@ export function ProjectCard({
       onPointerMove={(event) => {
         if (!tilt) return;
         const rect = event.currentTarget.getBoundingClientRect();
-        event.currentTarget.style.setProperty("--pointer-x", `${((event.clientX - rect.left) / rect.width) * 100}%`);
-        event.currentTarget.style.setProperty("--pointer-y", `${((event.clientY - rect.top) / rect.height) * 100}%`);
+        event.currentTarget.style.setProperty(
+          "--pointer-x",
+          `${((event.clientX - rect.left) / rect.width) * 100}%`,
+        );
+        event.currentTarget.style.setProperty(
+          "--pointer-y",
+          `${((event.clientY - rect.top) / rect.height) * 100}%`,
+        );
         x.set(
           (-(event.clientY - rect.top - rect.height / 2) / rect.height) * 10,
         );
@@ -62,47 +69,59 @@ export function ProjectCard({
           0{index + 1}
         </span>
         {presentation.artwork ? (
-          <m.div className="artwork-composition" style={tilt ? { rotateX, rotateY } : undefined}>
-            <Image src={project.screenshots[0].src} alt={project.screenshots[0].alt} fill sizes="(max-width:700px) 90vw, 580px" />
-            <span className="artwork-light" aria-hidden="true" />
-          </m.div>
-        ) : <><div className="device-floor" />
-        <div className="device-float">
           <m.div
-            className="device-composition"
+            className="artwork-composition"
             style={tilt ? { rotateX, rotateY } : undefined}
           >
-            <div className="device-laptop">
-              <div className="device-laptop-lid">
-                <span className="device-camera" />
-                <div className="device-screen">
-                  <Image
-                    src={project.screenshots[0].src}
-                    alt={project.screenshots[0].alt}
-                    fill
-                    sizes="(max-width:700px) 80vw, 480px"
-                  />
-                  <span className="device-reflection" />
-                </div>
-              </div>
-              <div className="device-laptop-base">
-                <i />
-              </div>
-            </div>
-            <div className="device-phone">
-              <div className="device-phone-screen">
-                <Image
-                  src={mobile.src}
-                  alt={mobile.alt}
-                  fill
-                  sizes="(max-width:700px) 23vw, 145px"
-                />
-                <span className="device-reflection" />
-              </div>
-              <span className="device-phone-notch" />
-            </div>
+            <Image
+              src={project.screenshots[0].src}
+              alt={project.screenshots[0].alt}
+              fill
+              sizes="(max-width:700px) 90vw, 580px"
+            />
+            <span className="artwork-light" aria-hidden="true" />
           </m.div>
-        </div></>}
+        ) : (
+          <>
+            <div className="device-floor" />
+            <div className="device-float">
+              <m.div
+                className="device-composition"
+                style={tilt ? { rotateX, rotateY } : undefined}
+              >
+                <div className="device-laptop">
+                  <div className="device-laptop-lid">
+                    <span className="device-camera" />
+                    <div className="device-screen">
+                      <Image
+                        src={project.screenshots[0].src}
+                        alt={project.screenshots[0].alt}
+                        fill
+                        sizes="(max-width:700px) 80vw, 480px"
+                      />
+                      <span className="device-reflection" />
+                    </div>
+                  </div>
+                  <div className="device-laptop-base">
+                    <i />
+                  </div>
+                </div>
+                <div className="device-phone">
+                  <div className="device-phone-screen">
+                    <Image
+                      src={mobile.src}
+                      alt={mobile.alt}
+                      fill
+                      sizes="(max-width:700px) 23vw, 145px"
+                    />
+                    <span className="device-reflection" />
+                  </div>
+                  <span className="device-phone-notch" />
+                </div>
+              </m.div>
+            </div>
+          </>
+        )}
         <span className="device-view">
           {site.work.view}
           <ArrowUpRight size={18} />

@@ -51,3 +51,9 @@ Owner login regression checks cover missing setup, safe credential/outage/rate e
 For `npm run test:login:browser`, provide the guarded isolated HTTPS fixture environment and `AGENCY_TEST_UNCONFIGURED_URL` pointing to a separate ordinary loopback app without auth settings. It verifies the setup notice, business-email prefill, wrong password, real owner dashboard login/logout, an explicitly dropped session cookie, safe failure messaging and old error-query handling. It uses system Chromium or `PLAYWRIGHT_CHROMIUM_EXECUTABLE`. No real credential is embedded in the test.
 
 To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQL instance while its fixture app/proxy remain running, then run `AGENCY_TEST_DATABASE_UNAVAILABLE=true node --env-file=/private/path/test.env tests/admin-database-outage.browser.mjs`. This must still render sign-in and report its actual database failure inline; restart the fixture database before other suites. Never stop a production database for this check.
+
+## Editorial motion and private setup regression
+
+`npm run test:motion:browser` uses `PUBLIC_TEST_URL` (default loopback port 3008) and system Chromium. It checks six viewport widths, themes, actual filter contents, live OS motion changes, explicit animation preference persistence, native touch behavior, lazy AI demos, form validation, overflow, no-JavaScript content and browser errors. It refuses nonlocal targets.
+
+`node --env-file=/private/path/local-test.env tests/owner-setup.integration.mjs` requires `AGENCY_TEST_DATABASE=isolated` and an explicitly local PostgreSQL connection on port 55432. It creates/drops its own disposable database, runs real private build setup, verifies weak credential diagnostics, first-owner creation and repeat-run preservation, and never prints generated fixture secrets. It must never be run against a real production database.

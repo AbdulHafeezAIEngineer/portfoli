@@ -1,0 +1,33 @@
+{
+  "scope": "Local production, mobile simulated throttling, fresh consent banner, Lighthouse 13.5.0",
+  "scores": {
+    "performance": 95,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100,
+    "agentic-browsing": 100
+  },
+  "metrics": {
+    "first-contentful-paint": {
+      "value": 1361.335,
+      "display": "1.4 s"
+    },
+    "largest-contentful-paint": {
+      "value": 2942.0025,
+      "display": "2.9 s"
+    },
+    "total-blocking-time": {
+      "value": 30.5,
+      "display": "30 ms"
+    },
+    "cumulative-layout-shift": {
+      "value": 0,
+      "display": "0"
+    },
+    "speed-index": {
+      "value": 1554.210417751738,
+      "display": "1.6 s"
+    }
+  },
+  "productionVerified": false
+}

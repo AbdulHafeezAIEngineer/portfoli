@@ -1710,39 +1710,71 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .emblem-object,
-  .emblem-shine,
-  .emblem-ring,
-  .workflow-art-core,
-  .footer-art > span {
+  html:not([data-motion="full"]) .emblem-object,
+  html:not([data-motion="full"]) .emblem-shine,
+  html:not([data-motion="full"]) .emblem-ring,
+  html:not([data-motion="full"]) .workflow-art-core,
+  html:not([data-motion="full"]) .footer-art > span {
     animation: none;
   }
-  .emblem-shine {
+  html:not([data-motion="full"]) .emblem-shine {
     display: none;
   }
-  .footer-art > span {
+  html:not([data-motion="full"]) .footer-art > span {
     background-position: 45% 50%;
   }
-  .bunch-piece,
-  .studio-service,
-  .service-orbit,
-  .journey-chapter > svg,
-  .tool-tile,
-  .love-progress span {
+  html:not([data-motion="full"]) .bunch-piece,
+  html:not([data-motion="full"]) .studio-service,
+  html:not([data-motion="full"]) .service-orbit,
+  html:not([data-motion="full"]) .journey-chapter > svg,
+  html:not([data-motion="full"]) .tool-tile,
+  html:not([data-motion="full"]) .love-progress span {
     transition: none;
   }
-  .bunch-piece:nth-child(n),
-  .bunch-piece:hover,
-  .bunch-piece:focus-visible,
-  .tool-tile:nth-child(n),
-  .tool-tile:hover {
+  html:not([data-motion="full"]) .bunch-piece:nth-child(n),
+  html:not([data-motion="full"]) .bunch-piece:hover,
+  html:not([data-motion="full"]) .bunch-piece:focus-visible,
+  html:not([data-motion="full"]) .tool-tile:nth-child(n),
+  html:not([data-motion="full"]) .tool-tile:hover {
     transform: none;
   }
-  .studio-service:hover,
-  .journey-chapter:hover > svg {
+  html:not([data-motion="full"]) .studio-service:hover,
+  html:not([data-motion="full"]) .journey-chapter:hover > svg {
     transform: none;
   }
 }
+html[data-motion="reduced"] .studio-service:hover,
+  html[data-motion="reduced"] .journey-chapter:hover > svg {
+    transform: none;
+  }
+html[data-motion="reduced"] .bunch-piece:nth-child(n),
+  html[data-motion="reduced"] .bunch-piece:hover,
+  html[data-motion="reduced"] .bunch-piece:focus-visible,
+  html[data-motion="reduced"] .tool-tile:nth-child(n),
+  html[data-motion="reduced"] .tool-tile:hover {
+    transform: none;
+  }
+html[data-motion="reduced"] .bunch-piece,
+  html[data-motion="reduced"] .studio-service,
+  html[data-motion="reduced"] .service-orbit,
+  html[data-motion="reduced"] .journey-chapter > svg,
+  html[data-motion="reduced"] .tool-tile,
+  html[data-motion="reduced"] .love-progress span {
+    transition: none;
+  }
+html[data-motion="reduced"] .footer-art > span {
+    background-position: 45% 50%;
+  }
+html[data-motion="reduced"] .emblem-shine {
+    display: none;
+  }
+html[data-motion="reduced"] .emblem-object,
+  html[data-motion="reduced"] .emblem-shine,
+  html[data-motion="reduced"] .emblem-ring,
+  html[data-motion="reduced"] .workflow-art-core,
+  html[data-motion="reduced"] .footer-art > span {
+    animation: none;
+  }
 
 .contact-privacy a {
   color: var(--text);

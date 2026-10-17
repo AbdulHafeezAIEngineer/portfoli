@@ -10,18 +10,18 @@ The admin dashboard and database-backed authentication are implemented. The depl
 
 Open the **elvora-studio** Vercel project → **Settings → Environment Variables**. Use the **Production** environment. Never put secrets in NEXT_PUBLIC variables, source code, screenshots or chat.
 
-| Variable | Set privately in Vercel |
-| --- | --- |
-| `DATABASE_URL` | Application connection URL from your PostgreSQL provider |
-| `DIRECT_URL` | Direct migration connection URL from the same provider |
-| `NEXTAUTH_SECRET` | Securely generated random secret, at least 32 characters; keep it stable |
-| `NEXTAUTH_URL` | `https://www.elvoraai.online` |
-| `NEXT_PUBLIC_SITE_URL` | `https://www.elvoraai.online` |
-| `AUTH_REDIS_REST_URL` | Shared Redis REST endpoint for login rate protection |
-| `AUTH_REDIS_REST_TOKEN` | Matching private Redis REST token |
-| `ADMIN_EMAIL` | `abdulhafeez@elvoraai.online` |
-| `ADMIN_PASSWORD` | Your new strong admin password: 14+ characters with upper/lowercase, number and symbol; maximum 72 UTF-8 bytes |
-| `ADMIN_BOOTSTRAP_ON_BUILD` | `true` for the first production deployment |
+| Variable                   | Set privately in Vercel                                                                                        |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`             | Application connection URL from your PostgreSQL provider                                                       |
+| `DIRECT_URL`               | Direct migration connection URL from the same provider                                                         |
+| `NEXTAUTH_SECRET`          | Securely generated random secret, at least 32 characters; keep it stable                                       |
+| `NEXTAUTH_URL`             | `https://www.elvoraai.online`                                                                                  |
+| `NEXT_PUBLIC_SITE_URL`     | `https://www.elvoraai.online`                                                                                  |
+| `AUTH_REDIS_REST_URL`      | Shared Redis REST endpoint for login rate protection                                                           |
+| `AUTH_REDIS_REST_TOKEN`    | Matching private Redis REST token                                                                              |
+| `ADMIN_EMAIL`              | `abdulhafeez@elvoraai.online`                                                                                  |
+| `ADMIN_PASSWORD`           | Your new strong admin password: 14+ characters with upper/lowercase, number and symbol; maximum 72 UTF-8 bytes |
+| `ADMIN_BOOTSTRAP_ON_BUILD` | `true` for the first production deployment                                                                     |
 
 Vercel's connected storage integrations can provision the required PostgreSQL and Redis accounts; map their actual connection variables to the names above. Use verified provider URLs and TLS. Do not replace missing values with examples. A serverless Vercel deployment requires shared login protection; do not use an in-memory override to bypass this requirement.
 
@@ -32,6 +32,12 @@ After a successful first deployment, remove `ADMIN_PASSWORD`, set `ADMIN_BOOTSTR
 If an account already exists, the setup operation preserves it. It will not turn a newly entered environment password into a password reset. Existing-account recovery is the deliberate private `npm run admin:reset` procedure in `DEPLOYMENT.md`; no public reset endpoint exists.
 
 ## Login feedback
+
+### Build stops after migrations with a credential requirement
+
+The supplied production log reached `Reviewed database migrations applied.` and then rejected the first-owner email/password. This is not an npm-install failure. Verify `ADMIN_EMAIL` privately and replace the manually added `ADMIN_PASSWORD` Secret in Vercel Production with a password satisfying all rules above. Do not use the Neon database password. Redeploy the latest main commit after saving; the updated script reports only the specific missing requirements, never the password. An existing owner is always preserved.
+
+The `.env.local not found` notice is expected on Vercel when settings are supplied through environment variables. PostgreSQL's SSL-mode compatibility warning is not the credential error; do not disable TLS verification to suppress it.
 
 - Incomplete private configuration shows **Owner sign-in needs setup** and a Check again button, rather than submitting into a redirect loop.
 - Wrong credentials show a clear inline error and preserve entered details.
