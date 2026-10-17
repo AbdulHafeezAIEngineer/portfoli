@@ -1,8 +1,12 @@
+import { FaqSection } from "@/components/faq-section";
 import { Footer } from "@/components/footer";
 import { Hero } from "@/components/hero";
 import { Navbar } from "@/components/navbar";
 import { Work } from "@/components/work";
 import {
+  getServices,
+  getFaqs,
+  getTestimonials,
   getProjects,
   getBots,
   getSkills,
@@ -27,12 +31,24 @@ import { WallOfLove } from "@/components/wall-of-love";
 
 export const dynamic = "force-dynamic";
 export default async function Home() {
-  const [projects, skills, certificates, bots, identity] = await Promise.all([
+  const [
+    projects,
+    skills,
+    certificates,
+    bots,
+    identity,
+    services,
+    faqs,
+    reviews,
+  ] = await Promise.all([
     getProjects(),
     getSkills(),
     getCertificates(),
     getBots(),
     getIdentity(),
+    getServices(),
+    getFaqs(),
+    getTestimonials(),
   ]);
   return (
     <div id="top">
@@ -44,7 +60,7 @@ export default async function Home() {
       <Navbar identity={identity} />
       <main id="main-content">
         <Hero />
-        <Services />
+        <Services services={services} />
         <Work projects={projects} bots={bots} />
         <WorkBunch projects={projects} />
         <Experience />
@@ -53,7 +69,8 @@ export default async function Home() {
         <Workflow />
         <Journey />
         <Certifications certificates={certificates} />
-        <WallOfLove />
+        <WallOfLove testimonials={reviews} />
+        <FaqSection faqs={faqs} />
         <Contact email={identity.email} />
       </main>
       <Footer brand={identity.brand} email={identity.email} />

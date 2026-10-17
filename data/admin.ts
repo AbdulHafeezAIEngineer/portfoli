@@ -63,6 +63,16 @@ export const adminContent = {
   originWarning:
     "Set the actual public site origin and private database/auth settings before using production admin.",
   fields: {
+    question: "Question",
+    answer: "Answer",
+    detail: "Scope note",
+    scope: "Deliverables (one per line)",
+    requirements: "Requirements (one per line)",
+    role: "Role / organization",
+    quote: "Genuine feedback",
+    portrait: "Approved portrait URL (optional)",
+    permissionConfirmed:
+      "Permission to publish this genuine feedback and portrait confirmed",
     id: "ID / slug",
     title: "Title",
     subtitle: "Short subtitle",
@@ -97,6 +107,9 @@ export const adminContent = {
   },
   resources: [
     { id: "projects", label: "Projects" },
+    { id: "services", label: "Services" },
+    { id: "faqs", label: "FAQs" },
+    { id: "testimonials", label: "Approved reviews" },
     { id: "bots", label: "Bots" },
     { id: "skills", label: "Skills" },
     { id: "certificates", label: "Certificates" },
@@ -108,7 +121,10 @@ export const adminContent = {
 } as const;
 export const adminFields: Record<
   string,
-  { key: string; type: "text" | "long" | "json" | "boolean" | "number" }[]
+  {
+    key: string;
+    type: "text" | "long" | "json" | "boolean" | "number" | "lines";
+  }[]
 > = {
   projects: [
     { key: "id", type: "text" },
@@ -211,4 +227,50 @@ export const adminDefaults: Record<string, Record<string, unknown>> = {
     description: "",
     chatLogging: false,
   },
+};
+
+adminFields.services = [
+  { key: "id", type: "text" },
+  { key: "title", type: "text" },
+  { key: "description", type: "long" },
+  { key: "detail", type: "long" },
+  { key: "tags", type: "lines" },
+  { key: "scope", type: "lines" },
+  { key: "requirements", type: "lines" },
+  { key: "published", type: "boolean" },
+];
+adminFields.faqs = [
+  { key: "id", type: "text" },
+  { key: "question", type: "text" },
+  { key: "answer", type: "long" },
+  { key: "published", type: "boolean" },
+];
+adminFields.testimonials = [
+  { key: "id", type: "text" },
+  { key: "name", type: "text" },
+  { key: "role", type: "text" },
+  { key: "quote", type: "long" },
+  { key: "portrait", type: "text" },
+  { key: "permissionConfirmed", type: "boolean" },
+  { key: "published", type: "boolean" },
+];
+adminDefaults.services = {
+  id: "",
+  title: "",
+  description: "",
+  detail: "",
+  tags: [],
+  scope: [],
+  requirements: [],
+  published: false,
+};
+adminDefaults.faqs = { id: "", question: "", answer: "", published: false };
+adminDefaults.testimonials = {
+  id: "",
+  name: "",
+  role: "",
+  quote: "",
+  portrait: "",
+  permissionConfirmed: false,
+  published: false,
 };

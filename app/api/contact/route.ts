@@ -43,23 +43,52 @@ export async function POST(request: Request) {
     // Quietly discard honeypot submissions without sending mail or revealing the trap.
     if (parsed.data.website)
       return NextResponse.json({ ok: true }, { status: 202, headers });
-    const password = gmailPassword();
+    const store =
+      process.env.CONTENT_SOURCE === "database" ||
+      process.env.CONTACT_STORAGE === "database";
+    if (!store) gmailPassword();
     await reserveContact(request);
     release = acquireContactSlot();
     await verifyTurnstile(parsed.data.turnstileToken);
-    const records =
-      process.env.CONTENT_SOURCE === "database"
-        ? await import("@/lib/records")
-        : null;
-    const id = records ? await records.recordContact(parsed.data) : null;
+    const records = store ? await import("@/lib/records") : null;
+    let id: string | null = null;
+    try {
+      id = records ? await records.recordContact(parsed.data) : null;
+    } catch {
+      throw new ChatError(503, copy.errors.unavailable);
+    }
+    let notification: "accepted" | "failed" | "not-configured" =
+      "not-configured";
+    if (!process.env.GMAIL_APP_PASSWORD?.trim() && records) {
+      try {
+        await records.markDelivery(id, notification);
+      } catch {
+        console.error("contact.delivery-status-write-failed");
+      }
+      return NextResponse.json(
+        { ok: true, acceptance: "stored", notification },
+        { status: 202, headers },
+      );
+    }
+    const password = gmailPassword();
     try {
       await deliverContact(parsed.data, password);
+      notification = "accepted";
     } catch (error) {
-      if (records) await records.markDelivery(id, "failed");
-      throw error;
+      if (!records) throw error;
+      notification = "failed";
     }
-    if (records) await records.markDelivery(id, "accepted");
-    return NextResponse.json({ ok: true }, { status: 202, headers });
+    if (records) {
+      try {
+        await records.markDelivery(id, notification);
+      } catch {
+        console.error("contact.delivery-status-write-failed");
+      }
+    }
+    return NextResponse.json(
+      { ok: true, acceptance: records ? "stored" : "email", notification },
+      { status: 202, headers },
+    );
   } catch (error) {
     const known = error instanceof ChatError;
     const retryAfter: Record<string, string> =

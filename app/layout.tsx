@@ -1,3 +1,4 @@
+import { consentVisibilityScript } from "@/lib/consent";
 import { headers } from "next/headers";
 import { getIdentity } from "@/lib/content-loader";
 import type { Metadata, Viewport } from "next";
@@ -12,6 +13,7 @@ import "./premium.css";
 import "./studio.css";
 import "./reference.css";
 import "./editorial.css";
+import "./agency.css";
 import { ConsentProvider } from "@/components/consent-provider";
 
 const inter = localFont({
@@ -53,6 +55,11 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(site.url),
     title: identity.title,
     description: identity.description,
+    robots:
+      process.env.VERCEL_ENV === "preview" ||
+      process.env.CONTEXT === "deploy-preview"
+        ? { index: false, follow: false }
+        : undefined,
     authors: [{ name: site.name }],
     alternates: { canonical: "/" },
     openGraph: {
@@ -86,11 +93,12 @@ export const viewport: Viewport = {
   ],
 };
 
-const themeScript = `(function(){var t='dark';try{var s=localStorage.getItem('portfolio-theme');if(s==='light'||s==='dark')t=s;}catch(e){}document.documentElement.dataset.theme=t;})();`;
+const themeScript = `(function(){var t='dark';try{var s=localStorage.getItem('portfolio-theme');if(s==='light'||s==='dark')t=s;}catch(e){}document.documentElement.dataset.theme=t;if(window.IntersectionObserver&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.dataset.motionReveals='enabled';})();`;
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const nonce = (await headers()).get("x-nonce") || undefined;
   return (
     <html
       lang="en"
@@ -100,8 +108,28 @@ export default function RootLayout({
     >
       <head>
         <script
-          nonce={headers().get("x-nonce") || undefined}
-          dangerouslySetInnerHTML={{ __html: themeScript }}
+          nonce={nonce}
+          dangerouslySetInnerHTML={{
+            __html: themeScript + consentVisibilityScript(),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          nonce={nonce}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: site.name,
+              url: site.url,
+              jobTitle: site.role,
+              email: site.email,
+              sameAs: [
+                "https://github.com/AbdulHafeezAIEngineer",
+                "https://www.instagram.com/elvoraaistudio",
+              ],
+            }).replace(/</g, "\\u003c"),
+          }}
         />
       </head>
       <body>
@@ -109,7 +137,7 @@ export default function RootLayout({
           {site.ui.skip}
         </a>
         <noscript>
-          <style>{`.motion-reveal,.motion-word{opacity:1!important;transform:none!important;filter:none!important}`}</style>
+          <style>{`.consent-banner{display:none!important}.motion-reveal,.motion-word{opacity:1!important;transform:none!important;filter:none!important}`}</style>
         </noscript>
         <MotionProvider>
           <ConsentProvider>{children}</ConsentProvider>

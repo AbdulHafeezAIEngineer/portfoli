@@ -1,0 +1,58 @@
+{
+  "source": "Local production build, explicit file content mode, fresh mobile-emulated Lighthouse run; no simultaneous captures/tests. Not a live deployment guarantee.",
+  "date": "17 October 2026",
+  "fetchTime": "2026-10-17T08:25:46.463Z",
+  "lighthouseVersion": "13.5.0",
+  "scores": {
+    "performance": 92,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+  },
+  "metrics": {
+    "first-contentful-paint": {
+      "value": 1211.353,
+      "display": "1.2 s"
+    },
+    "largest-contentful-paint": {
+      "value": 3265.3677500000003,
+      "display": "3.3 s"
+    },
+    "total-blocking-time": {
+      "value": 17.5,
+      "display": "20 ms"
+    },
+    "cumulative-layout-shift": {
+      "value": 0,
+      "display": "0"
+    },
+    "speed-index": {
+      "value": 1211.353,
+      "display": "1.2 s"
+    }
+  },
+  "settings": {
+    "formFactor": "mobile",
+    "throttlingMethod": "simulate",
+    "throttling": {
+      "rttMs": 150,
+      "throughputKbps": 1638.4,
+      "requestLatencyMs": 562.5,
+      "downloadThroughputKbps": 1474.5600000000002,
+      "uploadThroughputKbps": 675,
+      "cpuSlowdownMultiplier": 4
+    },
+    "screenEmulation": {
+      "mobile": true,
+      "width": 412,
+      "height": 823,
+      "deviceScaleFactor": 1.75,
+      "disabled": false
+    }
+  },
+  "limitations": [
+    "Public hosting, actual provider services and physical devices were not audited.",
+    "LCP is 3.3 seconds in this simulated mobile run; scores vary with host, CPU and network.",
+    "Dependency security is a separate audit in SECURITY_STATUS.md."
+  ]
+}

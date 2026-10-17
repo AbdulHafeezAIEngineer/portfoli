@@ -1,3 +1,27 @@
+## public/certificates/coursiv-master-of-chatgpt.webp
+
+Binary asset: 213792 bytes. SHA-256 `ced155f06969f60224707f010d9c191aec9529abbe427889120c74bfbc03626a`. Available in the repository and source ZIP.
+
+## public/certificates/prompt-engineering-placeholder.png
+
+Binary asset: 52367 bytes. SHA-256 `96a5113cf251de28f0c73edb1f2d09469ec69d119214364d6d34270d67f67e1d`. Available in the repository and source ZIP.
+
+## public/concepts/aster-hero.webp
+
+Binary asset: 347366 bytes. SHA-256 `6f877909b0a6cf21f71b82ec2e3ce6889b984ae6d6cfff9cb441193ce65b1dc0`. Available in the repository and source ZIP.
+
+## public/concepts/kovo-hero.webp
+
+Binary asset: 453464 bytes. SHA-256 `f07b9430ffc063a2a2fb0f93532023813591755f763acb4d97942b982c61d7fc`. Available in the repository and source ZIP.
+
+## public/concepts/solenne-hero.webp
+
+Binary asset: 299702 bytes. SHA-256 `6fc9738f6831ebe55d905e30644f0acce86b0592deb7697b4576d32473a53642`. Available in the repository and source ZIP.
+
+## public/concepts/vanta-hero.webp
+
+Binary asset: 163716 bytes. SHA-256 `2b3b950f71ca6e7a581d4b1f942bd0429e3ee165d5b0649ae449a209c47b17ed`. Available in the repository and source ZIP.
+
 ## public/elvora-logo.svg
 
 ``````xml
@@ -27,6 +51,22 @@
 </svg>
 ``````
 
+## public/projects/aster-1.webp
+
+Binary asset: 235952 bytes. SHA-256 `447459aabea60ae94ef02cbd171c95661fc64434bf76b6f9d50d1ddfd4098d3a`. Available in the repository and source ZIP.
+
+## public/projects/aster-2.webp
+
+Binary asset: 106390 bytes. SHA-256 `4227e1c54bc2d8ecc01b2a61258e1c8dbf05c9db55411ed2cf02a023ad315468`. Available in the repository and source ZIP.
+
+## public/projects/aster-3.webp
+
+Binary asset: 96896 bytes. SHA-256 `30d02c5f75afa31d0ec1a858a93b2090f2fabd4c8d4e0b82eff5b768126f7f35`. Available in the repository and source ZIP.
+
+## public/projects/aster-4.webp
+
+Binary asset: 293288 bytes. SHA-256 `5368cbd4cea43a83d6d488d624af3db537f2cb4806136ded9e1ae27cba48b6af`. Available in the repository and source ZIP.
+
 ## public/projects/aster-capture.json
 
 ``````json
@@ -44,6 +84,26 @@
   "method": "Chromium screenshots of actual local concept pages"
 }
 ``````
+
+## public/projects/elvora-promo.webp
+
+Binary asset: 224804 bytes. SHA-256 `0d2057b8f7a13076671f6ef08f39c183133de780ffd6d59f170213b067eacb72`. Available in the repository and source ZIP.
+
+## public/projects/kovo-1.webp
+
+Binary asset: 321498 bytes. SHA-256 `61d65093cd8a471639799ed9fa73ef226d5047ec2db4fa3fbc063ef491402844`. Available in the repository and source ZIP.
+
+## public/projects/kovo-2.webp
+
+Binary asset: 87428 bytes. SHA-256 `e85a71b86a43a3c2905d9ffd5c95509a5b7fb7b92f9b8a274d80dac210521957`. Available in the repository and source ZIP.
+
+## public/projects/kovo-3.webp
+
+Binary asset: 95934 bytes. SHA-256 `89508e4bd9316d1be34a8d0af45d0d87dd050925538f2d020351938b6182598d`. Available in the repository and source ZIP.
+
+## public/projects/kovo-4.webp
+
+Binary asset: 67930 bytes. SHA-256 `c7f7033023965bb3f4d53d2d867a9e20a8064b0f1d7361b095cd5703e4008c17`. Available in the repository and source ZIP.
 
 ## public/projects/kovo-capture.json
 
@@ -63,6 +123,22 @@
 }
 ``````
 
+## public/projects/real-estate-1.webp
+
+Binary asset: 88112 bytes. SHA-256 `e47f728a4d8d99af1385777dbe8a18a832e6dead7926d2eccff7e2193e549ffa`. Available in the repository and source ZIP.
+
+## public/projects/real-estate-2.webp
+
+Binary asset: 95110 bytes. SHA-256 `820bb76c183b7c728b7ee96bb2d02d29fafbbe37ceb9e1d5f403cad19efb238f`. Available in the repository and source ZIP.
+
+## public/projects/real-estate-3.webp
+
+Binary asset: 46548 bytes. SHA-256 `8d9fcae74bc58256db21f9270ef1410850e52a8197ed3aa86755c905021af409`. Available in the repository and source ZIP.
+
+## public/projects/real-estate-4.webp
+
+Binary asset: 57026 bytes. SHA-256 `7041eed01624b453d65678031f269f8225a5c6fc789f7993adaaa35f182335cc`. Available in the repository and source ZIP.
+
 ## public/projects/real-estate-capture.json
 
 ``````json
@@ -80,6 +156,22 @@
   "method": "Chromium screenshots of actual local concept pages"
 }
 ``````
+
+## public/projects/restaurant-1.webp
+
+Binary asset: 117528 bytes. SHA-256 `c5fd3f02007e5fcb8cb6c9d2db8b87d4f3292ceb75d35bf564f47fa392e81de5`. Available in the repository and source ZIP.
+
+## public/projects/restaurant-2.webp
+
+Binary asset: 123536 bytes. SHA-256 `b8fc5d7059ea882af574963b2539cc6a789cd2530e377e08e83fd0fab2ada38a`. Available in the repository and source ZIP.
+
+## public/projects/restaurant-3.webp
+
+Binary asset: 57034 bytes. SHA-256 `93852f1d53844e4f76ec3d34c2d88db128a039ef0bfdc8a98b1db34860fe903d`. Available in the repository and source ZIP.
+
+## public/projects/restaurant-4.webp
+
+Binary asset: 90038 bytes. SHA-256 `d8ad01e4d481722b4af528c964f20925b3086eaba490b42cccc421d47d570090`. Available in the repository and source ZIP.
 
 ## public/projects/restaurant-capture.json
 
@@ -99,6 +191,22 @@
 }
 ``````
 
+## public/projects/saas-1.webp
+
+Binary asset: 88456 bytes. SHA-256 `4ead076eeb02eb1d278326ecfe603b90f7e227b65f1bd4cc479f6b48811b6efe`. Available in the repository and source ZIP.
+
+## public/projects/saas-2.webp
+
+Binary asset: 57904 bytes. SHA-256 `a1b25462c5b7fa6b80db70f0d880178e761150468f77c2748ca67f868f1772e3`. Available in the repository and source ZIP.
+
+## public/projects/saas-3.webp
+
+Binary asset: 50820 bytes. SHA-256 `c5fa529710257784c7bd94e71534332d13ca0a793a0369f348e82b2619f44363`. Available in the repository and source ZIP.
+
+## public/projects/saas-4.webp
+
+Binary asset: 76460 bytes. SHA-256 `98d7b52574f797ef83d05f6503efd583ab5d45814b38ea021a998f7561fbbeab`. Available in the repository and source ZIP.
+
 ## public/projects/saas-capture.json
 
 ``````json
@@ -116,6 +224,22 @@
   "method": "Chromium screenshots of actual local concept pages"
 }
 ``````
+
+## public/projects/solenne-1.webp
+
+Binary asset: 311386 bytes. SHA-256 `c967249c9035aed4316920cf9ef8fe44f521a71acd83ab17d9dde9a6633eaf05`. Available in the repository and source ZIP.
+
+## public/projects/solenne-2.webp
+
+Binary asset: 73266 bytes. SHA-256 `86c8d5bc14522248b6b813fcf6b6f3b766b6461156aa274cfe46f4a102557e1f`. Available in the repository and source ZIP.
+
+## public/projects/solenne-3.webp
+
+Binary asset: 80346 bytes. SHA-256 `14e34047176aeae482f1b8b39741ce5fa35bd1ce877d3506cdb197504f7d52fd`. Available in the repository and source ZIP.
+
+## public/projects/solenne-4.webp
+
+Binary asset: 248062 bytes. SHA-256 `2099226e09be256b37350111ce716d44af96bcdb2d4bfaaeb025a8e2c53fa7a5`. Available in the repository and source ZIP.
 
 ## public/projects/solenne-capture.json
 
@@ -135,6 +259,22 @@
 }
 ``````
 
+## public/projects/store-1.webp
+
+Binary asset: 70600 bytes. SHA-256 `bd1b2547577c308922d40bb62615186ddd504ca7c864df8546c64353498a9460`. Available in the repository and source ZIP.
+
+## public/projects/store-2.webp
+
+Binary asset: 66942 bytes. SHA-256 `08ea173abe7f0f0cfe70044e4a9b81a065b26b63866cffcccffaafce83b29ecc`. Available in the repository and source ZIP.
+
+## public/projects/store-3.webp
+
+Binary asset: 36894 bytes. SHA-256 `09cce78f3a36dd275dd83da7eba3fe1ab4fef2983a03c0f639a57c0e5454fbd7`. Available in the repository and source ZIP.
+
+## public/projects/store-4.webp
+
+Binary asset: 49518 bytes. SHA-256 `f4545839a7e64b4816c534b7e51a744cf6698d1f0653691f36a870781e0b5215`. Available in the repository and source ZIP.
+
 ## public/projects/store-capture.json
 
 ``````json
@@ -153,6 +293,22 @@
 }
 ``````
 
+## public/projects/vanta-1.webp
+
+Binary asset: 180002 bytes. SHA-256 `d99512996f0a313ce14f7d274e5f3e56865ddacbabe9244c1bfc0e0fb0e8bfc5`. Available in the repository and source ZIP.
+
+## public/projects/vanta-2.webp
+
+Binary asset: 74376 bytes. SHA-256 `e337bbdac85f69188489c1391cc57ab13f0d3dcb37fdb2e8c007fb5cc0a40870`. Available in the repository and source ZIP.
+
+## public/projects/vanta-3.webp
+
+Binary asset: 59656 bytes. SHA-256 `4ecd47a4890bd8b7a2c260aded1e30b4c58daeeb82f763de27f1ed5adda9d20b`. Available in the repository and source ZIP.
+
+## public/projects/vanta-4.webp
+
+Binary asset: 172958 bytes. SHA-256 `381650964eb8163d90fb9469897ddd0de8e20953b7663cac3b5ab74da7f06a82`. Available in the repository and source ZIP.
+
 ## public/projects/vanta-capture.json
 
 ``````json
@@ -170,6 +326,10 @@
   "method": "Chromium screenshots of actual local concept pages"
 }
 ``````
+
+## public/studies/aura.webp
+
+Binary asset: 65846 bytes. SHA-256 `84e38391b7930041d5fa22b535fd64d095e5bb23bbc2d684b8feb127821d70f9`. Available in the repository and source ZIP.
 
 ## public/studies/capture.json
 
@@ -193,9 +353,29 @@
 }
 ``````
 
+## public/studies/elsewhere.webp
+
+Binary asset: 297080 bytes. SHA-256 `feb82e16c39386e6e2dee4ff9e9db18154cd1a35d9e859a7d396dce2d75f3155`. Available in the repository and source ZIP.
+
+## public/studies/form.webp
+
+Binary asset: 66070 bytes. SHA-256 `bc07aae4784fdae878e3e6f511bad1ac9b41c2da22ccfe871b898aaa192a8728`. Available in the repository and source ZIP.
+
+## public/studies/noma.webp
+
+Binary asset: 82876 bytes. SHA-256 `d9b556dada16212d64345055156dbc29ce72711797efff487ad5d178a7f224d4`. Available in the repository and source ZIP.
+
+## public/studies/offscript.webp
+
+Binary asset: 107188 bytes. SHA-256 `5c343ba3b4cb810669af5a0fc37201edf8cf1151e1e71a51c1440721e5e964c0`. Available in the repository and source ZIP.
+
+## public/studies/orbit.webp
+
+Binary asset: 79418 bytes. SHA-256 `d8d231ef5cc6eddc648e9c38d88801fffe174fcff88bd706197e146fd51d55e0`. Available in the repository and source ZIP.
+
 ## public/tool-marks/SOURCES.md
 
-``````markdown
+``````md
 Brand marks from Simple Icons 16.35.0 and the OpenAI mark from Simple Icons 14.15.0 (https://simpleicons.org), distributed under CC0. Individual marks may be subject to trademark rights. Product names identify tools in the toolkit; no affiliation is implied. Botpress uses a text identifier.
 ``````
 
@@ -276,4 +456,3 @@ Brand marks from Simple Icons 16.35.0 and the OpenAI mark from Simple Icons 14.1
 ``````xml
 <svg fill="currentColor" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>TypeScript</title><path d="M1.125 0C.502 0 0 .502 0 1.125v21.75C0 23.498.502 24 1.125 24h21.75c.623 0 1.125-.502 1.125-1.125V1.125C24 .502 23.498 0 22.875 0zm17.363 9.75c.612 0 1.154.037 1.627.111a6.38 6.38 0 0 1 1.306.34v2.458a3.95 3.95 0 0 0-.643-.361 5.093 5.093 0 0 0-.717-.26 5.453 5.453 0 0 0-1.426-.2c-.3 0-.573.028-.819.086a2.1 2.1 0 0 0-.623.242c-.17.104-.3.229-.393.374a.888.888 0 0 0-.14.49c0 .196.053.373.156.529.104.156.252.304.443.444s.423.276.696.41c.273.135.582.274.926.416.47.197.892.407 1.266.628.374.222.695.473.963.753.268.279.472.598.614.957.142.359.214.776.214 1.253 0 .657-.125 1.21-.373 1.656a3.033 3.033 0 0 1-1.012 1.085 4.38 4.38 0 0 1-1.487.596c-.566.12-1.163.18-1.79.18a9.916 9.916 0 0 1-1.84-.164 5.544 5.544 0 0 1-1.512-.493v-2.63a5.033 5.033 0 0 0 3.237 1.2c.333 0 .624-.03.872-.09.249-.06.456-.144.623-.25.166-.108.29-.234.373-.38a1.023 1.023 0 0 0-.074-1.089 2.12 2.12 0 0 0-.537-.5 5.597 5.597 0 0 0-.807-.444 27.72 27.72 0 0 0-1.007-.436c-.918-.383-1.602-.852-2.053-1.405-.45-.553-.676-1.222-.676-2.005 0-.614.123-1.141.369-1.582.246-.441.58-.804 1.004-1.089a4.494 4.494 0 0 1 1.47-.629 7.536 7.536 0 0 1 1.77-.201zm-15.113.188h9.563v2.166H9.506v9.646H6.789v-9.646H3.375z"/></svg>
 ``````
-

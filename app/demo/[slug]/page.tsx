@@ -8,22 +8,31 @@ import "../demo.css";
 import "../concepts.css";
 export const dynamic = "force-dynamic";
 export function generateStaticParams() {
-  return [...Object.keys(concepts), ...Object.keys(demos)].map((slug) => ({ slug }));
+  return [...Object.keys(concepts), ...Object.keys(demos)].map((slug) => ({
+    slug,
+  }));
 }
-export function generateMetadata({
+export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
-}): Metadata {
-  const demo = concepts[params.slug as ConceptSlug] || demos[params.slug as DemoSlug];
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const demo =
+    concepts[(await params).slug as ConceptSlug] ||
+    demos[(await params).slug as DemoSlug];
   return {
     title: demo ? `${demo.name} — Elvora concept` : "Concept not found",
     description: demo?.intro,
-    alternates: { canonical: `/demo/${params.slug}` },
+    alternates: { canonical: `/demo/${(await params).slug}` },
   };
 }
-export default function DemoPage({ params }: { params: { slug: string } }) {
-  if (Object.hasOwn(concepts, params.slug)) return <ConceptSite slug={params.slug as ConceptSlug} />;
-  if (!Object.hasOwn(demos, params.slug)) notFound();
-  return <DemoSite slug={params.slug as DemoSlug} />;
+export default async function DemoPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  if (Object.hasOwn(concepts, (await params).slug))
+    return <ConceptSite slug={(await params).slug as ConceptSlug} />;
+  if (!Object.hasOwn(demos, (await params).slug)) notFound();
+  return <DemoSite slug={(await params).slug as DemoSlug} />;
 }

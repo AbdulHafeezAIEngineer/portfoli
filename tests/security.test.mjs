@@ -111,7 +111,12 @@ test("admin content schemas reject unsafe image URLs, config mismatch and protot
   const projectLink = schemas.projects.shape.demoUrl;
   assert.equal(projectLink.safeParse("https://elvora.pplx.app").success, true);
   assert.equal(projectLink.safeParse("/demo/restaurant").success, true);
-  for (const link of ["javascript:alert(1)", "http://example.com", "https://user:password@example.com", "not-a-url"])
+  for (const link of [
+    "javascript:alert(1)",
+    "http://example.com",
+    "https://user:password@example.com",
+    "not-a-url",
+  ])
     assert.equal(projectLink.safeParse(link).success, false);
   for (const value of [
     "javascript:alert(1)",
@@ -214,5 +219,38 @@ test("uploads decode and re-encode real images while rejecting SVG, malformed an
         new File([small], "small.png", { type: "image/png" }),
       ),
     (error) => error.status === 422,
+  );
+});
+
+test("only permission-approved genuine review records can be published", () => {
+  const { schemas } = fixture().load("lib/admin/schemas.ts");
+  const review = {
+    id: "review-fixture",
+    name: "Test fixture",
+    role: "Test only",
+    quote: "A schema test, not customer feedback.",
+    portrait: "",
+    permissionConfirmed: false,
+    published: false,
+  };
+  assert.equal(schemas.testimonials.safeParse(review).success, true);
+  assert.equal(
+    schemas.testimonials.safeParse({ ...review, published: true }).success,
+    false,
+  );
+  assert.equal(
+    schemas.testimonials.safeParse({
+      ...review,
+      published: true,
+      permissionConfirmed: true,
+    }).success,
+    true,
+  );
+  assert.equal(
+    schemas.testimonials.safeParse({
+      ...review,
+      portrait: "https://unapproved.example/portrait.jpg",
+    }).success,
+    false,
   );
 });

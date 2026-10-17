@@ -1,21 +1,9 @@
-const deploymentDomain =
-  process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
-const netlifyUrl =
-  process.env.NETLIFY === "true"
-    ? process.env.URL || process.env.DEPLOY_PRIME_URL
-    : undefined;
-
 export const site = {
   brand: "Elvora",
   logo: { src: "/elvora-logo.svg" },
   name: "Abdul Hafeez",
   role: "AI Chatbot & Web Developer",
-  url:
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    netlifyUrl ||
-    (deploymentDomain
-      ? `https://${deploymentDomain}`
-      : "http://localhost:3000"),
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.elvoraai.online",
   email: "abdulhafeez@elvoraai.online",
   title: "Elvora — Thoughtful websites. Intelligent experiences.",
   description:

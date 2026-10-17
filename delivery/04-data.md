@@ -1,6 +1,6 @@
 ## data/admin.ts
 
-``````typescript
+``````ts
 export const adminContent = {
   title: "Elvora Studio",
   subtitle: "Portfolio management",
@@ -66,6 +66,16 @@ export const adminContent = {
   originWarning:
     "Set the actual public site origin and private database/auth settings before using production admin.",
   fields: {
+    question: "Question",
+    answer: "Answer",
+    detail: "Scope note",
+    scope: "Deliverables (one per line)",
+    requirements: "Requirements (one per line)",
+    role: "Role / organization",
+    quote: "Genuine feedback",
+    portrait: "Approved portrait URL (optional)",
+    permissionConfirmed:
+      "Permission to publish this genuine feedback and portrait confirmed",
     id: "ID / slug",
     title: "Title",
     subtitle: "Short subtitle",
@@ -100,6 +110,9 @@ export const adminContent = {
   },
   resources: [
     { id: "projects", label: "Projects" },
+    { id: "services", label: "Services" },
+    { id: "faqs", label: "FAQs" },
+    { id: "testimonials", label: "Approved reviews" },
     { id: "bots", label: "Bots" },
     { id: "skills", label: "Skills" },
     { id: "certificates", label: "Certificates" },
@@ -111,7 +124,10 @@ export const adminContent = {
 } as const;
 export const adminFields: Record<
   string,
-  { key: string; type: "text" | "long" | "json" | "boolean" | "number" }[]
+  {
+    key: string;
+    type: "text" | "long" | "json" | "boolean" | "number" | "lines";
+  }[]
 > = {
   projects: [
     { key: "id", type: "text" },
@@ -215,11 +231,169 @@ export const adminDefaults: Record<string, Record<string, unknown>> = {
     chatLogging: false,
   },
 };
+
+adminFields.services = [
+  { key: "id", type: "text" },
+  { key: "title", type: "text" },
+  { key: "description", type: "long" },
+  { key: "detail", type: "long" },
+  { key: "tags", type: "lines" },
+  { key: "scope", type: "lines" },
+  { key: "requirements", type: "lines" },
+  { key: "published", type: "boolean" },
+];
+adminFields.faqs = [
+  { key: "id", type: "text" },
+  { key: "question", type: "text" },
+  { key: "answer", type: "long" },
+  { key: "published", type: "boolean" },
+];
+adminFields.testimonials = [
+  { key: "id", type: "text" },
+  { key: "name", type: "text" },
+  { key: "role", type: "text" },
+  { key: "quote", type: "long" },
+  { key: "portrait", type: "text" },
+  { key: "permissionConfirmed", type: "boolean" },
+  { key: "published", type: "boolean" },
+];
+adminDefaults.services = {
+  id: "",
+  title: "",
+  description: "",
+  detail: "",
+  tags: [],
+  scope: [],
+  requirements: [],
+  published: false,
+};
+adminDefaults.faqs = { id: "", question: "", answer: "", published: false };
+adminDefaults.testimonials = {
+  id: "",
+  name: "",
+  role: "",
+  quote: "",
+  portrait: "",
+  permissionConfirmed: false,
+  published: false,
+};
+``````
+
+## data/agency.ts
+
+``````ts
+import { studio } from "./studio";
+export type Service = {
+  id: string;
+  title: string;
+  description: string;
+  detail: string;
+  tags: string[];
+  scope: string[];
+  requirements: string[];
+};
+const scopes = [
+  [
+    "Responsive page design and implementation",
+    "Accessible navigation, forms and interaction states",
+    "Deployment and domain connection",
+  ],
+  [
+    "An approved business knowledge base and FAQ flow",
+    "Website embed with consent and fallback states",
+    "Response testing and a clear handoff to your team",
+  ],
+  [
+    "A defined trigger, validated inputs and an API or webhook connection",
+    "Failure handling and human review where needed",
+    "Setup notes for the connected services",
+  ],
+  [
+    "Titles, descriptions and crawlable page structure",
+    "Responsive layout and image performance review",
+    "A documented review of the changes and remaining issues",
+  ],
+];
+const requirements = [
+  [
+    "Your business goals and desired pages",
+    "Approved copy, brand assets and product information",
+    "Hosting and domain access when launching",
+  ],
+  [
+    "Accurate business information you have permission to use",
+    "Example questions and escalation rules",
+    "A suitable AI provider account and agreed usage budget",
+  ],
+  [
+    "The specific repetitive task and desired result",
+    "API access to the services involved",
+    "Rules for approval, personal data and failures",
+  ],
+  [
+    "Access to the existing website",
+    "The pages and customer journeys to prioritize",
+    "Any available performance or search reports",
+  ],
+];
+export const services: Service[] = studio.services.items.map((item, i) => ({
+  ...item,
+  tags: [...item.tags],
+  scope: scopes[i],
+  requirements: requirements[i],
+}));
+export type Faq = { id: string; question: string; answer: string };
+export const faqs: Faq[] = [
+  {
+    id: "start",
+    question: "What do you need to start a project?",
+    answer:
+      "A short explanation of your business, the problem you want to solve and the pages or features you need. Existing brand assets, copy and examples help define the scope. We agree on deliverables before development starts.",
+  },
+  {
+    id: "timeline",
+    question: "How long does a website take?",
+    answer:
+      "Timing depends on the number of pages, content readiness and integrations. After reviewing your requirements, I can propose milestones and a realistic delivery schedule.",
+  },
+  {
+    id: "ai",
+    question: "Can a chatbot use my business information?",
+    answer:
+      "Yes. A chatbot can use approved business information, services and FAQs. We define what it should answer, test its responses and provide a fallback for questions it cannot safely resolve. AI responses still need appropriate review.",
+  },
+  {
+    id: "providers",
+    question: "Are hosting and AI usage included?",
+    answer:
+      "Provider costs depend on the chosen hosting, domain, email and AI services. These are discussed separately so you know which accounts and ongoing charges you control.",
+  },
+  {
+    id: "existing",
+    question: "Can you improve my existing website?",
+    answer:
+      "Yes. I can review its mobile experience, accessibility, performance and structure, then propose specific improvements. The scope depends on the existing code and platform.",
+  },
+  {
+    id: "handover",
+    question: "What happens after launch?",
+    answer:
+      "You receive a handover of the agreed work and setup notes. Ongoing updates, monitoring and chatbot content changes can be arranged as a separate scope.",
+  },
+];
+export type Testimonial = {
+  id: string;
+  name: string;
+  role: string;
+  quote: string;
+  portrait: string;
+  placeholder?: boolean;
+};
 ``````
 
 ## data/bots.ts
 
-``````typescript
+``````ts
 export type EmbedMethod = "iframe" | "script" | "api";
 export type DemoBotId = "support" | "booking" | "voice";
 export type BotId = string;
@@ -525,7 +699,7 @@ export const additionalBots: {
 
 ## data/certificates.ts
 
-``````typescript
+``````ts
 export type Certificate = {
   id: string;
   title: string;
@@ -573,7 +747,7 @@ export const certificateContent = {
 
 ## data/concept-images.ts
 
-``````typescript
+``````ts
 export const conceptImagePrompts = [
   {
     "slug": "solenne",
@@ -600,7 +774,7 @@ export const conceptImagePrompts = [
 
 ## data/concepts.ts
 
-``````typescript
+``````ts
 export const concepts = {
   solenne: {
     name: "Solenne",
@@ -788,7 +962,7 @@ export const conceptUI = {
 
 ## data/contact.ts
 
-``````typescript
+``````ts
 export const contactContent = {
   eyebrow: "06 / START A CONVERSATION",
   title: "Let's talk.",
@@ -812,7 +986,7 @@ export const contactContent = {
   sending: "Sending…",
   characters: "characters",
   privacy:
-    "Your name, email, and message are kept in a private inbox to respond to your enquiry. Please avoid confidential information.",
+    "Your contact details and project message are used to respond to your enquiry. See the Privacy Policy for storage and providers. Please avoid confidential information.",
   privacyLink: "Privacy Policy",
   success:
     "Your message was accepted by the mail server for delivery. Thank you for reaching out.",
@@ -847,7 +1021,7 @@ export const contactPolicy = {
 
 ## data/demos.ts
 
-``````typescript
+``````ts
 export const demos = {
   restaurant: {
     name: "Savor & Sage",
@@ -1058,7 +1232,7 @@ export const demoUI = {
 
 ## data/experience.ts
 
-``````typescript
+``````ts
 export const experience = {
   eyebrow: "ABOUT ABDUL HAFEEZ",
   title: "An independent developer.\nA thoughtful approach to AI.",
@@ -1146,7 +1320,7 @@ export const experience = {
 
 ## data/privacy.ts
 
-``````typescript
+``````ts
 export const consentContent = {
   version: 1,
   retentionDays: 180,
@@ -1203,7 +1377,7 @@ export const legal = {
         },
         {
           title: "Contact enquiries",
-          text: "If you submit the form, your name, email and message are processed to respond to your enquiry and limit abuse. Messages are delivered through the configured email service; a private inbox may also store them if database features are enabled. Cloudflare Turnstile may process technical information for form security when configured. Do not send passwords, payment details, medical information or other sensitive content.",
+          text: "If you submit the form, your name, email, optional company/service details and message are processed to respond to your enquiry and limit abuse. When inquiry storage is enabled, the message is saved in a private inbox. Email notifications are sent only when the mail service is configured and accepts them. Cloudflare Turnstile may process technical information for form security when configured. Do not send passwords, payment details, medical information or other sensitive content.",
         },
         {
           title: "AI demos, voice and embedded chat",
@@ -1291,7 +1465,7 @@ export const legal = {
 
 ## data/project-presentation.ts
 
-``````typescript
+``````ts
 type ProjectPresentation = {
   label: string;
   artwork: boolean;
@@ -1320,7 +1494,7 @@ export function projectPresentation(id: string): ProjectPresentation {
 
 ## data/projects.ts
 
-``````typescript
+``````ts
 import { concepts, type ConceptSlug } from "./concepts";
 export type Screenshot = { src: string; title: string; alt: string };
 export type Project = {
@@ -1337,35 +1511,46 @@ export type Project = {
   screenshots: Screenshot[];
 };
 export type ProjectView = Omit<Project, "promoPrompt">;
-const views = ["Home page desktop", "Collection / inner page", "Mobile view", "Feature / design details"];
-export const projects: Project[] = (Object.keys(concepts) as ConceptSlug[]).map((id) => {
-  const concept = concepts[id];
-  return {
-    id,
-    title: concept.name,
-    subtitle: concept.subtitle,
-    industry: concept.industry,
-    description: concept.description,
-    stack: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
-    accent: concept.accent,
-    demoUrl: `/demo/${id}`,
-    highlights: [...concept.highlights],
-    promoPrompt: `A premium 3D promotional composition for the fictional ${concept.name} ${concept.industry} website: a laptop and phone showing the actual supplied page screenshots, dark studio, champagne rim lighting and refined materials. Concept project, no client-work claims.`,
-    screenshots: views.map((title, index) => ({
-      src: `/projects/${id}-${index + 1}.webp`,
-      title,
-      alt: `${concept.name}: actual browser capture of the ${title.toLowerCase()} from the fictional custom concept website`,
-    })),
-  };
-});
+const views = [
+  "Home page desktop",
+  "Collection / inner page",
+  "Mobile view",
+  "Feature / design details",
+];
+export const projects: Project[] = (Object.keys(concepts) as ConceptSlug[]).map(
+  (id) => {
+    const concept = concepts[id];
+    return {
+      id,
+      title: concept.name,
+      subtitle: concept.subtitle,
+      industry: concept.industry,
+      description: concept.description,
+      stack: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
+      accent: concept.accent,
+      demoUrl: `/demo/${id}`,
+      highlights: [...concept.highlights],
+      promoPrompt: `A premium 3D promotional composition for the fictional ${concept.name} ${concept.industry} website: a laptop and phone showing the actual supplied page screenshots, dark studio, champagne rim lighting and refined materials. Concept project, no client-work claims.`,
+      screenshots: views.map((title, index) => ({
+        src: `/projects/${id}-${index + 1}.webp`,
+        title,
+        alt: `${concept.name}: actual browser capture of the ${title.toLowerCase()} from the fictional custom concept website`,
+      })),
+    };
+  },
+);
 export function getFileProjects(): ProjectView[] {
-  return projects.map(({ promoPrompt: _prompt, ...project }) => project);
+  return projects.map((project) => {
+    const { promoPrompt, ...view } = project;
+    void promoPrompt;
+    return view;
+  });
 }
 ``````
 
 ## data/prompts/booking.ts
 
-``````typescript
+``````ts
 import "server-only";
 export const bookingPrompt = `You are Meetly Booking, an appointment-booking SIMULATION for fictional Meetly Studio.
 Offer only two sample services: a 30-minute website consultation or a 30-minute AI chatbot discovery call, both fictional and free in this demo.
@@ -1376,7 +1561,7 @@ After explicit confirmation say 'Demo booking complete — no real appointment h
 
 ## data/prompts/support.ts
 
-``````typescript
+``````ts
 import "server-only";
 export const supportPrompt = `You are Cedar Support, the demonstration assistant for Cedar & Co., a FICTIONAL homewares company.
 Answer only from these sample facts:
@@ -1391,7 +1576,7 @@ Explain when a question is outside these facts. Never invent a working support a
 
 ## data/prompts/voice.ts
 
-``````typescript
+``````ts
 import "server-only";
 export const voicePrompt = `You are Aura Voice, a friendly portfolio demonstration assistant for Abdul Hafeez, an AI chatbot and web developer.
 Explain custom-data chatbots, website integration, browser voice interaction, customer support use cases, and web development in plain English. Do not invent Abdul's work history, credentials, clients, prices, availability, guarantees, or completed projects. The portfolio's website projects are independent concepts.
@@ -1400,25 +1585,13 @@ Keep answers short and conversational, usually two to four sentences, suitable f
 
 ## data/site.ts
 
-``````typescript
-const deploymentDomain =
-  process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
-const netlifyUrl =
-  process.env.NETLIFY === "true"
-    ? process.env.URL || process.env.DEPLOY_PRIME_URL
-    : undefined;
-
+``````ts
 export const site = {
   brand: "Elvora",
   logo: { src: "/elvora-logo.svg" },
   name: "Abdul Hafeez",
   role: "AI Chatbot & Web Developer",
-  url:
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    netlifyUrl ||
-    (deploymentDomain
-      ? `https://${deploymentDomain}`
-      : "http://localhost:3000"),
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.elvoraai.online",
   email: "abdulhafeez@elvoraai.online",
   title: "Elvora — Thoughtful websites. Intelligent experiences.",
   description:
@@ -1511,7 +1684,7 @@ export const site = {
 
 ## data/skills.ts
 
-``````typescript
+``````ts
 export type Skill = { id: string; name: string; category: string };
 export const skills: Skill[] = [
   { id: "claude", name: "Claude", category: "AI tools" },
@@ -1571,7 +1744,7 @@ export const skillContent = {
 
 ## data/studies.ts
 
-``````typescript
+``````ts
 export type Study = {
   id: string;
   name: string;
@@ -1743,7 +1916,7 @@ export const studyContent = {
 
 ## data/studio.ts
 
-``````typescript
+``````ts
 export const studio = {
   services: {
     eyebrow: "WHAT I CAN HELP YOU BUILD",
@@ -2057,7 +2230,7 @@ export const testimonials: Testimonial[] = ["01", "02", "03"].map((id) => ({
 
 ## data/tool-marks.ts
 
-``````typescript
+``````ts
 export const toolMarks: Record<
   string,
   { icon?: string; text?: string; color: string }
@@ -2079,4 +2252,3 @@ export const toolMarks: Record<
   "Tailwind CSS": { icon: "tailwindcss", color: "#6cc5d4" },
 };
 ``````
-

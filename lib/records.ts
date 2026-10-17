@@ -4,15 +4,14 @@ import type { ContactFields } from "./contact/schema";
 export async function recordContact(
   fields: ContactFields,
 ): Promise<string | null> {
-  if (process.env.CONTENT_SOURCE !== "database") return null;
   const record = await db.contactMessage.create({
-    data: { name: fields.name, email: fields.email, message: fields.message },
+    data: { name: fields.name, email: fields.email, message: fields.message, company: fields.company || "", service: fields.service || "" },
   });
   return record.id;
 }
 export async function markDelivery(
   id: string | null,
-  status: "accepted" | "failed",
+  status: "accepted" | "failed" | "not-configured",
 ) {
   if (id)
     await db.contactMessage.update({

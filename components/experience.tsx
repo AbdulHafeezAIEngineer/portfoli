@@ -10,7 +10,6 @@ import { experience as copy } from "@/data/experience";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
 import { SocialLinks } from "./social-links";
-import Image from "next/image";
 import { site } from "@/data/site";
 const fundamentalsIcons = {
   frontend: Blocks,
@@ -29,18 +28,22 @@ export function Experience() {
       <div className="experience-intro">
         <Reveal>
           <figure className="about-portrait">
-            <div className="about-portrait-image">
-              <Image
-                src={site.hero.portrait}
-                alt={site.hero.portraitAlt}
-                fill
-                sizes="(max-width:700px) 85vw,480px"
-              />
-              {site.hero.portraitStatus && (
-                <span className="about-portrait-status">
-                  {site.hero.portraitStatus}
-                </span>
-              )}
+            <div
+              className="about-portrait-image about-brand-poster"
+              aria-label="Elvora: code, context, craft"
+            >
+              <span className="eyebrow">INDEPENDENT BY DESIGN</span>
+              <span className="poster-emblem" aria-hidden="true">
+                E<span>.</span>
+              </span>
+              <strong>
+                Code.
+                <br />
+                Context.
+                <br />
+                Craft.
+              </strong>
+              <span>WEB DEVELOPMENT + APPLIED AI</span>
             </div>
             <figcaption>
               <div>

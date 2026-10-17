@@ -1,33 +1,34 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient, Prisma } from "@prisma/client";
-import { hash } from "bcryptjs";
+import { services, faqs } from "../data/agency";
 import { projects } from "../data/projects";
 import { getFileBots, realBotConfig, additionalBots } from "../data/bots";
 import { skills } from "../data/skills";
 import { certificates } from "../data/certificates";
 import { site } from "../data/site";
-import { strongPassword } from "../lib/admin/password";
+
 async function main() {
+  if (
+    process.env.NODE_ENV === "production" ||
+    process.env.SEED_CONTENT !== "demo"
+  )
+    throw new Error("Demo seed requires SEED_CONTENT=demo outside production.");
   const db = new PrismaClient({
     adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }),
     log: [],
   });
   try {
-    const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
-    const password = process.env.ADMIN_PASSWORD;
-    if (
-      !email ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
-      !password ||
-      !strongPassword(password)
-    )
-      throw new Error(
-        "Set ADMIN_EMAIL and a strong ADMIN_PASSWORD (14+ characters, upper/lowercase, number, symbol; at most 72 UTF-8 bytes). No credentials are printed.",
-      );
-    const exists = await db.adminUser.findUnique({ where: { email } });
-    if (!exists)
-      await db.adminUser.create({
-        data: { email, passwordHash: await hash(password, 12) },
+    for (const [order, service] of services.entries())
+      await db.service.upsert({
+        where: { id: service.id },
+        update: {},
+        create: { ...service, order, published: true },
+      });
+    for (const [order, faq] of faqs.entries())
+      await db.faq.upsert({
+        where: { id: faq.id },
+        update: {},
+        create: { ...faq, order, published: true },
       });
     for (const [order, project] of projects.entries()) {
       const { screenshots, promoPrompt: _prompt, ...data } = project;
@@ -91,7 +92,7 @@ async function main() {
       },
     });
     console.log(
-      "Seed complete. Existing records and admin passwords were preserved.",
+      "Development content imported. Existing records were preserved; no administrator or reviews were created.",
     );
   } catch {
     console.error(

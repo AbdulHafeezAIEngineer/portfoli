@@ -1,7 +1,28 @@
+## app/admin/[[...path]]/loading.tsx
+
+``````tsx
+import { site } from "@/data/site";
+
+export default function Loading() {
+  return (
+    <main className="loading-page" role="status">
+      <span className="wordmark">
+        {site.brand}
+        <span>.</span>
+      </span>
+      <span className="loading-line" />
+      <p>{site.ui.loading}</p>
+    </main>
+  );
+}
+``````
+
 ## app/admin/[[...path]]/page.tsx
 
 ``````tsx
 import type { Metadata } from "next";
+import { requireAdmin } from "@/lib/admin/session";
+import { redirect } from "next/navigation";
 import { notFound } from "next/navigation";
 import { AdminApp } from "@/components/admin-app";
 import { adminContent } from "@/data/admin";
@@ -10,10 +31,14 @@ export const metadata: Metadata = {
   title: "Elvora Studio — Private administration",
   robots: { index: false, follow: false },
 };
-export default function AdminPage({ params }: { params: { path?: string[] } }) {
-  const section = params.path?.[0] || "dashboard";
+export default async function AdminPage({
+  params,
+}: {
+  params: Promise<{ path?: string[] }>;
+}) {
+  const section = (await params).path?.[0] || "dashboard";
   if (
-    (params.path?.length || 0) > 1 ||
+    ((await params).path?.length || 0) > 1 ||
     ![
       "dashboard",
       "login",
@@ -22,6 +47,13 @@ export default function AdminPage({ params }: { params: { path?: string[] } }) {
     ].includes(section)
   )
     notFound();
+  if (section !== "login") {
+    try {
+      await requireAdmin();
+    } catch {
+      redirect("/admin/login");
+    }
+  }
   return <AdminApp section={section} />;
 }
 ``````
@@ -412,15 +444,343 @@ export default function AdminPage({ params }: { params: { path?: string[] } }) {
 }
 ``````
 
+## app/agency.css
+
+``````css
+/* Finishing layer: shared proportions and restrained surfaces. */
+.ambient-background {
+  opacity: 0.24;
+}
+.studio-service,
+.workflow-step,
+.domain-card,
+.journey-editorial-entry {
+  border-radius: 16px;
+}
+.contact-form select {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.agency-faq {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: clamp(24px, 6vw, 90px);
+}
+.faq-list details {
+  border-top: 1px solid var(--line);
+}
+.faq-list details:last-child {
+  border-bottom: 1px solid var(--line);
+}
+.faq-list summary {
+  display: flex;
+  gap: 20px;
+  padding: 25px 0;
+  cursor: pointer;
+  font-weight: 500;
+}
+.faq-list summary span {
+  color: var(--gold);
+  font-size: 0.8rem;
+  padding-top: 3px;
+}
+.faq-list details p {
+  padding: 0 0 25px 40px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+.faq-list summary::after {
+  content: "+";
+  margin-left: auto;
+}
+.faq-list details[open] summary::after {
+  content: "−";
+}
+.about-brand-poster {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: clamp(26px, 4vw, 52px);
+  background: var(--surface);
+  isolation: isolate;
+}
+.about-brand-poster strong {
+  font-family: var(--font-space);
+  font-size: clamp(3rem, 6vw, 6rem);
+  line-height: 1.05;
+  letter-spacing: -0.06em;
+  color: var(--text);
+  position: relative;
+}
+.about-brand-poster > span:last-child {
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+.poster-emblem {
+  position: absolute;
+  right: 5%;
+  top: 12%;
+  font: bold 23rem/1 var(--font-space);
+  opacity: 0.07;
+  transform: rotate(-12deg);
+}
+.poster-emblem span {
+  color: var(--gold);
+}
+.agency-detail {
+  padding-top: 150px;
+  padding-bottom: 100px;
+}
+.agency-detail-hero {
+  padding: 60px 0 80px;
+  max-width: 1000px;
+}
+.agency-detail h1 {
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  line-height: 1.04;
+  letter-spacing: -0.055em;
+  margin: 20px 0 30px;
+}
+.agency-detail-hero > p:not(.eyebrow) {
+  max-width: 740px;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+.agency-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(30px, 6vw, 90px);
+  padding: 60px 0;
+  border-top: 1px solid var(--line);
+}
+.agency-detail h2 {
+  font-size: clamp(1.6rem, 3vw, 2.6rem);
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+  margin: 18px 0 25px;
+}
+.agency-detail li {
+  list-style: none;
+  padding: 17px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  line-height: 1.7;
+}
+.agency-detail-grid p:not(.eyebrow),
+.agency-detail-note {
+  color: var(--muted);
+  line-height: 1.8;
+}
+.agency-detail-note {
+  padding: 24px;
+  background: var(--surface);
+  border-left: 2px solid var(--gold);
+  margin-bottom: 70px;
+}
+.agency-case-hero {
+  position: relative;
+  aspect-ratio: 16/10;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+.agency-case-hero img {
+  object-fit: cover;
+  object-position: top;
+}
+.agency-case-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+.agency-case-images img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+.agency-case-images figcaption {
+  padding: 12px 0;
+  color: var(--muted);
+}
+.agency-related {
+  margin-top: 90px;
+}
+.agency-related a {
+  display: flex;
+  justify-content: space-between;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 1.1rem;
+  gap: 20px;
+}
+.admin-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 24px 0;
+}
+.admin-filters input {
+  flex: 1;
+  min-width: 180px;
+}
+.admin-filters input,
+.admin-filters select,
+.lead-editor select,
+.lead-editor textarea {
+  padding: 12px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.admin-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  margin: 25px 0;
+}
+.admin-record {
+  min-width: 0;
+}
+.admin-record > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.lead-editor {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+}
+.admin-confirm {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 30px;
+  max-width: calc(100vw - 32px);
+}
+.admin-confirm::backdrop {
+  background: #0009;
+}
+.admin-confirm h2 {
+  margin-bottom: 20px;
+}
+.admin-confirm > div {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+@media (max-width: 760px) {
+  .agency-faq,
+  .agency-detail-grid,
+  .agency-case-images {
+    grid-template-columns: 1fr;
+  }
+  .agency-detail {
+    padding-top: 110px;
+  }
+  .agency-detail-hero {
+    padding: 40px 0 50px;
+  }
+  .agency-detail-grid {
+    padding: 35px 0;
+  }
+  .agency-detail-note {
+    padding: 20px;
+  }
+  .agency-faq {
+    gap: 30px;
+  }
+}
+[data-motion-reveals="enabled"] [data-reveal="block"] {
+  transition:
+    opacity 0.65s ease,
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.65s ease;
+  transition-delay: var(--reveal-delay, 0s);
+}
+[data-motion-reveals="enabled"] [data-reveal="block"]:not(.is-revealed) {
+  opacity: 0;
+  transform: translateY(26px);
+  filter: blur(3px);
+}
+[data-motion-reveals="enabled"] [data-reveal="words"] .motion-word {
+  transition: transform 0.65s cubic-bezier(0.18, 0.85, 0.25, 1.08);
+  transition-delay: var(--word-delay, 0s);
+}
+[data-motion-reveals="enabled"]
+  [data-reveal="words"]:not(.is-revealed)
+  .motion-word {
+  transform: translateY(112%) rotate(3deg);
+}
+[data-consent-choice="saved"] .consent-banner {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-reveal] .motion-word {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+}
+
+.agency-case-shot {
+  position: relative;
+  aspect-ratio: 16/10;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.agency-case-shot.is-mobile {
+  aspect-ratio: 390/844;
+  max-width: 390px;
+  margin-inline: auto;
+}
+.agency-case-shot img {
+  object-fit: contain;
+  border-radius: 0;
+}
+
+.admin-sidebar {
+  overflow-y: auto;
+}
+.admin-sidebar nav a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+@media (max-width: 700px) {
+  .admin-shell {
+    display: block;
+  }
+  .admin-sidebar {
+    overflow: visible;
+  }
+}
+``````
+
 ## app/api/admin/[resource]/route.ts
 
-``````typescript
+``````ts
 import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/admin/session";
-import { schemas } from "@/lib/admin/schemas";
+import { leadStatus, schemas } from "@/lib/admin/schemas";
 import {
   ChatError,
   checkOrigin,
@@ -455,20 +815,121 @@ function failure(error: unknown) {
   return reply({ error: "The request could not be completed." }, 503);
 }
 export async function GET(
-  _request: Request,
-  { params }: { params: { resource: string } },
+  request: Request,
+  { params }: { params: Promise<{ resource: string }> },
 ) {
   try {
     const user = await requireAdmin();
-    switch (params.resource) {
+    const resource = (await params).resource;
+    if (["inbox", "chatlogs", "audit"].includes(resource)) {
+      const query = new URL(request.url).searchParams;
+      const pagination = z
+        .object({
+          page: z.coerce.number().int().min(1).max(100000).default(1),
+          size: z.coerce.number().int().min(1).max(50).default(20),
+          q: z.string().trim().max(200).default(""),
+          sort: z.enum(["newest", "oldest"]).default("newest"),
+          status: z.union([z.literal(""), leadStatus]).default(""),
+        })
+        .parse(Object.fromEntries(query));
+      const { page, size, q, sort, status } = pagination;
+      const options = {
+        skip: (page - 1) * size,
+        take: size,
+        orderBy: [
+          {
+            createdAt: sort === "newest" ? ("desc" as const) : ("asc" as const),
+          },
+          { id: "asc" as const },
+        ],
+      };
+      const contains = { contains: q, mode: "insensitive" as const };
+      let items: unknown[], total: number;
+      if (resource === "inbox") {
+        const where = {
+          ...(status ? { status } : {}),
+          ...(q
+            ? {
+                OR: [
+                  { name: contains },
+                  { email: contains },
+                  { company: contains },
+                  { message: contains },
+                ],
+              }
+            : {}),
+        };
+        [items, total] = await db.$transaction([
+          db.contactMessage.findMany({ ...options, where }),
+          db.contactMessage.count({ where }),
+        ]);
+      } else if (resource === "chatlogs") {
+        const where = q
+          ? {
+              OR: [
+                { botId: contains },
+                { userMessage: contains },
+                { reply: contains },
+              ],
+            }
+          : {};
+        [items, total] = await db.$transaction([
+          db.chatLog.findMany({ ...options, where }),
+          db.chatLog.count({ where }),
+        ]);
+      } else {
+        const where = q
+          ? {
+              OR: [
+                { action: contains },
+                { resource: contains },
+                { recordId: contains },
+              ],
+            }
+          : {};
+        [items, total] = await db.$transaction([
+          db.auditLog.findMany({ ...options, where }),
+          db.auditLog.count({ where }),
+        ]);
+      }
+      return reply({
+        items,
+        total,
+        page,
+        pages: Math.max(1, Math.ceil(total / size)),
+      });
+    }
+    switch (resource) {
       case "dashboard":
+        const [projects, bots, messages, unread, newInquiries, recent] =
+          await Promise.all([
+            db.project.count(),
+            db.bot.count(),
+            db.contactMessage.count(),
+            db.contactMessage.count({ where: { read: false } }),
+            db.contactMessage.count({ where: { status: "new" } }),
+            db.contactMessage.findMany({
+              orderBy: { createdAt: "desc" },
+              take: 5,
+              select: { id: true, name: true, status: true, createdAt: true },
+            }),
+          ]);
         return reply({
-          projects: await db.project.count(),
-          bots: await db.bot.count(),
-          messages: await db.contactMessage.count(),
-          unread: await db.contactMessage.count({ where: { read: false } }),
+          projects,
+          bots,
+          messages,
+          unread,
+          newInquiries,
+          recent,
           twoFactor: !!user.totpSecret,
+          contentSource: process.env.CONTENT_SOURCE || "files",
         });
+      case "services":
+        return reply(await db.service.findMany({ orderBy: ordered }));
+      case "faqs":
+        return reply(await db.faq.findMany({ orderBy: ordered }));
+      case "testimonials":
+        return reply(await db.testimonial.findMany({ orderBy: ordered }));
       case "projects":
         return reply(
           (
@@ -505,27 +966,6 @@ export async function GET(
             : null,
         );
       }
-      case "inbox":
-        return reply(
-          await db.contactMessage.findMany({
-            orderBy: { createdAt: "desc" },
-            take: 100,
-          }),
-        );
-      case "chatlogs":
-        return reply(
-          await db.chatLog.findMany({
-            orderBy: { createdAt: "desc" },
-            take: 100,
-          }),
-        );
-      case "audit":
-        return reply(
-          await db.auditLog.findMany({
-            orderBy: { createdAt: "desc" },
-            take: 100,
-          }),
-        );
       default:
         return reply({ error: "Not found." }, 404);
     }
@@ -535,13 +975,13 @@ export async function GET(
 }
 export async function POST(
   request: Request,
-  { params }: { params: { resource: string } },
+  { params }: { params: Promise<{ resource: string }> },
 ) {
   try {
     const user = await requireAdmin();
     checkOrigin(request);
     const body = await readJson(request);
-    const resource = params.resource;
+    const resource = (await params).resource;
     if (resource === "security") {
       await limitLogin(Object.fromEntries(request.headers.entries()));
       return reply(await updateSecurity(user, body));
@@ -579,6 +1019,33 @@ export async function POST(
     }
     await db.$transaction(async (tx) => {
       switch (resource) {
+        case "services": {
+          const data = schemas.services.parse(body);
+          await tx.service.upsert({
+            where: { id: data.id },
+            create: data,
+            update: data,
+          });
+          break;
+        }
+        case "faqs": {
+          const data = schemas.faqs.parse(body);
+          await tx.faq.upsert({
+            where: { id: data.id },
+            create: data,
+            update: data,
+          });
+          break;
+        }
+        case "testimonials": {
+          const data = schemas.testimonials.parse(body);
+          await tx.testimonial.upsert({
+            where: { id: data.id },
+            create: data,
+            update: data,
+          });
+          break;
+        }
         case "projects": {
           const { screenshots, ...project } = schemas.projects.parse(body);
           await tx.project.upsert({
@@ -664,7 +1131,7 @@ export async function POST(
 }
 export async function DELETE(
   request: Request,
-  { params }: { params: { resource: string } },
+  { params }: { params: Promise<{ resource: string }> },
 ) {
   try {
     const user = await requireAdmin();
@@ -674,7 +1141,16 @@ export async function DELETE(
       .strict()
       .parse(await readJson(request));
     await db.$transaction(async (tx) => {
-      switch (params.resource) {
+      switch ((await params).resource) {
+        case "services":
+          await tx.service.delete({ where: { id } });
+          break;
+        case "faqs":
+          await tx.faq.delete({ where: { id } });
+          break;
+        case "testimonials":
+          await tx.testimonial.delete({ where: { id } });
+          break;
         case "projects":
           await tx.project.delete({ where: { id } });
           break;
@@ -700,7 +1176,7 @@ export async function DELETE(
         data: {
           adminId: user.id,
           action: "delete",
-          resource: params.resource,
+          resource: (await params).resource,
           recordId: id,
         },
       });
@@ -712,27 +1188,39 @@ export async function DELETE(
 }
 export async function PATCH(
   request: Request,
-  { params }: { params: { resource: string } },
+  { params }: { params: Promise<{ resource: string }> },
 ) {
   try {
     const user = await requireAdmin();
     checkOrigin(request);
     const body = await readJson(request);
-    const resource = params.resource;
+    const resource = (await params).resource;
     if (resource === "inbox") {
       const data = z
-        .object({ id: z.string().max(100), read: z.boolean() })
+        .object({
+          id: z.string().min(1).max(100),
+          read: z.boolean().optional(),
+          status: leadStatus.optional(),
+          notes: z.string().trim().max(5000).optional(),
+        })
         .strict()
+        .refine(
+          (value) =>
+            value.read !== undefined ||
+            value.status !== undefined ||
+            value.notes !== undefined,
+          "Provide an update.",
+        )
         .parse(body);
       await db.$transaction([
         db.contactMessage.update({
           where: { id: data.id },
-          data: { read: data.read },
+          data: { read: data.read, status: data.status, notes: data.notes },
         }),
         db.auditLog.create({
           data: {
             adminId: user.id,
-            action: data.read ? "mark-read" : "mark-unread",
+            action: "update-inquiry",
             resource,
             recordId: data.id,
           },
@@ -753,6 +1241,15 @@ export async function PATCH(
     await db.$transaction(async (tx) => {
       for (const [order, id] of ids.entries()) {
         switch (resource) {
+          case "services":
+            await tx.service.update({ where: { id }, data: { order } });
+            break;
+          case "faqs":
+            await tx.faq.update({ where: { id }, data: { order } });
+            break;
+          case "testimonials":
+            await tx.testimonial.update({ where: { id }, data: { order } });
+            break;
           case "projects":
             await tx.project.update({ where: { id }, data: { order } });
             break;
@@ -782,7 +1279,7 @@ export async function PATCH(
 
 ## app/api/admin/upload/route.ts
 
-``````typescript
+``````ts
 import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { encodePortfolioImage } from "@/lib/admin/images";
@@ -906,7 +1403,7 @@ export async function POST(request: Request) {
 
 ## app/api/auth/[...nextauth]/route.ts
 
-``````typescript
+``````ts
 import NextAuth from "next-auth";
 import { authOptions } from "@/lib/admin/auth";
 const handler = NextAuth(authOptions);
@@ -915,7 +1412,7 @@ export { handler as GET, handler as POST };
 
 ## app/api/bot-embed/route.ts
 
-``````typescript
+``````ts
 import { NextResponse } from "next/server";
 import { botRuntime } from "@/lib/bot-runtime";
 import { ChatError, publicHttpsUrl } from "@/lib/chat/http";
@@ -966,7 +1463,7 @@ export async function GET(request: Request) {
 
 ## app/api/chat/route.ts
 
-``````typescript
+``````ts
 import { NextResponse } from "next/server";
 import { validateMessages } from "@/lib/chat/protocol";
 import { hasPromptInjection } from "@/lib/chat/guard";
@@ -1041,7 +1538,7 @@ export async function POST(request: Request) {
 
 ## app/api/contact/route.ts
 
-``````typescript
+``````ts
 import { NextResponse } from "next/server";
 import { contactContent as copy } from "@/data/contact";
 import { ChatError, checkOrigin, readJson } from "@/lib/chat/http";
@@ -1087,23 +1584,52 @@ export async function POST(request: Request) {
     // Quietly discard honeypot submissions without sending mail or revealing the trap.
     if (parsed.data.website)
       return NextResponse.json({ ok: true }, { status: 202, headers });
-    const password = gmailPassword();
+    const store =
+      process.env.CONTENT_SOURCE === "database" ||
+      process.env.CONTACT_STORAGE === "database";
+    if (!store) gmailPassword();
     await reserveContact(request);
     release = acquireContactSlot();
     await verifyTurnstile(parsed.data.turnstileToken);
-    const records =
-      process.env.CONTENT_SOURCE === "database"
-        ? await import("@/lib/records")
-        : null;
-    const id = records ? await records.recordContact(parsed.data) : null;
+    const records = store ? await import("@/lib/records") : null;
+    let id: string | null = null;
+    try {
+      id = records ? await records.recordContact(parsed.data) : null;
+    } catch {
+      throw new ChatError(503, copy.errors.unavailable);
+    }
+    let notification: "accepted" | "failed" | "not-configured" =
+      "not-configured";
+    if (!process.env.GMAIL_APP_PASSWORD?.trim() && records) {
+      try {
+        await records.markDelivery(id, notification);
+      } catch {
+        console.error("contact.delivery-status-write-failed");
+      }
+      return NextResponse.json(
+        { ok: true, acceptance: "stored", notification },
+        { status: 202, headers },
+      );
+    }
+    const password = gmailPassword();
     try {
       await deliverContact(parsed.data, password);
+      notification = "accepted";
     } catch (error) {
-      if (records) await records.markDelivery(id, "failed");
-      throw error;
+      if (!records) throw error;
+      notification = "failed";
     }
-    if (records) await records.markDelivery(id, "accepted");
-    return NextResponse.json({ ok: true }, { status: 202, headers });
+    if (records) {
+      try {
+        await records.markDelivery(id, notification);
+      } catch {
+        console.error("contact.delivery-status-write-failed");
+      }
+    }
+    return NextResponse.json(
+      { ok: true, acceptance: records ? "stored" : "email", notification },
+      { status: 202, headers },
+    );
   } catch (error) {
     const known = error instanceof ChatError;
     const retryAfter: Record<string, string> =
@@ -1939,24 +2465,33 @@ import "../demo.css";
 import "../concepts.css";
 export const dynamic = "force-dynamic";
 export function generateStaticParams() {
-  return [...Object.keys(concepts), ...Object.keys(demos)].map((slug) => ({ slug }));
+  return [...Object.keys(concepts), ...Object.keys(demos)].map((slug) => ({
+    slug,
+  }));
 }
-export function generateMetadata({
+export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
-}): Metadata {
-  const demo = concepts[params.slug as ConceptSlug] || demos[params.slug as DemoSlug];
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const demo =
+    concepts[(await params).slug as ConceptSlug] ||
+    demos[(await params).slug as DemoSlug];
   return {
     title: demo ? `${demo.name} — Elvora concept` : "Concept not found",
     description: demo?.intro,
-    alternates: { canonical: `/demo/${params.slug}` },
+    alternates: { canonical: `/demo/${(await params).slug}` },
   };
 }
-export default function DemoPage({ params }: { params: { slug: string } }) {
-  if (Object.hasOwn(concepts, params.slug)) return <ConceptSite slug={params.slug as ConceptSlug} />;
-  if (!Object.hasOwn(demos, params.slug)) notFound();
-  return <DemoSite slug={params.slug as DemoSlug} />;
+export default async function DemoPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  if (Object.hasOwn(concepts, (await params).slug))
+    return <ConceptSite slug={(await params).slug as ConceptSlug} />;
+  if (!Object.hasOwn(demos, (await params).slug)) notFound();
+  return <DemoSite slug={(await params).slug as DemoSlug} />;
 }
 ``````
 
@@ -6535,6 +7070,7 @@ h2 {
 ## app/layout.tsx
 
 ``````tsx
+import { consentVisibilityScript } from "@/lib/consent";
 import { headers } from "next/headers";
 import { getIdentity } from "@/lib/content-loader";
 import type { Metadata, Viewport } from "next";
@@ -6549,6 +7085,7 @@ import "./premium.css";
 import "./studio.css";
 import "./reference.css";
 import "./editorial.css";
+import "./agency.css";
 import { ConsentProvider } from "@/components/consent-provider";
 
 const inter = localFont({
@@ -6590,6 +7127,11 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(site.url),
     title: identity.title,
     description: identity.description,
+    robots:
+      process.env.VERCEL_ENV === "preview" ||
+      process.env.CONTEXT === "deploy-preview"
+        ? { index: false, follow: false }
+        : undefined,
     authors: [{ name: site.name }],
     alternates: { canonical: "/" },
     openGraph: {
@@ -6623,11 +7165,12 @@ export const viewport: Viewport = {
   ],
 };
 
-const themeScript = `(function(){var t='dark';try{var s=localStorage.getItem('portfolio-theme');if(s==='light'||s==='dark')t=s;}catch(e){}document.documentElement.dataset.theme=t;})();`;
+const themeScript = `(function(){var t='dark';try{var s=localStorage.getItem('portfolio-theme');if(s==='light'||s==='dark')t=s;}catch(e){}document.documentElement.dataset.theme=t;if(window.IntersectionObserver&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.dataset.motionReveals='enabled';})();`;
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const nonce = (await headers()).get("x-nonce") || undefined;
   return (
     <html
       lang="en"
@@ -6637,8 +7180,28 @@ export default function RootLayout({
     >
       <head>
         <script
-          nonce={headers().get("x-nonce") || undefined}
-          dangerouslySetInnerHTML={{ __html: themeScript }}
+          nonce={nonce}
+          dangerouslySetInnerHTML={{
+            __html: themeScript + consentVisibilityScript(),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          nonce={nonce}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: site.name,
+              url: site.url,
+              jobTitle: site.role,
+              email: site.email,
+              sameAs: [
+                "https://github.com/AbdulHafeezAIEngineer",
+                "https://www.instagram.com/elvoraaistudio",
+              ],
+            }).replace(/</g, "\\u003c"),
+          }}
         />
       </head>
       <body>
@@ -6646,32 +7209,13 @@ export default function RootLayout({
           {site.ui.skip}
         </a>
         <noscript>
-          <style>{`.motion-reveal,.motion-word{opacity:1!important;transform:none!important;filter:none!important}`}</style>
+          <style>{`.consent-banner{display:none!important}.motion-reveal,.motion-word{opacity:1!important;transform:none!important;filter:none!important}`}</style>
         </noscript>
         <MotionProvider>
           <ConsentProvider>{children}</ConsentProvider>
         </MotionProvider>
       </body>
     </html>
-  );
-}
-``````
-
-## app/loading.tsx
-
-``````tsx
-import { site } from "@/data/site";
-
-export default function Loading() {
-  return (
-    <main className="loading-page" role="status">
-      <span className="wordmark">
-        {site.brand}
-        <span>.</span>
-      </span>
-      <span className="loading-line" />
-      <p>{site.ui.loading}</p>
-    </main>
   );
 }
 ``````
@@ -6760,11 +7304,15 @@ export default function OpenGraphImage() {
 ## app/page.tsx
 
 ``````tsx
+import { FaqSection } from "@/components/faq-section";
 import { Footer } from "@/components/footer";
 import { Hero } from "@/components/hero";
 import { Navbar } from "@/components/navbar";
 import { Work } from "@/components/work";
 import {
+  getServices,
+  getFaqs,
+  getTestimonials,
   getProjects,
   getBots,
   getSkills,
@@ -6789,12 +7337,24 @@ import { WallOfLove } from "@/components/wall-of-love";
 
 export const dynamic = "force-dynamic";
 export default async function Home() {
-  const [projects, skills, certificates, bots, identity] = await Promise.all([
+  const [
+    projects,
+    skills,
+    certificates,
+    bots,
+    identity,
+    services,
+    faqs,
+    reviews,
+  ] = await Promise.all([
     getProjects(),
     getSkills(),
     getCertificates(),
     getBots(),
     getIdentity(),
+    getServices(),
+    getFaqs(),
+    getTestimonials(),
   ]);
   return (
     <div id="top">
@@ -6806,7 +7366,7 @@ export default async function Home() {
       <Navbar identity={identity} />
       <main id="main-content">
         <Hero />
-        <Services />
+        <Services services={services} />
         <Work projects={projects} bots={bots} />
         <WorkBunch projects={projects} />
         <Experience />
@@ -6815,7 +7375,8 @@ export default async function Home() {
         <Workflow />
         <Journey />
         <Certifications certificates={certificates} />
-        <WallOfLove />
+        <WallOfLove testimonials={reviews} />
+        <FaqSection faqs={faqs} />
         <Contact email={identity.email} />
       </main>
       <Footer brand={identity.brand} email={identity.email} />
@@ -8601,28 +9162,137 @@ export default function Page() {
 
 ## app/robots.ts
 
-``````typescript
+``````ts
 import type { MetadataRoute } from "next";
 import { site } from "@/data/site";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: "*", allow: "/", disallow: ["/admin", "/api/admin"] },
+    rules:
+      process.env.VERCEL_ENV === "preview" ||
+      process.env.CONTEXT === "deploy-preview"
+        ? { userAgent: "*", disallow: "/" }
+        : { userAgent: "*", allow: "/", disallow: ["/admin", "/api/admin"] },
     sitemap: `${site.url}/sitemap.xml`,
   };
 }
 ``````
 
+## app/services/[slug]/page.tsx
+
+``````tsx
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { ArrowUpRight } from "lucide-react";
+import { getServices, getIdentity } from "@/lib/content-loader";
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
+export const dynamic = "force-dynamic";
+type Props = { params: Promise<{ slug: string }> };
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const service = (await getServices()).find((item) => item.id === slug);
+  if (!service)
+    return {
+      title: "Service not found",
+      robots: { index: false, follow: false },
+    };
+  return {
+    title: `${service.title} — Elvora`,
+    description: service.description,
+    alternates: { canonical: `/services/${slug}` },
+  };
+}
+export default async function Page({ params }: Props) {
+  const { slug } = await params;
+  const [services, identity] = await Promise.all([
+    getServices(),
+    getIdentity(),
+  ]);
+  const service = services.find((item) => item.id === slug);
+  if (!service) notFound();
+  return (
+    <>
+      <Navbar identity={identity} rootLinks />
+      <main id="main-content" className="container agency-detail">
+        <Link className="eyebrow" href="/#services">
+          ELVORA / SERVICES
+        </Link>
+        <header className="agency-detail-hero">
+          <p className="eyebrow">A PRACTICAL SCOPE. BUILT AROUND YOU.</p>
+          <h1>{service.title}</h1>
+          <p>{service.description}</p>
+          <Link href="/#contact" className="button button-gold">
+            Discuss your project <ArrowUpRight size={18} aria-hidden="true" />
+          </Link>
+        </header>
+        <div className="agency-detail-grid">
+          <section>
+            <p className="eyebrow">01 / DELIVERABLES</p>
+            <h2>What we can build.</h2>
+            <ul>
+              {service.scope.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </section>
+          <section>
+            <p className="eyebrow">02 / GETTING STARTED</p>
+            <h2>What I need from you.</h2>
+            <ul>
+              {service.requirements.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </section>
+        </div>
+        <p className="agency-detail-note">
+          {service.detail} Features, timing and provider costs are agreed before
+          work begins.
+        </p>
+        <section className="agency-related">
+          <h2>Other ways I can help.</h2>
+          {services
+            .filter((item) => item.id !== slug)
+            .map((item) => (
+              <Link key={item.id} href={`/services/${item.id}`}>
+                {item.title}
+                <ArrowUpRight size={20} aria-hidden="true" />
+              </Link>
+            ))}
+        </section>
+      </main>
+      <Footer brand={identity.brand} email={identity.email} />
+    </>
+  );
+}
+``````
+
 ## app/sitemap.ts
 
-``````typescript
+``````ts
 import type { MetadataRoute } from "next";
+import { getServices, getProjects } from "@/lib/content-loader";
 import { site } from "@/data/site";
 import { studies } from "@/data/studies";
 import { concepts } from "@/data/concepts";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const dynamic = "force-dynamic";
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [services, projects] = await Promise.all([
+    getServices(),
+    getProjects(),
+  ]);
   return [
+    ...services.map((service) => ({
+      url: `${site.url}/services/${service.id}`,
+      priority: 0.7,
+    })),
+    ...projects.map((project) => ({
+      url: `${site.url}/work/${project.id}`,
+      priority: 0.6,
+    })),
     { url: site.url, changeFrequency: "monthly", priority: 1 },
     ...["privacy", "cookies", "terms"].map((path) => ({
       url: `${site.url}/${path}`,
@@ -8656,20 +9326,26 @@ export const dynamicParams = false;
 export function generateStaticParams() {
   return studies.map(({ id }) => ({ slug: id }));
 }
-export function generateMetadata({
+export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
-}): Metadata {
-  const study = studies.find(({ id }) => id === params.slug);
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const study = studies.find(({ id }) => id === slug);
   return {
     title: study ? `${study.name} — UI study by Elvora` : "Study not found",
     description: study?.description,
-    alternates: { canonical: `/studies/${params.slug}` },
+    alternates: { canonical: `/studies/${(await params).slug}` },
   };
 }
-export default function Page({ params }: { params: { slug: string } }) {
-  const study = studies.find(({ id }) => id === params.slug);
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const study = studies.find(({ id }) => id === slug);
   if (!study) notFound();
   return <DesignStudy study={study} />;
 }
@@ -11563,3 +12239,125 @@ export default function Page() {
 }
 ``````
 
+## app/work/[slug]/page.tsx
+
+``````tsx
+import type { Metadata } from "next";
+import Link from "next/link";
+import Image from "next/image";
+import { notFound } from "next/navigation";
+import { getProjects, getIdentity } from "@/lib/content-loader";
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
+export const dynamic = "force-dynamic";
+type Props = { params: Promise<{ slug: string }> };
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const project = (await getProjects()).find((item) => item.id === slug);
+  return project
+    ? {
+        title: `${project.title} — Project notes | Elvora`,
+        description: project.description,
+        alternates: { canonical: `/work/${slug}` },
+      }
+    : { title: "Project not found", robots: { index: false, follow: false } };
+}
+export default async function Page({ params }: Props) {
+  const { slug } = await params;
+  const [projects, identity] = await Promise.all([
+    getProjects(),
+    getIdentity(),
+  ]);
+  const project = projects.find((item) => item.id === slug);
+  if (!project) notFound();
+  return (
+    <>
+      <Navbar identity={identity} rootLinks />
+      <main id="main-content" className="container agency-detail">
+        <Link href="/#work" className="eyebrow">
+          ELVORA / SELECTED WORK
+        </Link>
+        <header className="agency-detail-hero">
+          <p className="eyebrow">PROJECT NOTES / {project.industry}</p>
+          <h1>{project.title}</h1>
+          <p>{project.description}</p>
+          {project.demoUrl && (
+            <Link href={project.demoUrl} className="button button-gold">
+              Explore the website
+            </Link>
+          )}
+        </header>
+        <div className="agency-case-hero">
+          <Image
+            src={project.screenshots[0].src}
+            alt={project.screenshots[0].alt}
+            fill
+            priority
+            sizes="(max-width: 800px) 94vw,1200px"
+          />
+        </div>
+        <div className="agency-detail-grid">
+          <section>
+            <p className="eyebrow">THE DIRECTION</p>
+            <h2>{project.subtitle}</h2>
+            <p>{project.description}</p>
+            <ul>
+              {project.highlights.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </section>
+          <section>
+            <p className="eyebrow">THE IMPLEMENTATION</p>
+            <h2>From design to interface.</h2>
+            <p>
+              Explore the implemented page, its responsive layouts and
+              interaction details. Screenshots below are captures of the actual
+              interface.
+            </p>
+            <ul>
+              {project.stack.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </section>
+        </div>
+        <p className="agency-detail-note">
+          Concept portfolio work demonstrates design and implementation.
+          Fictional brands, sample products and interface data do not represent
+          commissioned client work or verified business results.
+        </p>
+        <div className="agency-case-images">
+          {project.screenshots.slice(1).map((image) => (
+            <figure key={image.src}>
+              <div
+                className={`agency-case-shot${image.title.toLowerCase().includes("mobile") ? " is-mobile" : ""}`}
+              >
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  fill
+                  sizes="(max-width:800px) 94vw,580px"
+                />
+              </div>
+              <figcaption>{image.title}</figcaption>
+            </figure>
+          ))}
+        </div>
+        <section className="agency-related">
+          <h2>Keep exploring.</h2>
+          {projects
+            .filter((item) => item.id !== slug)
+            .map((item) => (
+              <Link href={`/work/${item.id}`} key={item.id}>
+                {item.title}
+                <span aria-hidden="true">↗</span>
+              </Link>
+            ))}
+        </section>
+      </main>
+      <Footer brand={identity.brand} email={identity.email} />
+    </>
+  );
+}
+``````

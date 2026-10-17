@@ -17,6 +17,13 @@ export const contactFields = z.object({
     .toLowerCase()
     .max(policy.maxEmail, copy.errors.email)
     .email(copy.errors.email),
+  company: z
+    .string()
+    .trim()
+    .max(150)
+    .regex(/^[^\x00-\x1f\x7f]*$/)
+    .optional(),
+  service: z.enum(["", "web", "chat", "automation", "seo"]).optional(),
   message: z
     .string()
     .trim()
@@ -37,7 +44,11 @@ export function fieldErrors(error: z.ZodError): FieldErrors {
   for (const issue of error.issues) {
     const key = issue.path[0];
     if (
-      (key === "name" || key === "email" || key === "message") &&
+      (key === "name" ||
+        key === "email" ||
+        key === "message" ||
+        key === "company" ||
+        key === "service") &&
       !result[key]
     )
       result[key] = issue.message;

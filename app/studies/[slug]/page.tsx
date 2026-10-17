@@ -8,20 +8,26 @@ export const dynamicParams = false;
 export function generateStaticParams() {
   return studies.map(({ id }) => ({ slug: id }));
 }
-export function generateMetadata({
+export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
-}): Metadata {
-  const study = studies.find(({ id }) => id === params.slug);
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const study = studies.find(({ id }) => id === slug);
   return {
     title: study ? `${study.name} — UI study by Elvora` : "Study not found",
     description: study?.description,
-    alternates: { canonical: `/studies/${params.slug}` },
+    alternates: { canonical: `/studies/${(await params).slug}` },
   };
 }
-export default function Page({ params }: { params: { slug: string } }) {
-  const study = studies.find(({ id }) => id === params.slug);
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const study = studies.find(({ id }) => id === slug);
   if (!study) notFound();
   return <DesignStudy study={study} />;
 }

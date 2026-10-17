@@ -39,7 +39,7 @@ export async function deliverContact(
         to: site.email,
         replyTo: fields.email,
         subject: `${site.brand} enquiry from ${fields.name}`,
-        text: `Name: ${fields.name}\nEmail: ${fields.email}\n\n${fields.message}`,
+        text: `Name: ${fields.name}\nEmail: ${fields.email}\nCompany: ${fields.company || "Not provided"}\nService: ${fields.service || "Not specified"}\n\n${fields.message}`,
         disableFileAccess: true,
         disableUrlAccess: true,
       }),

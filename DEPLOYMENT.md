@@ -1,104 +1,95 @@
-# Production deployment
+# Elvora deployment and operations
 
-**Launch status:** the requested Next.js 14 release still has reported critical advisories. This is a review build; a patched major-version exception is needed before production. See `SECURITY_STATUS.md`.
-## PostgreSQL and private settings
+The app uses Next.js 15.5.28 App Router, React 18, TypeScript, Tailwind, Framer Motion, PostgreSQL/Prisma and Auth.js Credentials. Node 22/24 is supported; validation used Node 24. Deploy with a Next.js server/runtime, not a static file upload.
 
-Create a Neon or Supabase PostgreSQL database in your own account. Use the provider's pooled TLS URL for `DATABASE_URL` and direct TLS URL for `DIRECT_URL`. Use a least-privilege application role and keep both URLs in hosting secrets. Do not expose PostgreSQL, database dashboards or service credentials to browser code. Supabase table APIs/RLS are not used; Prisma connects from the server.
-
-Set `NEXT_PUBLIC_SITE_URL` and `NEXTAUTH_URL` to the actual HTTPS origin, without a trailing path. Set a unique random `NEXTAUTH_SECRET` of at least 32 bytes. To generate secrets privately in your own terminal:
+## Install and check
 
 ```bash
-openssl rand -base64 48
-openssl rand -base64 32
+npm ci --cache /tmp/portfoli-npm-cache --no-audit --no-fund
+npm run lint
+npm run typecheck
+npm run test:chat
+npm run test:contact
+npm run test:security
+npm run test:consent
+npm run build
+npm start
 ```
 
-The first value can be your auth secret; the second can be `TOTP_ENCRYPTION_KEY`. Store them securely; do not paste them in chat or commit terminal output. Keep the TOTP encryption key stable and backed up. The seed creates the first admin from `ADMIN_EMAIL` and `ADMIN_PASSWORD`; use 14+ characters with upper/lowercase, a number and a symbol, at most 72 UTF-8 bytes. Passwords are hashed with bcrypt cost 12. Seed preserves existing credentials and content.
+Stop your own development server before building: development and production share `.next`. Keep the lockfile and security overrides. `postinstall` generates the Prisma JavaScript/WASM driver client; native Prisma engines are not needed at application runtime. The migration CLI downloads its verified engine when needed; allow `binaries.prisma.sh` without disabling integrity or TLS checks.
 
-Run from a trusted deployment terminal with the private variables loaded:
+## Private configuration
+
+Use `.env.example` as the variable-name template. Local values belong in ignored `.env.local`; hosted values belong in private hosting settings. Never put secrets in `NEXT_PUBLIC_*`, source files, chat or screenshots.
+
+Set `NEXT_PUBLIC_SITE_URL` and `NEXTAUTH_URL` to the actual HTTPS canonical origin, normally `https://www.elvoraai.online`. The canonical fallback is that real domain. Preview deployments receive noindex controls. DNS was already connected in the owner's setup; this change does not require replacing nameservers.
+
+| Requirement | Variables |
+| --- | --- |
+| Database/admin | `DATABASE_URL`, `DIRECT_URL`, `NEXTAUTH_SECRET` |
+| Initial admin, temporary | `ADMIN_EMAIL`, `ADMIN_PASSWORD` |
+| Shared rate protection | `AUTH_REDIS_REST_URL/TOKEN`, `CONTACT_REDIS_REST_URL/TOKEN`, `CHAT_REDIS_REST_URL/TOKEN`; blank separate stores reuse CHAT settings |
+| Authenticator 2FA | Stable private `TOTP_ENCRYPTION_KEY`, 32 random bytes encoded as base64 |
+| Optional contact notifications | `GMAIL_SMTP_USER`, `GMAIL_APP_PASSWORD` |
+| Contact anti-abuse | `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `CONTACT_TURNSTILE_REQUIRED=true` |
+| AI API demos | `OPENAI_API_KEY`, optional model and quota settings |
+| Admin image uploads | `BLOB_READ_WRITE_TOKEN`, exact `BLOB_PUBLIC_HOST` |
+| External bot configuration | Exact approved `BOT_PROVIDER_ALLOWLIST` hosts and published provider configuration |
+
+Check the complete comments in `.env.example`. Shared quotas fail closed when unavailable. Set an in-memory limiter override only for an intentional single-process host; it resets on restart and does not protect multiple serverless instances. Trust an IP header only when the edge proxy overwrites it.
+
+## Database and first administrator
+
+Provision PostgreSQL with TLS. Use a pooled application URL and a direct migration URL if your provider separates them. Back up existing data and review migration SQL before deployment.
 
 ```bash
-npm ci
-npm run db:generate
 npm run db:migrate
-npm run db:seed
+npm run admin:bootstrap
 ```
 
-The migration command uses `DIRECT_URL`. Do not run `db:dev` against production. `db:dev` is for creating later reviewed migrations on a development database. Allow Prisma's verified binary downloads if the migration CLI requires them; the deployed app uses its JavaScript driver and does not need native Prisma engines.
+Bootstrap reads privately supplied `ADMIN_EMAIL` and a strong `ADMIN_PASSWORD`: at least 14 characters, upper/lowercase, a number and a symbol, at most 72 UTF-8 bytes. It stores only a bcrypt hash, prints no credentials, creates initial genuine site identity and refuses when any administrator exists. It does not create demonstration projects or reviews. Remove `ADMIN_PASSWORD` from the normal web runtime after bootstrap.
 
-After seeding, set `CONTENT_SOURCE=database` and redeploy. Remove `ADMIN_PASSWORD` from normal runtime settings. File mode remains available without database services. Admin database changes affect projects, bots, grouped skills, certificates, brand/email/metadata and the chat-logging setting.
+The additive agency migration adds services/FAQs/reviews and inquiry workflow fields. It preserves existing contact rows, backfills timestamps and adds status/permission constraints. Existing settings/email records are not overwritten by a changed schema default; update them through `/admin/settings` if needed.
 
-## Shared abuse protection
+Sign in at `/admin/login`. Admin pages and APIs check server authorization against the database session version. Enable authenticator 2FA from Security after configuring and backing up the encryption key. Password/2FA changes and sign-out invalidate previous sessions. Sign-out revokes all sessions for this single operator.
 
-Configure an Upstash-compatible Redis REST URL/token for chat, contact and authentication. Contact/auth can reuse `CHAT_REDIS_REST_URL` and `CHAT_REDIS_REST_TOKEN` or use their own stores; each has a separate namespace. Keep all memory-limiter production overrides false on serverless hosting. Missing/unavailable shared protection fails closed. Configure a trusted visitor-IP header only if the edge platform overwrites it and prevents spoofing; the default shares a conservative visitor bucket.
+For private recovery, supply `ADMIN_EMAIL` and a new strong `ADMIN_PASSWORD`, then run `npm run admin:reset`. Set `RESET_ADMIN_2FA=true` only when deliberately recovering a lost authenticator. The command records the recovery and revokes old sessions. Do not run reset automatically during web builds.
 
-Login allows 5 attempts per minute per bucket. Accounts also lock for 15 minutes after 5 failed password/2FA attempts. Errors are generic. Sessions have a maximum authenticated age of 15 minutes, use httpOnly Secure SameSite=strict cookies over production HTTPS, and are checked against the database password version for every admin API request. Changing/resetting the password invalidates old sessions on their next server request. Auth.js supplies CSRF tokens for authentication; admin mutations also validate their origin.
+## Choose public content and inquiry storage separately
 
-## Admin, 2FA and recovery
+- `CONTENT_SOURCE=files` is the default. The actual owner content and labeled fictional portfolio concepts come from `data/`. CMS edits do not replace this source automatically.
+- `CONTENT_SOURCE=database` reads published database records, including services, projects, FAQs and approved reviews. Populate and review content through `/admin` before switching. Missing settings or a database outage produces an error; there is no silent file fallback.
+- `CONTACT_STORAGE=database` stores inquiries independently from public content mode. Recommended when keeping file-based portfolio content with the private lead inbox.
+- Email-only file mode without database storage needs working SMTP configuration. It does not invent inbox persistence.
 
-Open `/admin/login`. Content editing includes published state, typed validation, ordered project images, multi-image upload, create/edit/delete and accessible move-up/down ordering. Structured arrays/configuration use labeled JSON fields. Inbox, chat logs and audit views return the latest 100 entries. Record deletion is permanent and asks for confirmation. Audit entries store IDs/actions, not passwords or message bodies.
-
-At `/admin/security`, enter your current password to change it or set up an authenticator. Setup secrets expire after five minutes; existing TOTP secrets are encrypted at rest. Enabling/disabling 2FA requires verification and invalidates existing sessions. Codes use a ±30-second window and replay protection; after setup, wait for a fresh code before signing in again. When 2FA is enabled, changing a password also requires a fresh authenticator code.
-
-For CLI recovery, temporarily load the target `ADMIN_EMAIL` and new strong `ADMIN_PASSWORD` privately, then run:
+For an isolated development database only:
 
 ```bash
-npm run admin:reset
+SEED_CONTENT=demo npm run db:seed
 ```
 
-To recover a lost authenticator too, deliberately set `RESET_ADMIN_2FA=true` only for that reset. This privileged CLI operation requires database access and creates an audit entry. Remove reset/password variables afterward. There are no hardcoded default credentials or password-printing scripts.
+Demo seed refuses `NODE_ENV=production`. It imports owner content and clearly labeled concepts without overwriting existing records; it creates no administrator or testimonial. Do not use demo seed to initialize real production data. Use the CMS to publish reviewed records.
 
-## Images and bot providers
+## Manage content and leads
 
-Create a Vercel Blob store and set `BLOB_READ_WRITE_TOKEN` and the exact `BLOB_PUBLIC_HOST`. Blob can also be used from Netlify. Uploads accept 1–4 JPEG/PNG/WebP files, up to 3 MB each. The server limits total bytes/pixels, checks the decoded format and rejects SVG/animated/corrupt images, rotates/resizes and re-encodes to WebP to strip metadata. Random filenames avoid trusting user-provided names. Uploaded images are public: upload only public portfolio assets. Write accurate alt text and save the record after upload. Removing a URL/record does not delete potentially shared Blob assets; periodically remove orphaned assets through your storage dashboard.
+The private dashboard shows database counts and recent inquiries. Projects, bots, skills, certificates, services, FAQs and reviews support editing, ordering, publishing and deletion. Reviews require permission confirmation before publishing; add only genuine approved quotes and portraits. No reviews are displayed by default.
 
-`BOT_PROVIDER_ALLOWLIST` contains exact trusted provider hostnames, comma-separated. Set it before saving external iframe/script/API destinations in admin. No provider secrets belong in public configuration or widget attributes. `REAL_BOT_API_KEY` stays private. The real bot uses the same reusable `BotEmbed` component; generic scripts run in an opaque sandboxed document which is destroyed on close. The trusted Botpress adapter supports its official loader plus configuration script in a dedicated same-origin frame with storage access; this frame is not an origin security boundary. See `BOTPRESS_SETUP.md`. Check framing/CSP/provider storage permissions in the actual deployment. API responses are rendered as escaped plain text and control characters are removed; no provider HTML executes in custom API chat.
+The inbox supports search, status filters, chronological ordering and pagination. Statuses are `new`, `contacted`, `in-progress`, `closed`; read/unread is separate. Internal notes are private. Notification status describes SMTP acceptance/failure/unconfigured state, not an assurance of inbox delivery. Audit entries record administrative mutations. Chat logging remains opt-in; establish retention before enabling it.
 
-## Mail, Turnstile and AI
+Image uploads require configured Blob storage. The server authorizes, limits, decodes and re-encodes JPEG/PNG/WebP, strips metadata and restricts displayed remote hosts. Local source assets work without Blob. Do not configure arbitrary remote image hosts.
 
-Configure Gmail App Password delivery and Cloudflare Turnstile using `CONTACT_SETUP.md`. Production requires Turnstile by default. Add your exact domain in Cloudflare and set public/private keys; verification checks hostname and the `contact` action. Contact submissions are stored before SMTP delivery when database content is enabled; delivery status is recorded. A 202 means Gmail accepted a message, not guaranteed inbox delivery. Configure outbound SMTP and actually test delivery yourself.
+## Contact and AI integrations
 
-Set OpenAI/model settings using `CHATBOT_SETUP.md`. Request/token quotas are not a monetary spending cap: configure provider project budgets/alerts and an enforceable cap where offered. The booking bot is a simulation and voice depends on supported HTTPS browsers and microphone permissions.
+The public recipient is **abdulhafeez@elvoraai.online**. The Gmail SMTP sender/account is separately configured and must match its Gmail App Password. Do not replace the recipient with the SMTP login address. See `CONTACT_SETUP.md` for precise acceptance/failure behavior.
 
-Chat logging is **off by default**. If enabled in site settings, the last user message and AI reply are retained in PostgreSQL. The public chat notice describes possible retention. Establish a lawful purpose, retention period, user notice and deletion routine before enabling it. Delete messages/logs you no longer need. Application logs do not print enquiry bodies, passwords or provider diagnostic details. Hosting/SMTP/AI/Redis providers have their own operational logging and retention.
+AI demos need an actual server-side API key and provider billing limits. App request quotas are not a currency spending cap. Keep shared quotas and output limits; verify real provider replies after deployment. The supplied Forte/Botpress scripts are preserved. Confirm its publishing state and allowed domains on the real provider account. Optional external chat must remain blocked until consent, and withdrawing permission removes embeds.
 
-## Vercel + Neon/Supabase
+## Hosting, HTTPS and launch
 
-1. Import `AbdulHafeezAIEngineer/portfoli` from GitHub, selecting the reviewed branch. Choose Next.js, Node.js 22/24, install `npm ci`, build `npm run build`.
-2. Add the public URL and private service settings in the Vercel dashboard. Keep production and preview databases/keys separate. Never grant untrusted preview deployments production secrets.
-3. Run reviewed production migrations and the initial seed from a trusted terminal/CI job. Do not run seed on every web build.
-4. Deploy with `CONTENT_SOURCE=database`, connect your domain in Vercel, set the requested DNS records, wait for managed SSL, then pin both origin variables to that domain and redeploy.
-5. Test admin, content updates, public galleries/bots, email, Turnstile and real storage uploads on the HTTPS domain.
+For Vercel, import the repository, use the Next.js preset and set private variables. Review and run migrations in a trusted deployment job before releasing schema-dependent code. Use the same application schema for previews only when intentionally isolated; do not point routine tests at production. Netlify uses the included Next.js adapter configuration; configure the actual domain rather than historical preview URLs.
 
-## Netlify
+After deployment, verify the canonical redirect, valid certificates, all service/work routes, sitemap/robots, admin sign-in/logout/2FA, new inquiry visibility, real notifications and failure states. Check metadata, keyboard navigation and mobile layouts. Local build and browser tests do not prove the external deployment completed.
 
-The complete portfolio is on GitHub's `main` branch, including the Elvora logo, About Me section and supplied Coursiv certificate. The older main version displayed AH and contained only Parts 1/2. For the owner's existing `portfolio3821.netlify.app` project, select repository `AbdulHafeezAIEngineer/portfoli` and production branch `main` in Netlify's continuous deployment settings. Once linked, pushes to `main` trigger a build. If automatic builds are disabled, choose **Deploys → Trigger deploy → Deploy site**. Use **Clear cache and deploy site** only if a successful build still serves stale assets.
+Configure automated encrypted PostgreSQL backups and retention with the provider, test restoration to a separate database, and back up stable auth/TOTP secrets through a secure process. Back up owned uploaded assets. Define inquiry/chat/audit deletion periods and access responsibilities. Code rollback across schema changes must preserve compatible columns; never drop real production data just to revert the UI.
 
-Use the provided `netlify.toml`: `npm run build`, publish `.next`, Node 24 and the Next.js adapter. Do not upload the source folder as static HTML; API routes/auth need the Next.js runtime. Set `NEXT_PUBLIC_SITE_URL` and `NEXTAUTH_URL` to `https://portfolio3821.netlify.app` unless using a new custom domain. Configure the same private services/Redis/origin variables. Keep `CONTENT_SOURCE=files` for the included file-based content. Existing database records are preserved by seeding; update them in `/admin` when choosing database mode.
-
-Selected Work in file mode now contains Solenne, Vanta Motors, Aster Care and Kovo Studio. The Elvora promotional card and previous samples are no longer selected. Database-mode owners should unpublish the previous project records and seed/add the four entries from `data/projects.ts`; the additive seed does not silently delete or overwrite existing records. Set `CONTENT_SOURCE=files` to display the supplied selection immediately. Update an existing database real-bot name to Forte O Level Study Assistant and retain its supplied Botpress configuration.
-
-Verify outbound SMTP support; if your host blocks it, keep the email link and move delivery to an allowed email API before launch. No successful Netlify deployment is claimed without a completed hosting build and public URL verification. The cloud environment could not access the owner's Netlify URL (HTTP/CONNECT 403), so local checks do not establish the current live-site state. The framework security limitation at the top of this document remains outstanding.
-
-## Headers and launch checks
-
-Middleware supplies a per-request nonce CSP, HSTS on external production hosts, SAMEORIGIN framing, nosniff, referrer and permissions policies. Inline Next.js/theme scripts use the nonce; style attributes remain permitted for Framer Motion. Development permits eval for tooling. Microphone permission is restricted to self so voice remains usable. Widget scripts load in their own document; trusted Botpress has same-origin access as described above. Only explicitly configured public Blob images and bot frame hosts are allowed. No wildcard CORS is enabled; API mutations validate same-origin requests. Robots disallows `/admin` and `/api/admin`, and admin metadata uses noindex; these are indexing preferences, not access control.
-
-Before launch:
-
-- [ ] Verify owner name, Elvora brand, portrait, genuine certificate and real workflow facts; remove only placeholders you can substantiate.
-- [ ] Use actual HTTPS origins and managed SSL; check security headers and nonce hydration on the deployed host.
-- [ ] Apply migrations, seed once, verify backups/recovery and least-privilege database access.
-- [ ] Configure Redis, strong auth secret, private Gmail/AI/storage/Turnstile settings and trusted provider hosts. Remove seed/reset passwords from runtime.
-- [ ] Enable and verify 2FA if desired; test lockout, sign-out, recovery and session invalidation.
-- [ ] Submit and receive a real enquiry; verify inbox persistence, reply-to, honeypot and rate-limit behavior.
-- [ ] Test a real Blob upload, alt text, image order and public rendering.
-- [ ] Test real provider chat/embedding and device microphone/voice playback over HTTPS.
-- [ ] Choose contact/chat retention, keep chat logging off unless needed, and remove test records.
-- [ ] Run `npm run test:chat`, `npm run test:contact`, `npm run lint`, `npm run typecheck`, `npm run build`; check keyboard/mobile flows and Lighthouse on the final host.
-- [ ] Review dependency security updates and provider usage/billing alerts. No particular Lighthouse score or absolute security guarantee is claimed.
-
-## Studio sections and privacy controls
-
-The services, supplied journey, workflow, AI toolkit, owner-supplied GitHub/Instagram links, separate screenshot contact sheet and animated ending use `data/studio.ts`. New policy pages are `/privacy`, `/cookies`, and `/terms`; they and the consent code require no extra credentials. Review those policies against the actual configured providers, retention/deletion practice and applicable legal requirements. Third-party chat is opt-in and consent can be withdrawn in the footer. No analytics or advertising tracking was added. Genuine review copy and approved portraits are still missing; the Wall of Love entries are explicitly labeled layout previews. The numbered reference images have now been supplied and used for the latest layout adaptation. The live Framer reference remains inaccessible here; exact motion timing is unverified. See `PRIVACY_SETUP.md`.
-
-The six additional interface studies use `/studies/noma`, `/studies/orbit`, `/studies/elsewhere`, `/studies/form`, `/studies/offscript` and `/studies/aura`. Their actual screenshot assets are included, and the collage links resolve inside the same Next.js app. No new environment variables or database changes are required. See `REFERENCE_DESIGN.md`.
+Current dependency audit and remaining development-tool findings are in `SECURITY_STATUS.md`. Measured checks and screenshots are in `VERIFICATION.md`. No production service credentials or legal-compliance certification are included.

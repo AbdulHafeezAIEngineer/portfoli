@@ -15,12 +15,19 @@ import {
   type FieldErrors,
 } from "@/lib/contact/schema";
 
-const empty: ContactFields = { name: "", email: "", message: "" };
+const empty: ContactFields = {
+  name: "",
+  email: "",
+  message: "",
+  company: "",
+  service: "",
+};
 export function ContactForm() {
   const [values, setValues] = useState<ContactFields>(empty);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [sending, setSending] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [success, setSuccess] = useState(copy.success as string);
   const [failure, setFailure] = useState("");
   const [turnstileToken, setToken] = useState("");
   const [resetKey, setResetKey] = useState(0);
@@ -84,9 +91,19 @@ export function ContactForm() {
       const data: unknown = await response.json();
       const payload =
         data && typeof data === "object"
-          ? (data as { ok?: boolean; error?: unknown; fields?: unknown })
+          ? (data as {
+              ok?: boolean;
+              error?: unknown;
+              fields?: unknown;
+              acceptance?: string;
+            })
           : null;
       if (response.status === 202 && payload?.ok === true) {
+        setSuccess(
+          payload.acceptance === "stored"
+            ? "Your inquiry has been saved. Thank you for getting in touch."
+            : copy.success,
+        );
         setStatus("success");
         setValues(empty);
         if (website.current) website.current.value = "";
@@ -160,6 +177,36 @@ export function ContactForm() {
           </div>
         ))}
       </div>
+      <div className="form-pair">
+        <div className="form-field">
+          <label htmlFor="contact-company">Company (optional)</label>
+          <input
+            id="contact-company"
+            name="company"
+            autoComplete="organization"
+            maxLength={150}
+            disabled={sending}
+            value={values.company || ""}
+            onChange={(e) => updateField("company", e.target.value)}
+          />
+        </div>
+        <div className="form-field">
+          <label htmlFor="contact-service">Service (optional)</label>
+          <select
+            id="contact-service"
+            name="service"
+            disabled={sending}
+            value={values.service || ""}
+            onChange={(e) => updateField("service", e.target.value)}
+          >
+            <option value="">Let&apos;s discuss it</option>
+            <option value="web">Website design & development</option>
+            <option value="chat">AI chatbot development</option>
+            <option value="automation">AI automation & integrations</option>
+            <option value="seo">SEO & optimization</option>
+          </select>
+        </div>
+      </div>
       <div className="form-field">
         <label htmlFor="contact-message">{copy.message}</label>
         <textarea
@@ -222,7 +269,7 @@ export function ContactForm() {
         {status === "success" && (
           <p className="form-success">
             <CheckCircle2 size={19} aria-hidden="true" />
-            {copy.success}
+            {success}
           </p>
         )}
       </div>

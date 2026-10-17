@@ -5,7 +5,7 @@ import { Menu, Moon, Sun, X } from "lucide-react";
 import { site } from "@/data/site";
 import { BrandMark } from "./brand-mark";
 
-export function Navbar({ identity }: { identity: { brand: string } }) {
+export function Navbar({ identity, rootLinks = false }: { identity: { brand: string }; rootLinks?: boolean }) {
   const [open, setOpen] = useState(false);
   const [theme, setTheme] = useState("dark");
   const menuButton = useRef<HTMLButtonElement>(null);
@@ -57,7 +57,7 @@ export function Navbar({ identity }: { identity: { brand: string } }) {
     <header className="site-header">
       <nav className="container nav-row" aria-label="Main navigation">
         <a
-          href="#top"
+          href={rootLinks ? "/#top" : "#top"}
           className="wordmark"
           aria-label={`${identity.brand} — Home`}
           onClick={() => setOpen(false)}
@@ -66,7 +66,7 @@ export function Navbar({ identity }: { identity: { brand: string } }) {
         </a>
         <div className="desktop-nav">
           {site.nav.map((item) => (
-            <a key={item.href} href={item.href}>
+            <a key={item.href} href={rootLinks ? `/${item.href}` : item.href}>
               {item.label}
             </a>
           ))}
@@ -105,7 +105,7 @@ export function Navbar({ identity }: { identity: { brand: string } }) {
           }}
         >
           {site.nav.map((item) => (
-            <a key={item.href} href={item.href} onClick={() => setOpen(false)}>
+            <a key={item.href} href={rootLinks ? `/${item.href}` : item.href} onClick={() => setOpen(false)}>
               {item.label}
             </a>
           ))}

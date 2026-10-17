@@ -1,29 +1,29 @@
-# Dependency security status — 15 October 2026
+# Dependency and application security status — 17 October 2026
 
-**Production launch is blocked while the requested Next.js 14 version is retained.** The implemented app can be reviewed locally, but it must not be described as free of known production dependency vulnerabilities.
+The owner approved the major-version migration. The project now uses **Next.js 15.5.28** and matching ESLint configuration with React 18.3.1. Async `headers()` and dynamic route parameters, tracing and external-package configuration were migrated. Lint, TypeScript, production build, real PostgreSQL/Auth.js HTTPS integration and browser checks cover the upgrade.
 
-The user explicitly fixed the stack at Next.js 14. The current 14.x release available to this project is 14.2.35. `npm audit --omit=dev` still reports **one critical affected package: Next.js**. Reported advisories require a patched later major version; updating within 14.x does not resolve them. A stack exception has been requested before changing majors. No major upgrade is silently applied.
+Current `npm audit --omit=dev`: **0 vulnerabilities**. The earlier Next.js 14 launch blocker has been resolved by the approved migration. This is an audit snapshot, not a guarantee against all vulnerabilities.
 
-Relevant examples:
+The full development audit reports **7 high-severity affected entries** through `braces <=3.0.3` and its glob/watch consumers in ESLint and Tailwind. No patched braces version is published in the available registry. These are build/development dependencies, not a finding in the production-only dependency tree. Do not process untrusted glob patterns through those tools. Review upstream releases and re-audit before launch; the finding is not suppressed or relabeled as fixed.
 
-- [App Router CSP nonce XSS — GHSA-ffhc-5mcf-pf4q](https://github.com/advisories/GHSA-ffhc-5mcf-pf4q)
-- [Image Optimization API remote-code-execution advisory — GHSA-2xp9-vwfh-vxw4](https://github.com/advisories/GHSA-2xp9-vwfh-vxw4)
-- [Server Components denial-of-service advisory — GHSA-8h8q-6873-q5fj](https://github.com/advisories/GHSA-8h8q-6873-q5fj)
+Existing security updates and overrides remain: Auth.js/NextAuth 4.24.15, Prisma 6.19.3, Sharp 0.35.5, Blob 2.8.2, PostCSS 8.5.30, deepmerge-ts 8.0.2, uuid 11.1.1 and postcss-selector-parser 7.1.6. The Gmail SMTP implementation uses patched Nodemailer 10.1.1 as the `gmail-smtp` alias. This Credentials-only app does not enable Auth.js's optional email authentication provider.
 
-Not every advisory applies to every feature/platform in this app. That does not justify treating the remaining affected framework as patched. CSP, validation, private admin checks and rate limits do not replace framework security updates.
+Application controls include server page/API authorization, 15-minute absolute session limits, database password-version checks, revocation on logout/password/2FA changes, bcrypt hashes and byte limits, failed-login lockout, shared-store production rate limits, same-origin mutation checks, strict validation, nonced CSP, no-store private responses and restricted image upload decoding/re-encoding. Sign-out revokes all sessions for the single administrator. Recovery is a private CLI operation, with audit records; there is no public registration/reset endpoint.
 
-Other findings were addressed by updating Auth.js/NextAuth 4.24.15, Prisma packages 6.19.3, Sharp 0.35.5, Vercel Blob 2.8.2, PostCSS 8.5.30, and compatible locked transitive dependencies. Prisma config uses a security override for deepmerge-ts 8.0.2; generation/build checks cover the pinned configuration. The current Gmail SMTP implementation uses Nodemailer 10.1.1 under the `gmail-smtp` npm alias because Auth.js declares an older optional mail-provider peer; this app uses Credentials authentication and does not use Auth.js's email provider. The alias keeps the patched SMTP library without installing the vulnerable optional version. Do not remove the lockfile or replace it with an incompatible peer override.
+Production still requires a strong private auth secret, HTTPS, least-privilege database access, backups, shared Redis limits for multiple instances, properly configured Turnstile, and actual provider configuration. Memory limits are an explicit single-process deployment option only. Review retention, provider agreements and served regions; consent controls do not certify legal compliance.
 
-Recheck before any launch:
+Recheck after dependency or authentication changes:
 
 ```bash
 npm audit --omit=dev
+npm audit
 npm run test:chat
 npm run test:contact
 npm run test:security
+npm run test:consent
 npm run lint
 npm run typecheck
 npm run build
 ```
 
-Audit advisories change over time. Once a patched framework upgrade is authorized, migrate the affected APIs/configuration, rerun production browser/database tests, and update this document with the actual result. Lighthouse accessibility/best-practices/SEO scores are not a dependency security certification.
+See `TESTING.md` for guarded real-database and HTTPS integration suites. No actual production credentials, database, mail delivery, paid AI call or public hosting deployment is established by local tests.

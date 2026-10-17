@@ -4,7 +4,7 @@
 "use client";
 import Link from "next/link";
 import { signIn, signOut } from "next-auth/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ArrowDown,
   ArrowUp,
@@ -16,13 +16,20 @@ import {
   X,
 } from "lucide-react";
 import { adminContent as copy, adminDefaults, adminFields } from "@/data/admin";
+import { useModal } from "@/hooks/use-modal";
 type RecordData = Record<string, unknown>;
-async function api(resource: string, method = "GET", body?: unknown) {
+async function api(
+  resource: string,
+  method = "GET",
+  body?: unknown,
+  signal?: AbortSignal,
+) {
   const response = await fetch(`/api/admin/${resource}`, {
     method,
     headers: body ? { "Content-Type": "application/json" } : undefined,
     body: body ? JSON.stringify(body) : undefined,
     cache: "no-store",
+    signal,
   });
   const data = await response.json();
   if (!response.ok)
@@ -30,6 +37,17 @@ async function api(resource: string, method = "GET", body?: unknown) {
   return data;
 }
 export function AdminApp({ section }: { section: string }) {
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [pages, setPages] = useState(1);
+  const [search, setSearch] = useState("");
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState("");
+  const [sort, setSort] = useState("newest");
+  const [deleting, setDeleting] = useState<RecordData | null>(null);
+  const [lead, setLead] = useState<RecordData | null>(null);
+  const paginated = ["inbox", "chatlogs", "audit"].includes(section);
+  const loading = useRef<AbortController | null>(null);
   const [records, setRecords] = useState<RecordData[]>([]);
   const [dashboard, setDashboard] = useState<RecordData>({});
   const [editor, setEditor] = useState<RecordData | null>(null);
@@ -37,22 +55,41 @@ export function AdminApp({ section }: { section: string }) {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const load = useCallback(async () => {
+    loading.current?.abort();
+    const controller = new AbortController();
+    loading.current = controller;
     setBusy(true);
     setError("");
     try {
-      const data = await api(section === "security" ? "dashboard" : section);
+      const suffix = paginated
+        ? `?${new URLSearchParams({ page: String(page), q: query, status: filter, sort })}`
+        : "";
+      const data = await api(
+        (section === "security" ? "dashboard" : section) + suffix,
+        "GET",
+        undefined,
+        controller.signal,
+      );
+      if (controller.signal.aborted) return;
       if (section === "dashboard" || section === "security") setDashboard(data);
       else if (section === "settings")
         setEditor(data || adminDefaults.settings);
-      else setRecords(data);
+      else if (paginated) {
+        setRecords(data.items);
+        setPages(data.pages);
+        setTotal(data.total);
+        if (page > data.pages) setPage(data.pages);
+      } else setRecords(data);
     } catch (error) {
-      setError(error instanceof Error ? error.message : copy.error);
+      if (!controller.signal.aborted)
+        setError(error instanceof Error ? error.message : copy.error);
     } finally {
-      setBusy(false);
+      if (!controller.signal.aborted) setBusy(false);
     }
-  }, [section]);
+  }, [section, paginated, page, query, filter, sort]);
   useEffect(() => {
     if (section !== "login") void load();
+    return () => loading.current?.abort();
   }, [section, load]);
   if (section === "login") return <AdminLogin />;
   async function mutate(method: string, body: unknown) {
@@ -62,6 +99,8 @@ export function AdminApp({ section }: { section: string }) {
     try {
       await api(section, method, body);
       setEditor(null);
+      setLead(null);
+      setDeleting(null);
       setMessage(method === "DELETE" ? copy.deleted : copy.saved);
       await load();
     } catch (error) {
@@ -161,18 +200,122 @@ export function AdminApp({ section }: { section: string }) {
         )}
         {section === "dashboard" && (
           <>
-            <p className="admin-note">{copy.originWarning}</p>
+            <p className="admin-note">
+              {dashboard.contentSource === "database"
+                ? "Published CMS content appears on the website."
+                : "The public website uses repository content. Set CONTENT_SOURCE=database after populating the CMS to publish these records."}
+            </p>
             <div className="admin-stats">
               {Object.entries(dashboard)
-                .filter(([key]) => key !== "twoFactor")
+                .filter(([, value]) => typeof value === "number")
                 .map(([key, value]) => (
                   <article className="glass" key={key}>
-                    <span>{key}</span>
+                    <span>
+                      {{
+                        projects: "Projects",
+                        bots: "Bots",
+                        messages: "Inquiries",
+                        unread: "Unread",
+                        newInquiries: "New inquiries",
+                      }[key] || key}
+                    </span>
                     <strong>{String(value)}</strong>
                   </article>
                 ))}
             </div>
+            <h2>Recent inquiries</h2>
+            {!busy &&
+              Array.isArray(dashboard.recent) &&
+              dashboard.recent.length === 0 && (
+                <p className="admin-note">No inquiries yet.</p>
+              )}
+            <div className="admin-records">
+              {(Array.isArray(dashboard.recent)
+                ? (dashboard.recent as RecordData[])
+                : []
+              ).map((row) => (
+                <Link
+                  className="admin-record glass"
+                  key={String(row.id)}
+                  href="/admin/inbox"
+                >
+                  <strong>{String(row.name)}</strong>
+                  <span>{String(row.status)}</span>
+                </Link>
+              ))}
+            </div>
           </>
+        )}
+        {paginated && (
+          <form
+            className="admin-filters"
+            onSubmit={(e) => {
+              e.preventDefault();
+              setPage(1);
+              setQuery(search);
+            }}
+          >
+            <label className="sr-only" htmlFor="admin-search">
+              Search records
+            </label>
+            <input
+              id="admin-search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search records"
+              maxLength={200}
+            />
+            <button className="button button-outline" disabled={busy}>
+              Search
+            </button>
+            <label className="sr-only" htmlFor="admin-sort">
+              Sort records
+            </label>
+            <select
+              id="admin-sort"
+              value={sort}
+              onChange={(e) => {
+                setSort(e.target.value);
+                setPage(1);
+              }}
+            >
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+            </select>
+            {section === "inbox" && (
+              <>
+                <label className="sr-only" htmlFor="admin-status">
+                  Filter status
+                </label>
+                <select
+                  id="admin-status"
+                  value={filter}
+                  onChange={(e) => {
+                    setFilter(e.target.value);
+                    setPage(1);
+                  }}
+                >
+                  <option value="">All statuses</option>
+                  {["new", "contacted", "in-progress", "closed"].map(
+                    (value) => (
+                      <option value={value} key={value}>
+                        {value}
+                      </option>
+                    ),
+                  )}
+                </select>
+              </>
+            )}
+          </form>
+        )}
+        {lead && (
+          <LeadEditor
+            key={String(lead.id)}
+            initial={lead}
+            busy={busy}
+            save={(data) => mutate("PATCH", data)}
+            close={() => setLead(null)}
+          />
         )}
         {section === "security" ? (
           <SecurityPanel enabled={dashboard.twoFactor === true} />
@@ -188,9 +331,17 @@ export function AdminApp({ section }: { section: string }) {
           section !== "dashboard" &&
           section !== "settings" && (
             <div className="admin-records">
-              {["projects", "bots", "skills", "certificates"].includes(
-                section,
-              ) && <p className="admin-note">{copy.reorderHelp}</p>}
+              {[
+                "projects",
+                "bots",
+                "skills",
+                "certificates",
+                "services",
+                "faqs",
+                "testimonials",
+              ].includes(section) && (
+                <p className="admin-note">{copy.reorderHelp}</p>
+              )}
               {section === "chatlogs" && (
                 <p className="admin-note">{copy.retention}</p>
               )}
@@ -200,7 +351,8 @@ export function AdminApp({ section }: { section: string }) {
                   <div>
                     <h2>
                       {String(
-                        record.title ||
+                        record.question ||
+                          record.title ||
                           record.name ||
                           record.botId ||
                           record.action ||
@@ -230,6 +382,13 @@ export function AdminApp({ section }: { section: string }) {
                         </p>
                       </>
                     )}
+                    {section === "inbox" && (
+                      <p>
+                        Status: {String(record.status)}
+                        {record.company ? ` · ${record.company}` : ""}
+                        {record.service ? ` · ${record.service}` : ""}
+                      </p>
+                    )}
                     {Boolean(record.deliveryStatus) && (
                       <p>
                         {copy.delivery}: {String(record.deliveryStatus)}
@@ -248,7 +407,7 @@ export function AdminApp({ section }: { section: string }) {
                         <button
                           className="icon-button"
                           disabled={busy || index === 0}
-                          aria-label={`${copy.up}: ${String(record.title || record.name)}`}
+                          aria-label={`${copy.up}: ${String(record.question || record.title || record.name)}`}
                           onClick={() => move(index, -1)}
                         >
                           <ArrowUp size={17} />
@@ -256,7 +415,7 @@ export function AdminApp({ section }: { section: string }) {
                         <button
                           className="icon-button"
                           disabled={busy || index === records.length - 1}
-                          aria-label={`${copy.down}: ${String(record.title || record.name)}`}
+                          aria-label={`${copy.down}: ${String(record.question || record.title || record.name)}`}
                           onClick={() => move(index, 1)}
                         >
                           <ArrowDown size={17} />
@@ -274,6 +433,15 @@ export function AdminApp({ section }: { section: string }) {
                       <button
                         className="button button-outline"
                         disabled={busy}
+                        onClick={() => setLead(record)}
+                      >
+                        Manage inquiry
+                      </button>
+                    )}
+                    {section === "inbox" && (
+                      <button
+                        className="button button-outline"
+                        disabled={busy}
                         onClick={() =>
                           mutate("PATCH", { id: record.id, read: !record.read })
                         }
@@ -285,10 +453,9 @@ export function AdminApp({ section }: { section: string }) {
                       <button
                         className="icon-button"
                         disabled={busy}
-                        aria-label={`${copy.remove}: ${String(record.title || record.name || record.id)}`}
+                        aria-label={`${copy.remove}: ${String(record.question || record.title || record.name || record.id)}`}
                         onClick={() => {
-                          if (window.confirm(copy.deleteConfirm))
-                            void mutate("DELETE", { id: record.id });
+                          setDeleting(record);
                         }}
                       >
                         <Trash2 size={17} />
@@ -299,6 +466,35 @@ export function AdminApp({ section }: { section: string }) {
               ))}
             </div>
           )
+        )}
+        {paginated && (
+          <div className="admin-pagination">
+            <button
+              className="button button-outline"
+              disabled={busy || page <= 1}
+              onClick={() => setPage((value) => value - 1)}
+            >
+              Previous
+            </button>
+            <span>
+              {total} records · Page {page} of {pages}
+            </span>
+            <button
+              className="button button-outline"
+              disabled={busy || page >= pages}
+              onClick={() => setPage((value) => value + 1)}
+            >
+              Next
+            </button>
+          </div>
+        )}
+        {deleting && (
+          <DeleteDialog
+            error={error}
+            busy={busy}
+            close={() => setDeleting(null)}
+            confirm={() => mutate("DELETE", { id: deleting.id })}
+          />
         )}
       </main>
     </div>
@@ -395,9 +591,13 @@ function RecordEditor({
     Object.fromEntries(
       (adminFields[resource] || []).map((field) => [
         field.key,
-        field.type === "json"
-          ? JSON.stringify(initial[field.key] ?? null, null, 2)
-          : (initial[field.key] ?? (field.type === "boolean" ? false : "")),
+        field.type === "lines"
+          ? Array.isArray(initial[field.key])
+            ? (initial[field.key] as string[]).join("\n")
+            : ""
+          : field.type === "json"
+            ? JSON.stringify(initial[field.key] ?? null, null, 2)
+            : (initial[field.key] ?? (field.type === "boolean" ? false : "")),
       ]),
     ),
   );
@@ -413,9 +613,14 @@ function RecordEditor({
           const data: RecordData = {};
           for (const field of adminFields[resource])
             data[field.key] =
-              field.type === "json"
-                ? JSON.parse(String(values[field.key]))
-                : values[field.key];
+              field.type === "lines"
+                ? String(values[field.key])
+                    .split("\n")
+                    .map((value) => value.trim())
+                    .filter(Boolean)
+                : field.type === "json"
+                  ? JSON.parse(String(values[field.key]))
+                  : values[field.key];
           if (resource !== "settings" && typeof initial.order === "number")
             data.order = initial.order;
           onSave(data);
@@ -440,11 +645,14 @@ function RecordEditor({
       {adminFields[resource]?.map((field) => (
         <div className="form-field" key={field.key}>
           <label htmlFor={`edit-${field.key}`}>
-            {copy.fields[field.key as keyof typeof copy.fields] || field.key}
+            {field.type === "lines"
+              ? `${field.key[0].toUpperCase()}${field.key.slice(1)} (one per line)`
+              : copy.fields[field.key as keyof typeof copy.fields] || field.key}
           </label>
           {field.type === "boolean" ? (
             <input
               id={`edit-${field.key}`}
+              disabled={busy}
               type="checkbox"
               checked={Boolean(values[field.key])}
               onChange={(event) =>
@@ -454,9 +662,12 @@ function RecordEditor({
                 }))
               }
             />
-          ) : field.type === "json" || field.type === "long" ? (
+          ) : field.type === "json" ||
+            field.type === "long" ||
+            field.type === "lines" ? (
             <textarea
               id={`edit-${field.key}`}
+              disabled={busy}
               rows={field.type === "json" ? 5 : 4}
               value={String(values[field.key])}
               onChange={(event) =>
@@ -471,6 +682,17 @@ function RecordEditor({
               id={`edit-${field.key}`}
               type={field.type === "number" ? "number" : "text"}
               value={String(values[field.key])}
+              disabled={busy}
+              required={
+                ![
+                  "demoUrl",
+                  "image",
+                  "portrait",
+                  "issuedAt",
+                  "systemPrompt",
+                  "note",
+                ].includes(field.key)
+              }
               readOnly={field.key === "id" && Boolean(initial.id)}
               onChange={(event) =>
                 setValues((current) => ({
@@ -485,7 +707,7 @@ function RecordEditor({
           )}
         </div>
       ))}
-      {["projects", "certificates"].includes(resource) && (
+      {["projects", "certificates", "testimonials"].includes(resource) && (
         <div className="admin-upload">
           <label htmlFor="admin-images">{copy.upload}</label>
           <p>{copy.uploadHelp}</p>
@@ -511,8 +733,12 @@ function RecordEditor({
                 const result = await response.json();
                 if (!response.ok) throw new Error(result.error || copy.error);
                 setValues((current) =>
-                  resource === "certificates"
-                    ? { ...current, image: result.images[0].src }
+                  resource === "certificates" || resource === "testimonials"
+                    ? {
+                        ...current,
+                        [resource === "testimonials" ? "portrait" : "image"]:
+                          result.images[0].src,
+                      }
                     : {
                         ...current,
                         screenshots: JSON.stringify(
@@ -643,6 +869,111 @@ function SecurityPanel({ enabled }: { enabled: boolean }) {
         </p>
       )}
     </div>
+  );
+}
+
+function DeleteDialog({
+  busy,
+  close,
+  confirm,
+  error,
+}: {
+  error: string;
+  busy: boolean;
+  close: () => void;
+  confirm: () => void;
+}) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  const trap = useModal(dialog);
+  return (
+    <dialog
+      ref={dialog}
+      className="admin-confirm"
+      aria-labelledby="delete-title"
+      onKeyDown={trap}
+      onCancel={(e) => {
+        e.preventDefault();
+        if (!busy) close();
+      }}
+    >
+      <h2 id="delete-title">Delete this record?</h2>
+      <p>This action cannot be undone.</p>
+      {error && <p role="alert">{error}</p>}
+      <div>
+        <button
+          className="button button-outline"
+          disabled={busy}
+          onClick={close}
+        >
+          Cancel
+        </button>
+        <button
+          className="button button-gold"
+          disabled={busy}
+          onClick={confirm}
+        >
+          Delete record
+        </button>
+      </div>
+    </dialog>
+  );
+}
+function LeadEditor({
+  initial,
+  busy,
+  save,
+  close,
+}: {
+  initial: RecordData;
+  busy: boolean;
+  save: (data: RecordData) => void;
+  close: () => void;
+}) {
+  const [status, setStatus] = useState(String(initial.status));
+  const [notes, setNotes] = useState(String(initial.notes || ""));
+  return (
+    <form
+      className="admin-editor glass lead-editor"
+      onSubmit={(e) => {
+        e.preventDefault();
+        save({ id: initial.id, status, notes });
+      }}
+    >
+      <h2>Manage inquiry from {String(initial.name)}</h2>
+      <label htmlFor="lead-status">Status</label>
+      <select
+        id="lead-status"
+        disabled={busy}
+        value={status}
+        onChange={(e) => setStatus(e.target.value)}
+      >
+        {["new", "contacted", "in-progress", "closed"].map((value) => (
+          <option value={value} key={value}>
+            {value}
+          </option>
+        ))}
+      </select>
+      <label htmlFor="lead-notes">Private notes</label>
+      <textarea
+        id="lead-notes"
+        rows={5}
+        maxLength={5000}
+        disabled={busy}
+        value={notes}
+        onChange={(e) => setNotes(e.target.value)}
+      />
+      <button className="button button-gold" disabled={busy}>
+        Save inquiry
+      </button>
+      <button
+        type="button"
+        className="button button-outline"
+        disabled={busy}
+        onClick={close}
+      >
+        Cancel
+      </button>
+    </form>
   );
 }
 ``````
@@ -1869,9 +2200,12 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
       try {
         current = parseConsent(localStorage.getItem(copy.key));
       } catch {
+        document.documentElement.dataset.consentChoice = "needed";
+        setRecord(null);
         setReady(true);
         return;
       }
+      document.documentElement.dataset.consentChoice = current ? "saved" : "needed";
       setRecord(current);
       setReady(true);
     };
@@ -1891,6 +2225,7 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
   }, []);
   const save = useCallback((external: boolean) => {
     const next = { version: copy.version, external, updatedAt: Date.now() };
+    document.documentElement.dataset.consentChoice = "saved";
     setRecord(next);
     setSettings(false);
     setReady(true);
@@ -1911,7 +2246,7 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-      {ready && !record && !settings && (
+      {!record && !settings && (
         <aside className="consent-banner" aria-labelledby="consent-title">
           <div className="consent-symbol">
             <ShieldCheck size={24} aria-hidden="true" />
@@ -1982,12 +2317,19 @@ import {
   type FieldErrors,
 } from "@/lib/contact/schema";
 
-const empty: ContactFields = { name: "", email: "", message: "" };
+const empty: ContactFields = {
+  name: "",
+  email: "",
+  message: "",
+  company: "",
+  service: "",
+};
 export function ContactForm() {
   const [values, setValues] = useState<ContactFields>(empty);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [sending, setSending] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [success, setSuccess] = useState(copy.success as string);
   const [failure, setFailure] = useState("");
   const [turnstileToken, setToken] = useState("");
   const [resetKey, setResetKey] = useState(0);
@@ -2051,9 +2393,19 @@ export function ContactForm() {
       const data: unknown = await response.json();
       const payload =
         data && typeof data === "object"
-          ? (data as { ok?: boolean; error?: unknown; fields?: unknown })
+          ? (data as {
+              ok?: boolean;
+              error?: unknown;
+              fields?: unknown;
+              acceptance?: string;
+            })
           : null;
       if (response.status === 202 && payload?.ok === true) {
+        setSuccess(
+          payload.acceptance === "stored"
+            ? "Your inquiry has been saved. Thank you for getting in touch."
+            : copy.success,
+        );
         setStatus("success");
         setValues(empty);
         if (website.current) website.current.value = "";
@@ -2127,6 +2479,36 @@ export function ContactForm() {
           </div>
         ))}
       </div>
+      <div className="form-pair">
+        <div className="form-field">
+          <label htmlFor="contact-company">Company (optional)</label>
+          <input
+            id="contact-company"
+            name="company"
+            autoComplete="organization"
+            maxLength={150}
+            disabled={sending}
+            value={values.company || ""}
+            onChange={(e) => updateField("company", e.target.value)}
+          />
+        </div>
+        <div className="form-field">
+          <label htmlFor="contact-service">Service (optional)</label>
+          <select
+            id="contact-service"
+            name="service"
+            disabled={sending}
+            value={values.service || ""}
+            onChange={(e) => updateField("service", e.target.value)}
+          >
+            <option value="">Let&apos;s discuss it</option>
+            <option value="web">Website design & development</option>
+            <option value="chat">AI chatbot development</option>
+            <option value="automation">AI automation & integrations</option>
+            <option value="seo">SEO & optimization</option>
+          </select>
+        </div>
+      </div>
       <div className="form-field">
         <label htmlFor="contact-message">{copy.message}</label>
         <textarea
@@ -2189,7 +2571,7 @@ export function ContactForm() {
         {status === "success" && (
           <p className="form-success">
             <CheckCircle2 size={19} aria-hidden="true" />
-            {copy.success}
+            {success}
           </p>
         )}
       </div>
@@ -3089,7 +3471,6 @@ import { experience as copy } from "@/data/experience";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
 import { SocialLinks } from "./social-links";
-import Image from "next/image";
 import { site } from "@/data/site";
 const fundamentalsIcons = {
   frontend: Blocks,
@@ -3108,18 +3489,22 @@ export function Experience() {
       <div className="experience-intro">
         <Reveal>
           <figure className="about-portrait">
-            <div className="about-portrait-image">
-              <Image
-                src={site.hero.portrait}
-                alt={site.hero.portraitAlt}
-                fill
-                sizes="(max-width:700px) 85vw,480px"
-              />
-              {site.hero.portraitStatus && (
-                <span className="about-portrait-status">
-                  {site.hero.portraitStatus}
-                </span>
-              )}
+            <div
+              className="about-portrait-image about-brand-poster"
+              aria-label="Elvora: code, context, craft"
+            >
+              <span className="eyebrow">INDEPENDENT BY DESIGN</span>
+              <span className="poster-emblem" aria-hidden="true">
+                E<span>.</span>
+              </span>
+              <strong>
+                Code.
+                <br />
+                Context.
+                <br />
+                Craft.
+              </strong>
+              <span>WEB DEVELOPMENT + APPLIED AI</span>
             </div>
             <figcaption>
               <div>
@@ -3201,6 +3586,42 @@ export function Experience() {
 }
 ``````
 
+## components/faq-section.tsx
+
+``````tsx
+import type { Faq } from "@/data/agency";
+import { TextReveal } from "./text-reveal";
+export function FaqSection({ faqs }: { faqs: Faq[] }) {
+  if (!faqs.length) return null;
+  return (
+    <section
+      id="faq"
+      className="container studio-section agency-faq"
+      aria-labelledby="faq-title"
+    >
+      <div>
+        <p className="eyebrow">BEFORE WE BUILD</p>
+        <TextReveal id="faq-title" text={"Good questions.\nClear answers."} />
+        <p className="section-intro">
+          A few things to know before starting a project together.
+        </p>
+      </div>
+      <div className="faq-list">
+        {faqs.map((faq, index) => (
+          <details key={faq.id}>
+            <summary>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              {faq.question}
+            </summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  );
+}
+``````
+
 ## components/footer.tsx
 
 ``````tsx
@@ -3253,10 +3674,10 @@ export function Footer({
               {email}
               <ArrowUpRight size={17} aria-hidden="true" />
             </a>
-            <a href="/#contact" className="footer-brief-link">
+            <Link href="/#contact" className="footer-brief-link">
               {studio.ending.action}
               <ArrowUpRight size={16} aria-hidden="true" />
-            </a>
+            </Link>
           </div>
         </Reveal>
       </div>
@@ -3274,7 +3695,7 @@ export function Footer({
         </div>
         <div className="container">
           <Reveal>
-            <a
+            <Link
               className="footer-emblem"
               href="/#top"
               aria-label={`${brand} — Home`}
@@ -3289,7 +3710,7 @@ export function Footer({
                 />
               </span>
               <strong>{brand}</strong>
-            </a>
+            </Link>
             <p className="footer-signature">{studio.ending.signature}</p>
             <div className="footer-social-row">
               <SocialLinks iconsOnly />
@@ -3311,13 +3732,13 @@ export function Footer({
               ))}
               <CookieSettingsButton />
             </nav>
-            <a
+            <Link
               className="footer-top-link"
               href="/#top"
               aria-label={site.ui.back}
             >
               ↑
-            </a>
+            </Link>
           </div>
           <p className="footer-editorial-credit">{studio.ending.credit}</p>
         </div>
@@ -3503,12 +3924,13 @@ export function LegalPage({ page }: { page: keyof typeof legal.pages }) {
 ``````tsx
 "use client";
 
+import { RevealObserver } from "./reveal-observer";
 import { LazyMotion, domAnimation, MotionConfig } from "framer-motion";
 
 export function MotionProvider({ children }: { children: React.ReactNode }) {
   return (
     <LazyMotion features={domAnimation} strict>
-      <MotionConfig reducedMotion="user">{children}</MotionConfig>
+      <MotionConfig reducedMotion="user"><RevealObserver />{children}</MotionConfig>
     </LazyMotion>
   );
 }
@@ -3524,7 +3946,7 @@ import { Menu, Moon, Sun, X } from "lucide-react";
 import { site } from "@/data/site";
 import { BrandMark } from "./brand-mark";
 
-export function Navbar({ identity }: { identity: { brand: string } }) {
+export function Navbar({ identity, rootLinks = false }: { identity: { brand: string }; rootLinks?: boolean }) {
   const [open, setOpen] = useState(false);
   const [theme, setTheme] = useState("dark");
   const menuButton = useRef<HTMLButtonElement>(null);
@@ -3576,7 +3998,7 @@ export function Navbar({ identity }: { identity: { brand: string } }) {
     <header className="site-header">
       <nav className="container nav-row" aria-label="Main navigation">
         <a
-          href="#top"
+          href={rootLinks ? "/#top" : "#top"}
           className="wordmark"
           aria-label={`${identity.brand} — Home`}
           onClick={() => setOpen(false)}
@@ -3585,7 +4007,7 @@ export function Navbar({ identity }: { identity: { brand: string } }) {
         </a>
         <div className="desktop-nav">
           {site.nav.map((item) => (
-            <a key={item.href} href={item.href}>
+            <a key={item.href} href={rootLinks ? `/${item.href}` : item.href}>
               {item.label}
             </a>
           ))}
@@ -3624,7 +4046,7 @@ export function Navbar({ identity }: { identity: { brand: string } }) {
           }}
         >
           {site.nav.map((item) => (
-            <a key={item.href} href={item.href} onClick={() => setOpen(false)}>
+            <a key={item.href} href={rootLinks ? `/${item.href}` : item.href} onClick={() => setOpen(false)}>
               {item.label}
             </a>
           ))}
@@ -3979,6 +4401,7 @@ export default function ProjectGallery({
         </div>
         <div className="gallery-details">
           <div>
+            <Link className="gallery-demo-link" href={`/work/${project.id}`}>Read project notes</Link>
             <p id="gallery-description">{project.description}</p>
             {project.demoUrl && (
               <Link className="gallery-demo-link" href={project.demoUrl} target={project.demoUrl.startsWith("https://") ? "_blank" : undefined} rel={project.demoUrl.startsWith("https://") ? "noopener noreferrer" : undefined}>
@@ -4010,45 +4433,85 @@ export default function ProjectGallery({
 }
 ``````
 
-## components/reveal.tsx
+## components/reveal-observer.tsx
 
 ``````tsx
 "use client";
-import { m, useReducedMotion } from "framer-motion";
+import { useEffect } from "react";
+export function RevealObserver() {
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (media.matches || !window.IntersectionObserver) {
+      delete document.documentElement.dataset.motionReveals;
+      return;
+    }
+    const observed = new WeakSet<Element>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries)
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-revealed");
+            observer.unobserve(entry.target);
+          }
+      },
+      { threshold: 0.08, rootMargin: "0px 0px -20px 0px" },
+    );
+    const scan = (root: Element) => {
+      const elements = [
+        ...root.querySelectorAll("[data-reveal]"),
+        ...(root.matches("[data-reveal]") ? [root] : []),
+      ];
+      for (const element of elements)
+        if (!observed.has(element)) {
+          observed.add(element);
+          observer.observe(element);
+        }
+    };
+    scan(document.body);
+    const mutation = new MutationObserver((records) => {
+      for (const record of records)
+        for (const node of record.addedNodes)
+          if (node instanceof Element) scan(node);
+    });
+    mutation.observe(document.body, { childList: true, subtree: true });
+    const change = () => {
+      if (media.matches) {
+        delete document.documentElement.dataset.motionReveals;
+        observer.disconnect();
+      }
+    };
+    media.addEventListener("change", change);
+    return () => {
+      observer.disconnect();
+      mutation.disconnect();
+      media.removeEventListener("change", change);
+    };
+  }, []);
+  return null;
+}
+``````
 
+## components/reveal.tsx
+
+``````tsx
+import type { CSSProperties, ReactNode } from "react";
 export function Reveal({
   children,
   delay = 0,
   className = "",
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   delay?: number;
   className?: string;
 }) {
-  const reduced = useReducedMotion();
   return (
-    <m.div
+    <div
+      data-reveal="block"
       className={`motion-reveal ${className}`}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.12, margin: "0px 0px -20px 0px" }}
-      variants={{
-        hidden: { opacity: 0, y: 32, scale: 0.985, filter: "blur(5px)" },
-        visible: {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          filter: "blur(0px)",
-          transition: {
-            duration: reduced ? 0 : 0.75,
-            delay: reduced ? 0 : delay,
-            ease: [0.22, 1, 0.36, 1],
-          },
-        },
-      }}
+      style={{ "--reveal-delay": `${delay}s` } as CSSProperties}
     >
       {children}
-    </m.div>
+    </div>
   );
 }
 ``````
@@ -4185,10 +4648,6 @@ export function SocialLinks({ iconsOnly = false }: { iconsOnly?: boolean }) {
 ## components/studio-sections.tsx
 
 ``````tsx
-"use client";
-import Image from "next/image";
-import { useRef } from "react";
-import { m, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -4202,14 +4661,14 @@ import {
   Workflow as WorkflowIcon,
 } from "lucide-react";
 import { studio } from "@/data/studio";
-import { studies } from "@/data/studies";
-import type { ProjectView } from "@/data/projects";
+import type { Service } from "@/data/agency";
+export { WorkBunch } from "./work-bunch";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
 import { ToolMark } from "./tool-mark";
 const serviceIcons = [Braces, Bot, WorkflowIcon, Search];
 
-export function Services() {
+export function Services({ services }: { services: Service[] }) {
   return (
     <section
       id="services"
@@ -4226,8 +4685,8 @@ export function Services() {
         </Reveal>
       </div>
       <div className="studio-services">
-        {studio.services.items.map((service, index) => {
-          const Icon = serviceIcons[index];
+        {services.map((service, index) => {
+          const Icon = serviceIcons[index % serviceIcons.length];
           return (
             <Reveal key={service.id} delay={(index % 2) * 0.08}>
               <article className={`studio-service service-${service.id}`}>
@@ -4244,10 +4703,10 @@ export function Services() {
                 <p className="service-detail">{service.detail}</p>
                 <a
                   className="service-learn"
-                  href="#contact"
-                  aria-label={`${studio.services.action}: ${service.title}`}
+                  href={`/services/${service.id}`}
+                  aria-label={`Service details: ${service.title}`}
                 >
-                  {studio.services.more}
+                  Service details
                   <ArrowUpRight size={15} aria-hidden="true" />
                 </a>
               </article>
@@ -4418,104 +4877,12 @@ export function ToolOrbit() {
     </section>
   );
 }
-
-export function WorkBunch({ projects }: { projects: ProjectView[] }) {
-  const ref = useRef<HTMLElement>(null);
-  const reduced = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const drift = useTransform(scrollYProgress, [0, 1], [-24, 24]);
-  const items = [
-    ...projects.slice(0, 4).map((project) => ({
-      id: project.id,
-      title: project.title,
-      image: project.screenshots[0].src,
-      alt: project.screenshots[0].alt,
-      href: project.demoUrl,
-      category: studio.bunch.websiteLabel,
-    })),
-    ...studies.map((study) => ({
-      id: study.id,
-      title: study.name,
-      image: study.screenshot,
-      alt: `${study.name}: original ${study.industry.toLowerCase()} interface concept, captured from its implemented design study`,
-      href: `/studies/${study.id}`,
-      category: study.industry,
-    })),
-  ];
-  return (
-    <section
-      ref={ref}
-      id="work-bunch"
-      className="bunch-section studio-section reference-bunch"
-      aria-labelledby="bunch-title"
-    >
-      <div className="container reference-heading">
-        <Reveal>
-          <p className="eyebrow">{studio.bunch.eyebrow}</p>
-        </Reveal>
-        <TextReveal id="bunch-title" text={studio.bunch.title} />
-        <Reveal>
-          <p>{studio.bunch.intro}</p>
-        </Reveal>
-      </div>
-      <div className="bunch-window">
-        <m.div
-          className="bunch-grid"
-          style={reduced ? undefined : { y: drift }}
-        >
-          {items.map((item, index) => (
-            <a
-              className={`bunch-piece bunch-piece-${index}`}
-              href={item.href}
-              key={item.id}
-              aria-label={`${studio.bunch.explore}: ${item.title}`}
-            >
-              <div className="bunch-browser" aria-hidden="true">
-                <i />
-                <i />
-                <i />
-                <span>
-                  {item.title.toLowerCase().replaceAll(" ", "-")}.concept
-                </span>
-              </div>
-              <div className="bunch-image">
-                <Image
-                  src={item.image}
-                  alt={item.alt}
-                  fill
-                  sizes="(max-width:650px) 70vw,(max-width:1000px) 35vw,400px"
-                />
-              </div>
-              <div className="bunch-caption">
-                <span>{item.title}</span>
-                <small>{item.category}</small>
-                <ArrowUpRight size={15} aria-hidden="true" />
-              </div>
-            </a>
-          ))}
-        </m.div>
-      </div>
-      <div className="container bunch-after">
-        <p className="studio-note">{studio.bunch.note}</p>
-        <a href="#work" className="text-link">
-          {studio.bunch.view}
-          <ArrowUpRight size={17} aria-hidden="true" />
-        </a>
-      </div>
-    </section>
-  );
-}
 ``````
 
 ## components/text-reveal.tsx
 
 ``````tsx
-"use client";
-import { m, useReducedMotion } from "framer-motion";
-
+import type { CSSProperties } from "react";
 export function TextReveal({
   text,
   as = "h2",
@@ -4527,54 +4894,27 @@ export function TextReveal({
   id?: string;
   className?: string;
 }) {
-  const reduced = useReducedMotion();
-  const Heading = as === "h1" ? m.h1 : as === "h3" ? m.h3 : m.h2;
+  const Heading = as;
+  let wordIndex = 0;
   return (
     <Heading
       id={id}
       className={`text-reveal ${className}`}
       aria-label={text.replaceAll("\n", " ")}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.45 }}
-      variants={{
-        hidden: {},
-        visible: {
-          transition: {
-            staggerChildren: reduced ? 0 : 0.035,
-            delayChildren: reduced ? 0 : 0.02,
-          },
-        },
-      }}
+      data-reveal={as === "h1" ? undefined : "words"}
     >
       {text.split("\n").map((line, lineIndex) => (
-        <span
-          className="text-reveal-line"
-          aria-hidden="true"
-          key={`${lineIndex}-${line}`}
-        >
+        <span className="text-reveal-line" aria-hidden="true" key={lineIndex}>
           {line.split(" ").map((word, index) => (
-            <span className="word-mask" key={`${word}-${index}`}>
-              <m.span
+            <span className="word-mask" key={index}>
+              <span
                 className="motion-word"
-                variants={{
-                  hidden: { y: "112%", rotate: 3 },
-                  visible: {
-                    y: "0%",
-                    rotate: 0,
-                    transition: reduced
-                      ? { duration: 0 }
-                      : {
-                          type: "spring",
-                          stiffness: 160,
-                          damping: 24,
-                          mass: 0.8,
-                        },
-                  },
-                }}
+                style={
+                  { "--word-delay": `${wordIndex++ * 0.035}s` } as CSSProperties
+                }
               >
                 {word}
-              </m.span>
+              </span>
               {index < line.split(" ").length - 1 && " "}
             </span>
           ))}
@@ -4692,11 +5032,12 @@ import {
   Quote,
   UserRound,
 } from "lucide-react";
-import { studio, testimonials } from "@/data/studio";
+import { studio } from "@/data/studio";
+import type { Testimonial } from "@/data/agency";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
 
-export function WallOfLove() {
+export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { amount: 0.2 });
   const reduced = useReducedMotion();
@@ -4723,7 +5064,8 @@ export function WallOfLove() {
       setIndex((current) => (current + 1) % testimonials.length);
     }, 6500);
     return () => window.clearTimeout(timer);
-  }, [active, index]);
+  }, [active, index, testimonials.length]);
+  if (!testimonials.length) return null;
   function go(next: number) {
     setPlaying(false);
     setDirection(next > index ? 1 : -1);
@@ -4890,6 +5232,109 @@ export function WallOfLove() {
       {testimonials.some((item) => item.placeholder) && (
         <p className="studio-note love-disclosure">{studio.love.notice}</p>
       )}
+    </section>
+  );
+}
+``````
+
+## components/work-bunch.tsx
+
+``````tsx
+"use client";
+import Image from "next/image";
+import { useRef } from "react";
+import { m, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
+import { studio } from "@/data/studio";
+import { studies } from "@/data/studies";
+import type { ProjectView } from "@/data/projects";
+import { Reveal } from "./reveal";
+import { TextReveal } from "./text-reveal";
+export function WorkBunch({ projects }: { projects: ProjectView[] }) {
+  const ref = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const drift = useTransform(scrollYProgress, [0, 1], [-24, 24]);
+  const items = [
+    ...projects.slice(0, 4).map((project) => ({
+      id: project.id,
+      title: project.title,
+      image: project.screenshots[0].src,
+      alt: project.screenshots[0].alt,
+      href: project.demoUrl,
+      category: studio.bunch.websiteLabel,
+    })),
+    ...studies.map((study) => ({
+      id: study.id,
+      title: study.name,
+      image: study.screenshot,
+      alt: `${study.name}: original ${study.industry.toLowerCase()} interface concept, captured from its implemented design study`,
+      href: `/studies/${study.id}`,
+      category: study.industry,
+    })),
+  ];
+  return (
+    <section
+      ref={ref}
+      id="work-bunch"
+      className="bunch-section studio-section reference-bunch"
+      aria-labelledby="bunch-title"
+    >
+      <div className="container reference-heading">
+        <Reveal>
+          <p className="eyebrow">{studio.bunch.eyebrow}</p>
+        </Reveal>
+        <TextReveal id="bunch-title" text={studio.bunch.title} />
+        <Reveal>
+          <p>{studio.bunch.intro}</p>
+        </Reveal>
+      </div>
+      <div className="bunch-window">
+        <m.div
+          className="bunch-grid"
+          style={reduced ? undefined : { y: drift }}
+        >
+          {items.map((item, index) => (
+            <a
+              className={`bunch-piece bunch-piece-${index}`}
+              href={item.href}
+              key={item.id}
+            >
+              <div className="bunch-browser" aria-hidden="true">
+                <i />
+                <i />
+                <i />
+                <span>
+                  {item.title.toLowerCase().replaceAll(" ", "-")}.concept
+                </span>
+              </div>
+              <div className="bunch-image">
+                <Image
+                  src={item.image}
+                  alt={item.alt}
+                  fill
+                  sizes="(max-width:650px) 70vw,(max-width:1000px) 35vw,400px"
+                />
+              </div>
+              <div className="bunch-caption">
+                <span>{item.title}</span>
+                <small>{item.category}</small>
+                <ArrowUpRight size={15} aria-hidden="true" />
+              </div>
+            </a>
+          ))}
+        </m.div>
+      </div>
+      <div className="container bunch-after">
+        <p className="studio-note">{studio.bunch.note}</p>
+        <a href="#work" className="text-link">
+          {studio.bunch.view}
+          <ArrowUpRight size={17} aria-hidden="true" />
+        </a>
+      </div>
     </section>
   );
 }
@@ -5066,4 +5511,3 @@ export function Work({
   );
 }
 ``````
-

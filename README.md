@@ -1,7 +1,20 @@
 # Elvora — Abdul Hafeez's portfolio
 
-**Launch status:** the requested Next.js 14 release still has reported critical advisories. This is a review build; a patched major-version exception is needed before production. See `SECURITY_STATUS.md`.
-Next.js 14 App Router, TypeScript, Tailwind CSS and Framer Motion. All application backend logic runs in Next.js route handlers. Selected Work contains four bespoke fictional websites: Solenne (hotel), Vanta Motors (automotive), Aster Care (private clinic) and Kovo Studio (architecture), each with a working demo and four actual browser-captured gallery images. CSS 3D laptop/phone cards present their desktop and mobile views. The featured Forte O Level Study Assistant card displays a chat preview and opens its in-page Botpress panel with one click anywhere on the card. External chat permission is required before the provider embed loads. The portfolio retains three API chat demos, voice controls, About Me, the supplied Coursiv certificate, domain-email contact and the private PostgreSQL/Prisma/Auth.js admin. Older demos and the Elvora promotional asset are archived and are not selected work.
+**Current status:** approved Next.js 15.5.28 migration, real inquiry/CMS workflow and agency detail pages are implemented. Production dependency audit: zero findings; remaining development-tool findings and private service requirements are documented in `SECURITY_STATUS.md` and `DEPLOYMENT.md`. Local validation does not prove live deployment.
+
+Next.js 15 App Router, TypeScript, Tailwind CSS and Framer Motion. All application backend logic runs in Next.js route handlers. Selected Work contains four bespoke fictional websites: Solenne (hotel), Vanta Motors (automotive), Aster Care (private clinic) and Kovo Studio (architecture), each with a working demo and four actual browser-captured gallery images. CSS 3D laptop/phone cards present their desktop and mobile views. The featured Forte O Level Study Assistant card displays a chat preview and opens its in-page Botpress panel with one click anywhere on the card. External chat permission is required before the provider embed loads. The portfolio retains three API chat demos, voice controls, About Me, the supplied Coursiv certificate, domain-email contact and the private PostgreSQL/Prisma/Auth.js admin. Older demos and the Elvora promotional asset are archived and are not selected work.
+
+## Agency features
+
+Services and project-note routes, native FAQs, a private service/FAQ/review CMS, searchable paginated inquiries with status and private notes, actual dashboard counts and audit history. Contact acceptance distinguishes database storage from optional SMTP notification. Genuine approved reviews appear only after publication; the About section uses original Elvora brand artwork.
+
+The public hero is readable immediately. Shared CSS/viewport reveals retain the motion style while reducing per-word client work. Cookie choices still control optional embeds, and public text remains visible without JavaScript.
+
+- [Implementation audit](AGENCY_AUDIT.md)
+- [Deployment and first-admin setup](DEPLOYMENT.md)
+- [Testing and measured verification](VERIFICATION.md)
+- [Security limitations](SECURITY_STATUS.md)
+- [Desktop preview](docs/agency-home-desktop.png) · [Mobile About preview](docs/agency-about-mobile.png) · [Admin inbox preview](docs/agency-admin-inbox-desktop.png)
 
 ## Run
 
@@ -19,6 +32,7 @@ Do not overwrite an existing `.env.local`. Set the actual site URL; the example 
 npm run test:chat
 npm run test:contact
 npm run test:security
+npm run test:consent
 npm run lint
 npm run typecheck
 npm run build
@@ -40,7 +54,7 @@ The capture script starts and stops its own development server on port 3100. Sto
 
 ## Content and data boundaries
 
-All editable portfolio content starts in `data/`. `lib/content-loader.ts` is the server-only boundary: `CONTENT_SOURCE=database` uses Prisma after migrations and seed, while file mode reads the same typed content. Components keep the same display props. Seed is additive and preserves existing records/passwords.
+All editable portfolio content starts in `data/`. `lib/content-loader.ts` is the server-only boundary: `CONTENT_SOURCE=database` uses published Prisma records after migration and deliberate CMS content preparation. File mode remains explicit; database failures never substitute file records. `CONTACT_STORAGE=database` enables durable inquiries independently. Initial admin creation uses `npm run admin:bootstrap`; seed is guarded, additive and development/demo-only.
 
 - `data/site.ts`: Elvora identity, Abdul Hafeez's introduction, domain email, navigation and shared UI text.
 - `data/projects.ts`, `concepts.ts`, `concept-images.ts`: the four selected concepts, page content, 16 screenshot paths, generated-image prompts and design details. `data/demos.ts` retains archived demos.

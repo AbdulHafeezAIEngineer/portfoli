@@ -85,7 +85,36 @@ const shared = {
   published: z.boolean(),
   order: z.number().int().min(0).max(10000).optional(),
 };
+export const leadStatus = z.enum(["new", "contacted", "in-progress", "closed"]);
 export const schemas = {
+  services: z
+    .object({
+      ...shared,
+      title: text(),
+      description: text(3000),
+      detail: text(1000),
+      tags: array,
+      scope: array,
+      requirements: array,
+    })
+    .strict(),
+  faqs: z
+    .object({ ...shared, question: text(300), answer: text(3000) })
+    .strict(),
+  testimonials: z
+    .object({
+      ...shared,
+      name: text(120),
+      role: text(200),
+      quote: text(2000),
+      portrait: z.union([z.literal(""), imageUrl]),
+      permissionConfirmed: z.boolean(),
+    })
+    .strict()
+    .refine(
+      (value) => !value.published || value.permissionConfirmed,
+      "Confirm permission for genuine feedback before publishing.",
+    ),
   projects: z
     .object({
       ...shared,
@@ -95,12 +124,24 @@ export const schemas = {
       description: text(3000),
       stack: array,
       accent: z.string().regex(/^#[0-9a-fA-F]{6}$/),
-      demoUrl: z.union([z.literal(""), local, z.string().url().max(1000).refine((value) => {
-        try {
-          const url = new URL(value);
-          return url.protocol === "https:" && !url.username && !url.password;
-        } catch { return false; }
-      }, "Use a local path or an HTTPS website URL.")]),
+      demoUrl: z.union([
+        z.literal(""),
+        local,
+        z
+          .string()
+          .url()
+          .max(1000)
+          .refine((value) => {
+            try {
+              const url = new URL(value);
+              return (
+                url.protocol === "https:" && !url.username && !url.password
+              );
+            } catch {
+              return false;
+            }
+          }, "Use a local path or an HTTPS website URL."),
+      ]),
       highlights: array,
       screenshots: z
         .array(
@@ -139,6 +180,7 @@ export const schemas = {
         "Web interfaces",
         "APIs & data",
         "Voice AI",
+        "Development tools",
       ]),
     })
     .strict(),

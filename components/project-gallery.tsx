@@ -204,6 +204,7 @@ export default function ProjectGallery({
         </div>
         <div className="gallery-details">
           <div>
+            <Link className="gallery-demo-link" href={`/work/${project.id}`}>Read project notes</Link>
             <p id="gallery-description">{project.description}</p>
             {project.demoUrl && (
               <Link className="gallery-demo-link" href={project.demoUrl} target={project.demoUrl.startsWith("https://") ? "_blank" : undefined} rel={project.demoUrl.startsWith("https://") ? "noopener noreferrer" : undefined}>

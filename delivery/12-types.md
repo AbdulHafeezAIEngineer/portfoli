@@ -1,6 +1,6 @@
 ## types/gmail-smtp.d.ts
 
-``````typescript
+``````ts
 declare module "gmail-smtp" {
   import nodemailer from "nodemailer";
   export default nodemailer;
@@ -9,7 +9,7 @@ declare module "gmail-smtp" {
 
 ## types/next-auth.d.ts
 
-``````typescript
+``````ts
 import "next-auth";
 import "next-auth/jwt";
 declare module "next-auth" {
@@ -30,4 +30,3 @@ declare module "next-auth/jwt" {
   }
 }
 ``````
-

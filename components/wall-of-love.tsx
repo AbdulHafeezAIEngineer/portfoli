@@ -11,11 +11,12 @@ import {
   Quote,
   UserRound,
 } from "lucide-react";
-import { studio, testimonials } from "@/data/studio";
+import { studio } from "@/data/studio";
+import type { Testimonial } from "@/data/agency";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
 
-export function WallOfLove() {
+export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { amount: 0.2 });
   const reduced = useReducedMotion();
@@ -42,7 +43,8 @@ export function WallOfLove() {
       setIndex((current) => (current + 1) % testimonials.length);
     }, 6500);
     return () => window.clearTimeout(timer);
-  }, [active, index]);
+  }, [active, index, testimonials.length]);
+  if (!testimonials.length) return null;
   function go(next: number) {
     setPlaying(false);
     setDirection(next > index ? 1 : -1);

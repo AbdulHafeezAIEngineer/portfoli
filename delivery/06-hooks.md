@@ -1,6 +1,6 @@
 ## hooks/use-modal.ts
 
-``````typescript
+``````ts
 "use client";
 
 import { useEffect, type KeyboardEvent, type RefObject } from "react";
@@ -28,7 +28,7 @@ export function useModal(ref: RefObject<HTMLDialogElement>) {
 
 ## hooks/use-voice.ts
 
-``````typescript
+``````ts
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -122,4 +122,3 @@ export function useVoice(enabled: boolean, onTranscript: (text: string) => void)
   return { supported, playbackSupported, listening, speaking, error, start, stop, speak, stopSpeaking };
 }
 ``````
-

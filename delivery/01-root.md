@@ -1,6 +1,6 @@
 ## .env.example
 
-``````text
+``````example
 NEXT_PUBLIC_SITE_URL=https://your-domain.example
 
 # Copy this file to .env.local. Never commit .env.local or prefix secrets with NEXT_PUBLIC_.
@@ -48,7 +48,11 @@ CONTACT_ALLOW_IN_MEMORY_LIMITER=false
 # Same supported headers as CHAT_TRUSTED_IP_HEADER. Blank reuses that setting.
 CONTACT_TRUSTED_IP_HEADER=
 
-# Complete portfolio: use files by default, or database after migrate + seed.
+# Public content uses files by default; use database after migration, bootstrap and CMS content entry.
+# Store inquiries independently of public content with CONTACT_STORAGE=database.
+CONTACT_STORAGE=none
+# Demo seed is refused in production. Never use it to bootstrap an admin.
+SEED_CONTENT=
 CONTENT_SOURCE=files
 # Neon/Supabase pooled PostgreSQL URL for application queries (use TLS).
 DATABASE_URL=
@@ -58,7 +62,7 @@ DIRECT_URL=
 # Auth.js / NextAuth: actual HTTPS site origin and a securely generated secret.
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=
-# Seed/reset only; never printed. Remove ADMIN_PASSWORD from runtime after seeding.
+# Bootstrap/reset only; never printed. Remove ADMIN_PASSWORD from runtime after bootstrap.
 ADMIN_EMAIL=
 ADMIN_PASSWORD=
 AUTH_REDIS_REST_URL=
@@ -106,9 +110,46 @@ next-env.d.ts
 *.log
 ``````
 
+## AGENCY_AUDIT.md
+
+``````md
+# Elvora agency completion audit — 17 October 2026
+
+Scope: the supplied complete-agency and UI/UX audit prompts. Preserve the existing Elvora identity, four fictional website concepts, six UI studies, genuine supplied Coursiv certificate, actual contact email and social profiles. The owner approved moving beyond Next.js 14 to resolve its reported framework advisories.
+
+| Area | Existing baseline | Result |
+| --- | --- | --- |
+| Framework | Next.js 14.2.35 with a critical production finding | Next.js 15.5.28, React 18 retained; async request APIs migrated; current production audit has zero findings |
+| Public content | Established homepage, demos, studies, policies, tools, workflow and journey | Preserved and refined; service details, project notes, FAQs, canonical metadata and factual Person structured data added |
+| CMS | Projects, bots, skills, certificates, settings | Added services, FAQs and permission-approved testimonials, ordering, publishing and audit events |
+| Inquiries | SMTP required before optional storage | Durable database acceptance independent from email; company/service fields; accurate notification state |
+| Lead management | Read/delete, latest 100 only | Search, status filter, chronological sort, bounded pagination, status and private notes |
+| Authentication | Credentials, bcrypt, optional encrypted TOTP, version checks in APIs | Server page checks, bcrypt byte-bound login, expired lockout recovery, database session revocation on sign-out |
+| Initial admin | Coupled to demonstration seed | Separate first-admin bootstrap; serializable refusal when any admin exists; no public registration |
+| Authenticity | Labeled review/portrait previews | Unapproved reviews hidden; genuine review publication requires permission; original Elvora About composition |
+| Motion | Many per-word Framer components | Shared viewport observer and CSS word/card reveals; interactive motion retained; hero immediately readable |
+| Consent | Banner inserted after hydration | Initial server HTML banner; valid saved choice hidden before hydration; same parser/expiry rules; optional features default off |
+| Loading | Root streaming fallback | Loading boundary scoped to private admin; public text visible without JavaScript |
+| Deployment | Next 14 launch blocker and historical setup | Current migration/bootstrap/contact/security/testing guidance; real provider configuration remains necessary |
+
+Important implementation paths:
+
+- `app/services/[slug]/page.tsx`, `app/work/[slug]/page.tsx`, `components/faq-section.tsx`, `app/agency.css`.
+- `data/agency.ts`, `lib/content-loader.ts`, `lib/admin/schemas.ts`.
+- `app/api/admin/[resource]/route.ts`, `components/admin-app.tsx`, `data/admin.ts`.
+- `app/api/contact/route.ts`, `lib/records.ts`, `components/contact-form.tsx`.
+- `lib/admin/auth.ts`, `scripts/bootstrap-admin.ts`, `prisma/schema.prisma`, additive migration `202610170001_agency_content_and_leads`.
+- `components/reveal-observer.tsx`, `components/text-reveal.tsx`, `components/reveal.tsx`, `lib/consent.ts`.
+- `tests/agency.integration.mjs`, `tests/auth.integration.mjs`, `tests/helpers/https-proxy.mjs`.
+
+The CMS uses PostgreSQL through Prisma. File mode is explicit and remains the default; database content mode fails rather than silently substituting file records. `CONTACT_STORAGE=database` can store inquiries while public content stays in file mode. No role hierarchy is added: this is a single-operator private admin, with all privileged operations authorized on the server.
+
+No client identities, customer quotes, approved portraits, metrics, business results or provider credentials were invented. The reference animation timings and live deployment are not claimed as verified. See `VERIFICATION.md` for executed checks and measured limitations, and `DEPLOYMENT.md` for the remaining owner configuration.
+``````
+
 ## BOTPRESS_SETUP.md
 
-``````markdown
+``````md
 # Forte O Level Study Assistant
 
 The first real-bot card is connected to the two public scripts supplied by the owner:
@@ -135,7 +176,7 @@ The public card still opens its in-page panel with one click. `BotEmbed` now wai
 
 ## CHATBOT_SETUP.md
 
-``````markdown
+``````md
 # Part 2 — AI chatbot services
 
 The complete portfolio includes AI Chatbot Services alongside About Me, Skills, Certification and Contact. The AI Bots navbar anchor opens the AI tab, including direct links to `#ai-bots`. The first real-bot card now connects the owner's **Forte O Level Study Assistant** Botpress widget; see `BOTPRESS_SETUP.md`.
@@ -254,7 +295,7 @@ Use HTTPS in production; loopback development is a secure context. Voice input s
 
 ## CONCEPTS.md
 
-``````markdown
+``````md
 # Four new custom concept websites
 
 The selected portfolio now contains exactly four original concepts. The previous Elvora external/promotional card is removed from the selected grid.
@@ -279,173 +320,142 @@ The default file content mode uses the new selection immediately. If an owner ha
 
 ## CONTACT_SETUP.md
 
-``````markdown
-# Elvora contact setup
+``````md
+# Contact and inquiry setup
 
-Public contact: **abdulhafeez@elvoraai.online**. There are no phone or WhatsApp links. Owner-supplied GitHub and Instagram profiles are included. Update public identity in `data/site.ts`, form copy and limits in `data/contact.ts`. The destination is fixed on the server; visitors only set the reply-to address. The public domain inbox is separate from the Gmail SMTP sender. Set `GMAIL_SMTP_USER` to the actual authenticated Gmail account (defaults to the existing `buildwithelvora@gmail.com`) and use its matching `GMAIL_APP_PASSWORD`. Changing the public email does not configure Hostinger SMTP. Verify the new inbox can receive mail. In database content mode, also update the email in admin site settings; existing records are preserved.
+Public recipient: **abdulhafeez@elvoraai.online**. The form accepts name, email, optional company/service and a project message. The server validates strict input, checks origin, discards filled honeypots, applies quotas and verifies configured Turnstile before accepting work.
 
-## Gmail delivery
+## Durable inbox
 
-1. Configure production Cloudflare Turnstile (`NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`) for the exact public hostname. Verification checks its `contact` action. Production requires this protection by default.
+Configure PostgreSQL, run `npm run db:migrate`, bootstrap the admin and set `CONTACT_STORAGE=database`. This is independent of `CONTENT_SOURCE`; file-based public content can keep a real private inbox. Database content mode also enables inquiry storage.
 
-Copy `.env.example` to ignored `.env.local` for local development. On Netlify, use the site's secure environment-variable settings instead.
-2. Enable Google 2-Step Verification for the Gmail account and create a Gmail App Password if the account supports it. Set `GMAIL_APP_PASSWORD` securely. Use an App Password, never your normal Google password. Do not send either in chat or commit it. Google Workspace/account policies may prevent App Password creation; in that case keep the working email link until another mail service is configured.
-3. The server connects to `smtp.gmail.com:465` using TLS with certificate verification. Your hosting/network must allow outbound SMTP. Restart/redeploy after setting secrets.
-4. Set `NEXT_PUBLIC_SITE_URL` to the actual public HTTPS origin. A stale example origin rejects genuine form submissions.
-5. Configure shared rate limiting as below. Then submit a real enquiry yourself and verify inbox/spam delivery and Reply-To behavior.
+The server saves first. Its 202 response reports `acceptance: "stored"`; optional notification is `accepted`, `failed` or `not-configured`. Missing SMTP or failed notification does not discard an already stored inquiry. The UI says the inquiry was saved without claiming delivery. A database save failure returns 503 and does not send mail or show success.
 
-No email is sent without a configured App Password. A normal submission returns an explanatory 503 in that state, while the direct `mailto:` link works independently. A 202 means the SMTP server accepted the message, not that inbox delivery is guaranteed. SMTP timeouts can leave delivery uncertain; inputs are preserved on errors. This form does not promise exactly-once delivery. Do not store sensitive information in messages.
+## Optional Gmail notification
 
-## Rate limiting
+Set private `GMAIL_SMTP_USER` to the Gmail sender and `GMAIL_APP_PASSWORD` to that account's Gmail App Password with 2-Step Verification. The sender defaults to the existing buildwithelvora@gmail.com account; the recipient remains the domain email above. Never use the ordinary Google password, expose credentials to the browser or paste them into source.
 
-For Netlify/serverless or multiple instances, configure an Upstash-compatible Redis REST endpoint/token. `CONTACT_REDIS_REST_URL` and `CONTACT_REDIS_REST_TOKEN` can use a separate store; if blank they reuse `CHAT_REDIS_REST_URL` and `CHAT_REDIS_REST_TOKEN`. Contact keys have a separate namespace and do not consume chat quotas. Never expose the tokens to the browser. Allow outbound HTTPS to your actual Redis domain.
+The implementation uses verified TLS on smtp.gmail.com:465, bounded timeouts, a fixed recipient, a validated reply-to and plaintext content. SMTP acceptance does not prove inbox delivery; check the actual recipient mailbox, spam folder and sender restrictions after deployment.
 
-An atomic reservation permits 3 attempts per 10-minute fixed window, 10 per UTC day per visitor bucket, and 50 total per UTC day by default. `CONTACT_DAILY_SEND_CAP` accepts 1–500. Failed SMTP attempts consume quota too. Redis outages and missing production protection fail closed. Two concurrent SMTP calls per process are permitted; Redis enforces shared request quotas across instances.
+Without database storage, SMTP is required and failure returns an honest 502/503. No credentials produces no success response. Keep form details on failure so visitors can retry or email directly.
 
-The safe default uses a shared visitor bucket. Only configure `CONTACT_TRUSTED_IP_HEADER` (or its chat fallback) after confirming that your host overwrites that header and strips client-supplied values. Supported values: `x-vercel-forwarded-for`, `cf-connecting-ip`, `x-real-ip`, `x-forwarded-for`. Incorrectly trusting a forwarded header lets callers evade per-visitor limits. The global daily quota still applies.
+## Protection and privacy
 
-Development uses memory automatically. `CONTACT_ALLOW_IN_MEMORY_LIMITER=true` is an explicit option for a single persistent production process, not serverless hosting: counters reset on restart and are not shared. Do not enable this on Netlify as a substitute for Redis.
+Configure shared Redis REST limits for serverless/multiple instances and Turnstile keys for the actual hostname. Production protection fails closed when required settings are unavailable. Trust proxy IP headers only if the edge overwrites them. In-memory fallback is a deliberate single-process option, not a shared limit.
 
-## Validation and abuse handling
+Private inbox access requires admin authorization. Review retention and provider agreements, and delete records when no longer needed. Optional chat consent does not control an inquiry the visitor deliberately submits. See `PRIVACY_SETUP.md` and the actual privacy policy.
 
-Client and server share a Zod schema. Names contain 2–80 characters without control characters; email is trimmed, lowercased, valid, and at most 254 characters; messages contain 20–3,000 characters. Unknown payload fields are rejected. The body is limited to 32 KiB before parsing. Cross-site browser requests are rejected; origin checks are not authentication and do not stop arbitrary scripts, so quotas remain necessary.
-
-The offscreen honeypot is removed from keyboard navigation and the accessibility tree. Validated requests that fill it receive a quiet acknowledgement and send no mail. No enquiry content, raw email address, provider error details, or credentials are written to application logs. Transport/network providers can retain their own operational data. Messages go to Gmail, so its retention policy and your inbox management apply.
-
-## Checks
-
-```bash
-npm run test:contact
-npm run test:chat
-npm run lint
-npm run typecheck
-npm run build
-```
-
-Contact tests mock SMTP and Redis. They do not send mail or establish real Gmail delivery. Browser checks cover validation, error preservation, success reset, certificate controls, keyboard access, both themes and narrow layouts. Real SMTP delivery still needs a secure App Password and a host that permits SMTP.
-
-## Database inbox
-
-With `CONTENT_SOURCE=database`, validated submissions are saved to `ContactMessage` before SMTP delivery; the admin inbox records accepted/failed status. Honeypot requests are not stored. Keep a retention policy and delete enquiries when no longer needed. See `DEPLOYMENT.md` for admin, 2FA and launch configuration.
+Contact tests use explicit SMTP/Redis/Turnstile/storage fixtures; real-database integration also verifies durable acceptance without SMTP. Real email delivery must be checked with the configured provider on the public host. No real message was sent during automated verification.
 ``````
 
 ## DEPLOYMENT.md
 
-``````markdown
-# Production deployment
+``````md
+# Elvora deployment and operations
 
-**Launch status:** the requested Next.js 14 release still has reported critical advisories. This is a review build; a patched major-version exception is needed before production. See `SECURITY_STATUS.md`.
-## PostgreSQL and private settings
+The app uses Next.js 15.5.28 App Router, React 18, TypeScript, Tailwind, Framer Motion, PostgreSQL/Prisma and Auth.js Credentials. Node 22/24 is supported; validation used Node 24. Deploy with a Next.js server/runtime, not a static file upload.
 
-Create a Neon or Supabase PostgreSQL database in your own account. Use the provider's pooled TLS URL for `DATABASE_URL` and direct TLS URL for `DIRECT_URL`. Use a least-privilege application role and keep both URLs in hosting secrets. Do not expose PostgreSQL, database dashboards or service credentials to browser code. Supabase table APIs/RLS are not used; Prisma connects from the server.
-
-Set `NEXT_PUBLIC_SITE_URL` and `NEXTAUTH_URL` to the actual HTTPS origin, without a trailing path. Set a unique random `NEXTAUTH_SECRET` of at least 32 bytes. To generate secrets privately in your own terminal:
+## Install and check
 
 ```bash
-openssl rand -base64 48
-openssl rand -base64 32
+npm ci --cache /tmp/portfoli-npm-cache --no-audit --no-fund
+npm run lint
+npm run typecheck
+npm run test:chat
+npm run test:contact
+npm run test:security
+npm run test:consent
+npm run build
+npm start
 ```
 
-The first value can be your auth secret; the second can be `TOTP_ENCRYPTION_KEY`. Store them securely; do not paste them in chat or commit terminal output. Keep the TOTP encryption key stable and backed up. The seed creates the first admin from `ADMIN_EMAIL` and `ADMIN_PASSWORD`; use 14+ characters with upper/lowercase, a number and a symbol, at most 72 UTF-8 bytes. Passwords are hashed with bcrypt cost 12. Seed preserves existing credentials and content.
+Stop your own development server before building: development and production share `.next`. Keep the lockfile and security overrides. `postinstall` generates the Prisma JavaScript/WASM driver client; native Prisma engines are not needed at application runtime. The migration CLI downloads its verified engine when needed; allow `binaries.prisma.sh` without disabling integrity or TLS checks.
 
-Run from a trusted deployment terminal with the private variables loaded:
+## Private configuration
+
+Use `.env.example` as the variable-name template. Local values belong in ignored `.env.local`; hosted values belong in private hosting settings. Never put secrets in `NEXT_PUBLIC_*`, source files, chat or screenshots.
+
+Set `NEXT_PUBLIC_SITE_URL` and `NEXTAUTH_URL` to the actual HTTPS canonical origin, normally `https://www.elvoraai.online`. The canonical fallback is that real domain. Preview deployments receive noindex controls. DNS was already connected in the owner's setup; this change does not require replacing nameservers.
+
+| Requirement | Variables |
+| --- | --- |
+| Database/admin | `DATABASE_URL`, `DIRECT_URL`, `NEXTAUTH_SECRET` |
+| Initial admin, temporary | `ADMIN_EMAIL`, `ADMIN_PASSWORD` |
+| Shared rate protection | `AUTH_REDIS_REST_URL/TOKEN`, `CONTACT_REDIS_REST_URL/TOKEN`, `CHAT_REDIS_REST_URL/TOKEN`; blank separate stores reuse CHAT settings |
+| Authenticator 2FA | Stable private `TOTP_ENCRYPTION_KEY`, 32 random bytes encoded as base64 |
+| Optional contact notifications | `GMAIL_SMTP_USER`, `GMAIL_APP_PASSWORD` |
+| Contact anti-abuse | `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `CONTACT_TURNSTILE_REQUIRED=true` |
+| AI API demos | `OPENAI_API_KEY`, optional model and quota settings |
+| Admin image uploads | `BLOB_READ_WRITE_TOKEN`, exact `BLOB_PUBLIC_HOST` |
+| External bot configuration | Exact approved `BOT_PROVIDER_ALLOWLIST` hosts and published provider configuration |
+
+Check the complete comments in `.env.example`. Shared quotas fail closed when unavailable. Set an in-memory limiter override only for an intentional single-process host; it resets on restart and does not protect multiple serverless instances. Trust an IP header only when the edge proxy overwrites it.
+
+## Database and first administrator
+
+Provision PostgreSQL with TLS. Use a pooled application URL and a direct migration URL if your provider separates them. Back up existing data and review migration SQL before deployment.
 
 ```bash
-npm ci
-npm run db:generate
 npm run db:migrate
-npm run db:seed
+npm run admin:bootstrap
 ```
 
-The migration command uses `DIRECT_URL`. Do not run `db:dev` against production. `db:dev` is for creating later reviewed migrations on a development database. Allow Prisma's verified binary downloads if the migration CLI requires them; the deployed app uses its JavaScript driver and does not need native Prisma engines.
+Bootstrap reads privately supplied `ADMIN_EMAIL` and a strong `ADMIN_PASSWORD`: at least 14 characters, upper/lowercase, a number and a symbol, at most 72 UTF-8 bytes. It stores only a bcrypt hash, prints no credentials, creates initial genuine site identity and refuses when any administrator exists. It does not create demonstration projects or reviews. Remove `ADMIN_PASSWORD` from the normal web runtime after bootstrap.
 
-After seeding, set `CONTENT_SOURCE=database` and redeploy. Remove `ADMIN_PASSWORD` from normal runtime settings. File mode remains available without database services. Admin database changes affect projects, bots, grouped skills, certificates, brand/email/metadata and the chat-logging setting.
+The additive agency migration adds services/FAQs/reviews and inquiry workflow fields. It preserves existing contact rows, backfills timestamps and adds status/permission constraints. Existing settings/email records are not overwritten by a changed schema default; update them through `/admin/settings` if needed.
 
-## Shared abuse protection
+Sign in at `/admin/login`. Admin pages and APIs check server authorization against the database session version. Enable authenticator 2FA from Security after configuring and backing up the encryption key. Password/2FA changes and sign-out invalidate previous sessions. Sign-out revokes all sessions for this single operator.
 
-Configure an Upstash-compatible Redis REST URL/token for chat, contact and authentication. Contact/auth can reuse `CHAT_REDIS_REST_URL` and `CHAT_REDIS_REST_TOKEN` or use their own stores; each has a separate namespace. Keep all memory-limiter production overrides false on serverless hosting. Missing/unavailable shared protection fails closed. Configure a trusted visitor-IP header only if the edge platform overwrites it and prevents spoofing; the default shares a conservative visitor bucket.
+For private recovery, supply `ADMIN_EMAIL` and a new strong `ADMIN_PASSWORD`, then run `npm run admin:reset`. Set `RESET_ADMIN_2FA=true` only when deliberately recovering a lost authenticator. The command records the recovery and revokes old sessions. Do not run reset automatically during web builds.
 
-Login allows 5 attempts per minute per bucket. Accounts also lock for 15 minutes after 5 failed password/2FA attempts. Errors are generic. Sessions have a maximum authenticated age of 15 minutes, use httpOnly Secure SameSite=strict cookies over production HTTPS, and are checked against the database password version for every admin API request. Changing/resetting the password invalidates old sessions on their next server request. Auth.js supplies CSRF tokens for authentication; admin mutations also validate their origin.
+## Choose public content and inquiry storage separately
 
-## Admin, 2FA and recovery
+- `CONTENT_SOURCE=files` is the default. The actual owner content and labeled fictional portfolio concepts come from `data/`. CMS edits do not replace this source automatically.
+- `CONTENT_SOURCE=database` reads published database records, including services, projects, FAQs and approved reviews. Populate and review content through `/admin` before switching. Missing settings or a database outage produces an error; there is no silent file fallback.
+- `CONTACT_STORAGE=database` stores inquiries independently from public content mode. Recommended when keeping file-based portfolio content with the private lead inbox.
+- Email-only file mode without database storage needs working SMTP configuration. It does not invent inbox persistence.
 
-Open `/admin/login`. Content editing includes published state, typed validation, ordered project images, multi-image upload, create/edit/delete and accessible move-up/down ordering. Structured arrays/configuration use labeled JSON fields. Inbox, chat logs and audit views return the latest 100 entries. Record deletion is permanent and asks for confirmation. Audit entries store IDs/actions, not passwords or message bodies.
-
-At `/admin/security`, enter your current password to change it or set up an authenticator. Setup secrets expire after five minutes; existing TOTP secrets are encrypted at rest. Enabling/disabling 2FA requires verification and invalidates existing sessions. Codes use a ±30-second window and replay protection; after setup, wait for a fresh code before signing in again. When 2FA is enabled, changing a password also requires a fresh authenticator code.
-
-For CLI recovery, temporarily load the target `ADMIN_EMAIL` and new strong `ADMIN_PASSWORD` privately, then run:
+For an isolated development database only:
 
 ```bash
-npm run admin:reset
+SEED_CONTENT=demo npm run db:seed
 ```
 
-To recover a lost authenticator too, deliberately set `RESET_ADMIN_2FA=true` only for that reset. This privileged CLI operation requires database access and creates an audit entry. Remove reset/password variables afterward. There are no hardcoded default credentials or password-printing scripts.
+Demo seed refuses `NODE_ENV=production`. It imports owner content and clearly labeled concepts without overwriting existing records; it creates no administrator or testimonial. Do not use demo seed to initialize real production data. Use the CMS to publish reviewed records.
 
-## Images and bot providers
+## Manage content and leads
 
-Create a Vercel Blob store and set `BLOB_READ_WRITE_TOKEN` and the exact `BLOB_PUBLIC_HOST`. Blob can also be used from Netlify. Uploads accept 1–4 JPEG/PNG/WebP files, up to 3 MB each. The server limits total bytes/pixels, checks the decoded format and rejects SVG/animated/corrupt images, rotates/resizes and re-encodes to WebP to strip metadata. Random filenames avoid trusting user-provided names. Uploaded images are public: upload only public portfolio assets. Write accurate alt text and save the record after upload. Removing a URL/record does not delete potentially shared Blob assets; periodically remove orphaned assets through your storage dashboard.
+The private dashboard shows database counts and recent inquiries. Projects, bots, skills, certificates, services, FAQs and reviews support editing, ordering, publishing and deletion. Reviews require permission confirmation before publishing; add only genuine approved quotes and portraits. No reviews are displayed by default.
 
-`BOT_PROVIDER_ALLOWLIST` contains exact trusted provider hostnames, comma-separated. Set it before saving external iframe/script/API destinations in admin. No provider secrets belong in public configuration or widget attributes. `REAL_BOT_API_KEY` stays private. The real bot uses the same reusable `BotEmbed` component; generic scripts run in an opaque sandboxed document which is destroyed on close. The trusted Botpress adapter supports its official loader plus configuration script in a dedicated same-origin frame with storage access; this frame is not an origin security boundary. See `BOTPRESS_SETUP.md`. Check framing/CSP/provider storage permissions in the actual deployment. API responses are rendered as escaped plain text and control characters are removed; no provider HTML executes in custom API chat.
+The inbox supports search, status filters, chronological ordering and pagination. Statuses are `new`, `contacted`, `in-progress`, `closed`; read/unread is separate. Internal notes are private. Notification status describes SMTP acceptance/failure/unconfigured state, not an assurance of inbox delivery. Audit entries record administrative mutations. Chat logging remains opt-in; establish retention before enabling it.
 
-## Mail, Turnstile and AI
+Image uploads require configured Blob storage. The server authorizes, limits, decodes and re-encodes JPEG/PNG/WebP, strips metadata and restricts displayed remote hosts. Local source assets work without Blob. Do not configure arbitrary remote image hosts.
 
-Configure Gmail App Password delivery and Cloudflare Turnstile using `CONTACT_SETUP.md`. Production requires Turnstile by default. Add your exact domain in Cloudflare and set public/private keys; verification checks hostname and the `contact` action. Contact submissions are stored before SMTP delivery when database content is enabled; delivery status is recorded. A 202 means Gmail accepted a message, not guaranteed inbox delivery. Configure outbound SMTP and actually test delivery yourself.
+## Contact and AI integrations
 
-Set OpenAI/model settings using `CHATBOT_SETUP.md`. Request/token quotas are not a monetary spending cap: configure provider project budgets/alerts and an enforceable cap where offered. The booking bot is a simulation and voice depends on supported HTTPS browsers and microphone permissions.
+The public recipient is **abdulhafeez@elvoraai.online**. The Gmail SMTP sender/account is separately configured and must match its Gmail App Password. Do not replace the recipient with the SMTP login address. See `CONTACT_SETUP.md` for precise acceptance/failure behavior.
 
-Chat logging is **off by default**. If enabled in site settings, the last user message and AI reply are retained in PostgreSQL. The public chat notice describes possible retention. Establish a lawful purpose, retention period, user notice and deletion routine before enabling it. Delete messages/logs you no longer need. Application logs do not print enquiry bodies, passwords or provider diagnostic details. Hosting/SMTP/AI/Redis providers have their own operational logging and retention.
+AI demos need an actual server-side API key and provider billing limits. App request quotas are not a currency spending cap. Keep shared quotas and output limits; verify real provider replies after deployment. The supplied Forte/Botpress scripts are preserved. Confirm its publishing state and allowed domains on the real provider account. Optional external chat must remain blocked until consent, and withdrawing permission removes embeds.
 
-## Vercel + Neon/Supabase
+## Hosting, HTTPS and launch
 
-1. Import `AbdulHafeezAIEngineer/portfoli` from GitHub, selecting the reviewed branch. Choose Next.js, Node.js 22/24, install `npm ci`, build `npm run build`.
-2. Add the public URL and private service settings in the Vercel dashboard. Keep production and preview databases/keys separate. Never grant untrusted preview deployments production secrets.
-3. Run reviewed production migrations and the initial seed from a trusted terminal/CI job. Do not run seed on every web build.
-4. Deploy with `CONTENT_SOURCE=database`, connect your domain in Vercel, set the requested DNS records, wait for managed SSL, then pin both origin variables to that domain and redeploy.
-5. Test admin, content updates, public galleries/bots, email, Turnstile and real storage uploads on the HTTPS domain.
+For Vercel, import the repository, use the Next.js preset and set private variables. Review and run migrations in a trusted deployment job before releasing schema-dependent code. Use the same application schema for previews only when intentionally isolated; do not point routine tests at production. Netlify uses the included Next.js adapter configuration; configure the actual domain rather than historical preview URLs.
 
-## Netlify
+After deployment, verify the canonical redirect, valid certificates, all service/work routes, sitemap/robots, admin sign-in/logout/2FA, new inquiry visibility, real notifications and failure states. Check metadata, keyboard navigation and mobile layouts. Local build and browser tests do not prove the external deployment completed.
 
-The complete portfolio is on GitHub's `main` branch, including the Elvora logo, About Me section and supplied Coursiv certificate. The older main version displayed AH and contained only Parts 1/2. For the owner's existing `portfolio3821.netlify.app` project, select repository `AbdulHafeezAIEngineer/portfoli` and production branch `main` in Netlify's continuous deployment settings. Once linked, pushes to `main` trigger a build. If automatic builds are disabled, choose **Deploys → Trigger deploy → Deploy site**. Use **Clear cache and deploy site** only if a successful build still serves stale assets.
+Configure automated encrypted PostgreSQL backups and retention with the provider, test restoration to a separate database, and back up stable auth/TOTP secrets through a secure process. Back up owned uploaded assets. Define inquiry/chat/audit deletion periods and access responsibilities. Code rollback across schema changes must preserve compatible columns; never drop real production data just to revert the UI.
 
-Use the provided `netlify.toml`: `npm run build`, publish `.next`, Node 24 and the Next.js adapter. Do not upload the source folder as static HTML; API routes/auth need the Next.js runtime. Set `NEXT_PUBLIC_SITE_URL` and `NEXTAUTH_URL` to `https://portfolio3821.netlify.app` unless using a new custom domain. Configure the same private services/Redis/origin variables. Keep `CONTENT_SOURCE=files` for the included file-based content. Existing database records are preserved by seeding; update them in `/admin` when choosing database mode.
-
-Selected Work in file mode now contains Solenne, Vanta Motors, Aster Care and Kovo Studio. The Elvora promotional card and previous samples are no longer selected. Database-mode owners should unpublish the previous project records and seed/add the four entries from `data/projects.ts`; the additive seed does not silently delete or overwrite existing records. Set `CONTENT_SOURCE=files` to display the supplied selection immediately. Update an existing database real-bot name to Forte O Level Study Assistant and retain its supplied Botpress configuration.
-
-Verify outbound SMTP support; if your host blocks it, keep the email link and move delivery to an allowed email API before launch. No successful Netlify deployment is claimed without a completed hosting build and public URL verification. The cloud environment could not access the owner's Netlify URL (HTTP/CONNECT 403), so local checks do not establish the current live-site state. The framework security limitation at the top of this document remains outstanding.
-
-## Headers and launch checks
-
-Middleware supplies a per-request nonce CSP, HSTS on external production hosts, SAMEORIGIN framing, nosniff, referrer and permissions policies. Inline Next.js/theme scripts use the nonce; style attributes remain permitted for Framer Motion. Development permits eval for tooling. Microphone permission is restricted to self so voice remains usable. Widget scripts load in their own document; trusted Botpress has same-origin access as described above. Only explicitly configured public Blob images and bot frame hosts are allowed. No wildcard CORS is enabled; API mutations validate same-origin requests. Robots disallows `/admin` and `/api/admin`, and admin metadata uses noindex; these are indexing preferences, not access control.
-
-Before launch:
-
-- [ ] Verify owner name, Elvora brand, portrait, genuine certificate and real workflow facts; remove only placeholders you can substantiate.
-- [ ] Use actual HTTPS origins and managed SSL; check security headers and nonce hydration on the deployed host.
-- [ ] Apply migrations, seed once, verify backups/recovery and least-privilege database access.
-- [ ] Configure Redis, strong auth secret, private Gmail/AI/storage/Turnstile settings and trusted provider hosts. Remove seed/reset passwords from runtime.
-- [ ] Enable and verify 2FA if desired; test lockout, sign-out, recovery and session invalidation.
-- [ ] Submit and receive a real enquiry; verify inbox persistence, reply-to, honeypot and rate-limit behavior.
-- [ ] Test a real Blob upload, alt text, image order and public rendering.
-- [ ] Test real provider chat/embedding and device microphone/voice playback over HTTPS.
-- [ ] Choose contact/chat retention, keep chat logging off unless needed, and remove test records.
-- [ ] Run `npm run test:chat`, `npm run test:contact`, `npm run lint`, `npm run typecheck`, `npm run build`; check keyboard/mobile flows and Lighthouse on the final host.
-- [ ] Review dependency security updates and provider usage/billing alerts. No particular Lighthouse score or absolute security guarantee is claimed.
-
-## Studio sections and privacy controls
-
-The services, supplied journey, workflow, AI toolkit, owner-supplied GitHub/Instagram links, separate screenshot contact sheet and animated ending use `data/studio.ts`. New policy pages are `/privacy`, `/cookies`, and `/terms`; they and the consent code require no extra credentials. Review those policies against the actual configured providers, retention/deletion practice and applicable legal requirements. Third-party chat is opt-in and consent can be withdrawn in the footer. No analytics or advertising tracking was added. Genuine review copy and approved portraits are still missing; the Wall of Love entries are explicitly labeled layout previews. The numbered reference images have now been supplied and used for the latest layout adaptation. The live Framer reference remains inaccessible here; exact motion timing is unverified. See `PRIVACY_SETUP.md`.
-
-The six additional interface studies use `/studies/noma`, `/studies/orbit`, `/studies/elsewhere`, `/studies/form`, `/studies/offscript` and `/studies/aura`. Their actual screenshot assets are included, and the collage links resolve inside the same Next.js app. No new environment variables or database changes are required. See `REFERENCE_DESIGN.md`.
+Current dependency audit and remaining development-tool findings are in `SECURITY_STATUS.md`. Measured checks and screenshots are in `VERIFICATION.md`. No production service credentials or legal-compliance certification are included.
 ``````
 
 ## PART_3.md
 
-``````markdown
+``````md
 # Elvora personalization
 
 Brand: **Elvora**. Owner: **Abdul Hafeez**. Public contact: **abdulhafeez@elvoraai.online** only. No phone or WhatsApp links. Owner-supplied GitHub and Instagram profiles are included.
 
-The About Me section now summarizes the owner's supplied Python/AI exploration, agency work, independent development and startup aspirations. It explains structured prompts, review, testing, refinement and the frontend/backend/database/deployment fundamentals. The latest design avoids experience/project/success metric cards. AI tools are included as a toolkit without proficiency percentages. Genuine testimonials and approved client portraits are pending and remain explicitly labeled previews.
+The About Me section now summarizes the owner's supplied Python/AI exploration, agency work, independent development and startup aspirations. It explains structured prompts, review, testing, refinement and the frontend/backend/database/deployment fundamentals. The latest design avoids experience/project/success metric cards. AI tools are included as a toolkit without proficiency percentages. Genuine testimonials and approved client portraits are pending. The public review section is hidden until genuine permission-approved CMS records are published.
 
 The supplied E-and-amber-dot logo is represented as a scalable SVG in `public/elvora-logo.svg` and the favicon in `app/icon.svg`. The navbar and footer pair it with the **Elvora** wordmark. The portrait caption also uses the brand instead of AH.
 
@@ -453,16 +463,16 @@ The supplied Coursiv certificate is now showcased: **Master of ChatGPT**, issued
 
 `public/certificates/coursiv-master-of-chatgpt.webp` is a high-resolution rendering of the uploaded certificate, preserving its original artwork and wording. The title, issuer, date, description and accessible image text live in `data/certificates.ts`. The fullscreen viewer supports zoom buttons, +/−, 0 to fit, Esc, touch/native scrolling and focus restoration. The old neutral placeholder remains available for new draft entries; `npm run certificate-placeholder` does not replace the real certificate.
 
-After database seeding, edit published content through `/admin`. File changes are the seed source; they do not overwrite existing database records. Choose `CONTENT_SOURCE=files` when using data-only edits.
+Apply migrations and run the private first-admin bootstrap before using `/admin`. File mode remains the default. Demo seeding is development-only; use reviewed CMS records for database-mode production content.
 
-The About Me whitespace now contains a framed portrait area wired to the same `site.hero.portrait` and accessible description in `data/site.ts`. The hero now displays the animated Elvora emblem. The owner has not uploaded a personal photo, so the abstract image is explicitly labeled **Portrait placeholder**. Once supplied, put the real image in `public/`, update `portrait` and `portraitAlt` in `data/site.ts`, and clear `portraitStatus`; the About Me portrait updates.
+The About Me area now contains an original Elvora brand composition rather than a substitute personal photo. The hero now displays the animated Elvora emblem. The owner has not uploaded a personal photo, so the abstract image is explicitly labeled **Portrait placeholder**. Once supplied, put the real image in `public/`, update `portrait` and `portraitAlt` in `data/site.ts`, and clear `portraitStatus`; the About Me portrait updates.
 
 `app/premium.css` adds gold lighting, violet atmosphere, reflective buttons, hover depth, portrait motion, card glows and a scroll progress line. It preserves keyboard focus, light theme, mobile layouts and reduced-motion preferences. The current four concept websites and their actual screenshots are documented in `SCREENSHOTS.md`; the earlier Elvora promotional card has been removed from Selected Work.
 ``````
 
 ## PRIVACY_SETUP.md
 
-``````markdown
+``````md
 # Privacy controls and studio content
 
 The cookie banner presents **Accept All**, **Reject All**, and **Manage Preferences** with equal visual weight. Optional third-party chat defaults off. Essential storage is explained separately, and the only optional toggle corresponds to a real loaded feature. No analytics, advertising pixels or embedded social feeds have been added.
@@ -479,20 +489,35 @@ Theme storage remembers an explicit theme choice. Sign-in and configured anti-ab
 
 ## Genuine reviews and personal data
 
-The Wall of Love currently contains three **explicit review layout previews**, not client testimonials. No real face or invented endorsement is used. Replace entries in `data/studio.ts` only after obtaining genuine review copy, the correct name/role, and permission to publish the portrait and review. Put approved portraits in `public/testimonials/`, use the local path in `portrait`, and set `placeholder: false`. The template renders one slide at a time, pauses on hover/focus or a hidden tab, supports manual controls, and disables autoplay under reduced-motion preferences.
+The public Wall of Love is hidden by default. In database content mode, add genuine review copy, name/role and an approved local/Blob portrait through the private CMS. Publication requires `permissionConfirmed`; a database CHECK constraint also rejects unapproved publication. No stock face or invented endorsement is shown. The carousel pauses on hover/focus/hidden tabs, supports keyboard/manual controls and disables autoplay with reduced motion.
 
-The owner supplied the journey copy, four services, GitHub and Instagram URLs and requested the AI-tool category. No client/project/success totals or new experience-duration claims are added. The missing personal photo remains honestly labeled in About Me. The owner has now supplied the design-reference images, which inform the latest layouts; review copy and approved client portraits remain pending. The hero uses the existing Elvora logo as a CSS sculpture. Tool tiles use custom typographic marks and product names without endorsement claims.
+The owner supplied the journey copy, four services, GitHub and Instagram URLs and requested the AI-tool category. No client/project/success totals or new experience-duration claims are added. About Me uses original Elvora brand artwork instead of a substitute personal photo. The owner has now supplied the design-reference images, which inform the latest layouts; review copy and approved client portraits remain pending. The hero uses the existing Elvora logo as a CSS sculpture. Tool tiles use custom typographic marks and product names without endorsement claims.
 
-All new section copy lives in `data/studio.ts`, `data/experience.ts`, `data/skills.ts`, and `data/privacy.ts`; no database migration is required for these sections. In database content mode, existing skills and site settings are preserved; update them through admin to match the file-based AI toolkit and email. Never seed destructive replacements over existing content.
+The initial consent banner is server rendered. A nonce-protected script uses the same version/expiry parser to hide it for a valid saved choice before hydration; this script does not grant provider permission. Optional permission still starts off in the provider context until the saved record has been validated. Public content stays visible with JavaScript disabled; optional embeds do not load.
+
+Agency services, FAQs and permission-approved reviews have an additive database migration. Copy lives in `data/agency.ts`, `data/studio.ts`, `data/experience.ts`, `data/skills.ts` and `data/privacy.ts`; actual policy and provider configuration must stay aligned. In database mode, update existing skills/settings through admin. Never seed destructive replacements over existing content.
 ``````
 
 ## README.md
 
-``````markdown
+``````md
 # Elvora — Abdul Hafeez's portfolio
 
-**Launch status:** the requested Next.js 14 release still has reported critical advisories. This is a review build; a patched major-version exception is needed before production. See `SECURITY_STATUS.md`.
-Next.js 14 App Router, TypeScript, Tailwind CSS and Framer Motion. All application backend logic runs in Next.js route handlers. Selected Work contains four bespoke fictional websites: Solenne (hotel), Vanta Motors (automotive), Aster Care (private clinic) and Kovo Studio (architecture), each with a working demo and four actual browser-captured gallery images. CSS 3D laptop/phone cards present their desktop and mobile views. The featured Forte O Level Study Assistant card displays a chat preview and opens its in-page Botpress panel with one click anywhere on the card. External chat permission is required before the provider embed loads. The portfolio retains three API chat demos, voice controls, About Me, the supplied Coursiv certificate, domain-email contact and the private PostgreSQL/Prisma/Auth.js admin. Older demos and the Elvora promotional asset are archived and are not selected work.
+**Current status:** approved Next.js 15.5.28 migration, real inquiry/CMS workflow and agency detail pages are implemented. Production dependency audit: zero findings; remaining development-tool findings and private service requirements are documented in `SECURITY_STATUS.md` and `DEPLOYMENT.md`. Local validation does not prove live deployment.
+
+Next.js 15 App Router, TypeScript, Tailwind CSS and Framer Motion. All application backend logic runs in Next.js route handlers. Selected Work contains four bespoke fictional websites: Solenne (hotel), Vanta Motors (automotive), Aster Care (private clinic) and Kovo Studio (architecture), each with a working demo and four actual browser-captured gallery images. CSS 3D laptop/phone cards present their desktop and mobile views. The featured Forte O Level Study Assistant card displays a chat preview and opens its in-page Botpress panel with one click anywhere on the card. External chat permission is required before the provider embed loads. The portfolio retains three API chat demos, voice controls, About Me, the supplied Coursiv certificate, domain-email contact and the private PostgreSQL/Prisma/Auth.js admin. Older demos and the Elvora promotional asset are archived and are not selected work.
+
+## Agency features
+
+Services and project-note routes, native FAQs, a private service/FAQ/review CMS, searchable paginated inquiries with status and private notes, actual dashboard counts and audit history. Contact acceptance distinguishes database storage from optional SMTP notification. Genuine approved reviews appear only after publication; the About section uses original Elvora brand artwork.
+
+The public hero is readable immediately. Shared CSS/viewport reveals retain the motion style while reducing per-word client work. Cookie choices still control optional embeds, and public text remains visible without JavaScript.
+
+- [Implementation audit](AGENCY_AUDIT.md)
+- [Deployment and first-admin setup](DEPLOYMENT.md)
+- [Testing and measured verification](VERIFICATION.md)
+- [Security limitations](SECURITY_STATUS.md)
+- [Desktop preview](docs/agency-home-desktop.png) · [Mobile About preview](docs/agency-about-mobile.png) · [Admin inbox preview](docs/agency-admin-inbox-desktop.png)
 
 ## Run
 
@@ -510,6 +535,7 @@ Do not overwrite an existing `.env.local`. Set the actual site URL; the example 
 npm run test:chat
 npm run test:contact
 npm run test:security
+npm run test:consent
 npm run lint
 npm run typecheck
 npm run build
@@ -531,7 +557,7 @@ The capture script starts and stops its own development server on port 3100. Sto
 
 ## Content and data boundaries
 
-All editable portfolio content starts in `data/`. `lib/content-loader.ts` is the server-only boundary: `CONTENT_SOURCE=database` uses Prisma after migrations and seed, while file mode reads the same typed content. Components keep the same display props. Seed is additive and preserves existing records/passwords.
+All editable portfolio content starts in `data/`. `lib/content-loader.ts` is the server-only boundary: `CONTENT_SOURCE=database` uses published Prisma records after migration and deliberate CMS content preparation. File mode remains explicit; database failures never substitute file records. `CONTACT_STORAGE=database` enables durable inquiries independently. Initial admin creation uses `npm run admin:bootstrap`; seed is guarded, additive and development/demo-only.
 
 - `data/site.ts`: Elvora identity, Abdul Hafeez's introduction, domain email, navigation and shared UI text.
 - `data/projects.ts`, `concepts.ts`, `concept-images.ts`: the four selected concepts, page content, 16 screenshot paths, generated-image prompts and design details. `data/demos.ts` retains archived demos.
@@ -570,8 +596,10 @@ Latest previews: [footer](docs/editorial-footer-desktop.png), [contact](docs/edi
 
 ## REFERENCE_DESIGN.md
 
-``````markdown
+``````md
 # Elvora: supplied-reference design adaptation
+
+Latest agency completion (17 October): the established design is retained. Shared CSS word/card reveals replace per-word Framer instances, with interactive motion preserved. About uses original brand art; unapproved review previews are hidden. Service/project detail pages, FAQs and the lead/CMS dashboard extend the same design. See `AGENCY_AUDIT.md`.
 
 ## Latest editorial feature update
 
@@ -640,7 +668,7 @@ Capture from an existing local app using `CAPTURE_BASE_URL=http://127.0.0.1:3008
 
 ## SCREENSHOTS.md
 
-``````markdown
+``````md
 # Current concept-site screenshots
 
 Selected Work contains exactly four new custom concepts. Each gallery uses actual Chromium screenshots of its working Next.js demo. The imagery within those pages is original AI-generated fictional imagery plus original SVG illustrations; it does not depict real client work. The Elvora external/promotional card has been removed.
@@ -692,149 +720,170 @@ The original restaurant/real-estate/SaaS/store demos and prior Elvora promotiona
 
 Six actual 1440×900 browser captures at 2× resolution now live in `public/studies/`: `noma.webp`, `orbit.webp`, `elsewhere.webp`, `form.webp`, `offscript.webp` and `aura.webp`. They show the original coded `/studies/[slug]` pages with fictional demo content. Refresh with `npx tsx scripts/capture-studies.ts`; stop other Next.js processes first or provide `CAPTURE_BASE_URL`. These are separate from the four complete selected concept websites and their 16-image galleries.
 
-## Latest portfolio feature previews
+## Earlier editorial portfolio previews
 
-`docs/editorial-{tools,skills,domains,journey,reviews,contact,footer}-{desktop,mobile}.png` capture the current portfolio sections at 1440px and 390px. They show the implemented Elvora designs, not the reference uploads. Reduced-motion capture mode reveals every heading/card, and fixed navigation is hidden for unobstructed section previews. Review/profile placeholders remain clearly identified. Earlier `reference-` and `studio-` captures document previous design phases.
+`docs/editorial-{tools,skills,domains,journey,reviews,contact,footer}-{desktop,mobile}.png` capture the earlier editorial portfolio sections at 1440px and 390px. They show the implemented Elvora designs, not the reference uploads. Reduced-motion capture mode reveals every heading/card, and fixed navigation is hidden for unobstructed section previews. Review/profile placeholders remain clearly identified. Earlier `reference-` and `studio-` captures document previous design phases.
+
+## Agency completion previews — 17 October 2026
+
+`docs/agency-{home,about,faq,contact,service,project}-{desktop,mobile}.png` are twelve actual production-build public captures at 1440px/390px. They show original brand About artwork, genuine supplied content, FAQs and service/project notes. Fixed widgets are hidden only during unobstructed section captures. Reduced motion is used for still images; motion is separately verified in the browser.
+
+`docs/agency-admin-{dashboard,inbox}-{desktop,mobile}.png` show actual local PostgreSQL-backed admin pages. Inbox material is explicitly named temporary QA fixture data, not customer information. Fixture records were removed after testing. These captures do not establish a live production database or deployment.
+
+The ordinary public site hides reviews until genuine permission-approved records exist; earlier review-preview images are historical. `docs/agency-performance.json` records the current local mobile Lighthouse result and limits.
 ``````
 
 ## SECURITY_STATUS.md
 
-``````markdown
-# Dependency security status — 15 October 2026
+``````md
+# Dependency and application security status — 17 October 2026
 
-**Production launch is blocked while the requested Next.js 14 version is retained.** The implemented app can be reviewed locally, but it must not be described as free of known production dependency vulnerabilities.
+The owner approved the major-version migration. The project now uses **Next.js 15.5.28** and matching ESLint configuration with React 18.3.1. Async `headers()` and dynamic route parameters, tracing and external-package configuration were migrated. Lint, TypeScript, production build, real PostgreSQL/Auth.js HTTPS integration and browser checks cover the upgrade.
 
-The user explicitly fixed the stack at Next.js 14. The current 14.x release available to this project is 14.2.35. `npm audit --omit=dev` still reports **one critical affected package: Next.js**. Reported advisories require a patched later major version; updating within 14.x does not resolve them. A stack exception has been requested before changing majors. No major upgrade is silently applied.
+Current `npm audit --omit=dev`: **0 vulnerabilities**. The earlier Next.js 14 launch blocker has been resolved by the approved migration. This is an audit snapshot, not a guarantee against all vulnerabilities.
 
-Relevant examples:
+The full development audit reports **7 high-severity affected entries** through `braces <=3.0.3` and its glob/watch consumers in ESLint and Tailwind. No patched braces version is published in the available registry. These are build/development dependencies, not a finding in the production-only dependency tree. Do not process untrusted glob patterns through those tools. Review upstream releases and re-audit before launch; the finding is not suppressed or relabeled as fixed.
 
-- [App Router CSP nonce XSS — GHSA-ffhc-5mcf-pf4q](https://github.com/advisories/GHSA-ffhc-5mcf-pf4q)
-- [Image Optimization API remote-code-execution advisory — GHSA-2xp9-vwfh-vxw4](https://github.com/advisories/GHSA-2xp9-vwfh-vxw4)
-- [Server Components denial-of-service advisory — GHSA-8h8q-6873-q5fj](https://github.com/advisories/GHSA-8h8q-6873-q5fj)
+Existing security updates and overrides remain: Auth.js/NextAuth 4.24.15, Prisma 6.19.3, Sharp 0.35.5, Blob 2.8.2, PostCSS 8.5.30, deepmerge-ts 8.0.2, uuid 11.1.1 and postcss-selector-parser 7.1.6. The Gmail SMTP implementation uses patched Nodemailer 10.1.1 as the `gmail-smtp` alias. This Credentials-only app does not enable Auth.js's optional email authentication provider.
 
-Not every advisory applies to every feature/platform in this app. That does not justify treating the remaining affected framework as patched. CSP, validation, private admin checks and rate limits do not replace framework security updates.
+Application controls include server page/API authorization, 15-minute absolute session limits, database password-version checks, revocation on logout/password/2FA changes, bcrypt hashes and byte limits, failed-login lockout, shared-store production rate limits, same-origin mutation checks, strict validation, nonced CSP, no-store private responses and restricted image upload decoding/re-encoding. Sign-out revokes all sessions for the single administrator. Recovery is a private CLI operation, with audit records; there is no public registration/reset endpoint.
 
-Other findings were addressed by updating Auth.js/NextAuth 4.24.15, Prisma packages 6.19.3, Sharp 0.35.5, Vercel Blob 2.8.2, PostCSS 8.5.30, and compatible locked transitive dependencies. Prisma config uses a security override for deepmerge-ts 8.0.2; generation/build checks cover the pinned configuration. The current Gmail SMTP implementation uses Nodemailer 10.1.1 under the `gmail-smtp` npm alias because Auth.js declares an older optional mail-provider peer; this app uses Credentials authentication and does not use Auth.js's email provider. The alias keeps the patched SMTP library without installing the vulnerable optional version. Do not remove the lockfile or replace it with an incompatible peer override.
+Production still requires a strong private auth secret, HTTPS, least-privilege database access, backups, shared Redis limits for multiple instances, properly configured Turnstile, and actual provider configuration. Memory limits are an explicit single-process deployment option only. Review retention, provider agreements and served regions; consent controls do not certify legal compliance.
 
-Recheck before any launch:
+Recheck after dependency or authentication changes:
 
 ```bash
 npm audit --omit=dev
+npm audit
 npm run test:chat
 npm run test:contact
 npm run test:security
+npm run test:consent
 npm run lint
 npm run typecheck
 npm run build
 ```
 
-Audit advisories change over time. Once a patched framework upgrade is authorized, migrate the affected APIs/configuration, rerun production browser/database tests, and update this document with the actual result. Lighthouse accessibility/best-practices/SEO scores are not a dependency security certification.
+See `TESTING.md` for guarded real-database and HTTPS integration suites. No actual production credentials, database, mail delivery, paid AI call or public hosting deployment is established by local tests.
+``````
+
+## TESTING.md
+
+``````md
+# Verification workflow
+
+Node 24 was used. Install with the lockfile, retain Prisma/security overrides and do not run dev and build concurrently.
+
+```bash
+npm ci --cache /tmp/portfoli-npm-cache --no-audit --no-fund
+npm run lint
+npm run typecheck
+npm run test:chat
+npm run test:contact
+npm run test:security
+npm run test:consent
+npm run build
+npm audit --omit=dev
+npm audit
+```
+
+The unit suites verify guards, quotas, provider adapters, safe SMTP, durable-storage failure semantics, schemas, TOTP/encryption, real image decoding and consent expiry. Provider requests in those tests are explicit fixtures; no real mail or paid AI request is sent. The full development audit currently has an upstream finding documented in `SECURITY_STATUS.md`; it must not be reported as a passing zero-vulnerability check.
+
+## Opt-in real PostgreSQL and HTTPS integration
+
+Use a disposable local PostgreSQL database and generated test-only admin/auth secrets in an ignored private environment file outside the repository. Never use production data or credentials. The auth suite additionally requires a loopback database URL whose database name begins `elvora_agency_test` and resets only that fixture admin when cleaning up.
+
+1. Set private `DATABASE_URL` and `DIRECT_URL` for that isolated database. Run the actual migration CLI, bootstrap and deliberate development seed. Confirm repeated bootstrap is refused and production demo seed is refused.
+2. Set `AGENCY_TEST_DATABASE=isolated`, `NEXTAUTH_URL=https://127.0.0.1:3443`, `NEXT_PUBLIC_SITE_URL` to that test origin, `CONTENT_SOURCE=database`, `CONTACT_STORAGE=database`. Leave real SMTP, AI and storage credentials absent.
+3. For this single-process fixture only, enable `AUTH_ALLOW_IN_MEMORY_LIMITER=true`, `CONTACT_ALLOW_IN_MEMORY_LIMITER=true`, `CONTACT_TURNSTILE_REQUIRED=false`. The auth suite varies local `x-real-ip` fixture headers with `AUTH_TRUSTED_IP_HEADER=x-real-ip` to exercise multiple session transitions without waiting through the shared login bucket. This is a test setting, not evidence of a trusted production proxy.
+4. Create a self-signed certificate with localhost/127.0.0.1 SANs. Set `AGENCY_TEST_TLS=self-signed-local`, `AGENCY_TEST_TLS_KEY` and `AGENCY_TEST_TLS_CERT` to the private local files.
+5. Run the production build without fixture credentials embedded in it, then start the production app with the private fixture environment on port 3008. In another persistent terminal run `npm run test:proxy` with the same fixture environment. The helper binds loopback, forwards only to loopback and refuses use outside the explicitly isolated fixture.
+6. Run suites sequentially with the same private environment:
+
+```bash
+node --env-file=/private/path/test.env --test --test-concurrency=1 tests/agency.integration.mjs
+node --env-file=/private/path/test.env --test --test-concurrency=1 tests/auth.integration.mjs
+```
+
+The agency suite covers unauthorized verbs/pages/uploads, actual credential login, Secure/HttpOnly/Strict cookies, origin/schema rejection, CMS publication, sitemap, stored inquiries, status/notes/search/pagination/audit, logout and captured-token replay rejection. The auth suite covers authenticator confirmation, password-only rejection, 2FA disabling, password changes and session revocation. The only certificate-validation exception in the test client is guarded by the explicit local self-signed fixture; application production cookies and TLS settings are not weakened.
+
+Stop only your fixture app/proxy/database after testing. Restart the ordinary app without those credentials/settings. These tests create temporary local content and test accounts; they do not prove production configuration, external service delivery or deployment success.
+
+## Browser and performance review
+
+Use system Chromium or a compatible Playwright browser. Check public/admin layouts at 360, 390, 768, 1024 and 1440px, themes, keyboard navigation, accessible dialogs, form errors/success/reset, lead editing, genuine review carousel controls, reduced motion and JavaScript-off content. Under CSP, inject axe with the page's script nonce. Scan after theme transitions/reveal effects settle; do not hide genuine contrast failures.
+
+Verify consent defaults off, saved rejection, explicit embed creation, cross-tab permission revocation and frame teardown, storage failures and preference reopening. An explicit local iframe fixture can verify consent behavior without invoking the real provider; label that evidence accordingly.
+
+Run Lighthouse alone against a production server in ordinary file mode. Save the actual score, device/throttling settings and metrics; don't substitute a previous result or certify the public deployment from a local audit. Capture helpers may hide fixed navigation/skip-link widgets only in screenshots. `VERIFICATION.md` records measured outcomes and `docs/` contains actual captures.
 ``````
 
 ## VERIFICATION.md
 
-``````markdown
-# Verification — 16 October 2026
+``````md
+# Verification — 17 October 2026
 
-This is a **review build**, not a verified live deployment. `SECURITY_STATUS.md` records the remaining critical Next.js 14 dependency blocker and the pending major-version decision.
+This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
-## Latest editorial feature update
+## Install, framework and unit checks
 
-- Applied the nine new visual references through an oversized two-tone tool/journey heading style, an eight-tool directory, six categorized skill rows, five technical-domain bento cards, an ivory Let’s talk panel, a horizontal one-review carousel and a new footer. The footer combines pill navigation, actual contact details, cropped filled ELVORA typography, animated violet waves, a central emblem and legal/cookie controls.
-- Preserved the supplied journey, services, actual domain email, GitHub/Instagram and existing contact/consent behavior. Reference employers, experience totals, unrelated hardware/networking skills, client reviews and portrait photos were not attributed to the owner. Review entries remain clearly labeled previews until genuine owner-approved material is supplied.
-- The tool art is local SVG from Simple Icons with attribution; there is no additional runtime dependency, analytics provider or tracking integration. ChatGPT/OpenAI use the actual OpenAI mark; Botpress uses a text identifier.
-- Latest lint, TypeScript check and optimized production build passed. The homepage first-load JavaScript remains approximately 163 kB. No backend schema or dependency declarations changed.
-- Development browser checks passed for all seven updated sections at 320, 390, 768, 1024 and 1440px, including internal content bounds. The intentionally offscreen contact honeypot is excluded from visual-boundary assertions. There is no document overflow. Reviewed actual desktop/mobile section captures.
-- Dark and light homepage axe WCAG A/AA checks passed after correcting light-theme tool-label contrast. Browser checks verified review rotation, pause and keyboard arrows, exactly one active accessible slide, reduced-motion autoplay disabling and JavaScript-disabled content visibility. Fresh sessions reported no page errors.
-- Verified footer quick links, actual social destinations and reopening/rejecting cookie preferences. Contact empty-field validation, focus/error state, success/reset behavior and mobile accessibility passed with an explicit HTTP fixture. No real email, external chat or paid AI request was sent.
-- Fresh production sessions passed dark/light axe checks, 320px/390px layouts, policy/demo/study/local-logo HTTP checks, footer preference reopening, horizontal review rotation, keyboard arrows, reduced-motion behavior and zero hydration/page errors. All fourteen current previews were regenerated from the production build. Historical backend/provider/database tests in earlier sections were not rerun for this visual update. The known dependency findings and live-provider limitations remain documented separately.
-- Current screenshots use `docs/editorial-{tools,skills,domains,journey,reviews,contact,footer}-{desktop,mobile}.png`. Earlier `reference-` and `studio-` captures describe prior design phases. The live Framer timing and public deployment remain unverified; no exact animation-copy or legal-compliance certification is claimed.
+- Fresh locked `npm ci --cache /tmp/portfoli-npm-cache --no-audit --no-fund` passed and generated the pinned Prisma JavaScript/WASM client.
+- `npm run lint`, `npm run typecheck` and the optimized Next.js 15.5.28 production build passed. Homepage first-load JavaScript is approximately 170 kB; service/project detail pages approximately 119 kB. The expected Open Graph edge-runtime static-generation notice is not a build failure.
+- `npm run test:chat`: **16 passed**. Prompt/input/origin guards, provider contracts, quotas, controlled embeds and error handling.
+- `npm run test:contact`: **13 passed**. Validation, fixed-recipient safe SMTP, missing credentials, origin/honeypot/quota behavior, optional fields, durable storage without SMTP, notification failure after acceptance and database failure without false success.
+- `npm run test:security`: **7 passed**. Password byte rules, RFC 6238 TOTP vectors, authenticated encryption, strict content/connection/image schemas, Turnstile verification, actual image decoding/re-encoding and review publication permission.
+- `npm run test:consent`: **5 passed**. Malformed/expired/future/version handling, current accept/reject choices and equivalent initial-render visibility-script validation including blocked storage.
+- Current production audit: **0 vulnerabilities**. Full audit: **7 high development-tool entries**, through unpatched braces/glob consumers. That full audit is not reported as clean.
 
-## Earlier supplied-reference layout and motion update
+## Actual PostgreSQL and production HTTPS
 
-- The owner has now supplied seven reference images, including a repeated footer family. Adapted their centered headings, rounded charcoal service cards, horizontal five-step workflow, gold-dot vertical timeline, portrait-left About layout and compact three-column footer to Elvora. The previous claim that the design references were missing is superseded by this update. See `REFERENCE_DESIGN.md` for the mapping.
-- Retained the owner's supplied services/journey/AI philosophy, actual email and social URLs. Did not import Badhon's photo, names, dates, projects, testimonials, location or experience/success numbers. The personal photo and genuine approved testimonials/client portraits are still pending and labeled honestly.
-- Added clipped, staggered spring word reveals, short blur/scale/vertical image/card entrances, and retained the Elvora logo/footer shine and screenshot drift/hover. The Framer URL still returns CONNECT/HTTP 403 here; its exact live timing/easing could not be inspected, so no exact animation-copy claim is made.
-- The separate work collage now contains four original website concepts plus six new coded UI studies: noma, ORBIT, elsewhere., FORM /, offscript. and aura. Their balances, charts, products and brands are illustrative. Six actual browser captures at 1440×900, 2×, are included in `public/studies/`. No additional commissioned-client count is claimed.
-- Latest lint, typecheck and final production build passed. The new `/studies/[slug]` pages, images, policy routes and sitemap links return successful responses. Unknown study paths display the not-found screen with `noindex`; this async App Router layout streams that result with HTTP 200, so verification checks the actual not-found/noindex behavior rather than incorrectly requiring HTTP 404.
-- Development browser checks passed for dark/light homepage accessibility, the preferences dialog and policy pages, all six UI-study accessibility scans, 320–1440px layouts, gallery-study back links, review rotation/manual controls, consent denial/persistence/revocation, storage failure and JavaScript-disabled content. No real provider request or email was sent; provider behavior used an explicit local iframe fixture.
-- Production checks verified a word begins below its mask, moves upward on viewport entry and settles inside the mask, and all five workflow cards share a desktop row. Captured every journey chapter after revealing it, checked the three-column footer and ten-item collage, and generated complete desktop/mobile preview images.
-- A reduced-motion production check caught a server/client SVG mismatch in the review Play/Pause icon. Fixed it by deferring media-dependent icon/autoplay state until hydration and keeping initial reveal variants consistent. Final fresh normal/reduced-motion browser sessions, a study page with live consent controls under CSP, and the no-JavaScript fallback all passed without page errors. Final mobile workflow/About/collage captures also passed without overflow or page errors.
-- Current previews use the `docs/reference-` prefix: hero, services, workflow, journey, About, review preview, footer and work collage, with additional mobile workflow/About/collage captures. No new Lighthouse score, legal-compliance certification, paid AI reply or external public-deployment verification is claimed. Earlier dependency-security findings remain in `SECURITY_STATUS.md`.
+A disposable PostgreSQL 17.6 instance bound to loopback was used, with generated private test credentials and no production database. The actual Prisma migration CLI successfully applied both initial and additive agency migrations. First-admin bootstrap and development seed succeeded; repeated bootstrap and production demo seed were refused as intended.
 
-## Earlier studio design and privacy update
+`tests/agency.integration.mjs`: **8 passed** (including subtests). Actual Auth.js Credentials login and PostgreSQL queries were used. Verified unauthorized admin pages, all resource verbs and upload rejection; Secure/HttpOnly/SameSite=Strict cookies; same-origin and schema checks; FAQ/service publication and removal from public output/sitemap; durable inquiry storage without SMTP; lead search/status/notes/read; dashboard counts; audit pagination/no-store; and logout rejection of captured token replay.
 
-- Built four service cards, a distinct eight-image My bunch of work contact sheet beneath Selected Work, a six-tool AI board, expanded AI/development skills, the supplied five-step workflow, the owner-supplied four-chapter journey, a short About Me summary, social links, a one-at-a-time review carousel, shining CSS hero logo and animated footer wordmark. Added no experience/project/client/success metric cards. The personal portrait remains labeled until supplied.
-- The numbered reference images were not attached. The external Framer reference returned HTTP/CONNECT 403 in this environment; these are original Elvora layouts, not a verified exact reference match. Review entries are explicit layout previews with neutral icons. No genuine testimonial or real client face has been fabricated.
-- Latest `npm run lint`, `npm run typecheck`, `npm run build`, 16 chat tests, and four new consent parsing tests passed. Contact/backend delivery was not modified; no new real email or AI request was sent. Earlier contact/security/database checks below are historical, not rerun for this UI change.
-- Browser checks against the final production build passed: consent defaults off, Reject All persistence after reload, an explicit permission before creating the provider frame, cross-tab revocation and frame teardown, blocked-storage fallback, and a 320px banner/preferences layout. The provider response in these browser checks was an explicit local iframe fixture; this does not establish real Botpress replies.
-- Dark and light homepage axe checks reported zero WCAG A/AA violations. The initial consent banner, preferences dialog, and all three policy pages also passed. Corrected persistent low-contrast opacity in the scroll workflow; body text now retains full contrast while moving. Layout checks passed at 320, 390, 768, 1024 and 1440 pixels with no document overflow.
-- Verified one review at a time, timed rotation, pause and next controls, honest placeholder labels, correct social profile URLs, and no browser page errors. Reduced motion makes the emblem static and disables review autoplay. Policy routes returned HTTP 200 with working settings controls and readable mobile layouts.
-- New screenshot previews: `docs/studio-hero-preview.png`, `studio-services-preview.png`, `studio-work-bunch-preview.png`, `studio-tools-preview.png`, `studio-workflow-preview.png`, `studio-journey-preview.png`, `studio-wall-of-love-preview.png`, `studio-footer-preview.png`, and `studio-mobile-consent-preview.png`. They are captures of the implemented website, not the missing reference images.
-- No new Lighthouse audit, legal-compliance certification or public deployment verification is claimed. Policy copy must be reviewed against actual provider configuration, retention practice and served regions; see `PRIVACY_SETUP.md`. Known Next.js 14 advisories remain recorded in `SECURITY_STATUS.md`.
+`tests/auth.integration.mjs`: **4 passed** (including subtests). Verified actual authenticator setup/confirmation, incorrect code rejection, password-only rejection with 2FA enabled, fresh-code login, disabling 2FA, password changes, old-password rejection and session invalidation. The guarded suite restores only its disposable fixture admin.
 
-## Public email update
+The tracked loopback-only HTTPS proxy was exercised for these checks so application production Secure cookies remained enabled. Test certificate exceptions were restricted to the explicit self-signed local fixture. No production TLS setting was weakened. Temporary review/inquiry records were cleaned, and fixture app/proxy/database services were stopped after use.
 
-- Public contact links, fallback copy and new admin settings defaults now use `abdulhafeez@elvoraai.online`. The fixed contact-form recipient uses the same address. Existing Gmail SMTP authentication/sender is kept separate through `GMAIL_SMTP_USER`; no Hostinger SMTP credentials or live delivery are claimed. Contact tests (9), lint and typecheck passed. Existing database settings require an owner update if database content mode is enabled.
+## Browser, accessibility and content
 
-## Latest four-concept and direct-chat update
+- System Chromium checks passed for public layouts at **360, 390, 768, 1024 and 1440px**, with no document overflow. Admin inbox layouts passed the same sizes.
+- Dark/light homepage, service/project details, preferences dialog, private dashboard, FAQ management and inbox passed axe WCAG A/AA scans after transitions settled. Mobile menu Escape/focus behavior and native FAQ mouse/Enter controls passed.
+- Actual browser sign-in and FAQ create/save/delete/cancel were verified against the real local database. A list-label issue found during testing was fixed so FAQ questions display instead of IDs.
+- The real contact form submitted optional company/service and a message into PostgreSQL, displayed accurate saved acceptance, reset the optional values, and exposed the inquiry in admin. Search, filtering, status, private notes and deletion were exercised through the UI.
+- Consent banner exists in initial server HTML. Verified default-denied embeds, stored rejection, explicit permission before iframe creation, saved-choice suppression, cross-tab revocation and iframe teardown, preference reopening and blocked-storage feedback. The embedded provider response was an explicit local HTML fixture; it does not prove real Botpress replies.
+- Verified viewport word reveal/mask movement, immediately readable hero, reduced motion and public text with JavaScript disabled. Moving the root streaming loader to the private admin route fixed hidden public content without JavaScript.
+- Three temporary local CMS review fixtures verified timed rotation, hover/pause behavior, keyboard next, one active accessible slide and disabled autoplay under reduced motion. All fixtures were removed. The ordinary public site has no unapproved testimonials or fabricated faces.
+- Fresh browser sessions reported no page/hydration errors. Twelve public and four private dashboard/inbox screenshots show actual rendered pages. Private screenshots use clearly named local QA fixtures, not real customer information. The original Elvora About composition replaces the substitute portrait; supplied certificate, project captures, actual email and social URLs remain intact.
 
-- Built four new sample websites: Solenne (hotel), Vanta Motors (electric automotive), Aster Care (wellness/clinic), and Kovo Studio (architecture). Selected Work now contains exactly these four; the previous featured Elvora card is removed. Archived demo routes remain available separately.
-- Passed `npm run lint`, `npm run typecheck`, `npm run test:chat` (16 tests) and the final production build. The existing contact/database/security integrations were unchanged; their earlier checks are recorded below.
-- Browser checks passed for hotel room filters and date validation, car model/finish configuration, clinic service filters and sample visit planning, and architecture filters/local project briefs. These flows generate local sample summaries and do not make reservations, take payment or store personal information.
-- All four concept pages passed axe accessibility scans after contrast refinements. Their navigation, layouts and section boundaries were checked at 320, 390, 768, 1024 and 1440 pixels.
-- Captured 16 actual browser screenshots from the implemented pages: home, collection, mobile and feature views for every site. Original generated hero imagery is disclosed in `data/concept-images.ts` and `SCREENSHOTS.md`; these are fictional concept projects.
-- Verified the four project galleries, four thumbnails each, matching demo links, arrow keys, Escape and focus return. Production HTTP checks passed for the four routes and hero images, selected-work grid, sitemap and real Botpress embed document. Preview: `docs/new-work-preview.png`.
-- Forte now has a clearly labeled HTML chat preview matching the supplied greeting, with the entire card and preview acting as a single accessible Open chat button. Desktop/mobile SDK fixtures passed one-click opening from the preview, sequential script loading, ready/open, in-frame messages, storage, close cleanup and retry. Both themes passed axe checks for the updated bot cards, and layouts were checked from 320 to 1440 pixels. Preview: `docs/forte-bot-card.png`. Actual Botpress replies remain unverified because its public assets return HTTP 403 from this cloud environment.
+## Local mobile Lighthouse
 
-## Earlier verified functionality
+Fresh ordinary file-mode production server; Lighthouse 13.5.0, simulated mobile throttling, no concurrent browser/capture workload:
 
-- Dependency installation and the pinned Prisma JS/WASM client generation.
-- `npm run lint`, `npm run typecheck`, `npm run build`.
-- `npm run test:chat`: 16 tests; server-only prompts, message/input guards, quotas, provider adapters, configured extra bots, contained embeds and Botpress's two-script/nonce/host-validation contract.
-- `npm run test:contact`: 9 tests; validation, fixed-recipient mail, origin checks, honeypot, rate protection, credential absence and honest error handling.
-- `npm run test:security`: 6 tests; password rules, RFC 6238 TOTP vectors, authenticated encryption, strict schemas, Turnstile hostname/action and actual image decoding/re-encoding/rejection.
-- Actual initial migration SQL applied to an isolated temporary local PostgreSQL instance; additive seed completed.
-- Real PostgreSQL/Auth.js browser login with Secure, HttpOnly, SameSite=Strict cookies; create/edit/delete/reorder and updated public rendering; contact inbox read/delete and delivery status; opt-in chat logs; audit records; cross-origin and invalid-input rejection.
-- Authenticator setup, code verification, login, encrypted-secret storage and password-version session invalidation. Database failure counts, five-attempt/15-minute lockout, expiry recovery and CLI password/2FA recovery were checked without printing credentials.
-- SMTP and AI responses in integration checks used explicit fixtures; no actual email delivery or paid AI request was asserted. Final SMTP fixtures prohibited real SMTP network connections.
-- Four distinct demo pages, property filters, demo billing selector, demo shopping bag, accessible mobile navigation and actual 16 WebP screenshots captured by Playwright at the requested 2× desktop/mobile sizes.
-- Four-image galleries with thumbnails, wraparound arrows, Escape, actual concept-site links; certificate zoom/keyboard/focus; form validation, error preservation and success reset; dark/light accessibility; 320px–1440px layouts.
-- Deferred AI-tab/hash navigation, all four bot cards, pending real-bot state, three API demos, per-bot history retained across category changes, clear conversation, accessible modals and mobile chat layout.
-- Production file tracing includes Prisma's query compiler WASM for routes that use the database.
-- Supplied Coursiv certificate update: rendered the original PDF to a 2200×1555 WebP; checked the exact title, issuer, 31 October 2024 date, 6-hour duration and certificate ID against the document. Re-ran lint/typecheck and browser checks at 1440px/390px for image loading, absent placeholder wording, fullscreen zoom, keyboard shortcuts, Escape, focus return and overflow. Preview: `docs/certificate-showcase.png`.
-- Branding/About Me update: E-and-amber-dot SVG logo in navbar/footer/favicon, Elvora wordmark and portrait label, About Me navigation, the owner's supplied 2+ years of experience, three story paragraphs and four full-stack blocks. The production build passed. Browser checks against both development and production passed at 320px–1440px, including mobile navigation and certificate zoom; dark/light axe scans reported no violations. `docs/brand-preview.png`, `docs/about-preview.png` and `docs/mobile-about-preview.png` show this update.
-- Botpress connection: the supplied Forte Institute Study Assistant loader/configuration URLs are configured in the first real card. Explicit SDK fixtures verified lazy sequential loading, init selector, ready/open, provider storage, in-frame chat, close cleanup, desktop/mobile layout, errors and retry. These checks do not verify Botpress's actual SDK behavior or AI replies. Direct asset requests returned HTTP 403 from this cloud environment. Card preview: `docs/forte-bot-card.png`; setup details: `BOTPRESS_SETUP.md`.
-- Earlier premium visual update (its Elvora card is superseded by the four-concept update above): Forma Living was replaced in Selected Work by the supplied Elvora URL and a clearly labeled generated 3D promotional render. Checked the external HTTPS link/rel, single-artwork gallery, remaining four-image concept galleries, About Me portrait frame, hover lighting/tilt, reduced-motion behavior and 320px–1440px layouts. Fixed a decorative-glow overflow at tablet width. Both themes reported zero axe violations. The production build and local HTTP 200/gallery-link smoke check passed. The six security tests passed, including HTTPS project-link acceptance and malformed/unsafe-link rejection. The personal photo is still missing and stays visibly labeled as a placeholder.
+| Category | Score |
+| --- | ---: |
+| Performance | 92 |
+| Accessibility | 100 |
+| Best practices | 100 |
+| SEO | 100 |
 
-## Local Lighthouse
+FCP **1.2 s**, LCP **3.3 s**, total blocking time **20 ms**, CLS **0**, speed index **1.2 s**. Shared CSS/observer reveals and initial consent rendering reduce hydration work. LCP remains above the 2.5-second good threshold in this simulated run. See `docs/agency-performance.json` for settings and numeric metrics. Scores vary with devices, CPU, network, content, providers and the production host; they are neither a security nor a legal certification. Earlier scores/captures describe older builds.
 
-Earlier mobile-emulated audit against the premium local production build, in file content mode, before the four-concept/direct-chat update above. Lighthouse was not rerun for the latest update:
+## Remaining real-world setup and limits
 
-| Category       | Score |
-| -------------- | ----: |
-| Performance    |    85 |
-| Accessibility  |   100 |
-| Best practices |   100 |
-| SEO            |   100 |
+- Configure production PostgreSQL, migration access, auth secret and shared Redis limits; create the first admin privately with `npm run admin:bootstrap`. Populate reviewed CMS records before choosing database content mode. File mode remains the default; inquiry storage can be enabled independently.
+- Configure actual Turnstile keys, Gmail sender/App Password, server-side AI key and optional Blob settings. Real SMTP mailbox delivery, paid AI/provider replies, Redis service, Blob upload and Turnstile challenges were not verified with real accounts.
+- Preserve the supplied Botpress configuration and check provider publishing/domain permissions on the real host. Live external Framer timing, exact animation-copy parity and public deployment are not verified.
+- Genuine review text/portrait permission and an optional personal photo must come from the owner. No client statistics, revenue, experience totals, success rates or business outcomes were invented.
+- Verify public DNS/certificates/redirects, hosting deployment, backups/restoration, actual retention and served-region policy requirements. No DNS changes were made. Physical-device speech recognition/playback remains unverified.
+- Saved cloud startup instructions are a configuration draft, separate from website deployment; review/save and publish environment settings to activate them for future tasks. Fresh-task restoration has not been independently verified.
 
-The earlier build recorded 91 performance; the earlier premium visual update recorded 85 on its final run (82–86 across local runs). Trimming the initial hero animation reduced measured heading render delay, and CSS scroll progress avoids an extra client hook. Performance remains below the earlier result. Scores vary with device, CPU load, image replacements, network, third-party widgets, database latency and the production host. Lighthouse is not a dependency security certification. A compact result is in `docs/lighthouse-summary.json`; the standalone HTML/JSON reports are also prepared in the workspace.
-
-## Still needs real owner configuration/verification
-
-- A patched framework-major decision before external production launch. Current production dependency audit: one critical affected package, Next.js 14; other reported production findings were resolved.
-- The personal portrait and approved review text/client portraits are still missing. The design-reference images have now been supplied and used. AI tools and the supplied journey are included without metric cards. The supplied Coursiv certificate is displayed; external issuer verification has not been performed.
-- An owner-uploaded photo is needed to complete the About Me portrait area. The previous Elvora featured card has been removed; no screenshot of that external website is needed for the current selected-work grid.
-- Actual public HTTPS origin settings, external database/Redis/storage credentials, OpenAI key for the three API demos, Gmail App Password and Cloudflare Turnstile keys in private settings. The real Botpress connection uses the owner's supplied public scripts; verify its publishing state, domain permissions and live replies on the deployed site.
-- Live Gmail inbox delivery, real OpenAI/provider replies, actual Blob upload, real Redis REST service and real Turnstile challenge verification. Mock-based checks do not establish these integrations.
-- Native Prisma migration CLI deployment to the owner's cloud database. Its verified engine download was blocked in the current environment; the network draft adds `binaries.prisma.sh` but must be reviewed/saved and published to activate. Initial SQL/seed were independently verified against local PostgreSQL.
-- Physical-device microphone recognition and speech playback over HTTPS. Text fallback and application controls do not prove actual speech-service/device behavior.
-- Public hosting deployment, DNS/SSL, backups/recovery, retention settings and the launch checks in `DEPLOYMENT.md`.
+See `AGENCY_AUDIT.md`, `DEPLOYMENT.md`, `TESTING.md`, `CONTACT_SETUP.md` and `SECURITY_STATUS.md` for implementation and setup details.
 ``````
 
 ## middleware.ts
 
-``````typescript
+``````ts
 import { NextResponse, type NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 export async function middleware(request: NextRequest) {
@@ -925,22 +974,21 @@ export const config = {
 ``````javascript
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    outputFileTracingIncludes: {
-      "/**": ["./node_modules/.prisma/client/query_compiler_bg.wasm"],
-    },
-    serverComponentsExternalPackages: [
-      "@prisma/client",
-      "@prisma/adapter-pg",
-      "pg",
-      "gmail-smtp",
-    ],
+  outputFileTracingIncludes: {
+    "/**": ["./node_modules/.prisma/client/query_compiler_bg.wasm"],
   },
+  serverExternalPackages: [
+    "@prisma/client",
+    "@prisma/adapter-pg",
+    "pg",
+    "gmail-smtp",
+  ],
   images: {
     remotePatterns: process.env.BLOB_PUBLIC_HOST
       ? [{ protocol: "https", hostname: process.env.BLOB_PUBLIC_HOST }]
       : [],
   },
+  htmlLimitedBots: /.*/,
   poweredByHeader: false,
   reactStrictMode: true,
 };
@@ -971,7 +1019,7 @@ export default nextConfig;
         "framer-motion": "11.18.2",
         "gmail-smtp": "npm:nodemailer@10.1.1",
         "lucide-react": "0.468.0",
-        "next": "14.2.35",
+        "next": "15.5.28",
         "next-auth": "4.24.15",
         "pg": "8.16.3",
         "react": "18.3.1",
@@ -990,7 +1038,7 @@ export default nextConfig;
         "@types/react-dom": "18.3.5",
         "autoprefixer": "10.4.20",
         "eslint": "8.57.1",
-        "eslint-config-next": "14.2.35",
+        "eslint-config-next": "15.5.28",
         "postcss": "8.5.30",
         "prisma": "6.19.3",
         "tailwindcss": "3.4.17",
@@ -2114,53 +2162,6 @@ export default nextConfig;
         "url": "https://opencollective.com/libvips"
       }
     },
-    "node_modules/@isaacs/cliui": {
-      "version": "8.0.2",
-      "resolved": "https://registry.npmjs.org/@isaacs/cliui/-/cliui-8.0.2.tgz",
-      "integrity": "sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==",
-      "dev": true,
-      "license": "ISC",
-      "dependencies": {
-        "string-width": "^5.1.2",
-        "string-width-cjs": "npm:string-width@^4.2.0",
-        "strip-ansi": "^7.0.1",
-        "strip-ansi-cjs": "npm:strip-ansi@^6.0.1",
-        "wrap-ansi": "^8.1.0",
-        "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0"
-      },
-      "engines": {
-        "node": ">=12"
-      }
-    },
-    "node_modules/@isaacs/cliui/node_modules/ansi-regex": {
-      "version": "6.4.0",
-      "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-6.4.0.tgz",
-      "integrity": "sha512-KzTVk2tCWAHtYrvvvaP8bJKJq2pVinhLcGEQdtLIYPbmNGNyYe8QwNaTUYQp2J7/vIsUKt5QCqAfUkYyG9DkOw==",
-      "dev": true,
-      "license": "MIT",
-      "engines": {
-        "node": ">=12"
-      },
-      "funding": {
-        "url": "https://github.com/chalk/ansi-regex?sponsor=1"
-      }
-    },
-    "node_modules/@isaacs/cliui/node_modules/strip-ansi": {
-      "version": "7.2.0",
-      "resolved": "https://registry.npmjs.org/strip-ansi/-/strip-ansi-7.2.0.tgz",
-      "integrity": "sha512-yDPMNjp4WyfYBkHnjIRLfca1i6KMyGCtsVgoKe/z1+6vukgaENdgGBZt+ZmKPc4gavvEZ5OgHfHdrazhgNyG7w==",
-      "dev": true,
-      "license": "MIT",
-      "dependencies": {
-        "ansi-regex": "^6.2.2"
-      },
-      "engines": {
-        "node": ">=12"
-      },
-      "funding": {
-        "url": "https://github.com/chalk/strip-ansi?sponsor=1"
-      }
-    },
     "node_modules/@jridgewell/gen-mapping": {
       "version": "0.3.13",
       "resolved": "https://registry.npmjs.org/@jridgewell/gen-mapping/-/gen-mapping-0.3.13.tgz",
@@ -2233,25 +2234,55 @@ export default nextConfig;
       }
     },
     "node_modules/@next/env": {
-      "version": "14.2.35",
-      "resolved": "https://registry.npmjs.org/@next/env/-/env-14.2.35.tgz",
-      "integrity": "sha512-DuhvCtj4t9Gwrx80dmz2F4t/zKQ4ktN8WrMwOuVzkJfBilwAwGr6v16M5eI8yCuZ63H9TTuEU09Iu2HqkzFPVQ==",
+      "version": "15.5.28",
+      "resolved": "https://registry.npmjs.org/@next/env/-/env-15.5.28.tgz",
+      "integrity": "sha512-xxW5EBI8fMPuVTPBW7LL980IRbuDXlbkUAwp9DDhtb4Lnich3nJ13uYpvrX4VE74hWPf6AvHHAMmGCidcHjbfg==",
       "license": "MIT"
     },
     "node_modules/@next/eslint-plugin-next": {
-      "version": "14.2.35",
-      "resolved": "https://registry.npmjs.org/@next/eslint-plugin-next/-/eslint-plugin-next-14.2.35.tgz",
-      "integrity": "sha512-Jw9A3ICz2183qSsqwi7fgq4SBPiNfmOLmTPXKvlnzstUwyvBrtySiY+8RXJweNAs9KThb1+bYhZh9XWcNOr2zQ==",
+      "version": "15.5.28",
+      "resolved": "https://registry.npmjs.org/@next/eslint-plugin-next/-/eslint-plugin-next-15.5.28.tgz",
+      "integrity": "sha512-EsR/G+skBFfu8Z35P6V/yuu4IV8zkZXIssGOgIRD0ZXqB4CTEuEHQC1ySOQi31u4xjmgHVAdG1RT3QAasRmcZA==",
       "dev": true,
       "license": "MIT",
       "dependencies": {
-        "glob": "10.3.10"
+        "fast-glob": "3.3.1"
+      }
+    },
+    "node_modules/@next/eslint-plugin-next/node_modules/fast-glob": {
+      "version": "3.3.1",
+      "resolved": "https://registry.npmjs.org/fast-glob/-/fast-glob-3.3.1.tgz",
+      "integrity": "sha512-kNFPyjhh5cKjrUltxs+wFx+ZkbRaxxmZ+X0ZU31SOsxCEtP9VPgtq2teZw1DebupL5GmDaNQ6yKMMVcM41iqDg==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@nodelib/fs.stat": "^2.0.2",
+        "@nodelib/fs.walk": "^1.2.3",
+        "glob-parent": "^5.1.2",
+        "merge2": "^1.3.0",
+        "micromatch": "^4.0.4"
+      },
+      "engines": {
+        "node": ">=8.6.0"
+      }
+    },
+    "node_modules/@next/eslint-plugin-next/node_modules/glob-parent": {
+      "version": "5.1.2",
+      "resolved": "https://registry.npmjs.org/glob-parent/-/glob-parent-5.1.2.tgz",
+      "integrity": "sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==",
+      "dev": true,
+      "license": "ISC",
+      "dependencies": {
+        "is-glob": "^4.0.1"
+      },
+      "engines": {
+        "node": ">= 6"
       }
     },
     "node_modules/@next/swc-darwin-arm64": {
-      "version": "14.2.33",
-      "resolved": "https://registry.npmjs.org/@next/swc-darwin-arm64/-/swc-darwin-arm64-14.2.33.tgz",
-      "integrity": "sha512-HqYnb6pxlsshoSTubdXKu15g3iivcbsMXg4bYpjL2iS/V6aQot+iyF4BUc2qA/J/n55YtvE4PHMKWBKGCF/+wA==",
+      "version": "15.5.28",
+      "resolved": "https://registry.npmjs.org/@next/swc-darwin-arm64/-/swc-darwin-arm64-15.5.28.tgz",
+      "integrity": "sha512-dPoQYXcfSIqx5o+TOXVXO7kONK5qbtNRDeiTfII0bT3puGIT6VF5e0QwmxNZfEZ5Zety5f3m9P/p4xqwfiLlPg==",
       "cpu": [
         "arm64"
       ],
@@ -2265,9 +2296,9 @@ export default nextConfig;
       }
     },
     "node_modules/@next/swc-darwin-x64": {
-      "version": "14.2.33",
-      "resolved": "https://registry.npmjs.org/@next/swc-darwin-x64/-/swc-darwin-x64-14.2.33.tgz",
-      "integrity": "sha512-8HGBeAE5rX3jzKvF593XTTFg3gxeU4f+UWnswa6JPhzaR6+zblO5+fjltJWIZc4aUalqTclvN2QtTC37LxvZAA==",
+      "version": "15.5.28",
+      "resolved": "https://registry.npmjs.org/@next/swc-darwin-x64/-/swc-darwin-x64-15.5.28.tgz",
+      "integrity": "sha512-RgCJ7buBivTH+6sddqaVm+/v8kwMHlFkobvdt3DfETutws5HrxnToMIWSN9X3MZ3aAi7BbKrGZZWUDQLEycXqw==",
       "cpu": [
         "x64"
       ],
@@ -2281,9 +2312,9 @@ export default nextConfig;
       }
     },
     "node_modules/@next/swc-linux-arm64-gnu": {
-      "version": "14.2.33",
-      "resolved": "https://registry.npmjs.org/@next/swc-linux-arm64-gnu/-/swc-linux-arm64-gnu-14.2.33.tgz",
-      "integrity": "sha512-JXMBka6lNNmqbkvcTtaX8Gu5by9547bukHQvPoLe9VRBx1gHwzf5tdt4AaezW85HAB3pikcvyqBToRTDA4DeLw==",
+      "version": "15.5.28",
+      "resolved": "https://registry.npmjs.org/@next/swc-linux-arm64-gnu/-/swc-linux-arm64-gnu-15.5.28.tgz",
+      "integrity": "sha512-OHXQe13olE59aKe++zHavGcJPh5SLHXi6Anret3BBeq1+qhSuOJDNAli/EDDfxs6UTqA4Qddo4uyYry2slyjiQ==",
       "cpu": [
         "arm64"
       ],
@@ -2297,9 +2328,9 @@ export default nextConfig;
       }
     },
     "node_modules/@next/swc-linux-arm64-musl": {
-      "version": "14.2.33",
-      "resolved": "https://registry.npmjs.org/@next/swc-linux-arm64-musl/-/swc-linux-arm64-musl-14.2.33.tgz",
-      "integrity": "sha512-Bm+QulsAItD/x6Ih8wGIMfRJy4G73tu1HJsrccPW6AfqdZd0Sfm5Imhgkgq2+kly065rYMnCOxTBvmvFY1BKfg==",
+      "version": "15.5.28",
+      "resolved": "https://registry.npmjs.org/@next/swc-linux-arm64-musl/-/swc-linux-arm64-musl-15.5.28.tgz",
+      "integrity": "sha512-nTB7bB6vfn4ezCJNYP43ukt2o8L3+WxKF/sTcTxepdXsJh3SM9RhlU7wrZYbH7L4HO5M87dqDTwm8587vAkCiw==",
       "cpu": [
         "arm64"
       ],
@@ -2313,9 +2344,9 @@ export default nextConfig;
       }
     },
     "node_modules/@next/swc-linux-x64-gnu": {
-      "version": "14.2.33",
-      "resolved": "https://registry.npmjs.org/@next/swc-linux-x64-gnu/-/swc-linux-x64-gnu-14.2.33.tgz",
-      "integrity": "sha512-FnFn+ZBgsVMbGDsTqo8zsnRzydvsGV8vfiWwUo1LD8FTmPTdV+otGSWKc4LJec0oSexFnCYVO4hX8P8qQKaSlg==",
+      "version": "15.5.28",
+      "resolved": "https://registry.npmjs.org/@next/swc-linux-x64-gnu/-/swc-linux-x64-gnu-15.5.28.tgz",
+      "integrity": "sha512-WXCfVI32rW3xCusoUX1RpZKtyChWU2Zwe27JUDmM3KrXwcDNc9vV4zEq0GKFAURnuQ/Ouo/XqPvB0yh445XZCg==",
       "cpu": [
         "x64"
       ],
@@ -2329,9 +2360,9 @@ export default nextConfig;
       }
     },
     "node_modules/@next/swc-linux-x64-musl": {
-      "version": "14.2.33",
-      "resolved": "https://registry.npmjs.org/@next/swc-linux-x64-musl/-/swc-linux-x64-musl-14.2.33.tgz",
-      "integrity": "sha512-345tsIWMzoXaQndUTDv1qypDRiebFxGYx9pYkhwY4hBRaOLt8UGfiWKr9FSSHs25dFIf8ZqIFaPdy5MljdoawA==",
+      "version": "15.5.28",
+      "resolved": "https://registry.npmjs.org/@next/swc-linux-x64-musl/-/swc-linux-x64-musl-15.5.28.tgz",
+      "integrity": "sha512-Miq+NDb/HWsXuxseYxMM6fuEOQXgTziarkKIRpVKCn8W69cEfhQaQr+90pO+u4q2CbJR2wzXmUuCFyZaJs/Nng==",
       "cpu": [
         "x64"
       ],
@@ -2345,9 +2376,9 @@ export default nextConfig;
       }
     },
     "node_modules/@next/swc-win32-arm64-msvc": {
-      "version": "14.2.33",
-      "resolved": "https://registry.npmjs.org/@next/swc-win32-arm64-msvc/-/swc-win32-arm64-msvc-14.2.33.tgz",
-      "integrity": "sha512-nscpt0G6UCTkrT2ppnJnFsYbPDQwmum4GNXYTeoTIdsmMydSKFz9Iny2jpaRupTb+Wl298+Rh82WKzt9LCcqSQ==",
+      "version": "15.5.28",
+      "resolved": "https://registry.npmjs.org/@next/swc-win32-arm64-msvc/-/swc-win32-arm64-msvc-15.5.28.tgz",
+      "integrity": "sha512-5LR79lemgDlgxvG7MQJ+zHCkVcrUoQuO7CiIvq3I58vNW4goSOE2b+19Z6FujRWMouvni4gvudYFuFuNxolGWA==",
       "cpu": [
         "arm64"
       ],
@@ -2360,26 +2391,10 @@ export default nextConfig;
         "node": ">= 10"
       }
     },
-    "node_modules/@next/swc-win32-ia32-msvc": {
-      "version": "14.2.33",
-      "resolved": "https://registry.npmjs.org/@next/swc-win32-ia32-msvc/-/swc-win32-ia32-msvc-14.2.33.tgz",
-      "integrity": "sha512-pc9LpGNKhJ0dXQhZ5QMmYxtARwwmWLpeocFmVG5Z0DzWq5Uf0izcI8tLc+qOpqxO1PWqZ5A7J1blrUIKrIFc7Q==",
-      "cpu": [
-        "ia32"
-      ],
-      "license": "MIT",
-      "optional": true,
-      "os": [
-        "win32"
-      ],
-      "engines": {
-        "node": ">= 10"
-      }
-    },
     "node_modules/@next/swc-win32-x64-msvc": {
-      "version": "14.2.33",
-      "resolved": "https://registry.npmjs.org/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-14.2.33.tgz",
-      "integrity": "sha512-nOjfZMy8B94MdisuzZo9/57xuFVLHJaDj5e/xrduJp9CV2/HrfxTRH2fbyLe+K9QT41WBLUd4iXX3R7jBp0EUg==",
+      "version": "15.5.28",
+      "resolved": "https://registry.npmjs.org/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-15.5.28.tgz",
+      "integrity": "sha512-GNipvXUYROSTf4PXEyH95FrWImIB5zdaK6uEOg0RP1/X2drnvoMwiBkJ0VWdzX7w3iiBm3y5g2TxkKDGVTOQcg==",
       "cpu": [
         "x64"
       ],
@@ -2447,17 +2462,6 @@ export default nextConfig;
       "license": "MIT",
       "funding": {
         "url": "https://github.com/sponsors/panva"
-      }
-    },
-    "node_modules/@pkgjs/parseargs": {
-      "version": "0.11.0",
-      "resolved": "https://registry.npmjs.org/@pkgjs/parseargs/-/parseargs-0.11.0.tgz",
-      "integrity": "sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==",
-      "dev": true,
-      "license": "MIT",
-      "optional": true,
-      "engines": {
-        "node": ">=14"
       }
     },
     "node_modules/@playwright/test": {
@@ -2683,20 +2687,13 @@ export default nextConfig;
       "devOptional": true,
       "license": "MIT"
     },
-    "node_modules/@swc/counter": {
-      "version": "0.1.3",
-      "resolved": "https://registry.npmjs.org/@swc/counter/-/counter-0.1.3.tgz",
-      "integrity": "sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ==",
-      "license": "Apache-2.0"
-    },
     "node_modules/@swc/helpers": {
-      "version": "0.5.5",
-      "resolved": "https://registry.npmjs.org/@swc/helpers/-/helpers-0.5.5.tgz",
-      "integrity": "sha512-KGYxvIOXcceOAbEk4bi/dVLEK9z8sZ0uBB3Il5b1rhfClSpcX0yfRO0KmTkqR2cnQDymwLB+25ZyMzICg/cm/A==",
+      "version": "0.5.15",
+      "resolved": "https://registry.npmjs.org/@swc/helpers/-/helpers-0.5.15.tgz",
+      "integrity": "sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==",
       "license": "Apache-2.0",
       "dependencies": {
-        "@swc/counter": "^0.1.3",
-        "tslib": "^2.4.0"
+        "tslib": "^2.8.0"
       }
     },
     "node_modules/@tybys/wasm-util": {
@@ -3920,17 +3917,6 @@ export default nextConfig;
         "node": "^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7"
       }
     },
-    "node_modules/busboy": {
-      "version": "1.6.0",
-      "resolved": "https://registry.npmjs.org/busboy/-/busboy-1.6.0.tgz",
-      "integrity": "sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==",
-      "dependencies": {
-        "streamsearch": "^1.1.0"
-      },
-      "engines": {
-        "node": ">=10.16.0"
-      }
-    },
     "node_modules/c12": {
       "version": "3.1.0",
       "resolved": "https://registry.npmjs.org/c12/-/c12-3.1.0.tgz",
@@ -4478,13 +4464,6 @@ export default nextConfig;
         "node": ">= 0.4"
       }
     },
-    "node_modules/eastasianwidth": {
-      "version": "0.2.0",
-      "resolved": "https://registry.npmjs.org/eastasianwidth/-/eastasianwidth-0.2.0.tgz",
-      "integrity": "sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==",
-      "dev": true,
-      "license": "MIT"
-    },
     "node_modules/effect": {
       "version": "3.21.0",
       "resolved": "https://registry.npmjs.org/effect/-/effect-3.21.0.tgz",
@@ -4842,25 +4821,25 @@ export default nextConfig;
       }
     },
     "node_modules/eslint-config-next": {
-      "version": "14.2.35",
-      "resolved": "https://registry.npmjs.org/eslint-config-next/-/eslint-config-next-14.2.35.tgz",
-      "integrity": "sha512-BpLsv01UisH193WyT/1lpHqq5iJ/Orfz9h/NOOlAmTUq4GY349PextQ62K4XpnaM9supeiEn3TaOTeQO07gURg==",
+      "version": "15.5.28",
+      "resolved": "https://registry.npmjs.org/eslint-config-next/-/eslint-config-next-15.5.28.tgz",
+      "integrity": "sha512-FQkDceHNJVfMa2rKbBQKyVILq7nG/zd2TxKsjecJAIv/dOcqaZynK5shwQCt6qrZFFae/EukOFggSP0jtNSLAA==",
       "dev": true,
       "license": "MIT",
       "dependencies": {
-        "@next/eslint-plugin-next": "14.2.35",
-        "@rushstack/eslint-patch": "^1.3.3",
+        "@next/eslint-plugin-next": "15.5.28",
+        "@rushstack/eslint-patch": "^1.10.3",
         "@typescript-eslint/eslint-plugin": "^5.4.2 || ^6.0.0 || ^7.0.0 || ^8.0.0",
         "@typescript-eslint/parser": "^5.4.2 || ^6.0.0 || ^7.0.0 || ^8.0.0",
         "eslint-import-resolver-node": "^0.3.6",
         "eslint-import-resolver-typescript": "^3.5.2",
-        "eslint-plugin-import": "^2.28.1",
-        "eslint-plugin-jsx-a11y": "^6.7.1",
-        "eslint-plugin-react": "^7.33.2",
-        "eslint-plugin-react-hooks": "^4.5.0 || 5.0.0-canary-7118f5dd7-20230705"
+        "eslint-plugin-import": "^2.31.0",
+        "eslint-plugin-jsx-a11y": "^6.10.0",
+        "eslint-plugin-react": "^7.37.0",
+        "eslint-plugin-react-hooks": "^5.0.0"
       },
       "peerDependencies": {
-        "eslint": "^7.23.0 || ^8.0.0",
+        "eslint": "^7.23.0 || ^8.0.0 || ^9.0.0",
         "typescript": ">=3.3.1"
       },
       "peerDependenciesMeta": {
@@ -5085,16 +5064,16 @@ export default nextConfig;
       }
     },
     "node_modules/eslint-plugin-react-hooks": {
-      "version": "5.0.0-canary-7118f5dd7-20230705",
-      "resolved": "https://registry.npmjs.org/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-5.0.0-canary-7118f5dd7-20230705.tgz",
-      "integrity": "sha512-AZYbMo/NW9chdL7vk6HQzQhT+PvTAEVqWk9ziruUoW2kAOcN5qNyelv70e0F1VNQAbvutOC9oc+xfWycI9FxDw==",
+      "version": "5.2.0",
+      "resolved": "https://registry.npmjs.org/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-5.2.0.tgz",
+      "integrity": "sha512-+f15FfK64YQwZdJNELETdn5ibXEUQmW1DZL6KXhNnc2heoy/sg9VJJeT7n8TlMWouzWqSWavFkIhHyIbIAEapg==",
       "dev": true,
       "license": "MIT",
       "engines": {
         "node": ">=10"
       },
       "peerDependencies": {
-        "eslint": "^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0"
+        "eslint": "^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0"
       }
     },
     "node_modules/eslint-plugin-react/node_modules/doctrine": {
@@ -5415,23 +5394,6 @@ export default nextConfig;
         "url": "https://github.com/sponsors/ljharb"
       }
     },
-    "node_modules/foreground-child": {
-      "version": "3.3.1",
-      "resolved": "https://registry.npmjs.org/foreground-child/-/foreground-child-3.3.1.tgz",
-      "integrity": "sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==",
-      "dev": true,
-      "license": "ISC",
-      "dependencies": {
-        "cross-spawn": "^7.0.6",
-        "signal-exit": "^4.0.1"
-      },
-      "engines": {
-        "node": ">=14"
-      },
-      "funding": {
-        "url": "https://github.com/sponsors/isaacs"
-      }
-    },
     "node_modules/fraction.js": {
       "version": "4.3.7",
       "resolved": "https://registry.npmjs.org/fraction.js/-/fraction.js-4.3.7.tgz",
@@ -5664,30 +5626,6 @@ export default nextConfig;
         "giget": "dist/cli.mjs"
       }
     },
-    "node_modules/glob": {
-      "version": "10.3.10",
-      "resolved": "https://registry.npmjs.org/glob/-/glob-10.3.10.tgz",
-      "integrity": "sha512-fa46+tv1Ak0UPK1TOy/pZrIybNNt4HCv7SDzwyfiOZkvZLEbjsZkJBPtDHVshZjbecAoAGSC20MjLDG/qr679g==",
-      "deprecated": "Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me",
-      "dev": true,
-      "license": "ISC",
-      "dependencies": {
-        "foreground-child": "^3.1.0",
-        "jackspeak": "^2.3.5",
-        "minimatch": "^9.0.1",
-        "minipass": "^5.0.0 || ^6.0.2 || ^7.0.0",
-        "path-scurry": "^1.10.1"
-      },
-      "bin": {
-        "glob": "dist/esm/bin.mjs"
-      },
-      "engines": {
-        "node": ">=16 || 14 >=14.17"
-      },
-      "funding": {
-        "url": "https://github.com/sponsors/isaacs"
-      }
-    },
     "node_modules/glob-parent": {
       "version": "6.0.2",
       "resolved": "https://registry.npmjs.org/glob-parent/-/glob-parent-6.0.2.tgz",
@@ -5699,32 +5637,6 @@ export default nextConfig;
       },
       "engines": {
         "node": ">=10.13.0"
-      }
-    },
-    "node_modules/glob/node_modules/brace-expansion": {
-      "version": "2.1.7",
-      "resolved": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-2.1.7.tgz",
-      "integrity": "sha512-uZbew1NqdmPDTMJ8ah1y+b+9QEJrfkXFk3RcTQw3X0jW/xRUvFKsg1CfQdSYGdTbXZWExtU3J3ccxtnfw1Fi0g==",
-      "dev": true,
-      "license": "MIT",
-      "dependencies": {
-        "balanced-match": "^1.0.0"
-      }
-    },
-    "node_modules/glob/node_modules/minimatch": {
-      "version": "9.0.9",
-      "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-9.0.9.tgz",
-      "integrity": "sha512-OBwBN9AL4dqmETlpS2zasx+vTeWclWzkblfZk7KTA5j3jeOONz/tRCnZomUyvNg83wL5Zv9Ss6HMJXAgL8R2Yg==",
-      "dev": true,
-      "license": "ISC",
-      "dependencies": {
-        "brace-expansion": "^2.0.2"
-      },
-      "engines": {
-        "node": ">=16 || 14 >=14.17"
-      },
-      "funding": {
-        "url": "https://github.com/sponsors/isaacs"
       }
     },
     "node_modules/globals": {
@@ -5787,6 +5699,7 @@ export default nextConfig;
       "version": "4.2.11",
       "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.11.tgz",
       "integrity": "sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==",
+      "dev": true,
       "license": "ISC"
     },
     "node_modules/graphemer": {
@@ -6193,16 +6106,6 @@ export default nextConfig;
         "url": "https://github.com/sponsors/ljharb"
       }
     },
-    "node_modules/is-fullwidth-code-point": {
-      "version": "3.0.0",
-      "resolved": "https://registry.npmjs.org/is-fullwidth-code-point/-/is-fullwidth-code-point-3.0.0.tgz",
-      "integrity": "sha512-zymm5+u+sCsSWyD9qNaejV3DFvhCKclKdizYaJUuHA83RLjb7nSuGnddCHGv0hk+KY7BMAlsWeK4Ueg6EV6XQg==",
-      "dev": true,
-      "license": "MIT",
-      "engines": {
-        "node": ">=8"
-      }
-    },
     "node_modules/is-generator-function": {
       "version": "1.1.2",
       "resolved": "https://registry.npmjs.org/is-generator-function/-/is-generator-function-1.1.2.tgz",
@@ -6493,25 +6396,6 @@ export default nextConfig;
         "node": ">= 0.4"
       }
     },
-    "node_modules/jackspeak": {
-      "version": "2.3.6",
-      "resolved": "https://registry.npmjs.org/jackspeak/-/jackspeak-2.3.6.tgz",
-      "integrity": "sha512-N3yCS/NegsOBokc8GAdM8UcmfsKiSS8cipheD/nivzr700H+nsMOxJjQnvwOcRYVuFkdH0wGUvW2WbXGmrZGbQ==",
-      "dev": true,
-      "license": "BlueOak-1.0.0",
-      "dependencies": {
-        "@isaacs/cliui": "^8.0.2"
-      },
-      "engines": {
-        "node": ">=14"
-      },
-      "funding": {
-        "url": "https://github.com/sponsors/isaacs"
-      },
-      "optionalDependencies": {
-        "@pkgjs/parseargs": "^0.11.0"
-      }
-    },
     "node_modules/jiti": {
       "version": "1.21.7",
       "resolved": "https://registry.npmjs.org/jiti/-/jiti-1.21.7.tgz",
@@ -6732,13 +6616,6 @@ export default nextConfig;
         "loose-envify": "cli.js"
       }
     },
-    "node_modules/lru-cache": {
-      "version": "10.4.3",
-      "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-10.4.3.tgz",
-      "integrity": "sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==",
-      "dev": true,
-      "license": "ISC"
-    },
     "node_modules/lucide-react": {
       "version": "0.468.0",
       "resolved": "https://registry.npmjs.org/lucide-react/-/lucide-react-0.468.0.tgz",
@@ -6820,16 +6697,6 @@ export default nextConfig;
         "url": "https://github.com/sponsors/ljharb"
       }
     },
-    "node_modules/minipass": {
-      "version": "7.1.3",
-      "resolved": "https://registry.npmjs.org/minipass/-/minipass-7.1.3.tgz",
-      "integrity": "sha512-tEBHqDnIoM/1rXME1zgka9g6Q2lcoCkxHLuc7ODJ5BxbP5d4c2Z5cGgtXAku59200Cx7diuHTOYfSBD8n6mm8A==",
-      "dev": true,
-      "license": "BlueOak-1.0.0",
-      "engines": {
-        "node": ">=16 || 14 >=14.17"
-      }
-    },
     "node_modules/motion-dom": {
       "version": "11.18.1",
       "resolved": "https://registry.npmjs.org/motion-dom/-/motion-dom-11.18.1.tgz",
@@ -6906,41 +6773,40 @@ export default nextConfig;
       "license": "MIT"
     },
     "node_modules/next": {
-      "version": "14.2.35",
-      "resolved": "https://registry.npmjs.org/next/-/next-14.2.35.tgz",
-      "integrity": "sha512-KhYd2Hjt/O1/1aZVX3dCwGXM1QmOV4eNM2UTacK5gipDdPN/oHHK/4oVGy7X8GMfPMsUTUEmGlsy0EY1YGAkig==",
+      "version": "15.5.28",
+      "resolved": "https://registry.npmjs.org/next/-/next-15.5.28.tgz",
+      "integrity": "sha512-JjhLBBY1PNnuwPtcZ7t8yxVeJVYvD2Jyp633J+gRCNbzSt7N0E+xqCf6uQiff3+3qmUkwcF/ksfSsK1xsZ76Tw==",
       "license": "MIT",
       "dependencies": {
-        "@next/env": "14.2.35",
-        "@swc/helpers": "0.5.5",
-        "busboy": "1.6.0",
+        "@next/env": "15.5.28",
+        "@swc/helpers": "0.5.15",
         "caniuse-lite": "^1.0.30001579",
-        "graceful-fs": "^4.2.11",
         "postcss": "8.4.31",
-        "styled-jsx": "5.1.1"
+        "styled-jsx": "5.1.6"
       },
       "bin": {
         "next": "dist/bin/next"
       },
       "engines": {
-        "node": ">=18.17.0"
+        "node": "^18.18.0 || ^19.8.0 || >= 20.0.0"
       },
       "optionalDependencies": {
-        "@next/swc-darwin-arm64": "14.2.33",
-        "@next/swc-darwin-x64": "14.2.33",
-        "@next/swc-linux-arm64-gnu": "14.2.33",
-        "@next/swc-linux-arm64-musl": "14.2.33",
-        "@next/swc-linux-x64-gnu": "14.2.33",
-        "@next/swc-linux-x64-musl": "14.2.33",
-        "@next/swc-win32-arm64-msvc": "14.2.33",
-        "@next/swc-win32-ia32-msvc": "14.2.33",
-        "@next/swc-win32-x64-msvc": "14.2.33"
+        "@next/swc-darwin-arm64": "15.5.28",
+        "@next/swc-darwin-x64": "15.5.28",
+        "@next/swc-linux-arm64-gnu": "15.5.28",
+        "@next/swc-linux-arm64-musl": "15.5.28",
+        "@next/swc-linux-x64-gnu": "15.5.28",
+        "@next/swc-linux-x64-musl": "15.5.28",
+        "@next/swc-win32-arm64-msvc": "15.5.28",
+        "@next/swc-win32-x64-msvc": "15.5.28",
+        "sharp": "^0.34.3 || ^0.35.5"
       },
       "peerDependencies": {
         "@opentelemetry/api": "^1.1.0",
-        "@playwright/test": "^1.41.2",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
+        "@playwright/test": "^1.51.1",
+        "babel-plugin-react-compiler": "*",
+        "react": "^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0",
+        "react-dom": "^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0",
         "sass": "^1.3.0"
       },
       "peerDependenciesMeta": {
@@ -6948,6 +6814,9 @@ export default nextConfig;
           "optional": true
         },
         "@playwright/test": {
+          "optional": true
+        },
+        "babel-plugin-react-compiler": {
           "optional": true
         },
         "sass": {
@@ -7433,23 +7302,6 @@ export default nextConfig;
       "dev": true,
       "license": "MIT"
     },
-    "node_modules/path-scurry": {
-      "version": "1.11.1",
-      "resolved": "https://registry.npmjs.org/path-scurry/-/path-scurry-1.11.1.tgz",
-      "integrity": "sha512-Xa4Nw17FS9ApQFJ9umLiJS4orGjm7ZzwUrwamcGQuHSzDyth9boKDaycYdDcZDuqYATXw4HFXgaqWTctW/v1HA==",
-      "dev": true,
-      "license": "BlueOak-1.0.0",
-      "dependencies": {
-        "lru-cache": "^10.2.0",
-        "minipass": "^5.0.0 || ^6.0.2 || ^7.0.0"
-      },
-      "engines": {
-        "node": ">=16 || 14 >=14.18"
-      },
-      "funding": {
-        "url": "https://github.com/sponsors/isaacs"
-      }
-    },
     "node_modules/pathe": {
       "version": "2.0.3",
       "resolved": "https://registry.npmjs.org/pathe/-/pathe-2.0.3.tgz",
@@ -7787,9 +7639,9 @@ export default nextConfig;
       }
     },
     "node_modules/postcss-selector-parser": {
-      "version": "6.1.4",
-      "resolved": "https://registry.npmjs.org/postcss-selector-parser/-/postcss-selector-parser-6.1.4.tgz",
-      "integrity": "sha512-bIoJLOmjCO1S9XdY/DcnR5hJxvrDir1PbGChrzXG3vw0/FOliy/fA3dmdhQ441kah4gKv+TwckGzex6wNS5cnQ==",
+      "version": "7.1.6",
+      "resolved": "https://registry.npmjs.org/postcss-selector-parser/-/postcss-selector-parser-7.1.6.tgz",
+      "integrity": "sha512-7qASPzhKF2l2KLboRZux8CCTRMdGiV08vWmyKzPz22qZ7ZjQBOeY7rNzNoCLSUiftJ7HUq0GERHmxw/t0dCdMw==",
       "dev": true,
       "license": "MIT",
       "dependencies": {
@@ -8503,19 +8355,6 @@ export default nextConfig;
         "url": "https://github.com/sponsors/ljharb"
       }
     },
-    "node_modules/signal-exit": {
-      "version": "4.1.0",
-      "resolved": "https://registry.npmjs.org/signal-exit/-/signal-exit-4.1.0.tgz",
-      "integrity": "sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==",
-      "dev": true,
-      "license": "ISC",
-      "engines": {
-        "node": ">=14"
-      },
-      "funding": {
-        "url": "https://github.com/sponsors/isaacs"
-      }
-    },
     "node_modules/sisteransi": {
       "version": "1.0.5",
       "resolved": "https://registry.npmjs.org/sisteransi/-/sisteransi-1.0.5.tgz",
@@ -8560,84 +8399,6 @@ export default nextConfig;
       },
       "engines": {
         "node": ">= 0.4"
-      }
-    },
-    "node_modules/streamsearch": {
-      "version": "1.1.0",
-      "resolved": "https://registry.npmjs.org/streamsearch/-/streamsearch-1.1.0.tgz",
-      "integrity": "sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg==",
-      "engines": {
-        "node": ">=10.0.0"
-      }
-    },
-    "node_modules/string-width": {
-      "version": "5.1.2",
-      "resolved": "https://registry.npmjs.org/string-width/-/string-width-5.1.2.tgz",
-      "integrity": "sha512-HnLOCR3vjcY8beoNLtcjZ5/nxn2afmME6lhrDrebokqMap+XbeW8n9TXpPDOqdGK5qcI3oT0GKTW6wC7EMiVqA==",
-      "dev": true,
-      "license": "MIT",
-      "dependencies": {
-        "eastasianwidth": "^0.2.0",
-        "emoji-regex": "^9.2.2",
-        "strip-ansi": "^7.0.1"
-      },
-      "engines": {
-        "node": ">=12"
-      },
-      "funding": {
-        "url": "https://github.com/sponsors/sindresorhus"
-      }
-    },
-    "node_modules/string-width-cjs": {
-      "name": "string-width",
-      "version": "4.2.3",
-      "resolved": "https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz",
-      "integrity": "sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==",
-      "dev": true,
-      "license": "MIT",
-      "dependencies": {
-        "emoji-regex": "^8.0.0",
-        "is-fullwidth-code-point": "^3.0.0",
-        "strip-ansi": "^6.0.1"
-      },
-      "engines": {
-        "node": ">=8"
-      }
-    },
-    "node_modules/string-width-cjs/node_modules/emoji-regex": {
-      "version": "8.0.0",
-      "resolved": "https://registry.npmjs.org/emoji-regex/-/emoji-regex-8.0.0.tgz",
-      "integrity": "sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==",
-      "dev": true,
-      "license": "MIT"
-    },
-    "node_modules/string-width/node_modules/ansi-regex": {
-      "version": "6.4.0",
-      "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-6.4.0.tgz",
-      "integrity": "sha512-KzTVk2tCWAHtYrvvvaP8bJKJq2pVinhLcGEQdtLIYPbmNGNyYe8QwNaTUYQp2J7/vIsUKt5QCqAfUkYyG9DkOw==",
-      "dev": true,
-      "license": "MIT",
-      "engines": {
-        "node": ">=12"
-      },
-      "funding": {
-        "url": "https://github.com/chalk/ansi-regex?sponsor=1"
-      }
-    },
-    "node_modules/string-width/node_modules/strip-ansi": {
-      "version": "7.2.0",
-      "resolved": "https://registry.npmjs.org/strip-ansi/-/strip-ansi-7.2.0.tgz",
-      "integrity": "sha512-yDPMNjp4WyfYBkHnjIRLfca1i6KMyGCtsVgoKe/z1+6vukgaENdgGBZt+ZmKPc4gavvEZ5OgHfHdrazhgNyG7w==",
-      "dev": true,
-      "license": "MIT",
-      "dependencies": {
-        "ansi-regex": "^6.2.2"
-      },
-      "engines": {
-        "node": ">=12"
-      },
-      "funding": {
-        "url": "https://github.com/chalk/strip-ansi?sponsor=1"
       }
     },
     "node_modules/string.prototype.includes": {
@@ -8767,20 +8528,6 @@ export default nextConfig;
         "node": ">=8"
       }
     },
-    "node_modules/strip-ansi-cjs": {
-      "name": "strip-ansi",
-      "version": "6.0.1",
-      "resolved": "https://registry.npmjs.org/strip-ansi/-/strip-ansi-6.0.1.tgz",
-      "integrity": "sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==",
-      "dev": true,
-      "license": "MIT",
-      "dependencies": {
-        "ansi-regex": "^5.0.1"
-      },
-      "engines": {
-        "node": ">=8"
-      }
-    },
     "node_modules/strip-bom": {
       "version": "3.0.0",
       "resolved": "https://registry.npmjs.org/strip-bom/-/strip-bom-3.0.0.tgz",
@@ -8814,9 +8561,9 @@ export default nextConfig;
       }
     },
     "node_modules/styled-jsx": {
-      "version": "5.1.1",
-      "resolved": "https://registry.npmjs.org/styled-jsx/-/styled-jsx-5.1.1.tgz",
-      "integrity": "sha512-pW7uC1l4mBZ8ugbiZrcIsiIvVx1UmTfw7UkC3Um2tmfUq9Bhk8IiyEIPl6F8agHgjzku6j0xQEZbfA5uSgSaCw==",
+      "version": "5.1.6",
+      "resolved": "https://registry.npmjs.org/styled-jsx/-/styled-jsx-5.1.6.tgz",
+      "integrity": "sha512-qSVyDTeMotdvQYoHWLNGwRFJHC+i+ZvdBRYosOFgC+Wg1vx4frN2/RG/NA7SYqqvKNLf39P2LSRA2pu6n0XYZA==",
       "license": "MIT",
       "dependencies": {
         "client-only": "0.0.1"
@@ -8825,7 +8572,7 @@ export default nextConfig;
         "node": ">= 12.0.0"
       },
       "peerDependencies": {
-        "react": ">= 16.8.0 || 17.x.x || ^18.0.0-0"
+        "react": ">= 16.8.0 || 17.x.x || ^18.0.0-0 || ^19.0.0-0"
       },
       "peerDependenciesMeta": {
         "@babel/core": {
@@ -9528,107 +9275,6 @@ export default nextConfig;
         "node": ">=0.10.0"
       }
     },
-    "node_modules/wrap-ansi": {
-      "version": "8.1.0",
-      "resolved": "https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-8.1.0.tgz",
-      "integrity": "sha512-si7QWI6zUMq56bESFvagtmzMdGOtoxfR+Sez11Mobfc7tm+VkUckk9bW2UeffTGVUbOksxmSw0AA2gs8g71NCQ==",
-      "dev": true,
-      "license": "MIT",
-      "dependencies": {
-        "ansi-styles": "^6.1.0",
-        "string-width": "^5.0.1",
-        "strip-ansi": "^7.0.1"
-      },
-      "engines": {
-        "node": ">=12"
-      },
-      "funding": {
-        "url": "https://github.com/chalk/wrap-ansi?sponsor=1"
-      }
-    },
-    "node_modules/wrap-ansi-cjs": {
-      "name": "wrap-ansi",
-      "version": "7.0.0",
-      "resolved": "https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-7.0.0.tgz",
-      "integrity": "sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==",
-      "dev": true,
-      "license": "MIT",
-      "dependencies": {
-        "ansi-styles": "^4.0.0",
-        "string-width": "^4.1.0",
-        "strip-ansi": "^6.0.0"
-      },
-      "engines": {
-        "node": ">=10"
-      },
-      "funding": {
-        "url": "https://github.com/chalk/wrap-ansi?sponsor=1"
-      }
-    },
-    "node_modules/wrap-ansi-cjs/node_modules/emoji-regex": {
-      "version": "8.0.0",
-      "resolved": "https://registry.npmjs.org/emoji-regex/-/emoji-regex-8.0.0.tgz",
-      "integrity": "sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==",
-      "dev": true,
-      "license": "MIT"
-    },
-    "node_modules/wrap-ansi-cjs/node_modules/string-width": {
-      "version": "4.2.3",
-      "resolved": "https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz",
-      "integrity": "sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==",
-      "dev": true,
-      "license": "MIT",
-      "dependencies": {
-        "emoji-regex": "^8.0.0",
-        "is-fullwidth-code-point": "^3.0.0",
-        "strip-ansi": "^6.0.1"
-      },
-      "engines": {
-        "node": ">=8"
-      }
-    },
-    "node_modules/wrap-ansi/node_modules/ansi-regex": {
-      "version": "6.4.0",
-      "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-6.4.0.tgz",
-      "integrity": "sha512-KzTVk2tCWAHtYrvvvaP8bJKJq2pVinhLcGEQdtLIYPbmNGNyYe8QwNaTUYQp2J7/vIsUKt5QCqAfUkYyG9DkOw==",
-      "dev": true,
-      "license": "MIT",
-      "engines": {
-        "node": ">=12"
-      },
-      "funding": {
-        "url": "https://github.com/chalk/ansi-regex?sponsor=1"
-      }
-    },
-    "node_modules/wrap-ansi/node_modules/ansi-styles": {
-      "version": "6.2.3",
-      "resolved": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-6.2.3.tgz",
-      "integrity": "sha512-4Dj6M28JB+oAH8kFkTLUo+a2jwOFkuqb3yucU0CANcRRUbxS0cP0nZYCGjcc3BNXwRIsUVmDGgzawme7zvJHvg==",
-      "dev": true,
-      "license": "MIT",
-      "engines": {
-        "node": ">=12"
-      },
-      "funding": {
-        "url": "https://github.com/chalk/ansi-styles?sponsor=1"
-      }
-    },
-    "node_modules/wrap-ansi/node_modules/strip-ansi": {
-      "version": "7.2.0",
-      "resolved": "https://registry.npmjs.org/strip-ansi/-/strip-ansi-7.2.0.tgz",
-      "integrity": "sha512-yDPMNjp4WyfYBkHnjIRLfca1i6KMyGCtsVgoKe/z1+6vukgaENdgGBZt+ZmKPc4gavvEZ5OgHfHdrazhgNyG7w==",
-      "dev": true,
-      "license": "MIT",
-      "dependencies": {
-        "ansi-regex": "^6.2.2"
-      },
-      "engines": {
-        "node": ">=12"
-      },
-      "funding": {
-        "url": "https://github.com/chalk/strip-ansi?sponsor=1"
-      }
-    },
     "node_modules/wrappy": {
       "version": "1.0.2",
       "resolved": "https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz",
@@ -9730,7 +9376,7 @@ export default nextConfig;
     "build": "next build",
     "start": "next start --hostname 0.0.0.0",
     "typecheck": "tsc --noEmit",
-    "lint": "next lint",
+    "lint": "eslint app components data hooks lib middleware.ts next.config.mjs --ext .js,.jsx,.ts,.tsx,.mjs --max-warnings=0",
     "test:chat": "node --test tests/chat.test.mjs",
     "test:contact": "node --test tests/contact.test.mjs",
     "certificate-placeholder": "node scripts/generate-certificate.mjs",
@@ -9741,7 +9387,12 @@ export default nextConfig;
     "db:seed": "node --env-file-if-exists=.env.local --import tsx prisma/seed.ts",
     "admin:reset": "node --env-file-if-exists=.env.local --import tsx scripts/reset-admin.ts",
     "postinstall": "node scripts/generate-client.mjs",
-    "test:security": "node --test tests/security.test.mjs"
+    "test:security": "node --test tests/security.test.mjs",
+    "test:consent": "node --import tsx --test tests/consent.test.ts",
+    "admin:bootstrap": "node --env-file-if-exists=.env.local --import tsx scripts/bootstrap-admin.ts",
+    "test:agency": "node --test --test-concurrency=1 tests/agency.integration.mjs",
+    "test:auth": "node --test --test-concurrency=1 tests/auth.integration.mjs",
+    "test:proxy": "node tests/helpers/https-proxy.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "5.2.8",
@@ -9752,7 +9403,7 @@ export default nextConfig;
     "bcryptjs": "3.0.2",
     "framer-motion": "11.18.2",
     "lucide-react": "0.468.0",
-    "next": "14.2.35",
+    "next": "15.5.28",
     "next-auth": "4.24.15",
     "pg": "8.16.3",
     "react": "18.3.1",
@@ -9772,7 +9423,7 @@ export default nextConfig;
     "@types/react-dom": "18.3.5",
     "autoprefixer": "10.4.20",
     "eslint": "8.57.1",
-    "eslint-config-next": "14.2.35",
+    "eslint-config-next": "15.5.28",
     "postcss": "8.5.30",
     "prisma": "6.19.3",
     "tailwindcss": "3.4.17",
@@ -9787,7 +9438,8 @@ export default nextConfig;
     "@prisma/config": {
       "deepmerge-ts": "8.0.2"
     },
-    "uuid": "11.1.1"
+    "uuid": "11.1.1",
+    "postcss-selector-parser": "7.1.6"
   }
 }
 ``````
@@ -9800,7 +9452,7 @@ export default { plugins: { tailwindcss: {}, autoprefixer: {} } };
 
 ## tailwind.config.ts
 
-``````typescript
+``````ts
 import type { Config } from "tailwindcss";
 
 export default {
@@ -9848,4 +9500,3 @@ export default {
   "exclude": ["node_modules"]
 }
 ``````
-

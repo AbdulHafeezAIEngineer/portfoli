@@ -3,7 +3,7 @@ import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/admin/session";
-import { schemas } from "@/lib/admin/schemas";
+import { leadStatus, schemas } from "@/lib/admin/schemas";
 import {
   ChatError,
   checkOrigin,
@@ -38,20 +38,121 @@ function failure(error: unknown) {
   return reply({ error: "The request could not be completed." }, 503);
 }
 export async function GET(
-  _request: Request,
-  { params }: { params: { resource: string } },
+  request: Request,
+  { params }: { params: Promise<{ resource: string }> },
 ) {
   try {
     const user = await requireAdmin();
-    switch (params.resource) {
+    const resource = (await params).resource;
+    if (["inbox", "chatlogs", "audit"].includes(resource)) {
+      const query = new URL(request.url).searchParams;
+      const pagination = z
+        .object({
+          page: z.coerce.number().int().min(1).max(100000).default(1),
+          size: z.coerce.number().int().min(1).max(50).default(20),
+          q: z.string().trim().max(200).default(""),
+          sort: z.enum(["newest", "oldest"]).default("newest"),
+          status: z.union([z.literal(""), leadStatus]).default(""),
+        })
+        .parse(Object.fromEntries(query));
+      const { page, size, q, sort, status } = pagination;
+      const options = {
+        skip: (page - 1) * size,
+        take: size,
+        orderBy: [
+          {
+            createdAt: sort === "newest" ? ("desc" as const) : ("asc" as const),
+          },
+          { id: "asc" as const },
+        ],
+      };
+      const contains = { contains: q, mode: "insensitive" as const };
+      let items: unknown[], total: number;
+      if (resource === "inbox") {
+        const where = {
+          ...(status ? { status } : {}),
+          ...(q
+            ? {
+                OR: [
+                  { name: contains },
+                  { email: contains },
+                  { company: contains },
+                  { message: contains },
+                ],
+              }
+            : {}),
+        };
+        [items, total] = await db.$transaction([
+          db.contactMessage.findMany({ ...options, where }),
+          db.contactMessage.count({ where }),
+        ]);
+      } else if (resource === "chatlogs") {
+        const where = q
+          ? {
+              OR: [
+                { botId: contains },
+                { userMessage: contains },
+                { reply: contains },
+              ],
+            }
+          : {};
+        [items, total] = await db.$transaction([
+          db.chatLog.findMany({ ...options, where }),
+          db.chatLog.count({ where }),
+        ]);
+      } else {
+        const where = q
+          ? {
+              OR: [
+                { action: contains },
+                { resource: contains },
+                { recordId: contains },
+              ],
+            }
+          : {};
+        [items, total] = await db.$transaction([
+          db.auditLog.findMany({ ...options, where }),
+          db.auditLog.count({ where }),
+        ]);
+      }
+      return reply({
+        items,
+        total,
+        page,
+        pages: Math.max(1, Math.ceil(total / size)),
+      });
+    }
+    switch (resource) {
       case "dashboard":
+        const [projects, bots, messages, unread, newInquiries, recent] =
+          await Promise.all([
+            db.project.count(),
+            db.bot.count(),
+            db.contactMessage.count(),
+            db.contactMessage.count({ where: { read: false } }),
+            db.contactMessage.count({ where: { status: "new" } }),
+            db.contactMessage.findMany({
+              orderBy: { createdAt: "desc" },
+              take: 5,
+              select: { id: true, name: true, status: true, createdAt: true },
+            }),
+          ]);
         return reply({
-          projects: await db.project.count(),
-          bots: await db.bot.count(),
-          messages: await db.contactMessage.count(),
-          unread: await db.contactMessage.count({ where: { read: false } }),
+          projects,
+          bots,
+          messages,
+          unread,
+          newInquiries,
+          recent,
           twoFactor: !!user.totpSecret,
+          contentSource: process.env.CONTENT_SOURCE || "files",
         });
+      case "services":
+        return reply(await db.service.findMany({ orderBy: ordered }));
+      case "faqs":
+        return reply(await db.faq.findMany({ orderBy: ordered }));
+      case "testimonials":
+        return reply(await db.testimonial.findMany({ orderBy: ordered }));
       case "projects":
         return reply(
           (
@@ -88,27 +189,6 @@ export async function GET(
             : null,
         );
       }
-      case "inbox":
-        return reply(
-          await db.contactMessage.findMany({
-            orderBy: { createdAt: "desc" },
-            take: 100,
-          }),
-        );
-      case "chatlogs":
-        return reply(
-          await db.chatLog.findMany({
-            orderBy: { createdAt: "desc" },
-            take: 100,
-          }),
-        );
-      case "audit":
-        return reply(
-          await db.auditLog.findMany({
-            orderBy: { createdAt: "desc" },
-            take: 100,
-          }),
-        );
       default:
         return reply({ error: "Not found." }, 404);
     }
@@ -118,13 +198,13 @@ export async function GET(
 }
 export async function POST(
   request: Request,
-  { params }: { params: { resource: string } },
+  { params }: { params: Promise<{ resource: string }> },
 ) {
   try {
     const user = await requireAdmin();
     checkOrigin(request);
     const body = await readJson(request);
-    const resource = params.resource;
+    const resource = (await params).resource;
     if (resource === "security") {
       await limitLogin(Object.fromEntries(request.headers.entries()));
       return reply(await updateSecurity(user, body));
@@ -162,6 +242,33 @@ export async function POST(
     }
     await db.$transaction(async (tx) => {
       switch (resource) {
+        case "services": {
+          const data = schemas.services.parse(body);
+          await tx.service.upsert({
+            where: { id: data.id },
+            create: data,
+            update: data,
+          });
+          break;
+        }
+        case "faqs": {
+          const data = schemas.faqs.parse(body);
+          await tx.faq.upsert({
+            where: { id: data.id },
+            create: data,
+            update: data,
+          });
+          break;
+        }
+        case "testimonials": {
+          const data = schemas.testimonials.parse(body);
+          await tx.testimonial.upsert({
+            where: { id: data.id },
+            create: data,
+            update: data,
+          });
+          break;
+        }
         case "projects": {
           const { screenshots, ...project } = schemas.projects.parse(body);
           await tx.project.upsert({
@@ -247,7 +354,7 @@ export async function POST(
 }
 export async function DELETE(
   request: Request,
-  { params }: { params: { resource: string } },
+  { params }: { params: Promise<{ resource: string }> },
 ) {
   try {
     const user = await requireAdmin();
@@ -257,7 +364,16 @@ export async function DELETE(
       .strict()
       .parse(await readJson(request));
     await db.$transaction(async (tx) => {
-      switch (params.resource) {
+      switch ((await params).resource) {
+        case "services":
+          await tx.service.delete({ where: { id } });
+          break;
+        case "faqs":
+          await tx.faq.delete({ where: { id } });
+          break;
+        case "testimonials":
+          await tx.testimonial.delete({ where: { id } });
+          break;
         case "projects":
           await tx.project.delete({ where: { id } });
           break;
@@ -283,7 +399,7 @@ export async function DELETE(
         data: {
           adminId: user.id,
           action: "delete",
-          resource: params.resource,
+          resource: (await params).resource,
           recordId: id,
         },
       });
@@ -295,27 +411,39 @@ export async function DELETE(
 }
 export async function PATCH(
   request: Request,
-  { params }: { params: { resource: string } },
+  { params }: { params: Promise<{ resource: string }> },
 ) {
   try {
     const user = await requireAdmin();
     checkOrigin(request);
     const body = await readJson(request);
-    const resource = params.resource;
+    const resource = (await params).resource;
     if (resource === "inbox") {
       const data = z
-        .object({ id: z.string().max(100), read: z.boolean() })
+        .object({
+          id: z.string().min(1).max(100),
+          read: z.boolean().optional(),
+          status: leadStatus.optional(),
+          notes: z.string().trim().max(5000).optional(),
+        })
         .strict()
+        .refine(
+          (value) =>
+            value.read !== undefined ||
+            value.status !== undefined ||
+            value.notes !== undefined,
+          "Provide an update.",
+        )
         .parse(body);
       await db.$transaction([
         db.contactMessage.update({
           where: { id: data.id },
-          data: { read: data.read },
+          data: { read: data.read, status: data.status, notes: data.notes },
         }),
         db.auditLog.create({
           data: {
             adminId: user.id,
-            action: data.read ? "mark-read" : "mark-unread",
+            action: "update-inquiry",
             resource,
             recordId: data.id,
           },
@@ -336,6 +464,15 @@ export async function PATCH(
     await db.$transaction(async (tx) => {
       for (const [order, id] of ids.entries()) {
         switch (resource) {
+          case "services":
+            await tx.service.update({ where: { id }, data: { order } });
+            break;
+          case "faqs":
+            await tx.faq.update({ where: { id }, data: { order } });
+            break;
+          case "testimonials":
+            await tx.testimonial.update({ where: { id }, data: { order } });
+            break;
           case "projects":
             await tx.project.update({ where: { id }, data: { order } });
             break;

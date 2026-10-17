@@ -118,9 +118,12 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
       try {
         current = parseConsent(localStorage.getItem(copy.key));
       } catch {
+        document.documentElement.dataset.consentChoice = "needed";
+        setRecord(null);
         setReady(true);
         return;
       }
+      document.documentElement.dataset.consentChoice = current ? "saved" : "needed";
       setRecord(current);
       setReady(true);
     };
@@ -140,6 +143,7 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
   }, []);
   const save = useCallback((external: boolean) => {
     const next = { version: copy.version, external, updatedAt: Date.now() };
+    document.documentElement.dataset.consentChoice = "saved";
     setRecord(next);
     setSettings(false);
     setReady(true);
@@ -160,7 +164,7 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-      {ready && !record && !settings && (
+      {!record && !settings && (
         <aside className="consent-banner" aria-labelledby="consent-title">
           <div className="consent-symbol">
             <ShieldCheck size={24} aria-hidden="true" />

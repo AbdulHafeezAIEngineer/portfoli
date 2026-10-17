@@ -47,10 +47,10 @@ export function Footer({
               {email}
               <ArrowUpRight size={17} aria-hidden="true" />
             </a>
-            <a href="/#contact" className="footer-brief-link">
+            <Link href="/#contact" className="footer-brief-link">
               {studio.ending.action}
               <ArrowUpRight size={16} aria-hidden="true" />
-            </a>
+            </Link>
           </div>
         </Reveal>
       </div>
@@ -68,7 +68,7 @@ export function Footer({
         </div>
         <div className="container">
           <Reveal>
-            <a
+            <Link
               className="footer-emblem"
               href="/#top"
               aria-label={`${brand} — Home`}
@@ -83,7 +83,7 @@ export function Footer({
                 />
               </span>
               <strong>{brand}</strong>
-            </a>
+            </Link>
             <p className="footer-signature">{studio.ending.signature}</p>
             <div className="footer-social-row">
               <SocialLinks iconsOnly />
@@ -105,13 +105,13 @@ export function Footer({
               ))}
               <CookieSettingsButton />
             </nav>
-            <a
+            <Link
               className="footer-top-link"
               href="/#top"
               aria-label={site.ui.back}
             >
               ↑
-            </a>
+            </Link>
           </div>
           <p className="footer-editorial-credit">{studio.ending.credit}</p>
         </div>

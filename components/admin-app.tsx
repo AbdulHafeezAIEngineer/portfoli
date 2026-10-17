@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { signIn, signOut } from "next-auth/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ArrowDown,
   ArrowUp,
@@ -13,13 +13,20 @@ import {
   X,
 } from "lucide-react";
 import { adminContent as copy, adminDefaults, adminFields } from "@/data/admin";
+import { useModal } from "@/hooks/use-modal";
 type RecordData = Record<string, unknown>;
-async function api(resource: string, method = "GET", body?: unknown) {
+async function api(
+  resource: string,
+  method = "GET",
+  body?: unknown,
+  signal?: AbortSignal,
+) {
   const response = await fetch(`/api/admin/${resource}`, {
     method,
     headers: body ? { "Content-Type": "application/json" } : undefined,
     body: body ? JSON.stringify(body) : undefined,
     cache: "no-store",
+    signal,
   });
   const data = await response.json();
   if (!response.ok)
@@ -27,6 +34,17 @@ async function api(resource: string, method = "GET", body?: unknown) {
   return data;
 }
 export function AdminApp({ section }: { section: string }) {
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [pages, setPages] = useState(1);
+  const [search, setSearch] = useState("");
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState("");
+  const [sort, setSort] = useState("newest");
+  const [deleting, setDeleting] = useState<RecordData | null>(null);
+  const [lead, setLead] = useState<RecordData | null>(null);
+  const paginated = ["inbox", "chatlogs", "audit"].includes(section);
+  const loading = useRef<AbortController | null>(null);
   const [records, setRecords] = useState<RecordData[]>([]);
   const [dashboard, setDashboard] = useState<RecordData>({});
   const [editor, setEditor] = useState<RecordData | null>(null);
@@ -34,22 +52,41 @@ export function AdminApp({ section }: { section: string }) {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const load = useCallback(async () => {
+    loading.current?.abort();
+    const controller = new AbortController();
+    loading.current = controller;
     setBusy(true);
     setError("");
     try {
-      const data = await api(section === "security" ? "dashboard" : section);
+      const suffix = paginated
+        ? `?${new URLSearchParams({ page: String(page), q: query, status: filter, sort })}`
+        : "";
+      const data = await api(
+        (section === "security" ? "dashboard" : section) + suffix,
+        "GET",
+        undefined,
+        controller.signal,
+      );
+      if (controller.signal.aborted) return;
       if (section === "dashboard" || section === "security") setDashboard(data);
       else if (section === "settings")
         setEditor(data || adminDefaults.settings);
-      else setRecords(data);
+      else if (paginated) {
+        setRecords(data.items);
+        setPages(data.pages);
+        setTotal(data.total);
+        if (page > data.pages) setPage(data.pages);
+      } else setRecords(data);
     } catch (error) {
-      setError(error instanceof Error ? error.message : copy.error);
+      if (!controller.signal.aborted)
+        setError(error instanceof Error ? error.message : copy.error);
     } finally {
-      setBusy(false);
+      if (!controller.signal.aborted) setBusy(false);
     }
-  }, [section]);
+  }, [section, paginated, page, query, filter, sort]);
   useEffect(() => {
     if (section !== "login") void load();
+    return () => loading.current?.abort();
   }, [section, load]);
   if (section === "login") return <AdminLogin />;
   async function mutate(method: string, body: unknown) {
@@ -59,6 +96,8 @@ export function AdminApp({ section }: { section: string }) {
     try {
       await api(section, method, body);
       setEditor(null);
+      setLead(null);
+      setDeleting(null);
       setMessage(method === "DELETE" ? copy.deleted : copy.saved);
       await load();
     } catch (error) {
@@ -158,18 +197,122 @@ export function AdminApp({ section }: { section: string }) {
         )}
         {section === "dashboard" && (
           <>
-            <p className="admin-note">{copy.originWarning}</p>
+            <p className="admin-note">
+              {dashboard.contentSource === "database"
+                ? "Published CMS content appears on the website."
+                : "The public website uses repository content. Set CONTENT_SOURCE=database after populating the CMS to publish these records."}
+            </p>
             <div className="admin-stats">
               {Object.entries(dashboard)
-                .filter(([key]) => key !== "twoFactor")
+                .filter(([, value]) => typeof value === "number")
                 .map(([key, value]) => (
                   <article className="glass" key={key}>
-                    <span>{key}</span>
+                    <span>
+                      {{
+                        projects: "Projects",
+                        bots: "Bots",
+                        messages: "Inquiries",
+                        unread: "Unread",
+                        newInquiries: "New inquiries",
+                      }[key] || key}
+                    </span>
                     <strong>{String(value)}</strong>
                   </article>
                 ))}
             </div>
+            <h2>Recent inquiries</h2>
+            {!busy &&
+              Array.isArray(dashboard.recent) &&
+              dashboard.recent.length === 0 && (
+                <p className="admin-note">No inquiries yet.</p>
+              )}
+            <div className="admin-records">
+              {(Array.isArray(dashboard.recent)
+                ? (dashboard.recent as RecordData[])
+                : []
+              ).map((row) => (
+                <Link
+                  className="admin-record glass"
+                  key={String(row.id)}
+                  href="/admin/inbox"
+                >
+                  <strong>{String(row.name)}</strong>
+                  <span>{String(row.status)}</span>
+                </Link>
+              ))}
+            </div>
           </>
+        )}
+        {paginated && (
+          <form
+            className="admin-filters"
+            onSubmit={(e) => {
+              e.preventDefault();
+              setPage(1);
+              setQuery(search);
+            }}
+          >
+            <label className="sr-only" htmlFor="admin-search">
+              Search records
+            </label>
+            <input
+              id="admin-search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search records"
+              maxLength={200}
+            />
+            <button className="button button-outline" disabled={busy}>
+              Search
+            </button>
+            <label className="sr-only" htmlFor="admin-sort">
+              Sort records
+            </label>
+            <select
+              id="admin-sort"
+              value={sort}
+              onChange={(e) => {
+                setSort(e.target.value);
+                setPage(1);
+              }}
+            >
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+            </select>
+            {section === "inbox" && (
+              <>
+                <label className="sr-only" htmlFor="admin-status">
+                  Filter status
+                </label>
+                <select
+                  id="admin-status"
+                  value={filter}
+                  onChange={(e) => {
+                    setFilter(e.target.value);
+                    setPage(1);
+                  }}
+                >
+                  <option value="">All statuses</option>
+                  {["new", "contacted", "in-progress", "closed"].map(
+                    (value) => (
+                      <option value={value} key={value}>
+                        {value}
+                      </option>
+                    ),
+                  )}
+                </select>
+              </>
+            )}
+          </form>
+        )}
+        {lead && (
+          <LeadEditor
+            key={String(lead.id)}
+            initial={lead}
+            busy={busy}
+            save={(data) => mutate("PATCH", data)}
+            close={() => setLead(null)}
+          />
         )}
         {section === "security" ? (
           <SecurityPanel enabled={dashboard.twoFactor === true} />
@@ -185,9 +328,17 @@ export function AdminApp({ section }: { section: string }) {
           section !== "dashboard" &&
           section !== "settings" && (
             <div className="admin-records">
-              {["projects", "bots", "skills", "certificates"].includes(
-                section,
-              ) && <p className="admin-note">{copy.reorderHelp}</p>}
+              {[
+                "projects",
+                "bots",
+                "skills",
+                "certificates",
+                "services",
+                "faqs",
+                "testimonials",
+              ].includes(section) && (
+                <p className="admin-note">{copy.reorderHelp}</p>
+              )}
               {section === "chatlogs" && (
                 <p className="admin-note">{copy.retention}</p>
               )}
@@ -197,7 +348,8 @@ export function AdminApp({ section }: { section: string }) {
                   <div>
                     <h2>
                       {String(
-                        record.title ||
+                        record.question ||
+                          record.title ||
                           record.name ||
                           record.botId ||
                           record.action ||
@@ -227,6 +379,13 @@ export function AdminApp({ section }: { section: string }) {
                         </p>
                       </>
                     )}
+                    {section === "inbox" && (
+                      <p>
+                        Status: {String(record.status)}
+                        {record.company ? ` · ${record.company}` : ""}
+                        {record.service ? ` · ${record.service}` : ""}
+                      </p>
+                    )}
                     {Boolean(record.deliveryStatus) && (
                       <p>
                         {copy.delivery}: {String(record.deliveryStatus)}
@@ -245,7 +404,7 @@ export function AdminApp({ section }: { section: string }) {
                         <button
                           className="icon-button"
                           disabled={busy || index === 0}
-                          aria-label={`${copy.up}: ${String(record.title || record.name)}`}
+                          aria-label={`${copy.up}: ${String(record.question || record.title || record.name)}`}
                           onClick={() => move(index, -1)}
                         >
                           <ArrowUp size={17} />
@@ -253,7 +412,7 @@ export function AdminApp({ section }: { section: string }) {
                         <button
                           className="icon-button"
                           disabled={busy || index === records.length - 1}
-                          aria-label={`${copy.down}: ${String(record.title || record.name)}`}
+                          aria-label={`${copy.down}: ${String(record.question || record.title || record.name)}`}
                           onClick={() => move(index, 1)}
                         >
                           <ArrowDown size={17} />
@@ -271,6 +430,15 @@ export function AdminApp({ section }: { section: string }) {
                       <button
                         className="button button-outline"
                         disabled={busy}
+                        onClick={() => setLead(record)}
+                      >
+                        Manage inquiry
+                      </button>
+                    )}
+                    {section === "inbox" && (
+                      <button
+                        className="button button-outline"
+                        disabled={busy}
                         onClick={() =>
                           mutate("PATCH", { id: record.id, read: !record.read })
                         }
@@ -282,10 +450,9 @@ export function AdminApp({ section }: { section: string }) {
                       <button
                         className="icon-button"
                         disabled={busy}
-                        aria-label={`${copy.remove}: ${String(record.title || record.name || record.id)}`}
+                        aria-label={`${copy.remove}: ${String(record.question || record.title || record.name || record.id)}`}
                         onClick={() => {
-                          if (window.confirm(copy.deleteConfirm))
-                            void mutate("DELETE", { id: record.id });
+                          setDeleting(record);
                         }}
                       >
                         <Trash2 size={17} />
@@ -296,6 +463,35 @@ export function AdminApp({ section }: { section: string }) {
               ))}
             </div>
           )
+        )}
+        {paginated && (
+          <div className="admin-pagination">
+            <button
+              className="button button-outline"
+              disabled={busy || page <= 1}
+              onClick={() => setPage((value) => value - 1)}
+            >
+              Previous
+            </button>
+            <span>
+              {total} records · Page {page} of {pages}
+            </span>
+            <button
+              className="button button-outline"
+              disabled={busy || page >= pages}
+              onClick={() => setPage((value) => value + 1)}
+            >
+              Next
+            </button>
+          </div>
+        )}
+        {deleting && (
+          <DeleteDialog
+            error={error}
+            busy={busy}
+            close={() => setDeleting(null)}
+            confirm={() => mutate("DELETE", { id: deleting.id })}
+          />
         )}
       </main>
     </div>
@@ -392,9 +588,13 @@ function RecordEditor({
     Object.fromEntries(
       (adminFields[resource] || []).map((field) => [
         field.key,
-        field.type === "json"
-          ? JSON.stringify(initial[field.key] ?? null, null, 2)
-          : (initial[field.key] ?? (field.type === "boolean" ? false : "")),
+        field.type === "lines"
+          ? Array.isArray(initial[field.key])
+            ? (initial[field.key] as string[]).join("\n")
+            : ""
+          : field.type === "json"
+            ? JSON.stringify(initial[field.key] ?? null, null, 2)
+            : (initial[field.key] ?? (field.type === "boolean" ? false : "")),
       ]),
     ),
   );
@@ -410,9 +610,14 @@ function RecordEditor({
           const data: RecordData = {};
           for (const field of adminFields[resource])
             data[field.key] =
-              field.type === "json"
-                ? JSON.parse(String(values[field.key]))
-                : values[field.key];
+              field.type === "lines"
+                ? String(values[field.key])
+                    .split("\n")
+                    .map((value) => value.trim())
+                    .filter(Boolean)
+                : field.type === "json"
+                  ? JSON.parse(String(values[field.key]))
+                  : values[field.key];
           if (resource !== "settings" && typeof initial.order === "number")
             data.order = initial.order;
           onSave(data);
@@ -437,11 +642,14 @@ function RecordEditor({
       {adminFields[resource]?.map((field) => (
         <div className="form-field" key={field.key}>
           <label htmlFor={`edit-${field.key}`}>
-            {copy.fields[field.key as keyof typeof copy.fields] || field.key}
+            {field.type === "lines"
+              ? `${field.key[0].toUpperCase()}${field.key.slice(1)} (one per line)`
+              : copy.fields[field.key as keyof typeof copy.fields] || field.key}
           </label>
           {field.type === "boolean" ? (
             <input
               id={`edit-${field.key}`}
+              disabled={busy}
               type="checkbox"
               checked={Boolean(values[field.key])}
               onChange={(event) =>
@@ -451,9 +659,12 @@ function RecordEditor({
                 }))
               }
             />
-          ) : field.type === "json" || field.type === "long" ? (
+          ) : field.type === "json" ||
+            field.type === "long" ||
+            field.type === "lines" ? (
             <textarea
               id={`edit-${field.key}`}
+              disabled={busy}
               rows={field.type === "json" ? 5 : 4}
               value={String(values[field.key])}
               onChange={(event) =>
@@ -468,6 +679,17 @@ function RecordEditor({
               id={`edit-${field.key}`}
               type={field.type === "number" ? "number" : "text"}
               value={String(values[field.key])}
+              disabled={busy}
+              required={
+                ![
+                  "demoUrl",
+                  "image",
+                  "portrait",
+                  "issuedAt",
+                  "systemPrompt",
+                  "note",
+                ].includes(field.key)
+              }
               readOnly={field.key === "id" && Boolean(initial.id)}
               onChange={(event) =>
                 setValues((current) => ({
@@ -482,7 +704,7 @@ function RecordEditor({
           )}
         </div>
       ))}
-      {["projects", "certificates"].includes(resource) && (
+      {["projects", "certificates", "testimonials"].includes(resource) && (
         <div className="admin-upload">
           <label htmlFor="admin-images">{copy.upload}</label>
           <p>{copy.uploadHelp}</p>
@@ -508,8 +730,12 @@ function RecordEditor({
                 const result = await response.json();
                 if (!response.ok) throw new Error(result.error || copy.error);
                 setValues((current) =>
-                  resource === "certificates"
-                    ? { ...current, image: result.images[0].src }
+                  resource === "certificates" || resource === "testimonials"
+                    ? {
+                        ...current,
+                        [resource === "testimonials" ? "portrait" : "image"]:
+                          result.images[0].src,
+                      }
                     : {
                         ...current,
                         screenshots: JSON.stringify(
@@ -640,5 +866,110 @@ function SecurityPanel({ enabled }: { enabled: boolean }) {
         </p>
       )}
     </div>
+  );
+}
+
+function DeleteDialog({
+  busy,
+  close,
+  confirm,
+  error,
+}: {
+  error: string;
+  busy: boolean;
+  close: () => void;
+  confirm: () => void;
+}) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  const trap = useModal(dialog);
+  return (
+    <dialog
+      ref={dialog}
+      className="admin-confirm"
+      aria-labelledby="delete-title"
+      onKeyDown={trap}
+      onCancel={(e) => {
+        e.preventDefault();
+        if (!busy) close();
+      }}
+    >
+      <h2 id="delete-title">Delete this record?</h2>
+      <p>This action cannot be undone.</p>
+      {error && <p role="alert">{error}</p>}
+      <div>
+        <button
+          className="button button-outline"
+          disabled={busy}
+          onClick={close}
+        >
+          Cancel
+        </button>
+        <button
+          className="button button-gold"
+          disabled={busy}
+          onClick={confirm}
+        >
+          Delete record
+        </button>
+      </div>
+    </dialog>
+  );
+}
+function LeadEditor({
+  initial,
+  busy,
+  save,
+  close,
+}: {
+  initial: RecordData;
+  busy: boolean;
+  save: (data: RecordData) => void;
+  close: () => void;
+}) {
+  const [status, setStatus] = useState(String(initial.status));
+  const [notes, setNotes] = useState(String(initial.notes || ""));
+  return (
+    <form
+      className="admin-editor glass lead-editor"
+      onSubmit={(e) => {
+        e.preventDefault();
+        save({ id: initial.id, status, notes });
+      }}
+    >
+      <h2>Manage inquiry from {String(initial.name)}</h2>
+      <label htmlFor="lead-status">Status</label>
+      <select
+        id="lead-status"
+        disabled={busy}
+        value={status}
+        onChange={(e) => setStatus(e.target.value)}
+      >
+        {["new", "contacted", "in-progress", "closed"].map((value) => (
+          <option value={value} key={value}>
+            {value}
+          </option>
+        ))}
+      </select>
+      <label htmlFor="lead-notes">Private notes</label>
+      <textarea
+        id="lead-notes"
+        rows={5}
+        maxLength={5000}
+        disabled={busy}
+        value={notes}
+        onChange={(e) => setNotes(e.target.value)}
+      />
+      <button className="button button-gold" disabled={busy}>
+        Save inquiry
+      </button>
+      <button
+        type="button"
+        className="button button-outline"
+        disabled={busy}
+        onClick={close}
+      >
+        Cancel
+      </button>
+    </form>
   );
 }

@@ -54,7 +54,7 @@ export const legal = {
         },
         {
           title: "Contact enquiries",
-          text: "If you submit the form, your name, email and message are processed to respond to your enquiry and limit abuse. Messages are delivered through the configured email service; a private inbox may also store them if database features are enabled. Cloudflare Turnstile may process technical information for form security when configured. Do not send passwords, payment details, medical information or other sensitive content.",
+          text: "If you submit the form, your name, email, optional company/service details and message are processed to respond to your enquiry and limit abuse. When inquiry storage is enabled, the message is saved in a private inbox. Email notifications are sent only when the mail service is configured and accepts them. Cloudflare Turnstile may process technical information for form security when configured. Do not send passwords, payment details, medical information or other sensitive content.",
         },
         {
           title: "AI demos, voice and embedded chat",

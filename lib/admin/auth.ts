@@ -67,10 +67,16 @@ export const authOptions: NextAuthOptions = {
             !email ||
             email.length > 254 ||
             !password ||
-            password.length > 128
+            Buffer.byteLength(password, "utf8") > 72
           )
             return null;
           const user = await db.adminUser.findUnique({ where: { email } });
+          if (user?.lockedUntil && user.lockedUntil <= new Date()) {
+            await db.adminUser.updateMany({
+              where: { id: user.id, lockedUntil: { lte: new Date() } },
+              data: { failedAttempts: 0, lockedUntil: null },
+            });
+          }
           const valid = await compare(
             password,
             user?.passwordHash || dummyHash,
@@ -126,6 +132,28 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  events: {
+    async signOut({ token }) {
+      if (!token?.adminId || typeof token.passwordVersion !== "number") return;
+      await db.$transaction(async (tx) => {
+        const result = await tx.adminUser.updateMany({
+          where: {
+            id: String(token.adminId),
+            passwordVersion: token.passwordVersion as number,
+          },
+          data: { passwordVersion: { increment: 1 } },
+        });
+        if (result.count)
+          await tx.auditLog.create({
+            data: {
+              adminId: String(token.adminId),
+              action: "logout-revoke-sessions",
+              resource: "security",
+            },
+          });
+      });
+    },
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {

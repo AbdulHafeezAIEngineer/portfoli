@@ -49,6 +49,14 @@ The original restaurant/real-estate/SaaS/store demos and prior Elvora promotiona
 
 Six actual 1440×900 browser captures at 2× resolution now live in `public/studies/`: `noma.webp`, `orbit.webp`, `elsewhere.webp`, `form.webp`, `offscript.webp` and `aura.webp`. They show the original coded `/studies/[slug]` pages with fictional demo content. Refresh with `npx tsx scripts/capture-studies.ts`; stop other Next.js processes first or provide `CAPTURE_BASE_URL`. These are separate from the four complete selected concept websites and their 16-image galleries.
 
-## Latest portfolio feature previews
+## Earlier editorial portfolio previews
 
-`docs/editorial-{tools,skills,domains,journey,reviews,contact,footer}-{desktop,mobile}.png` capture the current portfolio sections at 1440px and 390px. They show the implemented Elvora designs, not the reference uploads. Reduced-motion capture mode reveals every heading/card, and fixed navigation is hidden for unobstructed section previews. Review/profile placeholders remain clearly identified. Earlier `reference-` and `studio-` captures document previous design phases.
+`docs/editorial-{tools,skills,domains,journey,reviews,contact,footer}-{desktop,mobile}.png` capture the earlier editorial portfolio sections at 1440px and 390px. They show the implemented Elvora designs, not the reference uploads. Reduced-motion capture mode reveals every heading/card, and fixed navigation is hidden for unobstructed section previews. Review/profile placeholders remain clearly identified. Earlier `reference-` and `studio-` captures document previous design phases.
+
+## Agency completion previews — 17 October 2026
+
+`docs/agency-{home,about,faq,contact,service,project}-{desktop,mobile}.png` are twelve actual production-build public captures at 1440px/390px. They show original brand About artwork, genuine supplied content, FAQs and service/project notes. Fixed widgets are hidden only during unobstructed section captures. Reduced motion is used for still images; motion is separately verified in the browser.
+
+`docs/agency-admin-{dashboard,inbox}-{desktop,mobile}.png` show actual local PostgreSQL-backed admin pages. Inbox material is explicitly named temporary QA fixture data, not customer information. Fixture records were removed after testing. These captures do not establish a live production database or deployment.
+
+The ordinary public site hides reviews until genuine permission-approved records exist; earlier review-preview images are historical. `docs/agency-performance.json` records the current local mobile Lighthouse result and limits.

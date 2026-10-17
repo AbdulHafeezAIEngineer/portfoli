@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { parseConsent } from "../lib/consent";
+import vm from "node:vm";
+import { consentVisibilityScript, parseConsent } from "../lib/consent";
 import { consentContent } from "../data/privacy";
 const now = 1800000000000;
 const record = (changes: Record<string, unknown> = {}) =>
@@ -65,4 +66,39 @@ test("expired, future and superseded consent requires a new choice", () => {
       ?.external,
     true,
   );
+});
+
+test("initial visibility script shares expiry and version validation without granting permission", () => {
+  const samples = [
+    null,
+    "bad",
+    JSON.stringify({
+      version: consentContent.version,
+      external: false,
+      updatedAt: Date.now() - 1000,
+    }),
+    JSON.stringify({
+      version: consentContent.version,
+      external: true,
+      updatedAt: Date.now() + 86400000,
+    }),
+  ];
+  for (const raw of samples) {
+    const dataset: Record<string, string> = {};
+    vm.runInNewContext(consentVisibilityScript(), {
+      document: { documentElement: { dataset } },
+      localStorage: { getItem: () => raw },
+    });
+    assert.equal(dataset.consentChoice, parseConsent(raw) ? "saved" : "needed");
+  }
+  const dataset: Record<string, string> = {};
+  vm.runInNewContext(consentVisibilityScript(), {
+    document: { documentElement: { dataset } },
+    localStorage: {
+      getItem: () => {
+        throw new Error("storage blocked");
+      },
+    },
+  });
+  assert.equal(dataset.consentChoice, "needed");
 });

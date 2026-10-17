@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start --hostname 0.0.0.0",
     "typecheck": "tsc --noEmit",
-    "lint": "next lint",
+    "lint": "eslint app components data hooks lib middleware.ts next.config.mjs --ext .js,.jsx,.ts,.tsx,.mjs --max-warnings=0",
     "test:chat": "node --test tests/chat.test.mjs",
     "test:contact": "node --test tests/contact.test.mjs",
     "certificate-placeholder": "node scripts/generate-certificate.mjs",
@@ -18,7 +18,12 @@
     "db:seed": "node --env-file-if-exists=.env.local --import tsx prisma/seed.ts",
     "admin:reset": "node --env-file-if-exists=.env.local --import tsx scripts/reset-admin.ts",
     "postinstall": "node scripts/generate-client.mjs",
-    "test:security": "node --test tests/security.test.mjs"
+    "test:security": "node --test tests/security.test.mjs",
+    "test:consent": "node --import tsx --test tests/consent.test.ts",
+    "admin:bootstrap": "node --env-file-if-exists=.env.local --import tsx scripts/bootstrap-admin.ts",
+    "test:agency": "node --test --test-concurrency=1 tests/agency.integration.mjs",
+    "test:auth": "node --test --test-concurrency=1 tests/auth.integration.mjs",
+    "test:proxy": "node tests/helpers/https-proxy.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "5.2.8",
@@ -29,7 +34,7 @@
     "bcryptjs": "3.0.2",
     "framer-motion": "11.18.2",
     "lucide-react": "0.468.0",
-    "next": "14.2.35",
+    "next": "15.5.28",
     "next-auth": "4.24.15",
     "pg": "8.16.3",
     "react": "18.3.1",
@@ -49,7 +54,7 @@
     "@types/react-dom": "18.3.5",
     "autoprefixer": "10.4.20",
     "eslint": "8.57.1",
-    "eslint-config-next": "14.2.35",
+    "eslint-config-next": "15.5.28",
     "postcss": "8.5.30",
     "prisma": "6.19.3",
     "tailwindcss": "3.4.17",
@@ -64,6 +69,7 @@
     "@prisma/config": {
       "deepmerge-ts": "8.0.2"
     },
-    "uuid": "11.1.1"
+    "uuid": "11.1.1",
+    "postcss-selector-parser": "7.1.6"
   }
 }

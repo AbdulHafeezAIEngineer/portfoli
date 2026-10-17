@@ -1,3 +1,506 @@
+## tests/agency.integration.mjs
+
+``````javascript
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { request } from "@playwright/test";
+const base = process.env.NEXTAUTH_URL || "";
+if (
+  process.env.AGENCY_TEST_DATABASE !== "isolated" ||
+  !/^https?:\/\/(localhost|127\.0\.0\.1):\d+$/.test(base)
+)
+  throw new Error("Run only against an explicit isolated local test database.");
+const tls = process.env.AGENCY_TEST_TLS === "self-signed-local";
+async function context() {
+  return request.newContext({ baseURL: base, ignoreHTTPSErrors: tls });
+}
+async function login(ctx) {
+  const csrf = await (await ctx.get("/api/auth/csrf")).json();
+  const response = await ctx.post("/api/auth/callback/credentials", {
+    form: {
+      csrfToken: csrf.csrfToken,
+      email: process.env.ADMIN_EMAIL,
+      password: process.env.ADMIN_PASSWORD,
+      json: "true",
+      callbackUrl: base + "/admin",
+    },
+  });
+  assert.ok(response.ok());
+  assert.equal(
+    (await ctx.get("/api/admin/dashboard")).status(),
+    200,
+    "Real credentials must establish an authorized database-backed session.",
+  );
+}
+const resources = [
+  "dashboard",
+  "projects",
+  "services",
+  "faqs",
+  "testimonials",
+  "bots",
+  "skills",
+  "certificates",
+  "settings",
+  "inbox",
+  "chatlogs",
+  "audit",
+];
+test("anonymous admin pages and every API reject access", async () => {
+  const ctx = await context();
+  try {
+    for (const resource of resources)
+      for (const method of ["GET", "POST", "PATCH", "DELETE"]) {
+        const r = await ctx.fetch("/api/admin/" + resource, {
+          method,
+          data: method === "GET" ? undefined : {},
+        });
+        assert.equal(r.status(), 401);
+        assert.match(r.headers()["cache-control"], /no-store/);
+      }
+    assert.equal((await ctx.post("/api/admin/upload")).status(), 401);
+    const page = await ctx.get("/admin", { maxRedirects: 0 });
+    assert.equal(page.status(), 307);
+    assert.match(page.headers().location, /\/admin\/login/);
+  } finally {
+    await ctx.dispose();
+  }
+});
+test("real login, CMS publication, durable inbox, lead management, audit and logout revocation", async (t) => {
+  const ctx = await context();
+  await login(ctx);
+  try {
+    const cookies = (await ctx.storageState()).cookies;
+    const token = cookies.find((c) => c.name.includes("session-token"));
+    assert.ok(token);
+    assert.equal(token.httpOnly, true);
+    assert.equal(token.sameSite, "Strict");
+    if (base.startsWith("https:")) assert.equal(token.secure, true);
+    await t.test("cross-origin mutation and strict schemas fail", async () => {
+      assert.equal(
+        (
+          await ctx.post("/api/admin/faqs", {
+            headers: { Origin: "https://attacker.example" },
+            data: {},
+          })
+        ).status(),
+        403,
+      );
+      assert.equal(
+        (
+          await ctx.post("/api/admin/faqs", {
+            headers: { Origin: base },
+            data: {
+              id: "x",
+              published: true,
+              question: "A question",
+              answer: "Answer",
+              unexpected: "field",
+            },
+          })
+        ).status(),
+        422,
+      );
+      assert.equal((await ctx.get("/api/admin/inbox?page=-1")).status(), 422);
+      assert.equal(
+        (
+          await ctx.post("/api/admin/testimonials", {
+            headers: { Origin: base },
+            data: {
+              id: "fixture-review",
+              name: "Test fixture",
+              role: "Test only",
+              quote: "Not genuine customer feedback.",
+              portrait: "",
+              published: true,
+              permissionConfirmed: false,
+            },
+          })
+        ).status(),
+        422,
+      );
+    });
+    const faq = {
+      id: "fixture-agency-faq",
+      question: "Integration fixture question?",
+      answer: "Temporary integration fixture answer.",
+      published: true,
+    };
+    await t.test(
+      "FAQ publishing and unpublishing affect server-rendered content",
+      async () => {
+        assert.equal(
+          (
+            await ctx.post("/api/admin/faqs", {
+              headers: { Origin: base },
+              data: faq,
+            })
+          ).status(),
+          200,
+        );
+        assert.ok((await (await ctx.get("/")).text()).includes(faq.question));
+        assert.equal(
+          (
+            await ctx.post("/api/admin/faqs", {
+              headers: { Origin: base },
+              data: { ...faq, published: false },
+            })
+          ).status(),
+          200,
+        );
+        assert.ok(!(await (await ctx.get("/")).text()).includes(faq.question));
+      },
+    );
+    const service = {
+      id: "fixture-service",
+      title: "Integration service",
+      description: "Temporary test service description.",
+      detail: "A test fixture only.",
+      tags: ["Fixture"],
+      scope: ["Test behavior"],
+      requirements: ["Test data"],
+      published: true,
+    };
+    await t.test(
+      "service details follow CMS publication and sitemap",
+      async () => {
+        assert.equal(
+          (
+            await ctx.post("/api/admin/services", {
+              headers: { Origin: base },
+              data: service,
+            })
+          ).status(),
+          200,
+        );
+        assert.ok(
+          (await (await ctx.get("/services/fixture-service")).text()).includes(
+            service.title,
+          ),
+        );
+        assert.ok(
+          (await (await ctx.get("/sitemap.xml")).text()).includes(
+            "/services/fixture-service",
+          ),
+        );
+        assert.equal(
+          (
+            await ctx.post("/api/admin/services", {
+              headers: { Origin: base },
+              data: { ...service, published: false },
+            })
+          ).status(),
+          200,
+        );
+        assert.ok(
+          !(await (await ctx.get("/sitemap.xml")).text()).includes(
+            "/services/fixture-service",
+          ),
+        );
+      },
+    );
+    let inquiry;
+    await t.test(
+      "contact without SMTP persists and can be searched and managed",
+      async () => {
+        const result = await ctx.post("/api/contact", {
+          headers: { Origin: base },
+          data: {
+            name: "Integration visitor",
+            email: "fixture@example.test",
+            company: "Temporary QA",
+            service: "web",
+            message:
+              "A temporary automated inquiry used to verify database persistence.",
+            website: "",
+          },
+        });
+        assert.equal(result.status(), 202);
+        const accepted = await result.json();
+        assert.equal(accepted.acceptance, "stored");
+        assert.equal(accepted.notification, "not-configured");
+        const inbox = await (
+          await ctx.get("/api/admin/inbox?q=fixture%40example.test")
+        ).json();
+        assert.ok(inbox.total >= 1);
+        inquiry = inbox.items[0];
+        assert.equal(inquiry.status, "new");
+        assert.equal(inquiry.company, "Temporary QA");
+        assert.equal(
+          (
+            await ctx.patch("/api/admin/inbox", {
+              headers: { Origin: base },
+              data: {
+                id: inquiry.id,
+                status: "contacted",
+                notes: "Private QA note",
+                read: true,
+              },
+            })
+          ).status(),
+          200,
+        );
+        const filtered = await (
+          await ctx.get(
+            "/api/admin/inbox?status=contacted&q=fixture%40example.test",
+          )
+        ).json();
+        assert.equal(filtered.items[0].notes, "Private QA note");
+        assert.equal(filtered.items[0].read, true);
+        assert.equal(
+          (
+            await ctx.patch("/api/admin/inbox", {
+              headers: { Origin: base },
+              data: { id: inquiry.id, status: "invalid" },
+            })
+          ).status(),
+          422,
+        );
+      },
+    );
+    await t.test(
+      "dashboard and paginated audit are actual database results",
+      async () => {
+        const dashboard = await (await ctx.get("/api/admin/dashboard")).json();
+        assert.ok(dashboard.messages >= 1);
+        assert.ok(Array.isArray(dashboard.recent));
+        const audit = await ctx.get("/api/admin/audit?size=2");
+        assert.match(audit.headers()["cache-control"], /no-store/);
+        const result = await audit.json();
+        assert.equal(result.items.length, 2);
+        assert.ok(result.total > 2);
+      },
+    );
+    for (const [resource, id] of [
+      ["faqs", faq.id],
+      ["services", service.id],
+      ...(inquiry ? [["inbox", inquiry.id]] : []),
+    ])
+      assert.equal(
+        (
+          await ctx.delete("/api/admin/" + resource, {
+            headers: { Origin: base },
+            data: { id },
+          })
+        ).status(),
+        200,
+      );
+    await t.test(
+      "signout revokes captured session tokens at the database boundary",
+      async () => {
+        const csrf = await (await ctx.get("/api/auth/csrf")).json();
+        await ctx.post("/api/auth/signout", {
+          form: {
+            csrfToken: csrf.csrfToken,
+            json: "true",
+            callbackUrl: base + "/admin/login",
+          },
+        });
+        assert.equal((await ctx.get("/api/admin/dashboard")).status(), 401);
+        const replay = await context();
+        try {
+          const response = await replay.get("/api/admin/dashboard", {
+            headers: { Cookie: `${token.name}=${token.value}` },
+          });
+          assert.equal(response.status(), 401);
+        } finally {
+          await replay.dispose();
+        }
+      },
+    );
+  } finally {
+    await ctx.dispose();
+  }
+});
+``````
+
+## tests/auth.integration.mjs
+
+``````javascript
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { randomBytes, createHmac } from "node:crypto";
+import { request } from "@playwright/test";
+import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { hash } from "bcryptjs";
+const base = process.env.NEXTAUTH_URL || "";
+const url = new URL(process.env.DATABASE_URL || "https://invalid");
+if (
+  process.env.AGENCY_TEST_DATABASE !== "isolated" ||
+  !/^https?:\/\/(localhost|127\.0\.0\.1):\d+$/.test(base) ||
+  url.hostname !== "127.0.0.1" ||
+  !url.pathname.startsWith("/elvora_agency_test")
+)
+  throw new Error("Explicit isolated local fixture required.");
+const db = new PrismaClient({
+  adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }),
+  log: [],
+});
+let count = 20;
+async function ctx() {
+  return request.newContext({
+    baseURL: base,
+    ignoreHTTPSErrors: process.env.AGENCY_TEST_TLS === "self-signed-local",
+    extraHTTPHeaders: { "x-real-ip": `127.0.1.${count++}` },
+  });
+}
+async function login(client, password = process.env.ADMIN_PASSWORD, code = "") {
+  const csrf = await (await client.get("/api/auth/csrf")).json();
+  await client.post("/api/auth/callback/credentials", {
+    form: {
+      csrfToken: csrf.csrfToken,
+      email: process.env.ADMIN_EMAIL,
+      password,
+      code,
+      json: "true",
+      callbackUrl: base + "/admin",
+    },
+  });
+  return (await client.get("/api/admin/dashboard")).status();
+}
+function codeAt(secret, step) {
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+  let bits = 0,
+    value = 0;
+  const bytes = [];
+  for (const c of secret) {
+    value = (value << 5) | alphabet.indexOf(c);
+    bits += 5;
+    if (bits >= 8) {
+      bytes.push((value >>> (bits - 8)) & 255);
+      bits -= 8;
+    }
+  }
+  const counter = Buffer.alloc(8);
+  counter.writeBigUInt64BE(BigInt(step));
+  const digest = createHmac("sha1", Buffer.from(bytes))
+    .update(counter)
+    .digest();
+  const offset = digest[19] & 15;
+  return String((digest.readUInt32BE(offset) & 0x7fffffff) % 1000000).padStart(
+    6,
+    "0",
+  );
+}
+const mutate = (client, data) =>
+  client.post("/api/admin/security", {
+    headers: { Origin: base },
+    data: {
+      currentPassword: process.env.ADMIN_PASSWORD,
+      newPassword: "",
+      code: "",
+      ...data,
+    },
+  });
+test("database-backed two-factor and password lifecycle invalidate previous sessions", async (t) => {
+  const clients = [];
+  const make = async () => {
+    const client = await ctx();
+    clients.push(client);
+    return client;
+  };
+  try {
+    const first = await make();
+    assert.equal(await login(first), 200);
+    await t.test(
+      "authenticator confirmation requires a valid code and invalidates the current session",
+      async () => {
+        const setup = await mutate(first, { operation: "totp-setup" });
+        assert.equal(setup.status(), 200);
+        const data = await setup.json();
+        assert.ok(data.secret);
+        globalThis.fixtureTotp = data;
+        assert.equal(
+          (
+            await mutate(first, {
+              operation: "totp-confirm",
+              ticket: data.ticket,
+              code: "bad",
+            })
+          ).status(),
+          422,
+        );
+        const step = Math.floor(Date.now() / 30000) - 1;
+        assert.equal(
+          (
+            await mutate(first, {
+              operation: "totp-confirm",
+              ticket: data.ticket,
+              code: codeAt(data.secret, step),
+            })
+          ).status(),
+          200,
+        );
+        assert.equal((await first.get("/api/admin/dashboard")).status(), 401);
+      },
+    );
+    await t.test(
+      "password alone is rejected, a fresh authenticator code signs in, disabling revokes the session",
+      async () => {
+        const alone = await make();
+        assert.equal(await login(alone), 401);
+        const second = await make();
+        const setup = globalThis.fixtureTotp;
+        assert.equal(
+          await login(
+            second,
+            process.env.ADMIN_PASSWORD,
+            codeAt(setup.secret, Math.floor(Date.now() / 30000)),
+          ),
+          200,
+        );
+        assert.equal(
+          (
+            await mutate(second, {
+              operation: "totp-disable",
+              code: codeAt(setup.secret, Math.floor(Date.now() / 30000) + 1),
+            })
+          ).status(),
+          200,
+        );
+        assert.equal((await second.get("/api/admin/dashboard")).status(), 401);
+      },
+    );
+    await t.test(
+      "password changes reject the old password and revoke captured sessions",
+      async () => {
+        const third = await make();
+        assert.equal(await login(third), 200);
+        const next = "Fixture!8" + randomBytes(18).toString("hex");
+        assert.equal(
+          (
+            await mutate(third, { operation: "password", newPassword: next })
+          ).status(),
+          200,
+        );
+        assert.equal((await third.get("/api/admin/dashboard")).status(), 401);
+        const old = await make();
+        assert.equal(await login(old), 401);
+        const fresh = await make();
+        assert.equal(await login(fresh, next), 200);
+      },
+    );
+  } finally {
+    // This reset is restricted above to the disposable local fixture account and database.
+    await db.adminUser.update({
+      where: { email: process.env.ADMIN_EMAIL },
+      data: {
+        passwordHash: await hash(process.env.ADMIN_PASSWORD, 12),
+        totpSecret: null,
+        totpLastStep: null,
+        passwordVersion: { increment: 1 },
+        failedAttempts: 0,
+        lockedUntil: null,
+      },
+    });
+    delete globalThis.fixtureTotp;
+    for (const client of clients) await client.dispose();
+    await db.$disconnect();
+  }
+});
+``````
+
 ## tests/chat.test.mjs
 
 ``````javascript
@@ -534,10 +1037,11 @@ test("additional data-configured bots use the reusable API and embed routes", as
 
 ## tests/consent.test.ts
 
-``````typescript
+``````ts
 import test from "node:test";
 import assert from "node:assert/strict";
-import { parseConsent } from "../lib/consent";
+import vm from "node:vm";
+import { consentVisibilityScript, parseConsent } from "../lib/consent";
 import { consentContent } from "../data/privacy";
 const now = 1800000000000;
 const record = (changes: Record<string, unknown> = {}) =>
@@ -603,6 +1107,41 @@ test("expired, future and superseded consent requires a new choice", () => {
     true,
   );
 });
+
+test("initial visibility script shares expiry and version validation without granting permission", () => {
+  const samples = [
+    null,
+    "bad",
+    JSON.stringify({
+      version: consentContent.version,
+      external: false,
+      updatedAt: Date.now() - 1000,
+    }),
+    JSON.stringify({
+      version: consentContent.version,
+      external: true,
+      updatedAt: Date.now() + 86400000,
+    }),
+  ];
+  for (const raw of samples) {
+    const dataset: Record<string, string> = {};
+    vm.runInNewContext(consentVisibilityScript(), {
+      document: { documentElement: { dataset } },
+      localStorage: { getItem: () => raw },
+    });
+    assert.equal(dataset.consentChoice, parseConsent(raw) ? "saved" : "needed");
+  }
+  const dataset: Record<string, string> = {};
+  vm.runInNewContext(consentVisibilityScript(), {
+    document: { documentElement: { dataset } },
+    localStorage: {
+      getItem: () => {
+        throw new Error("storage blocked");
+      },
+    },
+  });
+  assert.equal(dataset.consentChoice, "needed");
+});
 ``````
 
 ## tests/contact.test.mjs
@@ -624,6 +1163,8 @@ function fixture(options = {}) {
   const calls = [];
   const mails = [];
   const transports = [];
+  const stored = [];
+  const deliveries = [];
   const env = {
     NODE_ENV: "test",
     CONTACT_TURNSTILE_REQUIRED: "false",
@@ -666,6 +1207,19 @@ function fixture(options = {}) {
       },
     });
     const localRequire = (id) => {
+      if (id === "@/lib/records")
+        return {
+          async recordContact(fields) {
+            if (options.storageFailure)
+              throw new Error("private database error");
+            stored.push(fields);
+            return "fixture-inquiry";
+          },
+          async markDelivery(id, status) {
+            if (options.statusFailure) throw new Error("private status error");
+            deliveries.push({ id, status });
+          },
+        };
       if (id === "server-only") return {};
       if (id === "gmail-smtp")
         return {
@@ -704,7 +1258,7 @@ function fixture(options = {}) {
       }),
     );
   }
-  return { calls, mails, transports, env, load, post };
+  return { calls, mails, transports, stored, deliveries, env, load, post };
 }
 
 const valid = {
@@ -865,6 +1419,125 @@ test("concurrency slots can be released and reused", async () => {
   second();
   assert.equal((await f.post()).status, 202);
 });
+
+test("database acceptance works without SMTP and records the actual optional fields", async () => {
+  const f = fixture({
+    env: { CONTACT_STORAGE: "database", GMAIL_APP_PASSWORD: "" },
+  });
+  const result = await f.post({
+    ...valid,
+    company: "Example studio",
+    service: "web",
+  });
+  assert.equal(result.status, 202);
+  assert.deepEqual(await result.json(), {
+    ok: true,
+    acceptance: "stored",
+    notification: "not-configured",
+  });
+  assert.equal(f.stored.length, 1);
+  assert.equal(f.stored[0].company, "Example studio");
+  assert.equal(f.stored[0].service, "web");
+  assert.equal(f.mails.length, 0);
+});
+test("SMTP failure after durable storage reports stored acceptance without claiming email delivery", async () => {
+  const f = fixture({
+    env: { CONTACT_STORAGE: "database" },
+    send: async () => {
+      throw new Error("private SMTP error");
+    },
+  });
+  const response = await f.post();
+  const body = await response.json();
+  assert.equal(response.status, 202);
+  assert.equal(body.acceptance, "stored");
+  assert.equal(body.notification, "failed");
+  assert.equal(f.stored.length, 1);
+});
+test("database write failure never sends mail or reports success", async () => {
+  const f = fixture({
+    env: { CONTACT_STORAGE: "database" },
+    storageFailure: true,
+  });
+  const response = await f.post();
+  assert.equal(response.status, 503);
+  assert.equal((await response.json()).ok, false);
+  assert.equal(f.mails.length, 0);
+});
+test("optional fields reject unbounded and unsupported values before writing", async () => {
+  const f = fixture({ env: { CONTACT_STORAGE: "database" } });
+  for (const body of [
+    { ...valid, company: "a".repeat(151) },
+    { ...valid, service: "unknown" },
+    { ...valid, company: "bad\r\nBcc: test" },
+  ])
+    assert.equal((await f.post(body)).status, 422);
+  assert.equal(f.stored.length, 0);
+});
+``````
+
+## tests/helpers/https-proxy.mjs
+
+``````javascript
+// Local integration helper only; this is never used in deployment.
+import http from "node:http";
+import https from "node:https";
+import fs from "node:fs";
+if (
+  process.env.AGENCY_TEST_DATABASE !== "isolated" ||
+  process.env.AGENCY_TEST_TLS !== "self-signed-local"
+)
+  throw new Error("Explicit isolated local TLS fixture required.");
+const port = Number(process.env.AGENCY_TEST_TLS_PORT || 3443);
+const upstream = Number(process.env.AGENCY_TEST_APP_PORT || 3008);
+if (
+  ![port, upstream].every(
+    (value) => Number.isInteger(value) && value >= 1024 && value <= 65535,
+  )
+)
+  throw new Error("Invalid local test ports.");
+const server = https.createServer(
+  {
+    key: fs.readFileSync(process.env.AGENCY_TEST_TLS_KEY),
+    cert: fs.readFileSync(process.env.AGENCY_TEST_TLS_CERT),
+  },
+  (req, res) => {
+    if (
+      !["127.0.0.1", "localhost"].includes(
+        (req.headers.host || "").split(":")[0],
+      )
+    ) {
+      res.writeHead(400).end();
+      return;
+    }
+    const proxy = http.request(
+      {
+        hostname: "127.0.0.1",
+        port: upstream,
+        method: req.method,
+        path: req.url,
+        headers: {
+          ...req.headers,
+          "x-forwarded-proto": "https",
+          "x-forwarded-host": req.headers.host,
+        },
+      },
+      (remote) => {
+        res.writeHead(remote.statusCode || 502, remote.headers);
+        remote.pipe(res);
+      },
+    );
+    proxy.on("error", () => {
+      res.writeHead(502).end("Local test application unavailable.");
+    });
+    req.pipe(proxy);
+  },
+);
+server.listen(port, "127.0.0.1", () =>
+  console.log("Isolated HTTPS test proxy ready."),
+);
+for (const signal of ["SIGINT", "SIGTERM"])
+  process.on(signal, () => server.close(() => process.exit(0)));
 ``````
 
 ## tests/security.test.mjs
@@ -983,7 +1656,12 @@ test("admin content schemas reject unsafe image URLs, config mismatch and protot
   const projectLink = schemas.projects.shape.demoUrl;
   assert.equal(projectLink.safeParse("https://elvora.pplx.app").success, true);
   assert.equal(projectLink.safeParse("/demo/restaurant").success, true);
-  for (const link of ["javascript:alert(1)", "http://example.com", "https://user:password@example.com", "not-a-url"])
+  for (const link of [
+    "javascript:alert(1)",
+    "http://example.com",
+    "https://user:password@example.com",
+    "not-a-url",
+  ])
     assert.equal(projectLink.safeParse(link).success, false);
   for (const value of [
     "javascript:alert(1)",
@@ -1088,5 +1766,37 @@ test("uploads decode and re-encode real images while rejecting SVG, malformed an
     (error) => error.status === 422,
   );
 });
-``````
 
+test("only permission-approved genuine review records can be published", () => {
+  const { schemas } = fixture().load("lib/admin/schemas.ts");
+  const review = {
+    id: "review-fixture",
+    name: "Test fixture",
+    role: "Test only",
+    quote: "A schema test, not customer feedback.",
+    portrait: "",
+    permissionConfirmed: false,
+    published: false,
+  };
+  assert.equal(schemas.testimonials.safeParse(review).success, true);
+  assert.equal(
+    schemas.testimonials.safeParse({ ...review, published: true }).success,
+    false,
+  );
+  assert.equal(
+    schemas.testimonials.safeParse({
+      ...review,
+      published: true,
+      permissionConfirmed: true,
+    }).success,
+    true,
+  );
+  assert.equal(
+    schemas.testimonials.safeParse({
+      ...review,
+      portrait: "https://unapproved.example/portrait.jpg",
+    }).success,
+    false,
+  );
+});
+``````

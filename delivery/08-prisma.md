@@ -135,45 +135,224 @@ CREATE INDEX "ChatLog_createdAt_idx" ON "ChatLog"("createdAt");
 CREATE INDEX "AuditLog_createdAt_idx" ON "AuditLog"("createdAt");
 ``````
 
+## prisma/migrations/202610170001_agency_content_and_leads/migration.sql
+
+``````sql
+ALTER TABLE "ContactMessage" ADD COLUMN "company" TEXT NOT NULL DEFAULT '', ADD COLUMN "service" TEXT NOT NULL DEFAULT '', ADD COLUMN "status" TEXT NOT NULL DEFAULT 'new', ADD COLUMN "notes" TEXT NOT NULL DEFAULT '', ADD COLUMN "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE "ContactMessage" ALTER COLUMN "updatedAt" DROP DEFAULT;
+ALTER TABLE "ContactMessage" ADD CONSTRAINT "ContactMessage_status_check" CHECK ("status" IN ('new','contacted','in-progress','closed'));
+CREATE INDEX "ContactMessage_status_createdAt_idx" ON "ContactMessage"("status","createdAt");
+ALTER TABLE "SiteSettings" ALTER COLUMN "email" SET DEFAULT 'abdulhafeez@elvoraai.online';
+CREATE TABLE "Service" ("id" TEXT NOT NULL PRIMARY KEY,"title" TEXT NOT NULL,"description" TEXT NOT NULL,"detail" TEXT NOT NULL,"tags" TEXT[] NOT NULL,"scope" TEXT[] NOT NULL,"requirements" TEXT[] NOT NULL,"order" INTEGER NOT NULL DEFAULT 0,"published" BOOLEAN NOT NULL DEFAULT false,"createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,"updatedAt" TIMESTAMP(3) NOT NULL);
+CREATE TABLE "Faq" ("id" TEXT NOT NULL PRIMARY KEY,"question" TEXT NOT NULL,"answer" TEXT NOT NULL,"order" INTEGER NOT NULL DEFAULT 0,"published" BOOLEAN NOT NULL DEFAULT false,"createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,"updatedAt" TIMESTAMP(3) NOT NULL);
+CREATE TABLE "Testimonial" ("id" TEXT NOT NULL PRIMARY KEY,"name" TEXT NOT NULL,"role" TEXT NOT NULL,"quote" TEXT NOT NULL,"portrait" TEXT NOT NULL DEFAULT '',"permissionConfirmed" BOOLEAN NOT NULL DEFAULT false,"order" INTEGER NOT NULL DEFAULT 0,"published" BOOLEAN NOT NULL DEFAULT false,"createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,"updatedAt" TIMESTAMP(3) NOT NULL,CONSTRAINT "Testimonial_permission_check" CHECK (NOT "published" OR "permissionConfirmed"));
+``````
+
 ## prisma/migrations/migration_lock.toml
 
 ``````toml
 provider = "postgresql"
 ``````
 
+## prisma/schema.prisma
+
+``````prisma
+generator client {
+  provider = "prisma-client-js"
+  engineType = "client"
+  output = "../node_modules/.prisma/client"
+}
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+model AdminUser {
+  id String @id @default(cuid())
+  email String @unique
+  passwordHash String
+  passwordVersion Int @default(1)
+  failedAttempts Int @default(0)
+  lockedUntil DateTime?
+  totpSecret String?
+  totpLastStep Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Project {
+  id String @id
+  title String
+  subtitle String
+  industry String
+  description String
+  stack String[]
+  accent String @default("#d4af37")
+  demoUrl String
+  highlights String[]
+  order Int @default(0)
+  published Boolean @default(true)
+  images ProjectImage[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model ProjectImage {
+  id String @id @default(cuid())
+  projectId String
+  project Project @relation(fields:[projectId],references:[id],onDelete:Cascade)
+  src String
+  title String
+  alt String
+  order Int @default(0)
+  @@index([projectId,order])
+}
+model Bot {
+  id String @id
+  name String
+  description String
+  tags String[]
+  method String
+  kind String
+  welcome String
+  starters String[]
+  note String
+  config Json?
+  systemPrompt String?
+  order Int @default(0)
+  published Boolean @default(true)
+  updatedAt DateTime @updatedAt
+}
+model Skill {
+  id String @id
+  name String
+  category String
+  order Int @default(0)
+  published Boolean @default(true)
+}
+model Certificate {
+  id String @id
+  title String
+  issuer String
+  dateLabel String
+  issuedAt String?
+  description String
+  image String
+  alt String
+  isPlaceholder Boolean @default(true)
+  order Int @default(0)
+  published Boolean @default(true)
+}
+model ContactMessage {
+  id String @id @default(cuid())
+  name String
+  email String
+  message String
+  company String @default("")
+  service String @default("")
+  status String @default("new")
+  notes String @default("")
+  updatedAt DateTime @updatedAt
+  read Boolean @default(false)
+  deliveryStatus String @default("pending")
+  createdAt DateTime @default(now())
+  @@index([createdAt])
+  @@index([status,createdAt])
+}
+model ChatLog {
+  id String @id @default(cuid())
+  botId String
+  userMessage String
+  reply String
+  createdAt DateTime @default(now())
+  @@index([createdAt])
+}
+model SiteSettings {
+  id String @id @default("main")
+  brand String @default("Elvora")
+  email String @default("abdulhafeez@elvoraai.online")
+  title String
+  description String
+  chatLogging Boolean @default(false)
+  updatedAt DateTime @updatedAt
+}
+model AuditLog {
+  id String @id @default(cuid())
+  adminId String
+  action String
+  resource String
+  recordId String?
+  createdAt DateTime @default(now())
+  @@index([createdAt])
+}
+model Service {
+  id String @id
+  title String
+  description String
+  detail String
+  tags String[]
+  scope String[]
+  requirements String[]
+  order Int @default(0)
+  published Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Faq {
+  id String @id
+  question String
+  answer String
+  order Int @default(0)
+  published Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Testimonial {
+  id String @id
+  name String
+  role String
+  quote String
+  portrait String @default("")
+  permissionConfirmed Boolean @default(false)
+  order Int @default(0)
+  published Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+``````
+
 ## prisma/seed.ts
 
-``````typescript
+``````ts
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient, Prisma } from "@prisma/client";
-import { hash } from "bcryptjs";
+import { services, faqs } from "../data/agency";
 import { projects } from "../data/projects";
 import { getFileBots, realBotConfig, additionalBots } from "../data/bots";
 import { skills } from "../data/skills";
 import { certificates } from "../data/certificates";
 import { site } from "../data/site";
-import { strongPassword } from "../lib/admin/password";
+
 async function main() {
+  if (
+    process.env.NODE_ENV === "production" ||
+    process.env.SEED_CONTENT !== "demo"
+  )
+    throw new Error("Demo seed requires SEED_CONTENT=demo outside production.");
   const db = new PrismaClient({
     adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }),
     log: [],
   });
   try {
-    const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
-    const password = process.env.ADMIN_PASSWORD;
-    if (
-      !email ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
-      !password ||
-      !strongPassword(password)
-    )
-      throw new Error(
-        "Set ADMIN_EMAIL and a strong ADMIN_PASSWORD (14+ characters, upper/lowercase, number, symbol; at most 72 UTF-8 bytes). No credentials are printed.",
-      );
-    const exists = await db.adminUser.findUnique({ where: { email } });
-    if (!exists)
-      await db.adminUser.create({
-        data: { email, passwordHash: await hash(password, 12) },
+    for (const [order, service] of services.entries())
+      await db.service.upsert({
+        where: { id: service.id },
+        update: {},
+        create: { ...service, order, published: true },
+      });
+    for (const [order, faq] of faqs.entries())
+      await db.faq.upsert({
+        where: { id: faq.id },
+        update: {},
+        create: { ...faq, order, published: true },
       });
     for (const [order, project] of projects.entries()) {
       const { screenshots, promoPrompt: _prompt, ...data } = project;
@@ -237,7 +416,7 @@ async function main() {
       },
     });
     console.log(
-      "Seed complete. Existing records and admin passwords were preserved.",
+      "Development content imported. Existing records were preserved; no administrator or reviews were created.",
     );
   } catch {
     console.error(
@@ -255,4 +434,3 @@ main().catch(() => {
   process.exitCode = 1;
 });
 ``````
-

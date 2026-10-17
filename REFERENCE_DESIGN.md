@@ -1,5 +1,7 @@
 # Elvora: supplied-reference design adaptation
 
+Latest agency completion (17 October): the established design is retained. Shared CSS word/card reveals replace per-word Framer instances, with interactive motion preserved. About uses original brand art; unapproved review previews are hidden. Service/project detail pages, FAQs and the lead/CMS dashboard extend the same design. See `AGENCY_AUDIT.md`.
+
 ## Latest editorial feature update
 
 The latest batch adds nine reference images. These features are implemented in Elvora’s existing gold/violet visual identity, with a deliberate ivory contact panel. Earlier compositions below describe the previous design phase.

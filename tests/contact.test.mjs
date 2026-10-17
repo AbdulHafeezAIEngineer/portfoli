@@ -14,6 +14,8 @@ function fixture(options = {}) {
   const calls = [];
   const mails = [];
   const transports = [];
+  const stored = [];
+  const deliveries = [];
   const env = {
     NODE_ENV: "test",
     CONTACT_TURNSTILE_REQUIRED: "false",
@@ -56,6 +58,19 @@ function fixture(options = {}) {
       },
     });
     const localRequire = (id) => {
+      if (id === "@/lib/records")
+        return {
+          async recordContact(fields) {
+            if (options.storageFailure)
+              throw new Error("private database error");
+            stored.push(fields);
+            return "fixture-inquiry";
+          },
+          async markDelivery(id, status) {
+            if (options.statusFailure) throw new Error("private status error");
+            deliveries.push({ id, status });
+          },
+        };
       if (id === "server-only") return {};
       if (id === "gmail-smtp")
         return {
@@ -94,7 +109,7 @@ function fixture(options = {}) {
       }),
     );
   }
-  return { calls, mails, transports, env, load, post };
+  return { calls, mails, transports, stored, deliveries, env, load, post };
 }
 
 const valid = {
@@ -254,4 +269,59 @@ test("concurrency slots can be released and reused", async () => {
   first();
   second();
   assert.equal((await f.post()).status, 202);
+});
+
+test("database acceptance works without SMTP and records the actual optional fields", async () => {
+  const f = fixture({
+    env: { CONTACT_STORAGE: "database", GMAIL_APP_PASSWORD: "" },
+  });
+  const result = await f.post({
+    ...valid,
+    company: "Example studio",
+    service: "web",
+  });
+  assert.equal(result.status, 202);
+  assert.deepEqual(await result.json(), {
+    ok: true,
+    acceptance: "stored",
+    notification: "not-configured",
+  });
+  assert.equal(f.stored.length, 1);
+  assert.equal(f.stored[0].company, "Example studio");
+  assert.equal(f.stored[0].service, "web");
+  assert.equal(f.mails.length, 0);
+});
+test("SMTP failure after durable storage reports stored acceptance without claiming email delivery", async () => {
+  const f = fixture({
+    env: { CONTACT_STORAGE: "database" },
+    send: async () => {
+      throw new Error("private SMTP error");
+    },
+  });
+  const response = await f.post();
+  const body = await response.json();
+  assert.equal(response.status, 202);
+  assert.equal(body.acceptance, "stored");
+  assert.equal(body.notification, "failed");
+  assert.equal(f.stored.length, 1);
+});
+test("database write failure never sends mail or reports success", async () => {
+  const f = fixture({
+    env: { CONTACT_STORAGE: "database" },
+    storageFailure: true,
+  });
+  const response = await f.post();
+  assert.equal(response.status, 503);
+  assert.equal((await response.json()).ok, false);
+  assert.equal(f.mails.length, 0);
+});
+test("optional fields reject unbounded and unsupported values before writing", async () => {
+  const f = fixture({ env: { CONTACT_STORAGE: "database" } });
+  for (const body of [
+    { ...valid, company: "a".repeat(151) },
+    { ...valid, service: "unknown" },
+    { ...valid, company: "bad\r\nBcc: test" },
+  ])
+    assert.equal((await f.post(body)).status, 422);
+  assert.equal(f.stored.length, 0);
 });
