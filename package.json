@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0",
-    "build": "next build",
+    "build": "node --env-file-if-exists=.env.local --import tsx scripts/prepare-production.ts && next build",
     "start": "next start --hostname 0.0.0.0",
     "typecheck": "tsc --noEmit",
     "lint": "eslint app components data hooks lib middleware.ts next.config.mjs --ext .js,.jsx,.ts,.tsx,.mjs --max-warnings=0",
@@ -23,7 +23,10 @@
     "admin:bootstrap": "node --env-file-if-exists=.env.local --import tsx scripts/bootstrap-admin.ts",
     "test:agency": "node --test --test-concurrency=1 tests/agency.integration.mjs",
     "test:auth": "node --test --test-concurrency=1 tests/auth.integration.mjs",
-    "test:proxy": "node tests/helpers/https-proxy.mjs"
+    "test:proxy": "node tests/helpers/https-proxy.mjs",
+    "admin:prepare": "node --env-file-if-exists=.env.local --import tsx scripts/prepare-production.ts",
+    "test:login": "node --import tsx --test tests/admin-login.test.ts",
+    "test:login:browser": "node tests/admin-login.browser.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "5.2.8",

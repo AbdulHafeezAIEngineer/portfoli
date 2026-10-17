@@ -21,6 +21,7 @@ export default function Loading() {
 
 ``````tsx
 import type { Metadata } from "next";
+import { adminConfigurationReady } from "@/lib/admin/configuration";
 import { requireAdmin } from "@/lib/admin/session";
 import { redirect } from "next/navigation";
 import { notFound } from "next/navigation";
@@ -54,7 +55,12 @@ export default async function AdminPage({
       redirect("/admin/login");
     }
   }
-  return <AdminApp section={section} />;
+  return (
+    <AdminApp
+      section={section}
+      loginReady={section === "login" ? adminConfigurationReady() : true}
+    />
+  );
 }
 ``````
 
@@ -769,6 +775,21 @@ export default async function AdminPage({
   .admin-sidebar {
     overflow: visible;
   }
+}
+.admin-setup-notice {
+  padding: 20px;
+  margin: 24px 0;
+  background: var(--raised);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.admin-setup-notice h2 {
+  font-size: 1.05rem;
+  margin-bottom: 12px;
+}
+.admin-setup-notice p {
+  margin-bottom: 18px;
+  line-height: 1.7;
 }
 ``````
 
@@ -7072,7 +7093,6 @@ h2 {
 ``````tsx
 import { consentVisibilityScript } from "@/lib/consent";
 import { headers } from "next/headers";
-import { getIdentity } from "@/lib/content-loader";
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { site } from "@/data/site";
@@ -7121,8 +7141,8 @@ const space = localFont({
   display: "swap",
 });
 
-export async function generateMetadata(): Promise<Metadata> {
-  const identity = await getIdentity();
+export function generateMetadata(): Metadata {
+  const identity = site;
   return {
     metadataBase: new URL(site.url),
     title: identity.title,
@@ -7304,6 +7324,7 @@ export default function OpenGraphImage() {
 ## app/page.tsx
 
 ``````tsx
+import type { Metadata } from "next";
 import { FaqSection } from "@/components/faq-section";
 import { Footer } from "@/components/footer";
 import { Hero } from "@/components/hero";
@@ -7335,6 +7356,36 @@ import {
 } from "@/components/studio-sections";
 import { WallOfLove } from "@/components/wall-of-love";
 
+// Public CMS metadata belongs to the public page, so private sign-in can render during a CMS outage.
+export async function generateMetadata(): Promise<Metadata> {
+  const identity = await getIdentity();
+  return {
+    title: identity.title,
+    description: identity.description,
+    openGraph: {
+      type: "website",
+      locale: "en_US",
+      url: "/",
+      siteName: identity.brand,
+      title: identity.title,
+      description: identity.description,
+      images: [
+        {
+          url: "/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: identity.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: identity.title,
+      description: identity.description,
+      images: ["/opengraph-image"],
+    },
+  };
+}
 export const dynamic = "force-dynamic";
 export default async function Home() {
   const [

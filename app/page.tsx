@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { FaqSection } from "@/components/faq-section";
 import { Footer } from "@/components/footer";
 import { Hero } from "@/components/hero";
@@ -29,6 +30,36 @@ import {
 } from "@/components/studio-sections";
 import { WallOfLove } from "@/components/wall-of-love";
 
+// Public CMS metadata belongs to the public page, so private sign-in can render during a CMS outage.
+export async function generateMetadata(): Promise<Metadata> {
+  const identity = await getIdentity();
+  return {
+    title: identity.title,
+    description: identity.description,
+    openGraph: {
+      type: "website",
+      locale: "en_US",
+      url: "/",
+      siteName: identity.brand,
+      title: identity.title,
+      description: identity.description,
+      images: [
+        {
+          url: "/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: identity.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: identity.title,
+      description: identity.description,
+      images: ["/opengraph-image"],
+    },
+  };
+}
 export const dynamic = "force-dynamic";
 export default async function Home() {
   const [

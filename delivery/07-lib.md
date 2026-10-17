@@ -7,6 +7,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { compare, hashSync } from "bcryptjs";
 import { randomBytes } from "node:crypto";
 import { db } from "@/lib/db";
+import { ChatError } from "@/lib/chat/http";
 import { limitLogin } from "./rate-limit";
 const dummyHash = hashSync(randomBytes(32).toString("hex"), 12);
 export const authOptions: NextAuthOptions = {
@@ -129,8 +130,11 @@ export const authOptions: NextAuthOptions = {
             email: user.email,
             passwordVersion: user.passwordVersion,
           };
-        } catch {
-          return null;
+        } catch (error) {
+          if (error instanceof ChatError && error.status === 429)
+            throw new Error("AdminRateLimited");
+          console.error("admin.login.unavailable");
+          throw new Error("AdminUnavailable");
         }
       },
     }),
@@ -173,8 +177,34 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  logger: { error() {}, warn() {}, debug() {} },
+  logger: {
+    error(code) {
+      console.error(
+        "admin.auth.error",
+        /^[A-Z_]+$/.test(code) ? code : "AUTH_ERROR",
+      );
+    },
+    warn() {},
+    debug() {},
+  },
 };
+``````
+
+## lib/admin/configuration.ts
+
+``````ts
+import "server-only";
+
+/** Safe to expose only the aggregate readiness, never individual secret values. */
+export function adminConfigurationReady(env: NodeJS.ProcessEnv = process.env) {
+  if (!env.DATABASE_URL?.trim() || !env.NEXTAUTH_SECRET?.trim()) return false;
+  if (env.NODE_ENV !== "production") return true;
+  const redisUrl = env.AUTH_REDIS_REST_URL || env.CHAT_REDIS_REST_URL;
+  const redisToken = env.AUTH_REDIS_REST_TOKEN || env.CHAT_REDIS_REST_TOKEN;
+  // A partial shared-store configuration must not silently use memory.
+  if (redisUrl || redisToken) return Boolean(redisUrl && redisToken);
+  return env.AUTH_ALLOW_IN_MEMORY_LIMITER === "true";
+}
 ``````
 
 ## lib/admin/images.ts
@@ -228,6 +258,76 @@ export async function encodePortfolioImage(
       "One image could not be safely decoded. Use a static JPEG, PNG or WebP.",
     );
   }
+}
+``````
+
+## lib/admin/login-client.ts
+
+``````ts
+import { adminContent as copy } from "@/data/admin";
+
+export function adminLoginError(code: string | null) {
+  if (code === "CredentialsSignin") return copy.loginError;
+  if (code === "AdminRateLimited") return copy.loginLimited;
+  if (code === "SessionUnavailable") return copy.loginSessionError;
+  return copy.loginUnavailable;
+}
+
+/** Keep Auth.js CSRF and cookies, while retaining errors instead of navigating away. */
+export async function submitAdminLogin(
+  fields: { email: string; password: string; code: string },
+  request: typeof fetch = fetch,
+) {
+  const options: RequestInit = {
+    credentials: "same-origin",
+    cache: "no-store",
+    redirect: "error",
+    signal: AbortSignal.timeout(20000),
+  };
+  const csrfResponse = await request("/api/auth/csrf", options);
+  if (!csrfResponse.ok) throw new Error(copy.loginUnavailable);
+  const csrf: unknown = await csrfResponse.json();
+  if (
+    !csrf ||
+    typeof csrf !== "object" ||
+    !("csrfToken" in csrf) ||
+    typeof csrf.csrfToken !== "string"
+  )
+    throw new Error(copy.loginUnavailable);
+  const response = await request("/api/auth/callback/credentials", {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      ...fields,
+      csrfToken: csrf.csrfToken,
+      json: "true",
+      callbackUrl: "/admin",
+    }),
+  });
+  const result: unknown = await response.json();
+  if (
+    !result ||
+    typeof result !== "object" ||
+    !("url" in result) ||
+    typeof result.url !== "string"
+  )
+    throw new Error(copy.loginUnavailable);
+  let destination: URL;
+  try {
+    destination = new URL(result.url, "https://local.invalid");
+  } catch {
+    throw new Error(copy.loginUnavailable);
+  }
+  const code = destination.searchParams.get("error");
+  if (code) throw new Error(adminLoginError(code));
+  if (!response.ok) throw new Error(copy.loginUnavailable);
+  // A successful callback response alone does not prove that the browser kept its cookie.
+  const session = await request("/api/admin/dashboard", options);
+  if (!session.ok)
+    throw new Error(
+      session.status === 401 ? copy.loginSessionError : copy.loginUnavailable,
+    );
 }
 ``````
 

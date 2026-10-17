@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { compare, hashSync } from "bcryptjs";
 import { randomBytes } from "node:crypto";
 import { db } from "@/lib/db";
+import { ChatError } from "@/lib/chat/http";
 import { limitLogin } from "./rate-limit";
 const dummyHash = hashSync(randomBytes(32).toString("hex"), 12);
 export const authOptions: NextAuthOptions = {
@@ -126,8 +127,11 @@ export const authOptions: NextAuthOptions = {
             email: user.email,
             passwordVersion: user.passwordVersion,
           };
-        } catch {
-          return null;
+        } catch (error) {
+          if (error instanceof ChatError && error.status === 429)
+            throw new Error("AdminRateLimited");
+          console.error("admin.login.unavailable");
+          throw new Error("AdminUnavailable");
         }
       },
     }),
@@ -170,5 +174,14 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  logger: { error() {}, warn() {}, debug() {} },
+  logger: {
+    error(code) {
+      console.error(
+        "admin.auth.error",
+        /^[A-Z_]+$/.test(code) ? code : "AUTH_ERROR",
+      );
+    },
+    warn() {},
+    debug() {},
+  },
 };

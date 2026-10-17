@@ -27,3 +27,5 @@ npm run build
 ```
 
 See `TESTING.md` for guarded real-database and HTTPS integration suites. No actual production credentials, database, mail delivery, paid AI call or public hosting deployment is established by local tests.
+
+Owner-login follow-up: missing setup and infrastructure errors now stay visible, and dashboard navigation requires an established authorized cookie. Private one-time build activation is opt-in, skipped for previews, preserves existing credentials and exposes no public setup endpoint. This does not supply real hosting credentials or prove public owner activation; see `OWNER_LOGIN.md`.

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { adminConfigurationReady } from "@/lib/admin/configuration";
 import { requireAdmin } from "@/lib/admin/session";
 import { redirect } from "next/navigation";
 import { notFound } from "next/navigation";
@@ -32,5 +33,10 @@ export default async function AdminPage({
       redirect("/admin/login");
     }
   }
-  return <AdminApp section={section} />;
+  return (
+    <AdminApp
+      section={section}
+      loginReady={section === "login" ? adminConfigurationReady() : true}
+    />
+  );
 }

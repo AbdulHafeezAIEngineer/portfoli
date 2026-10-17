@@ -3,7 +3,7 @@
 ``````tsx
 "use client";
 import Link from "next/link";
-import { signIn, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ArrowDown,
@@ -16,6 +16,8 @@ import {
   X,
 } from "lucide-react";
 import { adminContent as copy, adminDefaults, adminFields } from "@/data/admin";
+import { site } from "@/data/site";
+import { adminLoginError, submitAdminLogin } from "@/lib/admin/login-client";
 import { useModal } from "@/hooks/use-modal";
 type RecordData = Record<string, unknown>;
 async function api(
@@ -36,7 +38,13 @@ async function api(
     throw new Error(typeof data.error === "string" ? data.error : copy.error);
   return data;
 }
-export function AdminApp({ section }: { section: string }) {
+export function AdminApp({
+  section,
+  loginReady = true,
+}: {
+  section: string;
+  loginReady?: boolean;
+}) {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [pages, setPages] = useState(1);
@@ -91,7 +99,7 @@ export function AdminApp({ section }: { section: string }) {
     if (section !== "login") void load();
     return () => loading.current?.abort();
   }, [section, load]);
-  if (section === "login") return <AdminLogin />;
+  if (section === "login") return <AdminLogin ready={loginReady} />;
   async function mutate(method: string, body: unknown) {
     setBusy(true);
     setError("");
@@ -500,32 +508,51 @@ export function AdminApp({ section }: { section: string }) {
     </div>
   );
 }
-function AdminLogin() {
+function AdminLogin({ ready }: { ready: boolean }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const locked = useRef(false);
+  const alert = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    const code = new URLSearchParams(window.location.search).get("error");
+    if (code) setError(adminLoginError(code));
+  }, []);
+  useEffect(() => {
+    if (error) alert.current?.focus();
+  }, [error]);
   return (
     <main id="main-content" className="admin-login">
       <form
         className="glass"
+        aria-busy={busy}
         onSubmit={async (event) => {
           event.preventDefault();
-          if (busy) return;
+          if (locked.current || !ready) return;
+          locked.current = true;
           const form = new FormData(event.currentTarget);
           setBusy(true);
           setError("");
           try {
-            const result = await signIn("credentials", {
-              redirect: false,
-              email: form.get("email"),
-              password: form.get("password"),
-              code: form.get("code"),
-              callbackUrl: "/admin",
+            await submitAdminLogin({
+              email: String(form.get("email") || ""),
+              password: String(form.get("password") || ""),
+              code: String(form.get("code") || ""),
             });
-            if (result?.ok && !result.error) window.location.assign("/admin");
-            else setError(copy.loginError);
-          } catch {
-            setError(copy.loginError);
+            window.location.assign("/admin");
+          } catch (failure) {
+            const safe = [
+              copy.loginError,
+              copy.loginUnavailable,
+              copy.loginLimited,
+              copy.loginSessionError,
+            ] as readonly string[];
+            setError(
+              failure instanceof Error && safe.includes(failure.message)
+                ? failure.message
+                : copy.loginUnavailable,
+            );
           } finally {
+            locked.current = false;
             setBusy(false);
           }
         }}
@@ -535,6 +562,19 @@ function AdminLogin() {
         </Link>
         <h1>{copy.loginTitle}</h1>
         <p>{copy.loginDescription}</p>
+        {!ready && (
+          <div className="admin-setup-notice" role="status">
+            <h2>{copy.setupTitle}</h2>
+            <p>{copy.setupDescription}</p>
+            <button
+              type="button"
+              className="button button-outline"
+              onClick={() => window.location.reload()}
+            >
+              {copy.checkSetup}
+            </button>
+          </div>
+        )}
         <label htmlFor="admin-email">{copy.email}</label>
         <input
           id="admin-email"
@@ -543,6 +583,8 @@ function AdminLogin() {
           required
           autoComplete="username"
           maxLength={254}
+          defaultValue={site.email}
+          disabled={busy || !ready}
         />
         <label htmlFor="admin-password">{copy.password}</label>
         <input
@@ -552,6 +594,7 @@ function AdminLogin() {
           required
           autoComplete="current-password"
           maxLength={128}
+          disabled={busy || !ready}
         />
         <label htmlFor="admin-code">{copy.code}</label>
         <input
@@ -561,13 +604,14 @@ function AdminLogin() {
           autoComplete="one-time-code"
           pattern="[0-9]{6}"
           maxLength={6}
+          disabled={busy || !ready}
         />
         {error && (
-          <p role="alert" className="field-error">
+          <p ref={alert} tabIndex={-1} role="alert" className="field-error">
             {error}
           </p>
         )}
-        <button className="button button-gold" disabled={busy}>
+        <button className="button button-gold" disabled={busy || !ready}>
           {busy ? copy.signingIn : copy.signIn}
         </button>
       </form>

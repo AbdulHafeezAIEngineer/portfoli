@@ -18,6 +18,7 @@ CHATBOT_SETUP.md
 CONCEPTS.md
 CONTACT_SETUP.md
 DEPLOYMENT.md
+OWNER_LOGIN.md
 PART_3.md
 PRIVACY_SETUP.md
 README.md
@@ -185,7 +186,9 @@ docs/studio-workflow-preview.png
 hooks/use-modal.ts
 hooks/use-voice.ts
 lib/admin/auth.ts
+lib/admin/configuration.ts
 lib/admin/images.ts
+lib/admin/login-client.ts
 lib/admin/password.ts
 lib/admin/rate-limit.ts
 lib/admin/schemas.ts
@@ -295,8 +298,12 @@ scripts/capture.ts
 scripts/generate-certificate.mjs
 scripts/generate-client.mjs
 scripts/package-source.py
+scripts/prepare-production.ts
 scripts/reset-admin.ts
 tailwind.config.ts
+tests/admin-database-outage.browser.mjs
+tests/admin-login.browser.mjs
+tests/admin-login.test.ts
 tests/agency.integration.mjs
 tests/auth.integration.mjs
 tests/chat.test.mjs

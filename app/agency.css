@@ -321,3 +321,18 @@
     overflow: visible;
   }
 }
+.admin-setup-notice {
+  padding: 20px;
+  margin: 24px 0;
+  background: var(--raised);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.admin-setup-notice h2 {
+  font-size: 1.05rem;
+  margin-bottom: 12px;
+}
+.admin-setup-notice p {
+  margin-bottom: 18px;
+  line-height: 1.7;
+}

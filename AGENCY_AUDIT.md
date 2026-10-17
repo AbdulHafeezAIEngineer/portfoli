@@ -30,3 +30,5 @@ Important implementation paths:
 The CMS uses PostgreSQL through Prisma. File mode is explicit and remains the default; database content mode fails rather than silently substituting file records. `CONTACT_STORAGE=database` can store inquiries while public content stays in file mode. No role hierarchy is added: this is a single-operator private admin, with all privileged operations authorized on the server.
 
 No client identities, customer quotes, approved portraits, metrics, business results or provider credentials were invented. The reference animation timings and live deployment are not claimed as verified. See `VERIFICATION.md` for executed checks and measured limitations, and `DEPLOYMENT.md` for the remaining owner configuration.
+
+Owner-login follow-up: fixed the configuration-error redirect loop, made failures visible and session-verified, prefilled the requested business email, and added private opt-in production-build owner activation. The admin login no longer depends on public CMS metadata. See `OWNER_LOGIN.md`; live Vercel activation still requires its actual private settings and access.

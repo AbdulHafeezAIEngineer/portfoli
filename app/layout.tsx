@@ -1,6 +1,5 @@
 import { consentVisibilityScript } from "@/lib/consent";
 import { headers } from "next/headers";
-import { getIdentity } from "@/lib/content-loader";
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { site } from "@/data/site";
@@ -49,8 +48,8 @@ const space = localFont({
   display: "swap",
 });
 
-export async function generateMetadata(): Promise<Metadata> {
-  const identity = await getIdentity();
+export function generateMetadata(): Metadata {
+  const identity = site;
   return {
     metadataBase: new URL(site.url),
     title: identity.title,

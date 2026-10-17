@@ -40,6 +40,9 @@ Check the complete comments in `.env.example`. Shared quotas fail closed when un
 
 ## Database and first administrator
 
+For the one-time Vercel build activation, see [OWNER_LOGIN.md](OWNER_LOGIN.md). `ADMIN_BOOTSTRAP_ON_BUILD=true` runs the private migration/first-owner operation before `next build`; the default is off. Existing accounts are preserved and preview deployments skip it. Remove the temporary admin password and disable the flag after activation.
+
+
 Provision PostgreSQL with TLS. Use a pooled application URL and a direct migration URL if your provider separates them. Back up existing data and review migration SQL before deployment.
 
 ```bash

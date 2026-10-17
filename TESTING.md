@@ -10,6 +10,7 @@ npm run test:chat
 npm run test:contact
 npm run test:security
 npm run test:consent
+npm run test:login
 npm run build
 npm audit --omit=dev
 npm audit
@@ -44,3 +45,9 @@ Use system Chromium or a compatible Playwright browser. Check public/admin layou
 Verify consent defaults off, saved rejection, explicit embed creation, cross-tab permission revocation and frame teardown, storage failures and preference reopening. An explicit local iframe fixture can verify consent behavior without invoking the real provider; label that evidence accordingly.
 
 Run Lighthouse alone against a production server in ordinary file mode. Save the actual score, device/throttling settings and metrics; don't substitute a previous result or certify the public deployment from a local audit. Capture helpers may hide fixed navigation/skip-link widgets only in screenshots. `VERIFICATION.md` records measured outcomes and `docs/` contains actual captures.
+
+Owner login regression checks cover missing setup, safe credential/outage/rate errors, CSRF submission, callback success with blocked cookies, and malformed responses. Private build activation is opt-in, skips previews, and must be tested against a separate empty disposable database. Verify first owner creation, repeat-run password preservation and removal of the temporary password; never test it against production incidentally.
+
+For `npm run test:login:browser`, provide the guarded isolated HTTPS fixture environment and `AGENCY_TEST_UNCONFIGURED_URL` pointing to a separate ordinary loopback app without auth settings. It verifies the setup notice, business-email prefill, wrong password, real owner dashboard login/logout, an explicitly dropped session cookie, safe failure messaging and old error-query handling. It uses system Chromium or `PLAYWRIGHT_CHROMIUM_EXECUTABLE`. No real credential is embedded in the test.
+
+To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQL instance while its fixture app/proxy remain running, then run `AGENCY_TEST_DATABASE_UNAVAILABLE=true node --env-file=/private/path/test.env tests/admin-database-outage.browser.mjs`. This must still render sign-in and report its actual database failure inline; restart the fixture database before other suites. Never stop a production database for this check.

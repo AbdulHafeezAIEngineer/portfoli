@@ -63,8 +63,11 @@ DIRECT_URL=
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=
 # Bootstrap/reset only; never printed. Remove ADMIN_PASSWORD from runtime after bootstrap.
-ADMIN_EMAIL=
+ADMIN_EMAIL=abdulhafeez@elvoraai.online
 ADMIN_PASSWORD=
+# Optional one-time private production build setup: applies migrations and creates only the first owner.
+# Preview deployments skip it; existing accounts/passwords are preserved. Turn off after setup.
+ADMIN_BOOTSTRAP_ON_BUILD=false
 AUTH_REDIS_REST_URL=
 AUTH_REDIS_REST_TOKEN=
 AUTH_TRUSTED_IP_HEADER=
@@ -145,6 +148,8 @@ Important implementation paths:
 The CMS uses PostgreSQL through Prisma. File mode is explicit and remains the default; database content mode fails rather than silently substituting file records. `CONTACT_STORAGE=database` can store inquiries while public content stays in file mode. No role hierarchy is added: this is a single-operator private admin, with all privileged operations authorized on the server.
 
 No client identities, customer quotes, approved portraits, metrics, business results or provider credentials were invented. The reference animation timings and live deployment are not claimed as verified. See `VERIFICATION.md` for executed checks and measured limitations, and `DEPLOYMENT.md` for the remaining owner configuration.
+
+Owner-login follow-up: fixed the configuration-error redirect loop, made failures visible and session-verified, prefilled the requested business email, and added private opt-in production-build owner activation. The admin login no longer depends on public CMS metadata. See `OWNER_LOGIN.md`; live Vercel activation still requires its actual private settings and access.
 ``````
 
 ## BOTPRESS_SETUP.md
@@ -393,6 +398,9 @@ Check the complete comments in `.env.example`. Shared quotas fail closed when un
 
 ## Database and first administrator
 
+For the one-time Vercel build activation, see [OWNER_LOGIN.md](OWNER_LOGIN.md). `ADMIN_BOOTSTRAP_ON_BUILD=true` runs the private migration/first-owner operation before `next build`; the default is off. Existing accounts are preserved and preview deployments skip it. Remove the temporary admin password and disable the flag after activation.
+
+
 Provision PostgreSQL with TLS. Use a pooled application URL and a direct migration URL if your provider separates them. Back up existing data and review migration SQL before deployment.
 
 ```bash
@@ -446,6 +454,57 @@ After deployment, verify the canonical redirect, valid certificates, all service
 Configure automated encrypted PostgreSQL backups and retention with the provider, test restoration to a separate database, and back up stable auth/TOTP secrets through a secure process. Back up owned uploaded assets. Define inquiry/chat/audit deletion periods and access responsibilities. Code rollback across schema changes must preserve compatible columns; never drop real production data just to revert the UI.
 
 Current dependency audit and remaining development-tool findings are in `SECURITY_STATUS.md`. Measured checks and screenshots are in `VERIFICATION.md`. No production service credentials or legal-compliance certification are included.
+``````
+
+## OWNER_LOGIN.md
+
+``````md
+# Activate the Elvora owner login on Vercel
+
+Owner sign-in: **https://www.elvoraai.online/admin/login**
+
+Login email: **abdulhafeez@elvoraai.online**. This is an identifier for the website owner account. The mailbox password is not automatically connected to website authentication. Choose a separate strong administrator password privately.
+
+The admin dashboard and database-backed authentication are implemented. The deployed project must have its own private configuration and first owner account. Adding details to the login form does not create an account.
+
+## One-time private deployment setup
+
+Open the **elvora-studio** Vercel project → **Settings → Environment Variables**. Use the **Production** environment. Never put secrets in NEXT_PUBLIC variables, source code, screenshots or chat.
+
+| Variable | Set privately in Vercel |
+| --- | --- |
+| `DATABASE_URL` | Application connection URL from your PostgreSQL provider |
+| `DIRECT_URL` | Direct migration connection URL from the same provider |
+| `NEXTAUTH_SECRET` | Securely generated random secret, at least 32 characters; keep it stable |
+| `NEXTAUTH_URL` | `https://www.elvoraai.online` |
+| `NEXT_PUBLIC_SITE_URL` | `https://www.elvoraai.online` |
+| `AUTH_REDIS_REST_URL` | Shared Redis REST endpoint for login rate protection |
+| `AUTH_REDIS_REST_TOKEN` | Matching private Redis REST token |
+| `ADMIN_EMAIL` | `abdulhafeez@elvoraai.online` |
+| `ADMIN_PASSWORD` | Your new strong admin password: 14+ characters with upper/lowercase, number and symbol; maximum 72 UTF-8 bytes |
+| `ADMIN_BOOTSTRAP_ON_BUILD` | `true` for the first production deployment |
+
+Vercel's connected storage integrations can provision the required PostgreSQL and Redis accounts; map their actual connection variables to the names above. Use verified provider URLs and TLS. Do not replace missing values with examples. A serverless Vercel deployment requires shared login protection; do not use an in-memory override to bypass this requirement.
+
+Redeploy the current GitHub main branch using the repository's normal `npm run build` command. With the private flag enabled, the build applies the reviewed additive migrations and creates **only the first owner**. It does not seed demonstration data, expose a web registration/setup endpoint or change existing accounts/passwords. Preview deployments skip owner creation. Setup failures stop the flagged deployment with a safe message in its private build logs; no credentials or database URLs are printed.
+
+After a successful first deployment, remove `ADMIN_PASSWORD`, set `ADMIN_BOOTSTRAP_ON_BUILD=false`, and redeploy. Sign in with the business email and the password you chose. Keep `NEXTAUTH_SECRET` and the database/Redis configuration in the runtime.
+
+If an account already exists, the setup operation preserves it. It will not turn a newly entered environment password into a password reset. Existing-account recovery is the deliberate private `npm run admin:reset` procedure in `DEPLOYMENT.md`; no public reset endpoint exists.
+
+## Login feedback
+
+- Incomplete private configuration shows **Owner sign-in needs setup** and a Check again button, rather than submitting into a redirect loop.
+- Wrong credentials show a clear inline error and preserve entered details.
+- Infrastructure failures and request throttling have separate safe messages.
+- A successful callback must also establish an authorized session before navigating to the dashboard. Missing/blocked session cookies leave a visible explanation on the login page.
+- Old `?error=...` redirects display a safe message instead of an apparently unchanged screen.
+
+The initial email is prefilled, but there is no default password. No email verification or SMTP account is required for this Credentials sign-in. SMTP and AI configuration remain separate integrations.
+
+## What has and has not been verified
+
+Local production HTTPS checks verify the real owner creation, credentials, session, dashboard and failure paths against isolated PostgreSQL. They do not configure your Vercel account. Live environment values, production database state and deployment logs require access to the actual hosting project. Do not report live activation until those checks succeed on that project.
 ``````
 
 ## PART_3.md
@@ -514,6 +573,7 @@ Services and project-note routes, native FAQs, a private service/FAQ/review CMS,
 The public hero is readable immediately. Shared CSS/viewport reveals retain the motion style while reducing per-word client work. Cookie choices still control optional embeds, and public text remains visible without JavaScript.
 
 - [Implementation audit](AGENCY_AUDIT.md)
+- [Activate owner login on Vercel](OWNER_LOGIN.md)
 - [Deployment and first-admin setup](DEPLOYMENT.md)
 - [Testing and measured verification](VERIFICATION.md)
 - [Security limitations](SECURITY_STATUS.md)
@@ -765,6 +825,8 @@ npm run build
 ```
 
 See `TESTING.md` for guarded real-database and HTTPS integration suites. No actual production credentials, database, mail delivery, paid AI call or public hosting deployment is established by local tests.
+
+Owner-login follow-up: missing setup and infrastructure errors now stay visible, and dashboard navigation requires an established authorized cookie. Private one-time build activation is opt-in, skipped for previews, preserves existing credentials and exposes no public setup endpoint. This does not supply real hosting credentials or prove public owner activation; see `OWNER_LOGIN.md`.
 ``````
 
 ## TESTING.md
@@ -782,6 +844,7 @@ npm run test:chat
 npm run test:contact
 npm run test:security
 npm run test:consent
+npm run test:login
 npm run build
 npm audit --omit=dev
 npm audit
@@ -816,6 +879,12 @@ Use system Chromium or a compatible Playwright browser. Check public/admin layou
 Verify consent defaults off, saved rejection, explicit embed creation, cross-tab permission revocation and frame teardown, storage failures and preference reopening. An explicit local iframe fixture can verify consent behavior without invoking the real provider; label that evidence accordingly.
 
 Run Lighthouse alone against a production server in ordinary file mode. Save the actual score, device/throttling settings and metrics; don't substitute a previous result or certify the public deployment from a local audit. Capture helpers may hide fixed navigation/skip-link widgets only in screenshots. `VERIFICATION.md` records measured outcomes and `docs/` contains actual captures.
+
+Owner login regression checks cover missing setup, safe credential/outage/rate errors, CSRF submission, callback success with blocked cookies, and malformed responses. Private build activation is opt-in, skips previews, and must be tested against a separate empty disposable database. Verify first owner creation, repeat-run password preservation and removal of the temporary password; never test it against production incidentally.
+
+For `npm run test:login:browser`, provide the guarded isolated HTTPS fixture environment and `AGENCY_TEST_UNCONFIGURED_URL` pointing to a separate ordinary loopback app without auth settings. It verifies the setup notice, business-email prefill, wrong password, real owner dashboard login/logout, an explicitly dropped session cookie, safe failure messaging and old error-query handling. It uses system Chromium or `PLAYWRIGHT_CHROMIUM_EXECUTABLE`. No real credential is embedded in the test.
+
+To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQL instance while its fixture app/proxy remain running, then run `AGENCY_TEST_DATABASE_UNAVAILABLE=true node --env-file=/private/path/test.env tests/admin-database-outage.browser.mjs`. This must still render sign-in and report its actual database failure inline; restart the fixture database before other suites. Never stop a production database for this check.
 ``````
 
 ## VERIFICATION.md
@@ -825,13 +894,26 @@ Run Lighthouse alone against a production server in ordinary file mode. Save the
 
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
+## Owner sign-in follow-up
+
+The reported return-to-login behavior was reproduced locally with missing private authentication settings. Auth.js's client helper can navigate to its error route when provider discovery fails, leaving the custom login screen apparently unchanged. The public hosting request was blocked by this cloud network's CONNECT policy; production variables/database/account state were not inspected or changed.
+
+Replaced that submission path with CSRF-protected credential submission that retains safe inline errors and verifies database-authorized session cookies before navigating. Added a setup-incomplete notice, business-email prefill, old error-query feedback, and distinct invalid-credential/outage/rate/cookie messages. Public CMS metadata now lives on the homepage rather than the shared root layout, so private sign-in can render independently of the CMS database. No secrets or account-existence details are exposed.
+
+Added private opt-in `ADMIN_BOOTSTRAP_ON_BUILD` activation. Against a separate empty local PostgreSQL database, it applied reviewed migrations and created the business-email owner with a generated test-only password. Repeated runs preserved the account/hash, including with the temporary password removed. Preview and default-off paths were checked. No public registration/setup endpoint or automatic password reset was added. `OWNER_LOGIN.md` gives the remaining Vercel activation steps.
+
+`test:login`: **5 passed**. Security suite now **8 passed**, including configuration readiness. Production build, lint and typecheck passed. Real Chromium HTTPS checks passed for the setup notice, actual business-owner dashboard login/logout, wrong-password feedback, dropped session-cookie feedback, safe outage/error-query messages and zero page/hydration errors. The actual API agency/auth suites were rerun against the new owner fixture. Stopping the actual disposable database exposed and then verified the root-metadata dependency fix: sign-in remains readable and shows a safe unavailable error without navigation or cleared input.
+
+The earlier website performance/public screenshots below describe the agency build. Public rendering is unchanged by this admin-only follow-up; Lighthouse was not rerun for it. Live owner activation still requires private Vercel/database configuration and remains unverified.
+
 ## Install, framework and unit checks
 
 - Fresh locked `npm ci --cache /tmp/portfoli-npm-cache --no-audit --no-fund` passed and generated the pinned Prisma JavaScript/WASM client.
 - `npm run lint`, `npm run typecheck` and the optimized Next.js 15.5.28 production build passed. Homepage first-load JavaScript is approximately 170 kB; service/project detail pages approximately 119 kB. The expected Open Graph edge-runtime static-generation notice is not a build failure.
 - `npm run test:chat`: **16 passed**. Prompt/input/origin guards, provider contracts, quotas, controlled embeds and error handling.
 - `npm run test:contact`: **13 passed**. Validation, fixed-recipient safe SMTP, missing credentials, origin/honeypot/quota behavior, optional fields, durable storage without SMTP, notification failure after acceptance and database failure without false success.
-- `npm run test:security`: **7 passed**. Password byte rules, RFC 6238 TOTP vectors, authenticated encryption, strict content/connection/image schemas, Turnstile verification, actual image decoding/re-encoding and review publication permission.
+- `npm run test:security`: **8 passed**. Password byte rules, RFC 6238 TOTP vectors, authenticated encryption, strict content/connection/image schemas, Turnstile verification, actual image decoding/re-encoding, review publication permission and admin configuration readiness.
+- `npm run test:login`: **5 passed**. Missing setup, safe login errors, CSRF submission, authorized cookie verification and malformed responses.
 - `npm run test:consent`: **5 passed**. Malformed/expired/future/version handling, current accept/reject choices and equivalent initial-render visibility-script validation including blocked storage.
 - Current production audit: **0 vulnerabilities**. Full audit: **7 high development-tool entries**, through unpatched braces/glob consumers. That full audit is not reported as clean.
 
@@ -9373,7 +9455,7 @@ export default nextConfig;
   "private": true,
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0",
-    "build": "next build",
+    "build": "node --env-file-if-exists=.env.local --import tsx scripts/prepare-production.ts && next build",
     "start": "next start --hostname 0.0.0.0",
     "typecheck": "tsc --noEmit",
     "lint": "eslint app components data hooks lib middleware.ts next.config.mjs --ext .js,.jsx,.ts,.tsx,.mjs --max-warnings=0",
@@ -9392,7 +9474,10 @@ export default nextConfig;
     "admin:bootstrap": "node --env-file-if-exists=.env.local --import tsx scripts/bootstrap-admin.ts",
     "test:agency": "node --test --test-concurrency=1 tests/agency.integration.mjs",
     "test:auth": "node --test --test-concurrency=1 tests/auth.integration.mjs",
-    "test:proxy": "node tests/helpers/https-proxy.mjs"
+    "test:proxy": "node tests/helpers/https-proxy.mjs",
+    "admin:prepare": "node --env-file-if-exists=.env.local --import tsx scripts/prepare-production.ts",
+    "test:login": "node --import tsx --test tests/admin-login.test.ts",
+    "test:login:browser": "node tests/admin-login.browser.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "5.2.8",

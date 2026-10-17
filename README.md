@@ -11,6 +11,7 @@ Services and project-note routes, native FAQs, a private service/FAQ/review CMS,
 The public hero is readable immediately. Shared CSS/viewport reveals retain the motion style while reducing per-word client work. Cookie choices still control optional embeds, and public text remains visible without JavaScript.
 
 - [Implementation audit](AGENCY_AUDIT.md)
+- [Activate owner login on Vercel](OWNER_LOGIN.md)
 - [Deployment and first-admin setup](DEPLOYMENT.md)
 - [Testing and measured verification](VERIFICATION.md)
 - [Security limitations](SECURITY_STATUS.md)

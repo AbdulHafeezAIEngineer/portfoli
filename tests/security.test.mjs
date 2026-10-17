@@ -254,3 +254,44 @@ test("only permission-approved genuine review records can be published", () => {
     false,
   );
 });
+
+test("admin setup readiness requires private auth/database settings and production login protection", () => {
+  const { adminConfigurationReady } = fixture().load(
+    "lib/admin/configuration.ts",
+  );
+  const base = {
+    NODE_ENV: "production",
+    DATABASE_URL: "fixture-database",
+    NEXTAUTH_SECRET: "fixture-secret",
+  };
+  assert.equal(adminConfigurationReady({}), false);
+  assert.equal(adminConfigurationReady(base), false);
+  assert.equal(
+    adminConfigurationReady({ ...base, AUTH_ALLOW_IN_MEMORY_LIMITER: "true" }),
+    true,
+  );
+  assert.equal(
+    adminConfigurationReady({
+      ...base,
+      AUTH_REDIS_REST_URL: "https://fixture.example",
+      AUTH_ALLOW_IN_MEMORY_LIMITER: "true",
+    }),
+    false,
+  );
+  assert.equal(
+    adminConfigurationReady({
+      ...base,
+      AUTH_REDIS_REST_URL: "https://fixture.example",
+      AUTH_REDIS_REST_TOKEN: "test-only",
+    }),
+    true,
+  );
+  assert.equal(
+    adminConfigurationReady({
+      ...base,
+      NEXTAUTH_SECRET: "",
+      AUTH_ALLOW_IN_MEMORY_LIMITER: "true",
+    }),
+    false,
+  );
+});
