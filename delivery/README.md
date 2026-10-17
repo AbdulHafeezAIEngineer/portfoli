@@ -131,6 +131,7 @@ data/studio.ts
 data/tool-marks.ts
 docs/BRIEF_COMPLETION.md
 docs/EDITORIAL_UPGRADE.md
+docs/PRESENTATION_UPDATE.md
 docs/SHOWCASE_UPDATE.md
 docs/about-preview.png
 docs/agency-about-desktop.png
@@ -153,6 +154,14 @@ docs/agency-service-mobile.png
 docs/brand-preview.png
 docs/brief-performance.json
 docs/certificate-showcase.png
+docs/contact-desktop-dark.png
+docs/contact-desktop-light.png
+docs/contact-mobile-dark.png
+docs/contact-mobile-light.png
+docs/curated-work-desktop-dark.png
+docs/curated-work-desktop-light.png
+docs/curated-work-mobile-dark.png
+docs/curated-work-mobile-light.png
 docs/editorial-contact-desktop.png
 docs/editorial-contact-mobile.png
 docs/editorial-desktop-hero.png

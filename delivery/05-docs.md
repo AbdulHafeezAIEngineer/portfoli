@@ -161,6 +161,31 @@ Lighthouse 13.5 mobile: **95 performance, 100 accessibility, 100 best practices,
 5. Collect consent-aware real-user performance measurements before tuning effects for the actual audience.
 ``````
 
+## docs/PRESENTATION_UPDATE.md
+
+``````md
+# Theme-matched contact and curated website gallery
+
+The contact panel previously forced light colors even on the dark website. It now uses warm charcoal, ivory typography and champagne accents in dark mode, and warm ivory with ink text in light mode. Inputs, optional company/service fields, privacy links, focus rings, validation errors, success feedback and social links follow the panel palette. Contact submission, consent and the private inbox behavior are unchanged.
+
+The selected website projects now use a wider editorial gallery instead of equal nested cards. Desktop alternates seven/five-column previews with staggered placement; tablets keep a balanced two-column view and phones use one clear column. Titles and industry information sit above the mockups, with discreet numbering, format labels and a project-open capsule. Desktop/mobile device compositions, image galleries, project order, concept disclosures, four category filters and the separate curved work wall remain. Responsive image sizes were updated for the larger previews. No image source, library or dependency was added.
+
+## Review captures
+
+- [Desktop gallery, dark](curated-work-desktop-dark.png) / [light](curated-work-desktop-light.png)
+- [Mobile gallery, dark](curated-work-mobile-dark.png) / [light](curated-work-mobile-light.png)
+- [Desktop contact, dark](contact-desktop-dark.png) / [light](contact-desktop-light.png)
+- [Mobile contact, dark](contact-mobile-dark.png) / [light](contact-mobile-light.png)
+
+Gallery captures show the complete section with reduced motion selected; fixed navigation is excluded from these stitched section-only screenshots. This does not change navigation behavior in the app.
+
+## Validation
+
+The optimized production build, lint and TypeScript checks passed. Existing motion/responsive browser checks passed at 360, 390, 768, 1024, 1440 and 1920px, both themes, including category filtering, no overflow, motion preferences, native touch scroll, on-demand AI demos, form validation/honeypot, no-JavaScript content and zero page/hydration errors. The separate interaction suite passed gallery/certificate dialogs, velocity marquees, desktop parallax and native/enhanced FAQ behavior.
+
+Actual axe WCAG A/AA scans found zero violations on desktop/mobile in both themes, including after triggering contact validation. Contact theme colors were checked in the browser. Lighthouse was not rerun for this visual follow-up; earlier scores describe earlier builds. No production credentials, hosting variables, owner accounts or authenticator settings were changed. Live deployment remains unverified; the reported production-build failure still requires its terminating log line.
+``````
+
 ## docs/SHOWCASE_UPDATE.md
 
 ``````md
@@ -363,6 +388,38 @@ Binary asset: 496538 bytes. SHA-256 `5db7c029677108382f5669bc6053b8e60f395d9e260
 ## docs/certificate-showcase.png
 
 Binary asset: 288928 bytes. SHA-256 `d953dd4825170428cfc8bd8cfc4cb49f517455fece767fb291e2e48221decc38`. Available in the repository and source ZIP.
+
+## docs/contact-desktop-dark.png
+
+Binary asset: 625648 bytes. SHA-256 `ea87523d181c5634335111cad843b0a54dd4081eea3bb082847bc7fa1812fb26`. Available in the repository and source ZIP.
+
+## docs/contact-desktop-light.png
+
+Binary asset: 815301 bytes. SHA-256 `d45e7149c535bf22f46dc100414347b81e893bb717ded2c1fbdc8df40b600eba`. Available in the repository and source ZIP.
+
+## docs/contact-mobile-dark.png
+
+Binary asset: 345548 bytes. SHA-256 `ce510ab818ecf5ce29e9e46784d01ff9d0ac6ee533148ae6a64026e2b05d54ba`. Available in the repository and source ZIP.
+
+## docs/contact-mobile-light.png
+
+Binary asset: 404370 bytes. SHA-256 `33b5b59ccefbab3119acef2de1cb8e667bb6033b21c76d20bdb497b30660dbff`. Available in the repository and source ZIP.
+
+## docs/curated-work-desktop-dark.png
+
+Binary asset: 1278321 bytes. SHA-256 `fa978dc41fd066aef9e8b0bef28ce35b24c9854b0dc70fcb217b4727845bedd4`. Available in the repository and source ZIP.
+
+## docs/curated-work-desktop-light.png
+
+Binary asset: 1401834 bytes. SHA-256 `19ddc9655f5c5a64cf32c48d657ce626b02f6759bf8be82b1f5095f0c88b1a5c`. Available in the repository and source ZIP.
+
+## docs/curated-work-mobile-dark.png
+
+Binary asset: 468252 bytes. SHA-256 `e05e5f84fcb20d0c088f90b361143d083c0c46bfedd71344ed52931e2384cd76`. Available in the repository and source ZIP.
+
+## docs/curated-work-mobile-light.png
+
+Binary asset: 491906 bytes. SHA-256 `009ecd7bb38a9a274d9963d12bc677815aeb84fb3f28a7578367de6b602bf56e`. Available in the repository and source ZIP.
 
 ## docs/editorial-contact-desktop.png
 

@@ -143,17 +143,26 @@ export function Work({
           {tab === index && (
             <>
               {(index === 0 || index === 1) && (
-                <div className="projects-grid work-filter-enter">
-                  {projects.map((item, number) => (
-                    <Reveal key={item.id} delay={(number % 2) * 0.06}>
-                      <ProjectCard
-                        project={item}
-                        index={number}
-                        total={projects.length}
-                        onOpen={() => setProject(item)}
-                      />
-                    </Reveal>
-                  ))}
+                <div className="work-filter-enter">
+                  <div className="work-collection-label">
+                    <span>THE WEBSITE EDIT</span>
+                    <span>
+                      {String(projects.length).padStart(2, "0")} / INDEPENDENT
+                      CONCEPTS
+                    </span>
+                  </div>
+                  <div className="projects-grid curated-projects-grid">
+                    {projects.map((item, number) => (
+                      <Reveal key={item.id} delay={(number % 2) * 0.06}>
+                        <ProjectCard
+                          project={item}
+                          index={number}
+                          total={projects.length}
+                          onOpen={() => setProject(item)}
+                        />
+                      </Reveal>
+                    ))}
+                  </div>
                 </div>
               )}
               {(index === 0 || index === 2) && (

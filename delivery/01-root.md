@@ -910,6 +910,10 @@ To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQ
 
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
+## Contact palette and project presentation follow-up
+
+The contact section now follows dark/light theme palettes instead of always showing a white panel. Website concepts use a wider staggered editorial layout with larger device previews, clearer titles and fewer nested borders. Mobile remains one column; categories, galleries, form behavior and the curved work wall are preserved. Production build/lint/types and both responsive/motion browser suites passed, covering six widths and both themes. Desktop/mobile axe scans in both themes found zero WCAG A/AA violations, including after contact validation. See [the presentation change record and screenshots](docs/PRESENTATION_UPDATE.md). Lighthouse was not rerun for this follow-up; no earlier measurement should be presented as a fresh score. Production hosting and owner setup remain unverified.
+
 ## Password typing and optional authenticator correction
 
 The reported disabled-password behavior was reproduced: all login inputs were disabled when aggregate server configuration was incomplete. Email and password now stay editable, with password show/hide and a separate website-password hint. Submission remains guarded until setup is ready. The optional authenticator field is collapsed behind a native disclosure, with explicit instructions that it only applies after enabling 2FA in Security. Server-side password and TOTP validation remain unchanged.

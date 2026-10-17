@@ -37,7 +37,7 @@ export function ProjectCard({
   const mobile = project.screenshots[2] || project.screenshots[0];
   return (
     <button
-      className={`project-card device-project${presentation.artwork ? " artwork-project" : ""}`}
+      className={`project-card device-project curated-project${presentation.artwork ? " artwork-project" : ""}`}
       onClick={onOpen}
       aria-haspopup="dialog"
       aria-label={`${site.work.view}: ${project.title}`}
@@ -62,13 +62,23 @@ export function ProjectCard({
         y.set(0);
       }}
     >
+      <div className="project-info">
+        <div>
+          <span className="project-industry">{project.industry}</span>
+          <h3>{project.title}</h3>
+          <p>{project.subtitle}</p>
+        </div>
+        <span className="curated-project-index" aria-hidden="true">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+      </div>
       <div
         className="device-stage"
         data-parallax="image"
         style={{ "--project-accent": project.accent } as React.CSSProperties}
       >
-        <span className="device-project-number" aria-hidden="true">
-          0{index + 1}
+        <span className="curated-format" aria-hidden="true">
+          {presentation.artwork ? "FEATURED WEBSITE" : "DESKTOP / MOBILE"}
         </span>
         {presentation.artwork ? (
           <m.div
@@ -80,7 +90,7 @@ export function ProjectCard({
               {...imagePreview(project.screenshots[0].src)}
               alt={project.screenshots[0].alt}
               fill
-              sizes="(max-width:700px) 90vw, 580px"
+              sizes="(max-width:767px) 90vw, (max-width:1439px) 55vw, 740px"
             />
             <span className="artwork-light" aria-hidden="true" />
           </m.div>
@@ -101,7 +111,7 @@ export function ProjectCard({
                         {...imagePreview(project.screenshots[0].src)}
                         alt={project.screenshots[0].alt}
                         fill
-                        sizes="(max-width:700px) 80vw, 480px"
+                        sizes="(max-width:767px) 80vw, (max-width:1439px) 45vw, 610px"
                       />
                       <span className="device-reflection" />
                     </div>
@@ -117,7 +127,7 @@ export function ProjectCard({
                       {...imagePreview(mobile.src)}
                       alt={mobile.alt}
                       fill
-                      sizes="(max-width:700px) 23vw, 145px"
+                      sizes="(max-width:767px) 23vw, (max-width:1439px) 13vw, 180px"
                     />
                     <span className="device-reflection" />
                   </div>
@@ -129,16 +139,8 @@ export function ProjectCard({
         )}
         <span className="device-view">
           {site.work.view}
-          <ArrowUpRight size={18} />
+          <ArrowUpRight size={18} aria-hidden="true" />
         </span>
-      </div>
-      <div className="project-info">
-        <div>
-          <span className="project-industry">{project.industry}</span>
-          <h3>{project.title}</h3>
-          <p>{project.subtitle}</p>
-        </div>
-        <ArrowUpRight className="project-arrow" size={23} aria-hidden="true" />
       </div>
       <div className="project-footer">
         <span>
@@ -146,7 +148,8 @@ export function ProjectCard({
           {presentation.label}
         </span>
         <span>
-          0{index + 1} / {String(total).padStart(2, "0")}
+          {String(index + 1).padStart(2, "0")} /{" "}
+          {String(total).padStart(2, "0")}
         </span>
       </div>
     </button>

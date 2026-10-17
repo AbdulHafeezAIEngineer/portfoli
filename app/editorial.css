@@ -537,6 +537,33 @@
   padding-bottom: 100px;
 }
 .contact-paper {
+  --bg: #14151b;
+  --surface: #1b1c23;
+  --raised: #24252d;
+  --text: #f3f0e9;
+  --muted: #b4b1bc;
+  --line: #f3f0e919;
+  --line-bright: #f3f0e942;
+  --gold: #e3c58c;
+  --glass: #1b1c23;
+  --soft: #ffffff05;
+  --contact-error: #ffadb8;
+  --contact-success: #9addba;
+  color-scheme: dark;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 0% 0%, #b9985d13, transparent 55%), var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  padding: clamp(28px, 4.7vw, 68px);
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: 60px;
+  box-shadow: 0 30px 90px #00000012;
+  position: relative;
+  isolation: isolate;
+}
+[data-theme="light"] .contact-paper {
   --bg: #f0eee7;
   --surface: #faf9f5;
   --raised: #e3e0d7;
@@ -547,17 +574,9 @@
   --gold: #715719;
   --glass: #faf9f5;
   --soft: #19191d04;
+  --contact-error: #a22a38;
+  --contact-success: #235d3f;
   color-scheme: light;
-  color: var(--text);
-  background: var(--bg);
-  border-radius: 26px;
-  padding: clamp(28px, 4.7vw, 68px);
-  display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-  gap: 60px;
-  box-shadow: 0 30px 90px #00000012;
-  position: relative;
-  isolation: isolate;
 }
 .contact-paper::before,
 .editorial-footer::before {
@@ -629,7 +648,7 @@
   background: var(--surface);
 }
 .contact-paper .social-icons a {
-  background: #dedbd2;
+  background: var(--raised);
 }
 .contact-form-wrap {
   min-width: 0;
@@ -670,35 +689,35 @@
   min-height: 110px;
 }
 .contact-paper .form-field [aria-invalid="true"] {
-  border-color: #a22a38;
+  border-color: var(--contact-error);
 }
 .contact-paper .field-error {
-  color: #a22a38;
+  color: var(--contact-error);
 }
 .contact-paper .button-gold {
-  background: #202025;
-  border-color: #202025;
-  color: #f9f8f4;
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--bg);
   width: 100%;
   min-height: 49px;
 }
 .contact-paper .button-gold:hover {
-  background: #38333c;
+  background: var(--gold);
   box-shadow: none;
 }
 .contact-paper .form-failure {
-  color: #862732;
-  border-color: #a22a3866;
-  background: #a22a3808;
+  color: var(--contact-error);
+  border-color: color-mix(in srgb, var(--contact-error) 40%, transparent);
+  background: color-mix(in srgb, var(--contact-error) 5%, transparent);
 }
 .contact-paper .form-success {
-  color: #235d3f;
+  color: var(--contact-success);
 }
 .contact-paper a:focus-visible,
 .contact-paper button:focus-visible,
 .contact-paper input:focus-visible,
 .contact-paper textarea:focus-visible {
-  outline-color: #715719;
+  outline-color: var(--gold);
 }
 
 /* A bold directory, huge cropped wordmark and a violet wave sign-off. */
