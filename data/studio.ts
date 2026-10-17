@@ -233,22 +233,6 @@ export const studio = {
       "In your pocket",
     ],
   },
-  love: {
-    eyebrow: "WALL OF LOVE",
-    title: "Wall of love.",
-    intro: "A space for the people behind the projects.",
-    previewLabel: "REVIEW LAYOUT PREVIEW",
-    notice:
-      "Genuine testimonials and approved portraits have not been supplied yet. These labeled entries preview the animation and are not client endorsements.",
-    previous: "Previous review",
-    next: "Next review",
-    play: "Play review rotation",
-    pause: "Pause review rotation",
-    personPlaceholder: "Approved client portrait pending",
-    quotePlaceholder:
-      "[PLACEHOLDER] A genuine client review will appear here, shared with their permission.",
-    rolePlaceholder: "[PLACEHOLDER] Client name & role",
-  },
   ending: {
     eyebrow: "YOUR IDEA DESERVES A THOUGHTFUL HOME",
     title: "Let's make\nsomething matter.",
@@ -289,21 +273,3 @@ export const studio = {
     },
   ],
 } as const;
-
-export type Testimonial = {
-  id: string;
-  quote: string;
-  name: string;
-  role: string;
-  portrait: string | null;
-  placeholder: boolean;
-};
-// Publish only genuine, owner-approved reviews and portraits, with permission.
-export const testimonials: Testimonial[] = ["01", "02", "03"].map((id) => ({
-  id,
-  quote: studio.love.quotePlaceholder,
-  name: studio.love.rolePlaceholder,
-  role: `Review preview ${id}`,
-  portrait: null,
-  placeholder: true,
-}));

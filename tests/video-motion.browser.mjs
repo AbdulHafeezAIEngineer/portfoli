@@ -147,15 +147,18 @@ try {
     );
     assert.ok(
       await page
-        .getByRole("heading", { name: "Wall of love.", exact: true })
+        .getByRole("heading", { name: "Testimonials", exact: true })
         .isVisible(),
     );
     assert.equal(
-      await page.locator(".love-card").count(),
-      0,
-      "No invented reviews in file mode.",
+      await page.locator('.testimonial-card[data-sample="true"]').count(),
+      4,
+      "Layout samples are explicitly labeled.",
     );
-    assert.equal(await page.locator(".love-empty").count(), 1);
+    assert.match(
+      await page.locator(".testimonial-sample-note").innerText(),
+      /not client endorsements/,
+    );
     assert.equal(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,
@@ -165,7 +168,7 @@ try {
     assert.deepEqual(errors, []);
     await context.close();
     console.log(
-      `PASS ${touch ? "touch" : "desktop"}: two-face flip, visible-only shine, reversible reading emphasis, stable word widths, reduced-motion cleanup and honest review empty state.`,
+      `PASS ${touch ? "touch" : "desktop"}: two-face flip, visible-only shine, reversible reading emphasis, stable word widths, reduced-motion cleanup and labeled testimonial layout samples.`,
     );
   }
   const nojs = await browser.newContext({ javaScriptEnabled: false });

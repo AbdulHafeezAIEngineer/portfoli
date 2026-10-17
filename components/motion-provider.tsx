@@ -9,19 +9,12 @@ import {
 } from "./motion-preference";
 
 export function MotionProvider({ children }: { children: React.ReactNode }) {
-  const [preference, setPreference] = useState<MotionPreference>("system");
-  const [systemReduced, setSystemReduced] = useState(true);
+  const [preference, setPreference] = useState<MotionPreference>("full");
   useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setSystemReduced(media.matches);
-    sync();
     const saved = document.documentElement.dataset.motion;
     if (saved === "full" || saved === "reduced") setPreference(saved);
-    media.addEventListener("change", sync);
-    return () => media.removeEventListener("change", sync);
   }, []);
-  const reduced =
-    preference === "reduced" || (preference === "system" && systemReduced);
+  const reduced = preference === "reduced";
   function updatePreference(value: MotionPreference) {
     setPreference(value);
     document.documentElement.dataset.motion = value;

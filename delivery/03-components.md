@@ -1,3 +1,214 @@
+## components/AiBotVideo.tsx
+
+``````tsx
+"use client";
+import { VisibilityVideo } from "./VisibilityVideo";
+
+export function AiBotVideo() {
+  return (
+    <VisibilityVideo
+      name="ai-bot"
+      threshold={0.5}
+      once
+      caption="A customer asks. The bot answers. Instantly."
+    />
+  );
+}
+``````
+
+## components/VisibilityVideo.tsx
+
+``````tsx
+"use client";
+
+import Image from "next/image";
+import { Pause, Play, RotateCcw } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useMotionPreference } from "./motion-preference";
+
+export function VisibilityVideo({
+  name,
+  caption,
+  threshold,
+  once = false,
+}: {
+  name: "work-showcase" | "ai-bot";
+  caption: string;
+  threshold: number;
+  once?: boolean;
+}) {
+  const { reduced } = useMotionPreference();
+  const frame = useRef<HTMLDivElement>(null);
+  const video = useRef<HTMLVideoElement>(null);
+  const finished = useRef(false);
+  const visible = useRef(false);
+  const manuallyPaused = useRef(false);
+  const [eligible, setEligible] = useState(false);
+  const [ended, setEnded] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const [blocked, setBlocked] = useState(false);
+  const poster = `/videos/${name}-poster.webp`;
+
+  useEffect(() => {
+    const desktop = matchMedia("(min-width: 768px)");
+    const lessMotion = matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () =>
+      setEligible(desktop.matches && !lessMotion.matches && !reduced);
+    update();
+    desktop.addEventListener("change", update);
+    lessMotion.addEventListener("change", update);
+    return () => {
+      desktop.removeEventListener("change", update);
+      lessMotion.removeEventListener("change", update);
+    };
+  }, [reduced]);
+
+  useEffect(() => {
+    if (!eligible || !frame.current || !video.current) return;
+    const media = video.current;
+    const play = () => {
+      if (
+        !visible.current ||
+        document.hidden ||
+        manuallyPaused.current ||
+        (once && finished.current)
+      )
+        return;
+      void media.play().catch((error) => {
+        if (error?.name !== "AbortError") setBlocked(true);
+      });
+    };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visible.current =
+          entry.isIntersecting && entry.intersectionRatio >= threshold;
+        if (visible.current) play();
+        else media.pause();
+      },
+      { threshold: [0, threshold] },
+    );
+    const visibilityChange = () => {
+      if (document.hidden) media.pause();
+      else play();
+    };
+    observer.observe(frame.current);
+    document.addEventListener("visibilitychange", visibilityChange);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", visibilityChange);
+      visible.current = false;
+      media.pause();
+    };
+  }, [eligible, once, threshold]);
+
+  function toggle() {
+    const media = video.current;
+    if (!media) return;
+    if (!media.paused) {
+      manuallyPaused.current = true;
+      media.pause();
+      return;
+    }
+    if (!visible.current) return;
+    manuallyPaused.current = false;
+    if (ended) {
+      media.currentTime = 0;
+      finished.current = false;
+      setEnded(false);
+    }
+    setBlocked(false);
+    void media.play().catch(() => setBlocked(true));
+  }
+
+  return (
+    <figure
+      className="showcase-video mx-auto w-full max-w-6xl"
+      data-showcase-video={name}
+    >
+      <div
+        ref={frame}
+        className="showcase-video-frame relative aspect-video overflow-hidden rounded-3xl bg-black"
+      >
+        {eligible ? (
+          <video
+            ref={video}
+            muted
+            loop={!once}
+            playsInline
+            preload="none"
+            poster={poster}
+            aria-label={caption}
+            onPlaying={() => {
+              setPlaying(true);
+              setBlocked(false);
+            }}
+            onPause={() => setPlaying(false)}
+            onEnded={() => {
+              finished.current = true;
+              setEnded(true);
+              setPlaying(false);
+            }}
+            onError={() => setBlocked(true)}
+          >
+            <source src={`/videos/${name}.webm`} type="video/webm" />
+            <source src={`/videos/${name}.mp4`} type="video/mp4" />
+          </video>
+        ) : (
+          <Image
+            src={poster}
+            alt={caption}
+            fill
+            sizes="(max-width: 767px) 90vw, (max-width: 1280px) 90vw, 1152px"
+          />
+        )}
+        {eligible &&
+          (!once || ended || blocked || playing || manuallyPaused.current) && (
+            <button
+              type="button"
+              className="showcase-video-control"
+              onClick={toggle}
+              aria-label={
+                ended
+                  ? "Replay AI bot video"
+                  : playing
+                    ? `Pause ${once ? "AI bot" : "website showcase"} video`
+                    : `Play ${once ? "AI bot" : "website showcase"} video`
+              }
+            >
+              {ended ? (
+                <RotateCcw size={15} aria-hidden="true" />
+              ) : playing ? (
+                <Pause size={15} aria-hidden="true" />
+              ) : (
+                <Play size={15} aria-hidden="true" />
+              )}
+              {ended ? "Replay" : playing ? "Pause" : "Play"}
+            </button>
+          )}
+      </div>
+      <figcaption>{caption}</figcaption>
+    </figure>
+  );
+}
+``````
+
+## components/WorkShowcaseVideo.tsx
+
+``````tsx
+"use client";
+import { VisibilityVideo } from "./VisibilityVideo";
+
+export function WorkShowcaseVideo() {
+  return (
+    <VisibilityVideo
+      name="work-showcase"
+      threshold={0.4}
+      caption="A look at the concept websites, in motion."
+    />
+  );
+}
+``````
+
 ## components/admin-app.tsx
 
 ``````tsx
@@ -1562,6 +1773,7 @@ import {
 } from "@/data/bots";
 import { Reveal } from "./reveal";
 import { FortePreview } from "./forte-preview";
+import { AiBotVideo } from "./AiBotVideo";
 
 const ChatPanel = dynamic(() => import("./bot-chat-panel"), { ssr: false });
 const icons = {
@@ -1599,6 +1811,7 @@ export function BotServices({ bots }: { bots: Bot[] }) {
           <p>{copy.description}</p>
         </div>
       </Reveal>
+      <AiBotVideo />
       <div className="bots-grid">
         {bots.map((bot, index) => {
           const Icon = icons[bot.id as keyof typeof icons] || Sparkles;
@@ -2001,6 +2214,8 @@ export function Certifications({
 ``````tsx
 "use client";
 
+import artColors from "@/data/project-art-colors.json";
+
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
@@ -2134,11 +2349,11 @@ function RoomPlan({ variant }: { variant: number }) {
 }
 
 function CarDrawing({ color }: { color: string }) {
-  return <svg viewBox="0 0 700 330" aria-hidden="true"><defs><linearGradient id="car-paint" x2=".4" y2="1"><stop stopColor={color} /><stop offset="1" stopColor="#171b1b" /></linearGradient></defs><path d="M60 245h580M95 257h510" stroke="#b1c471" strokeOpacity=".2" /><path d="m78 220 20-45 109-20 92-66h163l105 66 59 20 28 45-35 18H99z" fill="url(#car-paint)" stroke="#c7ccbd" strokeWidth="1.5" /><path d="m229 153 75-51h145l84 51z" fill="#101615" stroke="#bec9b9" /><path d="M370 104v49M102 186h71m378-13h58M204 169h325M408 168v60" fill="none" stroke="#a7b09f" strokeWidth="1.5" /><path d="m83 208 32-3m480-4 43 8" stroke="#d9fa82" strokeWidth="4" /><g fill="#0b1010" stroke="#a8b09c" strokeWidth="2"><circle cx="187" cy="232" r="39" /><circle cx="535" cy="232" r="39" /></g><g fill="none" stroke="#75816d" strokeWidth="2"><circle cx="187" cy="232" r="24" /><circle cx="535" cy="232" r="24" /><path d="m164 232 46 0m-23-23v46m325-23h46m-23-23v46" /></g></svg>;
+  return <svg viewBox="0 0 700 330" aria-hidden="true"><defs><linearGradient id="car-paint" x2=".4" y2="1"><stop stopColor={color} /><stop offset="1" stopColor={artColors.tone42} /></linearGradient></defs><path d="M60 245h580M95 257h510" stroke={artColors.tone43} strokeOpacity=".2" /><path d="m78 220 20-45 109-20 92-66h163l105 66 59 20 28 45-35 18H99z" fill="url(#car-paint)" stroke={artColors.tone44} strokeWidth="1.5" /><path d="m229 153 75-51h145l84 51z" fill={artColors.tone45} stroke={artColors.tone46} /><path d="M370 104v49M102 186h71m378-13h58M204 169h325M408 168v60" fill="none" stroke={artColors.tone47} strokeWidth="1.5" /><path d="m83 208 32-3m480-4 43 8" stroke={artColors.tone48} strokeWidth="4" /><g fill={artColors.tone49} stroke={artColors.tone50} strokeWidth="2"><circle cx="187" cy="232" r="39" /><circle cx="535" cy="232" r="39" /></g><g fill="none" stroke={artColors.tone51} strokeWidth="2"><circle cx="187" cy="232" r="24" /><circle cx="535" cy="232" r="24" /><path d="m164 232 46 0m-23-23v46m325-23h46m-23-23v46" /></g></svg>;
 }
 
 function SpaceStudy({ variant }: { variant: number }) {
-  return <svg viewBox="0 0 420 280" aria-hidden="true"><path d="m40 225 153-80 190 75-149 49z" fill="#00000009" /><path d="m70 121 130-57 143 48-130 62z" fill={variant === 1 ? "#b6a18a" : "#d4cbbd"} /><path d="m70 121 143 53v68L70 188z" fill="#a49b8e" /><path d="m213 174 130-62v69l-130 61z" fill="#6a655d" /><path d="m98 114 104-42 109 37-103 48z" fill="#e8e0d2" /><path d="m96 142 96 36v45l-96-36zM232 183l88-42v34l-88 43z" fill="#363d38" /><path d="m246 188 58-28M245 198l58-28" stroke="#b6b5a0" /><circle cx="143" cy="163" r={variant === 2 ? "19" : "13"} fill="#c9c3b1" /><path d="M355 190v-52m-12 23 12-30 14 30z" fill="#838d71" stroke="#838d71" /></svg>;
+  return <svg viewBox="0 0 420 280" aria-hidden="true"><path d="m40 225 153-80 190 75-149 49z" fill={artColors.tone52} /><path d="m70 121 130-57 143 48-130 62z" fill={variant === 1 ? artColors.tone53 : artColors.tone54} /><path d="m70 121 143 53v68L70 188z" fill={artColors.tone55} /><path d="m213 174 130-62v69l-130 61z" fill={artColors.tone56} /><path d="m98 114 104-42 109 37-103 48z" fill={artColors.tone57} /><path d="m96 142 96 36v45l-96-36zM232 183l88-42v34l-88 43z" fill={artColors.tone58} /><path d="m246 188 58-28M245 198l58-28" stroke={artColors.tone59} /><circle cx="143" cy="163" r={variant === 2 ? "19" : "13"} fill={artColors.tone60} /><path d="M355 190v-52m-12 23 12-30 14 30z" fill={artColors.tone61} stroke={artColors.tone61} /></svg>;
 }
 
 function FloorStudy() {
@@ -2707,6 +2922,8 @@ export function Contact({ email }: { email: string }) {
 
 ``````tsx
 "use client";
+
+import artColors from "@/data/project-art-colors.json";
 import Link from "next/link";
 import { useState } from "react";
 import {
@@ -3032,45 +3249,45 @@ function Architecture() {
     >
       <defs>
         <linearGradient id="arch-sky" x2="0" y2="1">
-          <stop stopColor="#acbdc0" />
-          <stop offset="1" stopColor="#e6dfc8" />
+          <stop stopColor={artColors.tone01} />
+          <stop offset="1" stopColor={artColors.tone02} />
         </linearGradient>
         <linearGradient id="arch-glass" x2="1" y2="1">
-          <stop stopColor="#52645c" />
-          <stop offset=".5" stopColor="#82968b" />
-          <stop offset="1" stopColor="#2c403c" />
+          <stop stopColor={artColors.tone03} />
+          <stop offset=".5" stopColor={artColors.tone04} />
+          <stop offset="1" stopColor={artColors.tone05} />
         </linearGradient>
         <linearGradient id="arch-floor">
-          <stop stopColor="#d4c5a9" />
-          <stop offset="1" stopColor="#ece2cb" />
+          <stop stopColor={artColors.tone06} />
+          <stop offset="1" stopColor={artColors.tone07} />
         </linearGradient>
       </defs>
       <path fill="url(#arch-sky)" d="M0 0h900v700H0z" />
-      <circle cx="720" cy="150" r="82" fill="#fff0d2" opacity=".7" />
-      <path d="M0 440 250 365 900 420v280H0" fill="#b6b29c" />
+      <circle cx="720" cy="150" r="82" fill={artColors.tone08} opacity=".7" />
+      <path d="M0 440 250 365 900 420v280H0" fill={artColors.tone09} />
       <path fill="url(#arch-floor)" d="m0 510 700-80 200 85v185H0" />
-      <path d="M130 270h630v260H130z" fill="#d9d0b7" />
-      <path d="m130 270 120-75h630l-120 75" fill="#e9dfc6" />
-      <path d="m760 270 120-75v250l-120 85" fill="#bdb69f" />
+      <path d="M130 270h630v260H130z" fill={artColors.tone10} />
+      <path d="m130 270 120-75h630l-120 75" fill={artColors.tone11} />
+      <path d="m760 270 120-75v250l-120 85" fill={artColors.tone12} />
       <path d="M175 310h540v175H175z" fill="url(#arch-glass)" />
       <path
         d="M260 310v175m110-175v175m110-175v175m110-175v175"
-        stroke="#d8cdb2"
+        stroke={artColors.tone13}
         strokeWidth="9"
       />
-      <path d="M115 492h660v30H115z" fill="#f0e3c8" />
-      <path d="m60 610 500-40 225 62-520 55" fill="#749c9a" />
-      <path d="m80 613 480-32 190 49-490 42" fill="#a5c6bf" />
+      <path d="M115 492h660v30H115z" fill={artColors.tone14} />
+      <path d="m60 610 500-40 225 62-520 55" fill={artColors.tone15} />
+      <path d="m80 613 480-32 190 49-490 42" fill={artColors.tone16} />
       <path
         d="M48 260q80-90 120-225M65 235q-5-95-50-145M80 210q95-45 185-17M105 160q-60-110-110-120"
-        stroke="#68775d"
+        stroke={artColors.tone17}
         strokeWidth="22"
         fill="none"
       />
-      <path d="M50 490 76 190" stroke="#7e7255" strokeWidth="13" />
-      <path d="m790 560 35-135 40 135" fill="#667a56" />
-      <ellipse cx="815" cy="565" rx="75" ry="16" fill="#6f785a" opacity=".4" />
-      <path d="m0 700 900-80v80" fill="#948d74" opacity=".2" />
+      <path d="M50 490 76 190" stroke={artColors.tone18} strokeWidth="13" />
+      <path d="m790 560 35-135 40 135" fill={artColors.tone19} />
+      <ellipse cx="815" cy="565" rx="75" ry="16" fill={artColors.tone20} opacity=".4" />
+      <path d="m0 700 900-80v80" fill={artColors.tone21} opacity=".2" />
     </svg>
   );
 }
@@ -3137,19 +3354,19 @@ function Garment({ variant }: { variant: number }) {
         <linearGradient id={`fabric-${variant}`}>
           <stop
             stopColor={
-              variant === 0 ? "#a47c5d" : variant === 1 ? "#cec8ba" : "#303432"
+              variant === 0 ? artColors.tone22 : variant === 1 ? artColors.tone23 : artColors.tone24
             }
           />
           <stop
             offset=".45"
             stopColor={
-              variant === 0 ? "#d0aa86" : variant === 1 ? "#f3ede0" : "#666961"
+              variant === 0 ? artColors.tone25 : variant === 1 ? artColors.tone26 : artColors.tone27
             }
           />
           <stop
             offset="1"
             stopColor={
-              variant === 0 ? "#916b50" : variant === 1 ? "#b7b1a4" : "#282c2b"
+              variant === 0 ? artColors.tone28 : variant === 1 ? artColors.tone29 : artColors.tone30
             }
           />
         </linearGradient>
@@ -3159,7 +3376,7 @@ function Garment({ variant }: { variant: number }) {
         cy="603"
         rx="160"
         ry="19"
-        fill="#473b2d"
+        fill={artColors.tone31}
         opacity=".12"
       />
       {variant < 2 ? (
@@ -3170,20 +3387,20 @@ function Garment({ variant }: { variant: number }) {
           />
           <path
             d="m185 110 65 142 65-142-30 110 35 34-68 95-68-95 35-34z"
-            fill={variant === 0 ? "#b48b68" : "#e0d8ca"}
+            fill={variant === 0 ? artColors.tone32 : artColors.tone33}
           />
           <path
             d="M250 250v330"
-            stroke={variant === 0 ? "#8a654c" : "#b0a999"}
+            stroke={variant === 0 ? artColors.tone34 : artColors.tone35}
             strokeWidth="2"
           />
-          <path d="m160 393 60 5m65 0 55-5" stroke="#715d4b" strokeWidth="3" />
+          <path d="m160 393 60 5m65 0 55-5" stroke={artColors.tone36} strokeWidth="3" />
           {[320, 370, 420].map((y) => (
-            <circle key={y} cx="265" cy={y} r="4" fill="#5b4739" />
+            <circle key={y} cx="265" cy={y} r="4" fill={artColors.tone37} />
           ))}
           <path
             d="m150 255 20 130m180-130-20 130"
-            stroke="#fff"
+            stroke={artColors.tone38}
             strokeOpacity=".1"
             strokeWidth="2"
           />
@@ -3196,14 +3413,14 @@ function Garment({ variant }: { variant: number }) {
           />
           <path
             d="M155 125h190m-95 0v135m-58-80-18 360m138-360-15 360"
-            stroke="#e6e0cf"
+            stroke={artColors.tone39}
             strokeOpacity=".22"
             strokeWidth="2"
           />
           <path
             d="m155 150 47 0-38 65m181-65h-47l44 65"
             fill="none"
-            stroke="#242927"
+            stroke={artColors.tone40}
             strokeWidth="2"
           />
         </>
@@ -3211,7 +3428,7 @@ function Garment({ variant }: { variant: number }) {
       <path
         d="M190 106q60-35 120 0"
         fill="none"
-        stroke="#644e3b"
+        stroke={artColors.tone41}
         strokeWidth="3"
         opacity=".3"
       />
@@ -4213,12 +4430,12 @@ export function LogoMotion() {
 
 import { createContext, useContext } from "react";
 
-export type MotionPreference = "system" | "full" | "reduced";
+export type MotionPreference = "full" | "reduced";
 export const MotionPreferenceContext = createContext<{
   preference: MotionPreference;
   reduced: boolean;
   setPreference: (value: MotionPreference) => void;
-}>({ preference: "system", reduced: true, setPreference: () => {} });
+}>({ preference: "full", reduced: false, setPreference: () => {} });
 
 export const useMotionPreference = () => useContext(MotionPreferenceContext);
 
@@ -4234,7 +4451,6 @@ export function MotionControl() {
           setPreference(event.target.value as MotionPreference)
         }
       >
-        <option value="system">Auto</option>
         <option value="full">On</option>
         <option value="reduced">Off</option>
       </select>
@@ -4257,19 +4473,12 @@ import {
 } from "./motion-preference";
 
 export function MotionProvider({ children }: { children: React.ReactNode }) {
-  const [preference, setPreference] = useState<MotionPreference>("system");
-  const [systemReduced, setSystemReduced] = useState(true);
+  const [preference, setPreference] = useState<MotionPreference>("full");
   useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setSystemReduced(media.matches);
-    sync();
     const saved = document.documentElement.dataset.motion;
     if (saved === "full" || saved === "reduced") setPreference(saved);
-    media.addEventListener("change", sync);
-    return () => media.removeEventListener("change", sync);
   }, []);
-  const reduced =
-    preference === "reduced" || (preference === "system" && systemReduced);
+  const reduced = preference === "reduced";
   function updatePreference(value: MotionPreference) {
     setPreference(value);
     document.documentElement.dataset.motion = value;
@@ -5616,6 +5825,116 @@ export function ToolOrbit() {
 }
 ``````
 
+## components/testimonials.tsx
+
+``````tsx
+import Image from "next/image";
+import { UserRound } from "lucide-react";
+import type { Testimonial } from "@/data/agency";
+import { Reveal } from "./reveal";
+import { TextReveal } from "./text-reveal";
+
+/** Explicit layout samples, never attributed to real customers or used as endorsements. */
+const samples: Testimonial[] = [
+  {
+    id: "sample-design",
+    quote:
+      "Sample testimonial about a website's design, clarity and attention to detail. This card previews the space for a client's own words.",
+    name: "Sample client",
+    role: "Website design · layout preview",
+    portrait: "",
+    placeholder: true,
+  },
+  {
+    id: "sample-build",
+    quote:
+      "Sample testimonial about development, responsive layouts and the small interactions that make a website feel considered.",
+    name: "Sample client",
+    role: "Development · layout preview",
+    portrait: "",
+    placeholder: true,
+  },
+  {
+    id: "sample-ai",
+    quote:
+      "Sample testimonial about a useful AI integration and how it fits into a real business workflow. Genuine feedback can replace this sample.",
+    name: "Sample client",
+    role: "AI integration · layout preview",
+    portrait: "",
+    placeholder: true,
+  },
+  {
+    id: "sample-process",
+    quote:
+      "Sample testimonial about communication, collaboration and the experience of bringing a project from its first idea to launch.",
+    name: "Sample client",
+    role: "Collaboration · layout preview",
+    portrait: "",
+    placeholder: true,
+  },
+];
+
+export function Testimonials({
+  testimonials,
+}: {
+  testimonials: Testimonial[];
+}) {
+  const preview = testimonials.length === 0;
+  const reviews = preview ? samples : testimonials;
+  return (
+    <section
+      id="testimonials"
+      className="container testimonials-section"
+      aria-labelledby="testimonials-title"
+    >
+      <Reveal>
+        <div className="testimonials-heading">
+          <TextReveal id="testimonials-title" text="Testimonials" />
+          {preview && (
+            <p className="testimonial-sample-note">
+              Design preview — sample content, not client endorsements.
+            </p>
+          )}
+        </div>
+      </Reveal>
+      <div className="testimonials-grid">
+        {reviews.map((review, index) => (
+          <Reveal key={review.id} delay={(index % 4) * 0.07}>
+            <figure
+              className="testimonial-card"
+              data-sample={review.placeholder ? "true" : undefined}
+            >
+              {review.placeholder && (
+                <span className="testimonial-sample-label">SAMPLE REVIEW</span>
+              )}
+              <blockquote>{review.quote}</blockquote>
+              <figcaption>
+                <span className="testimonial-avatar">
+                  {review.portrait && !review.placeholder ? (
+                    <Image
+                      src={review.portrait}
+                      alt=""
+                      width={40}
+                      height={40}
+                    />
+                  ) : (
+                    <UserRound size={20} strokeWidth={1.5} aria-hidden="true" />
+                  )}
+                </span>
+                <span>
+                  <strong>{review.name}</strong>
+                  <small>{review.role}</small>
+                </span>
+              </figcaption>
+            </figure>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+``````
+
 ## components/text-reveal.tsx
 
 ``````tsx
@@ -5677,7 +5996,6 @@ export function ToolMark({ name }: { name: string }) {
       aria-hidden="true"
       style={
         {
-          "--mark-color": mark?.color || "var(--gold)",
           ...(mark?.icon
             ? { "--mark-image": `url('/tool-marks/${mark.icon}.svg')` }
             : {}),
@@ -5749,345 +6067,6 @@ export function Turnstile({
       />
       <div ref={container} />
     </div>
-  );
-}
-``````
-
-## components/wall-of-love.tsx
-
-``````tsx
-"use client";
-import { useMotionPreference } from "./motion-preference";
-
-import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, m, useInView } from "framer-motion";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Pause,
-  Play,
-  Quote,
-  UserRound,
-} from "lucide-react";
-import { studio } from "@/data/studio";
-import type { Testimonial } from "@/data/agency";
-import { Reveal } from "./reveal";
-import { TextReveal } from "./text-reveal";
-import type { CSSProperties } from "react";
-
-export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
-  const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { amount: 0.2 });
-  const { reduced } = useMotionPreference();
-  const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState(1);
-  const [hydrated, setHydrated] = useState(false);
-  const [playing, setPlaying] = useState(true);
-  const [interacting, setInteracting] = useState(false);
-  const [visible, setVisible] = useState(true);
-  const swipe = useRef<{ x: number; y: number; time: number } | null>(null);
-  const remaining = useRef(6500);
-  const review = testimonials[index];
-  const autoplay = hydrated && playing && !reduced && testimonials.length > 1;
-  const active = autoplay && !interacting && inView && visible;
-  useEffect(() => {
-    setHydrated(true);
-    const update = () => setVisible(document.visibilityState === "visible");
-    update();
-    document.addEventListener("visibilitychange", update);
-    return () => document.removeEventListener("visibilitychange", update);
-  }, []);
-  useEffect(() => {
-    remaining.current = 6500;
-  }, [index, reduced]);
-  useEffect(() => {
-    if (!active || testimonials.length < 2) return;
-    const started = performance.now();
-    const timer = window.setTimeout(() => {
-      setDirection(1);
-      setIndex((current) => (current + 1) % testimonials.length);
-    }, remaining.current);
-    return () => {
-      window.clearTimeout(timer);
-      remaining.current = Math.max(
-        0,
-        remaining.current - (performance.now() - started),
-      );
-    };
-  }, [active, index, testimonials.length]);
-  if (!testimonials.length)
-    return (
-      <section
-        id="wall-of-love"
-        className="container studio-section love-section editorial-love"
-        aria-labelledby="love-title"
-      >
-        <Reveal>
-          <p className="eyebrow">{studio.love.eyebrow}</p>
-          <div className="studio-heading reference-love-heading">
-            <TextReveal id="love-title" text={studio.love.title} />
-          </div>
-          <div className="love-empty">
-            <span className="love-empty-mark" aria-hidden="true">
-              “
-            </span>
-            <div>
-              <p className="eyebrow">PEOPLE / PROJECTS / PERSPECTIVE</p>
-              <h3>The next story could start here.</h3>
-              <p>
-                Client stories will appear here when shared with permission.
-              </p>
-              <a href="#contact" className="text-link">
-                Start a conversation <ArrowRight size={18} aria-hidden="true" />
-              </a>
-            </div>
-          </div>
-        </Reveal>
-      </section>
-    );
-  function go(next: number) {
-    setPlaying(false);
-    setDirection(next > index ? 1 : -1);
-    setIndex((next + testimonials.length) % testimonials.length);
-  }
-  return (
-    <section
-      ref={ref}
-      id="wall-of-love"
-      className="container studio-section love-section editorial-love"
-      aria-labelledby="love-title"
-    >
-      <Reveal>
-        <p className="eyebrow">{studio.love.eyebrow}</p>
-        <div className="studio-heading reference-love-heading">
-          <TextReveal id="love-title" text={studio.love.title} />
-          <p>{studio.love.intro}</p>
-        </div>
-      </Reveal>
-      <div
-        className="love-stage"
-        data-rotation-active={active}
-        role="region"
-        aria-roledescription="carousel"
-        aria-label="Testimonials"
-        tabIndex={0}
-        onKeyDown={(event) => {
-          if (event.target !== event.currentTarget) return;
-          if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-            event.preventDefault();
-            go(index + (event.key === "ArrowRight" ? 1 : -1));
-          }
-        }}
-        onMouseEnter={() => setInteracting(true)}
-        onMouseLeave={() => setInteracting(false)}
-        onFocusCapture={() => setInteracting(true)}
-        onBlurCapture={(event) => {
-          if (!event.currentTarget.contains(event.relatedTarget as Node))
-            setInteracting(false);
-        }}
-        onPointerDown={(event) => {
-          if (
-            event.pointerType !== "touch" ||
-            (event.target as Element).closest("button")
-          )
-            return;
-          swipe.current = {
-            x: event.clientX,
-            y: event.clientY,
-            time: performance.now(),
-          };
-        }}
-        onPointerCancel={() => {
-          swipe.current = null;
-        }}
-        onPointerUp={(event) => {
-          const start = swipe.current;
-          swipe.current = null;
-          if (!start || performance.now() - start.time > 800) return;
-          const x = event.clientX - start.x;
-          const y = event.clientY - start.y;
-          if (Math.abs(x) > 48 && Math.abs(x) > Math.abs(y) * 1.2)
-            go(index + (x < 0 ? 1 : -1));
-        }}
-      >
-        {testimonials.length > 1 &&
-          [-1, 1].map((offset) => {
-            const adjacent =
-              testimonials[
-                (index + offset + testimonials.length) % testimonials.length
-              ];
-            return (
-              <m.div
-                className={`love-preview-card ${offset < 0 ? "love-preview-left" : "love-preview-right"}`}
-                key={`${offset}-${adjacent.id}`}
-                aria-hidden="true"
-                initial={
-                  reduced
-                    ? false
-                    : { opacity: 0, x: offset * 18, rotate: offset * 5 }
-                }
-                animate={{ opacity: 0.5, x: 0, rotate: offset * 5 }}
-                transition={{
-                  duration: reduced ? 0 : 0.65,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-              >
-                <Quote size={29} strokeWidth={1} />
-                <p>{adjacent.quote}</p>
-                <span className="love-preview-person">
-                  <UserRound size={23} strokeWidth={1} />
-                  <span>{adjacent.role}</span>
-                </span>
-              </m.div>
-            );
-          })}
-        <div className="love-card">
-          <div className="love-card-top">
-            <Quote size={35} strokeWidth={1} aria-hidden="true" />
-            <span className="eyebrow">
-              {review.placeholder
-                ? studio.love.previewLabel
-                : studio.love.eyebrow}
-            </span>
-            <span className="love-count">
-              {String(index + 1).padStart(2, "0")} /{" "}
-              {String(testimonials.length).padStart(2, "0")}
-            </span>
-          </div>
-          <div
-            className="love-slide-area"
-            aria-live={autoplay ? "off" : "polite"}
-            aria-atomic="true"
-          >
-            <AnimatePresence mode="wait" initial={false} custom={direction}>
-              <m.div
-                key={review.id}
-                custom={direction}
-                variants={{
-                  enter: (travel: number) =>
-                    reduced
-                      ? { opacity: 1, x: 0 }
-                      : {
-                          opacity: 0,
-                          x: travel * 28,
-                          y: 8,
-                          rotate: travel * 1.2,
-                        },
-                  center: { opacity: 1, x: 0, y: 0, rotate: 0 },
-                  leave: (travel: number) =>
-                    reduced
-                      ? { opacity: 1, x: 0 }
-                      : {
-                          opacity: 0,
-                          x: travel * -22,
-                          y: -4,
-                          rotate: travel * -0.6,
-                        },
-                }}
-                initial="enter"
-                animate="center"
-                exit="leave"
-                transition={{
-                  duration: reduced ? 0 : 0.45,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                role="group"
-                aria-roledescription="slide"
-                aria-label={`Review ${index + 1} of ${testimonials.length}`}
-              >
-                <blockquote>
-                  <span className="sr-only">{review.quote}</span>
-                  <span aria-hidden="true">
-                    {review.quote.split(/\s+/).map((word, number) => (
-                      <span
-                        className="review-word"
-                        key={number}
-                        style={
-                          {
-                            "--review-word-delay": `${Math.min(number, 35) * 0.022}s`,
-                          } as CSSProperties
-                        }
-                      >
-                        {word}{" "}
-                      </span>
-                    ))}
-                  </span>
-                </blockquote>
-                <div className="review-person">
-                  <div className="review-avatar">
-                    {review.portrait && !review.placeholder ? (
-                      <Image
-                        src={review.portrait}
-                        alt={review.name}
-                        width={60}
-                        height={60}
-                      />
-                    ) : (
-                      <UserRound
-                        size={27}
-                        strokeWidth={1}
-                        aria-label={studio.love.personPlaceholder}
-                      />
-                    )}
-                  </div>
-                  <div>
-                    <strong>{review.name}</strong>
-                    <small>{review.role}</small>
-                  </div>
-                </div>
-              </m.div>
-            </AnimatePresence>
-          </div>
-          <div className="love-controls">
-            <div
-              key={review.id}
-              className="love-progress"
-              aria-hidden="true"
-              data-autoplay={hydrated && !reduced && testimonials.length > 1}
-            >
-              {testimonials.map((item, i) => (
-                <span key={item.id} className={i === index ? "current" : ""} />
-              ))}
-            </div>
-            <div>
-              <button
-                type="button"
-                className="icon-button"
-                onClick={() => go(index - 1)}
-                disabled={testimonials.length < 2}
-                aria-label={studio.love.previous}
-              >
-                <ArrowLeft size={18} />
-              </button>
-              <button
-                type="button"
-                className="icon-button"
-                disabled={
-                  (hydrated && Boolean(reduced)) || testimonials.length < 2
-                }
-                onClick={() => setPlaying((value) => !value)}
-                aria-label={autoplay ? studio.love.pause : studio.love.play}
-              >
-                {autoplay ? <Pause size={17} /> : <Play size={17} />}
-              </button>
-              <button
-                type="button"
-                className="icon-button"
-                onClick={() => go(index + 1)}
-                disabled={testimonials.length < 2}
-                aria-label={studio.love.next}
-              >
-                <ArrowRight size={18} />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      {testimonials.some((item) => item.placeholder) && (
-        <p className="studio-note love-disclosure">{studio.love.notice}</p>
-      )}
-    </section>
   );
 }
 ``````
@@ -6290,6 +6269,7 @@ import { site } from "@/data/site";
 import { Reveal } from "./reveal";
 import { ProjectCard } from "./project-card";
 import { TextReveal } from "./text-reveal";
+import { WorkShowcaseVideo } from "./WorkShowcaseVideo";
 
 const BotServices = dynamic(
   () => import("./bot-services").then((m) => m.BotServices),
@@ -6366,6 +6346,7 @@ export function Work({
           </div>
           <p>{site.work.description}</p>
         </div>
+        <WorkShowcaseVideo />
         <div
           className="work-filters"
           role="tablist"

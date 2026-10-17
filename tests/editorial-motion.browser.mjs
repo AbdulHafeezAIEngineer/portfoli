@@ -68,24 +68,16 @@ try {
         );
       }
     }
-    // Browser emulation checks desktop Windows reduced-motion, live changes, and explicit opt-in.
-    await page.getByLabel("Animation preference").selectOption("system");
-    await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.waitForFunction(
-      () => !document.documentElement.dataset.motionReveals,
+    // Fresh visitors get On, including when the OS asks for reduced motion.
+    assert.equal(
+      await page.getByLabel("Animation preference").inputValue(),
+      "full",
     );
     assert.equal(
-      await page
-        .locator(".tool-marquee > div")
-        .evaluate((el) => getComputedStyle(el).animationName),
-      "none",
-    );
-    await page.emulateMedia({ reducedMotion: "no-preference" });
-    await page.waitForFunction(
-      () => document.documentElement.dataset.motionReveals === "enabled",
+      await page.getByLabel("Animation preference").locator("option").count(),
+      2,
     );
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.getByLabel("Animation preference").selectOption("full");
     await page.waitForFunction(
       () => document.documentElement.dataset.motionReveals === "enabled",
     );
@@ -124,7 +116,7 @@ try {
       assert.equal(await button.getAttribute("aria-expanded"), "false");
     }
     console.log(
-      `PASS ${width}px: both themes, categories, live OS preference, On/Off persistence, no overflow or unsolicited AI traffic.`,
+      `PASS ${width}px: both themes, categories, default On, manual Off persistence, no overflow or unsolicited AI traffic.`,
     );
     await context.close();
   }

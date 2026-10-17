@@ -20,6 +20,7 @@ import {
 } from "@/data/bots";
 import { Reveal } from "./reveal";
 import { FortePreview } from "./forte-preview";
+import { AiBotVideo } from "./AiBotVideo";
 
 const ChatPanel = dynamic(() => import("./bot-chat-panel"), { ssr: false });
 const icons = {
@@ -57,6 +58,7 @@ export function BotServices({ bots }: { bots: Bot[] }) {
           <p>{copy.description}</p>
         </div>
       </Reveal>
+      <AiBotVideo />
       <div className="bots-grid">
         {bots.map((bot, index) => {
           const Icon = icons[bot.id as keyof typeof icons] || Sparkles;

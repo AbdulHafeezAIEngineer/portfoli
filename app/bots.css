@@ -14,7 +14,7 @@
   height: 100%;
 }
 .bot-card {
-  --bot-accent: #d4af37;
+  --bot-accent: var(--accent-text);
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -25,24 +25,24 @@
   transition: transform 0.25s;
 }
 .bot-card:hover {
-  border-color: #d4af3766;
+  border-color: color-mix(in srgb, var(--accent-text) 40%, transparent);
   transform: translateY(-3px);
 }
 .bot-card-support {
-  --bot-accent: #99c7ae;
+  --bot-accent: var(--accent-text);
 }
 .bot-card-booking {
-  --bot-accent: #b8a6ff;
+  --bot-accent: var(--accent-text);
 }
 .bot-card-voice {
-  --bot-accent: #a0c8ef;
+  --bot-accent: var(--accent-text);
 }
 .bot-card-top {
   position: relative;
   min-height: 172px;
   border-bottom: 1px solid var(--line);
   overflow: hidden;
-  background: radial-gradient(ellipse at 50% 100%, #7c5cff0c, transparent 70%);
+  background: radial-gradient(ellipse at 50% 100%, color-mix(in srgb, var(--muted) 4.71%, transparent), transparent 70%);
 }
 .bot-art {
   position: absolute;
@@ -245,10 +245,10 @@
 .embed-card pre {
   padding: 15px;
   margin: 20px 0;
-  background: #0a0a12;
-  border: 1px solid #ffffff12;
+  background: var(--bg);
+  border: 1px solid color-mix(in srgb, var(--text) 7.06%, transparent);
   border-radius: 6px;
-  color: #d4d0e8;
+  color: var(--text);
   overflow-x: auto;
   font-size: 9px;
   line-height: 1.9;
@@ -301,7 +301,7 @@
   align-items: center;
 }
 .chat-dialog::backdrop {
-  background: #030309aa;
+  background: color-mix(in srgb, var(--neutral-black) 66.67%, transparent);
   backdrop-filter: blur(12px);
 }
 .chat-panel {
@@ -313,7 +313,7 @@
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 17px;
-  box-shadow: 0 30px 100px #00000060;
+  box-shadow: 0 30px 100px color-mix(in srgb, var(--neutral-black) 37.65%, transparent);
   overflow: hidden;
 }
 .chat-header {
@@ -330,9 +330,9 @@
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  background: #d4af3710;
+  background: color-mix(in srgb, var(--accent-text) 6.27%, transparent);
   color: var(--gold);
-  border: 1px solid #d4af3728;
+  border: 1px solid color-mix(in srgb, var(--accent-text) 15.69%, transparent);
   flex-shrink: 0;
 }
 .chat-header .eyebrow {
@@ -384,8 +384,8 @@
   border-top-left-radius: 3px;
 }
 .message-user {
-  background: #d4af3711;
-  border-color: #d4af3726;
+  background: color-mix(in srgb, var(--accent-text) 6.67%, transparent);
+  border-color: color-mix(in srgb, var(--accent-text) 14.9%, transparent);
   align-self: flex-end;
   border-top-right-radius: 3px;
 }
@@ -498,8 +498,8 @@
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  background: #d4af37;
-  color: #161207;
+  background: var(--accent);
+  color: var(--text);
 }
 .chat-send:disabled {
   opacity: 0.4;
@@ -519,8 +519,8 @@
 .chat-error {
   padding: 9px 11px;
   border-radius: 6px;
-  border: 1px solid #bd5f5f50;
-  background: #bd5f5f0c;
+  border: 1px solid color-mix(in srgb, var(--accent-text) 31.37%, transparent);
+  background: color-mix(in srgb, var(--accent-text) 4.71%, transparent);
   color: var(--text);
   font-size: 11px;
   line-height: 1.8;
@@ -547,7 +547,7 @@
   color: var(--muted);
 }
 .voice-playback input {
-  accent-color: #d4af37;
+  accent-color: var(--accent-text);
   width: 15px;
   height: 15px;
 }
@@ -579,7 +579,7 @@
   opacity: 0.35;
 }
 .mic-button.listening {
-  background: #bd5f5f20;
+  background: color-mix(in srgb, var(--accent-text) 12.55%, transparent);
   color: var(--text);
 }
 .chat-unconfigured {
@@ -805,7 +805,7 @@ html[data-motion="reduced"] .typing-indicator i {
   height: auto;
   padding: 16px 16px 12px;
   display: block;
-  background: radial-gradient(ellipse at 50% 30%, #7c5cff10, transparent 70%);
+  background: radial-gradient(ellipse at 50% 30%, color-mix(in srgb, var(--muted) 6.27%, transparent), transparent 70%);
 }
 .forte-card-top .method-badge {
   position: static;
@@ -813,13 +813,13 @@ html[data-motion="reduced"] .typing-indicator i {
   margin: 12px 0 0;
 }
 .forte-preview {
-  color: #20232a;
-  background: #fbfbfd;
-  border: 1px solid #d9dce5;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: 15px;
   overflow: hidden;
   text-align: left;
-  box-shadow: 0 12px 35px #00000020;
+  box-shadow: 0 12px 35px color-mix(in srgb, var(--neutral-black) 12.55%, transparent);
   transition: transform 0.5s;
 }
 .bot-card-real:hover .forte-preview {
@@ -830,11 +830,11 @@ html[data-motion="reduced"] .typing-indicator i {
   align-items: center;
   gap: 9px;
   padding: 14px 12px;
-  border-bottom: 1px solid #eef0f6;
+  border-bottom: 1px solid var(--line);
 }
 .forte-preview-header > svg {
   flex-shrink: 0;
-  color: #343640;
+  color: var(--text);
 }
 .forte-preview-header > div {
   min-width: 0;
@@ -852,7 +852,7 @@ html[data-motion="reduced"] .typing-indicator i {
 .forte-preview-header > div > span {
   display: block;
   font-size: 8px;
-  color: #686d7c;
+  color: var(--muted);
   line-height: 1.6;
   overflow: hidden;
   white-space: nowrap;
@@ -863,8 +863,8 @@ html[data-motion="reduced"] .typing-indicator i {
   font-family: Georgia, serif;
   font-size: 10px;
   font-weight: 700;
-  background: #fff;
-  border: 1px solid #e3e4e9;
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: 5px;
   padding: 7px 4px;
   letter-spacing: -0.5px;
@@ -877,7 +877,7 @@ html[data-motion="reduced"] .typing-indicator i {
   display: block;
   font-size: 6px;
   letter-spacing: 1.6px;
-  color: #727a8a;
+  color: var(--muted);
   margin-bottom: 12px;
 }
 .forte-preview-body > strong {
@@ -889,7 +889,7 @@ html[data-motion="reduced"] .typing-indicator i {
   max-width: 350px;
 }
 .forte-preview-body > p {
-  color: #657188;
+  color: var(--accent-text);
   font-size: 12px;
   line-height: 1.6;
   margin-top: 9px;
@@ -900,28 +900,28 @@ html[data-motion="reduced"] .typing-indicator i {
   align-items: center;
   gap: 12px;
   margin-top: 20px;
-  color: #3c4b65;
+  color: var(--accent-text);
   font-size: 9px;
 }
 .forte-preview-composer {
   margin: 0 12px;
-  border: 1px solid #d6d9e1;
+  border: 1px solid var(--line);
   border-radius: 12px;
   padding: 11px 12px;
-  background: #fff;
-  box-shadow: 0 2px 4px #00000006;
-  color: #657188;
+  background: var(--surface);
+  box-shadow: 0 2px 4px color-mix(in srgb, var(--neutral-black) 2.35%, transparent);
+  color: var(--accent-text);
   font-size: 10px;
 }
 .forte-preview-composer > div {
   display: flex;
   gap: 13px;
   margin-top: 16px;
-  color: #747f91;
+  color: var(--muted);
 }
 .forte-preview-powered {
   padding: 8px 12px;
-  color: #778397;
+  color: var(--accent-text);
   font-size: 7px;
   text-align: center;
 }

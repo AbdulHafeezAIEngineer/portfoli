@@ -2,6 +2,14 @@
 
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
+## Current purple palette and local showcase videos
+
+The shared UI now uses the owner-specified purple tokens in both themes, with neutral large typography and no purple gradients. Custom project artwork, device designs, lower layouts and the curved photo wall retain their geometry/content/colors. Work and AI Bots have local WebM/MP4 showcases with visibility-based play/pause, an AI once/replay flow, and poster-only behavior below 768px or under reduced motion. No new library or consent/Botpress changes were introduced.
+
+Pending follow-ups are also complete: Motion defaults to On (saved Off persists), and Testimonials uses the supplied four-card composition with explicit layout samples when approved feedback is absent. This supersedes the older carousel/invitation behavior described below. Current build/lint/types, native media browser checks, six-width/both-theme regressions, logo/reading/gallery/FAQ checks, five consent tests and five login tests passed. Desktop/mobile WCAG A/AA scans in both themes found zero violations; token text/button contrast is at least 4.66:1. See [the complete file list, final token table and evidence](docs/PURPLE_VIDEO_UPDATE.md).
+
+The supplied Vercel log still identifies first-owner `ADMIN_PASSWORD` symbol validation as the production blocker. No credentials, authenticator settings or backend rules were changed. Local success is not verification of a live production deployment or owner login. Earlier performance figures below are historical.
+
 ## Motion from the supplied video
 
 The 19.38-second reference shows a profile flip and progressive reading emphasis; it does not include its testimonials section. Elvora's existing logo now has a two-face scroll-linked flip and visible-only shine on desktop/touch. Hero/About/selected introduction copy gains reversible word emphasis using one inline word element plus a CSS ink layer, with stable widths, an accessible full-text copy and native no-JavaScript readability. Minor icon/arrow feedback is gated by motion preferences.

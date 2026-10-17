@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { site } from "@/data/site";
+import palette from "@/data/theme-tokens.json";
 
 export const runtime = "edge";
 export const alt = site.title;
@@ -16,10 +17,10 @@ export default function OpenGraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#0A0A12",
+          background: palette.dark.background,
           padding: "70px 80px",
-          color: "#f7f6f2",
-          borderBottom: "8px solid #D4AF37",
+          color: palette.dark.text,
+          borderBottom: `8px solid ${palette.dark.accent}`,
           fontFamily: "sans-serif",
         }}
       >
@@ -27,7 +28,7 @@ export default function OpenGraphImage() {
           style={{
             display: "flex",
             fontSize: 24,
-            color: "#D4AF37",
+            color: palette.dark.accentHover,
             letterSpacing: 4,
           }}
         >
@@ -43,11 +44,11 @@ export default function OpenGraphImage() {
           }}
         >
           <span>{site.hero.heading[0]}</span>
-          <span style={{ color: "#D4AF37" }}>
+          <span>
             {site.hero.heading.slice(1).join(" ")}
           </span>
         </div>
-        <div style={{ display: "flex", fontSize: 24, color: "#a8a8b8" }}>
+        <div style={{ display: "flex", fontSize: 24, color: palette.dark.muted }}>
           {site.role}
         </div>
       </div>

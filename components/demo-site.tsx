@@ -1,4 +1,6 @@
 "use client";
+
+import artColors from "@/data/project-art-colors.json";
 import Link from "next/link";
 import { useState } from "react";
 import {
@@ -324,45 +326,45 @@ function Architecture() {
     >
       <defs>
         <linearGradient id="arch-sky" x2="0" y2="1">
-          <stop stopColor="#acbdc0" />
-          <stop offset="1" stopColor="#e6dfc8" />
+          <stop stopColor={artColors.tone01} />
+          <stop offset="1" stopColor={artColors.tone02} />
         </linearGradient>
         <linearGradient id="arch-glass" x2="1" y2="1">
-          <stop stopColor="#52645c" />
-          <stop offset=".5" stopColor="#82968b" />
-          <stop offset="1" stopColor="#2c403c" />
+          <stop stopColor={artColors.tone03} />
+          <stop offset=".5" stopColor={artColors.tone04} />
+          <stop offset="1" stopColor={artColors.tone05} />
         </linearGradient>
         <linearGradient id="arch-floor">
-          <stop stopColor="#d4c5a9" />
-          <stop offset="1" stopColor="#ece2cb" />
+          <stop stopColor={artColors.tone06} />
+          <stop offset="1" stopColor={artColors.tone07} />
         </linearGradient>
       </defs>
       <path fill="url(#arch-sky)" d="M0 0h900v700H0z" />
-      <circle cx="720" cy="150" r="82" fill="#fff0d2" opacity=".7" />
-      <path d="M0 440 250 365 900 420v280H0" fill="#b6b29c" />
+      <circle cx="720" cy="150" r="82" fill={artColors.tone08} opacity=".7" />
+      <path d="M0 440 250 365 900 420v280H0" fill={artColors.tone09} />
       <path fill="url(#arch-floor)" d="m0 510 700-80 200 85v185H0" />
-      <path d="M130 270h630v260H130z" fill="#d9d0b7" />
-      <path d="m130 270 120-75h630l-120 75" fill="#e9dfc6" />
-      <path d="m760 270 120-75v250l-120 85" fill="#bdb69f" />
+      <path d="M130 270h630v260H130z" fill={artColors.tone10} />
+      <path d="m130 270 120-75h630l-120 75" fill={artColors.tone11} />
+      <path d="m760 270 120-75v250l-120 85" fill={artColors.tone12} />
       <path d="M175 310h540v175H175z" fill="url(#arch-glass)" />
       <path
         d="M260 310v175m110-175v175m110-175v175m110-175v175"
-        stroke="#d8cdb2"
+        stroke={artColors.tone13}
         strokeWidth="9"
       />
-      <path d="M115 492h660v30H115z" fill="#f0e3c8" />
-      <path d="m60 610 500-40 225 62-520 55" fill="#749c9a" />
-      <path d="m80 613 480-32 190 49-490 42" fill="#a5c6bf" />
+      <path d="M115 492h660v30H115z" fill={artColors.tone14} />
+      <path d="m60 610 500-40 225 62-520 55" fill={artColors.tone15} />
+      <path d="m80 613 480-32 190 49-490 42" fill={artColors.tone16} />
       <path
         d="M48 260q80-90 120-225M65 235q-5-95-50-145M80 210q95-45 185-17M105 160q-60-110-110-120"
-        stroke="#68775d"
+        stroke={artColors.tone17}
         strokeWidth="22"
         fill="none"
       />
-      <path d="M50 490 76 190" stroke="#7e7255" strokeWidth="13" />
-      <path d="m790 560 35-135 40 135" fill="#667a56" />
-      <ellipse cx="815" cy="565" rx="75" ry="16" fill="#6f785a" opacity=".4" />
-      <path d="m0 700 900-80v80" fill="#948d74" opacity=".2" />
+      <path d="M50 490 76 190" stroke={artColors.tone18} strokeWidth="13" />
+      <path d="m790 560 35-135 40 135" fill={artColors.tone19} />
+      <ellipse cx="815" cy="565" rx="75" ry="16" fill={artColors.tone20} opacity=".4" />
+      <path d="m0 700 900-80v80" fill={artColors.tone21} opacity=".2" />
     </svg>
   );
 }
@@ -429,19 +431,19 @@ function Garment({ variant }: { variant: number }) {
         <linearGradient id={`fabric-${variant}`}>
           <stop
             stopColor={
-              variant === 0 ? "#a47c5d" : variant === 1 ? "#cec8ba" : "#303432"
+              variant === 0 ? artColors.tone22 : variant === 1 ? artColors.tone23 : artColors.tone24
             }
           />
           <stop
             offset=".45"
             stopColor={
-              variant === 0 ? "#d0aa86" : variant === 1 ? "#f3ede0" : "#666961"
+              variant === 0 ? artColors.tone25 : variant === 1 ? artColors.tone26 : artColors.tone27
             }
           />
           <stop
             offset="1"
             stopColor={
-              variant === 0 ? "#916b50" : variant === 1 ? "#b7b1a4" : "#282c2b"
+              variant === 0 ? artColors.tone28 : variant === 1 ? artColors.tone29 : artColors.tone30
             }
           />
         </linearGradient>
@@ -451,7 +453,7 @@ function Garment({ variant }: { variant: number }) {
         cy="603"
         rx="160"
         ry="19"
-        fill="#473b2d"
+        fill={artColors.tone31}
         opacity=".12"
       />
       {variant < 2 ? (
@@ -462,20 +464,20 @@ function Garment({ variant }: { variant: number }) {
           />
           <path
             d="m185 110 65 142 65-142-30 110 35 34-68 95-68-95 35-34z"
-            fill={variant === 0 ? "#b48b68" : "#e0d8ca"}
+            fill={variant === 0 ? artColors.tone32 : artColors.tone33}
           />
           <path
             d="M250 250v330"
-            stroke={variant === 0 ? "#8a654c" : "#b0a999"}
+            stroke={variant === 0 ? artColors.tone34 : artColors.tone35}
             strokeWidth="2"
           />
-          <path d="m160 393 60 5m65 0 55-5" stroke="#715d4b" strokeWidth="3" />
+          <path d="m160 393 60 5m65 0 55-5" stroke={artColors.tone36} strokeWidth="3" />
           {[320, 370, 420].map((y) => (
-            <circle key={y} cx="265" cy={y} r="4" fill="#5b4739" />
+            <circle key={y} cx="265" cy={y} r="4" fill={artColors.tone37} />
           ))}
           <path
             d="m150 255 20 130m180-130-20 130"
-            stroke="#fff"
+            stroke={artColors.tone38}
             strokeOpacity=".1"
             strokeWidth="2"
           />
@@ -488,14 +490,14 @@ function Garment({ variant }: { variant: number }) {
           />
           <path
             d="M155 125h190m-95 0v135m-58-80-18 360m138-360-15 360"
-            stroke="#e6e0cf"
+            stroke={artColors.tone39}
             strokeOpacity=".22"
             strokeWidth="2"
           />
           <path
             d="m155 150 47 0-38 65m181-65h-47l44 65"
             fill="none"
-            stroke="#242927"
+            stroke={artColors.tone40}
             strokeWidth="2"
           />
         </>
@@ -503,7 +505,7 @@ function Garment({ variant }: { variant: number }) {
       <path
         d="M190 106q60-35 120 0"
         fill="none"
-        stroke="#644e3b"
+        stroke={artColors.tone41}
         strokeWidth="3"
         opacity=".3"
       />

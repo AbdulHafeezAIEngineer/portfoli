@@ -574,6 +574,8 @@ Agency services, FAQs and permission-approved reviews have an additive database 
 
 Next.js 15 App Router, TypeScript, Tailwind CSS and Framer Motion. All application backend logic runs in Next.js route handlers. Selected Work contains four bespoke fictional websites: Solenne (hotel), Vanta Motors (automotive), Aster Care (private clinic) and Kovo Studio (architecture), each with a working demo and four actual browser-captured gallery images. CSS 3D laptop/phone cards present their desktop and mobile views. The featured Forte O Level Study Assistant card displays a chat preview and opens its in-page Botpress panel with one click anywhere on the card. External chat permission is required before the provider embed loads. The portfolio retains three API chat demos, voice controls, About Me, the supplied Coursiv certificate, domain-email contact and the private PostgreSQL/Prisma/Auth.js admin. Older demos and the Elvora promotional asset are archived and are not selected work.
 
+Current UI/video update: [purple palette, preserved custom designs, visibility-controlled showcases, Testimonials and complete changed-file list](docs/PURPLE_VIDEO_UPDATE.md).
+
 ## Agency features
 
 Services and project-note routes, native FAQs, a private service/FAQ/review CMS, searchable paginated inquiries with status and private notes, actual dashboard counts and audit history. Contact acceptance distinguishes database storage from optional SMTP notification. Genuine approved reviews appear only after publication; the About section uses original Elvora brand artwork.
@@ -909,6 +911,14 @@ To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQ
 # Verification — 17 October 2026
 
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
+
+## Current purple palette and local showcase videos
+
+The shared UI now uses the owner-specified purple tokens in both themes, with neutral large typography and no purple gradients. Custom project artwork, device designs, lower layouts and the curved photo wall retain their geometry/content/colors. Work and AI Bots have local WebM/MP4 showcases with visibility-based play/pause, an AI once/replay flow, and poster-only behavior below 768px or under reduced motion. No new library or consent/Botpress changes were introduced.
+
+Pending follow-ups are also complete: Motion defaults to On (saved Off persists), and Testimonials uses the supplied four-card composition with explicit layout samples when approved feedback is absent. This supersedes the older carousel/invitation behavior described below. Current build/lint/types, native media browser checks, six-width/both-theme regressions, logo/reading/gallery/FAQ checks, five consent tests and five login tests passed. Desktop/mobile WCAG A/AA scans in both themes found zero violations; token text/button contrast is at least 4.66:1. See [the complete file list, final token table and evidence](docs/PURPLE_VIDEO_UPDATE.md).
+
+The supplied Vercel log still identifies first-owner `ADMIN_PASSWORD` symbol validation as the production blocker. No credentials, authenticator settings or backend rules were changed. Local success is not verification of a live production deployment or owner login. Earlier performance figures below are historical.
 
 ## Motion from the supplied video
 
@@ -9559,6 +9569,7 @@ export default nextConfig;
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "prebuild": "node scripts/generate-theme-assets.mjs",
     "dev": "next dev --hostname 0.0.0.0",
     "build": "node --env-file-if-exists=.env.local --import tsx scripts/prepare-production.ts && next build",
     "start": "next start --hostname 0.0.0.0",
@@ -9589,6 +9600,7 @@ export default nextConfig;
     "test:login-fields:browser": "node tests/login-fields.browser.mjs",
     "test:video-motion:browser": "node tests/video-motion.browser.mjs",
     "test:reviews:browser": "node tests/review-motion.browser.mjs",
+    "test:showcase:browser": "node tests/showcase-videos.browser.mjs",
     "images:previews": "node scripts/generate-image-previews.mjs"
   },
   "dependencies": {
@@ -9659,9 +9671,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        midnight: "#0A0A12",
-        champagne: "#D4AF37",
-        violet: "#7C5CFF",
+        background: "var(--bg)",
+        surface: "var(--surface)",
+        border: "var(--line)",
+        foreground: "var(--text)",
+        muted: "var(--muted)",
+        accent: "var(--accent)",
+        "accent-hover": "var(--accent-hover)",
+        "accent-soft": "var(--accent-soft)",
+        midnight: "var(--bg)",
+        champagne: "var(--accent-text)",
+        violet: "var(--accent)",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],

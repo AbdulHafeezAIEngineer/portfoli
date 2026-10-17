@@ -16,7 +16,7 @@
   display: inline-grid;
   place-items: center;
   flex-shrink: 0;
-  color: var(--mark-color);
+  color: var(--text);
 }
 .tool-brand-mark i {
   width: 100%;
@@ -31,16 +31,12 @@
     sans-serif;
   letter-spacing: -0.08em;
 }
-[data-theme="light"] .tool-brand-mark {
-  color: color-mix(in srgb, var(--mark-color) 40%, #171720);
-}
 
 /* A practical toolkit, laid out as an index rather than a proficiency chart. */
 .toolkit-section {
   position: relative;
 }
-.toolkit-section::before,
-.editorial-love::before {
+.toolkit-section::before {
   content: "";
   position: absolute;
   inset: 0 -15px;
@@ -56,7 +52,7 @@
   background-position:
     17px 29px,
     100px 61px;
-  mask-image: linear-gradient(transparent, #000 15%, #000 85%, transparent);
+  mask-image: linear-gradient(transparent, var(--neutral-black) 15%, var(--neutral-black) 85%, transparent);
 }
 .toolkit-heading {
   display: grid;
@@ -311,7 +307,7 @@
 .domain-ai {
   background: linear-gradient(
     115deg,
-    color-mix(in srgb, var(--gold) 6%, var(--surface)),
+    color-mix(in srgb, var(--muted) 6%, var(--surface)),
     var(--surface) 70%
   );
 }
@@ -427,155 +423,29 @@
   padding-top: 22px;
 }
 
-/* One rotating review, with cropped neighbours and a restrained star field. */
-.editorial-love {
-  position: relative;
-  isolation: isolate;
-}
-.editorial-love .reference-love-heading {
-  display: block;
-  text-align: center;
-}
-.editorial-love .reference-love-heading h2 {
-  font-size: clamp(40px, 5.3vw, 72px);
-  max-width: none;
-  letter-spacing: -0.06em;
-}
-.editorial-love .reference-love-heading > p {
-  max-width: none;
-  margin-top: 18px;
-}
-.editorial-love .love-stage {
-  max-width: none;
-  padding: 30px max(50px, 17%);
-  margin-top: 38px;
-  position: relative;
-  overflow: hidden;
-  border-radius: 24px;
-}
-.editorial-love .love-card {
-  position: relative;
-  z-index: 1;
-  padding: 32px;
-  min-height: 350px;
-  background: linear-gradient(125deg, var(--raised), var(--surface));
-  border-radius: 24px;
-  box-shadow: 0 18px 60px #00000012;
-}
-.editorial-love .love-card-top {
-  gap: 13px;
-}
-.editorial-love .love-card-top > svg {
-  flex-shrink: 0;
-  color: var(--gold);
-}
-.editorial-love .love-card-top .eyebrow {
-  font-size: 8px;
-  letter-spacing: 1.2px;
-}
-.editorial-love .love-count {
-  margin-left: auto;
-  flex-shrink: 0;
-}
-.editorial-love .love-slide-area {
-  overflow: hidden;
-  padding-top: 26px;
-  min-height: 210px;
-}
-.editorial-love .love-slide-area blockquote {
-  font-size: clamp(18px, 1.9vw, 25px);
-  line-height: 1.6;
-  margin-bottom: 27px;
-}
-.love-preview-card {
-  position: absolute;
-  top: 60px;
-  bottom: 60px;
-  width: 35%;
-  display: flex;
-  flex-direction: column;
-  padding: 29px;
-  border-radius: 22px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  color: var(--muted);
-  pointer-events: none;
-  opacity: 0.6;
-}
-.love-preview-left {
-  left: -20%;
-  transform: rotate(-3deg);
-}
-.love-preview-right {
-  right: -20%;
-  transform: rotate(3deg);
-}
-.love-preview-card > svg {
-  color: var(--gold);
-}
-.love-preview-card > p {
-  font-size: 15px;
-  line-height: 1.8;
-  margin-top: 25px;
-}
-.love-preview-person {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 10px;
-  margin-top: auto;
-  padding-top: 22px;
-}
-.editorial-love .love-disclosure {
-  max-width: 640px;
-  font-size: 10px;
-}
 
-/* An ivory invitation, with the existing functional contact form. */
+
+/* Theme-aware invitation, with the existing functional contact form. */
 .editorial-contact {
   padding-top: 60px;
   padding-bottom: 100px;
 }
 .contact-paper {
-  --bg: #14151b;
-  --surface: #1b1c23;
-  --raised: #24252d;
-  --text: #f3f0e9;
-  --muted: #b4b1bc;
-  --line: #f3f0e919;
-  --line-bright: #f3f0e942;
-  --gold: #e3c58c;
-  --glass: #1b1c23;
-  --soft: #ffffff05;
-  --contact-error: #ffadb8;
-  --contact-success: #9addba;
   color-scheme: dark;
   color: var(--text);
   background:
-    radial-gradient(ellipse at 0% 0%, #b9985d13, transparent 55%), var(--bg);
+    radial-gradient(ellipse at 0% 0%, color-mix(in srgb, var(--muted) 7.45%, transparent), transparent 55%), var(--bg);
   border: 1px solid var(--line);
   border-radius: 26px;
   padding: clamp(28px, 4.7vw, 68px);
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
   gap: 60px;
-  box-shadow: 0 30px 90px #00000012;
+  box-shadow: 0 30px 90px color-mix(in srgb, var(--neutral-black) 7.06%, transparent);
   position: relative;
   isolation: isolate;
 }
 [data-theme="light"] .contact-paper {
-  --bg: #f0eee7;
-  --surface: #faf9f5;
-  --raised: #e3e0d7;
-  --text: #19191d;
-  --muted: #626169;
-  --line: #21212b24;
-  --line-bright: #21212b45;
-  --gold: #715719;
-  --glass: #faf9f5;
-  --soft: #19191d04;
-  --contact-error: #a22a38;
-  --contact-success: #235d3f;
   color-scheme: light;
 }
 .contact-paper::before,
@@ -720,7 +590,7 @@
   outline-color: var(--gold);
 }
 
-/* A bold directory, huge cropped wordmark and a violet wave sign-off. */
+/* A bold directory, huge cropped wordmark and a neutral wave sign-off. */
 .editorial-footer {
   position: relative;
   isolation: isolate;
@@ -835,14 +705,8 @@
   position: relative;
   margin-top: -1px;
   padding: 65px 0 22px;
-  color: #f3f0fa;
-  background: #140c24;
-  --text: #f3f0fa;
-  --muted: #b6a9c9;
-  --line: #e4d2ff24;
-  --gold: #e2c66f;
-  --raised: #ffffff08;
-  --surface: #29183f;
+  color: var(--text);
+  background: var(--bg);
 }
 .footer-waves {
   position: absolute;
@@ -860,15 +724,15 @@
   margin-left: -5%;
 }
 .footer-waves path {
-  fill: #140c24;
+  fill: var(--text);
 }
 .footer-waves path:first-child {
-  fill: #27153f;
+  fill: var(--text);
   opacity: 0.7;
   animation: editorial-wave 16s ease-in-out infinite alternate;
 }
 .footer-waves path:nth-child(2) {
-  fill: #1c102e;
+  fill: var(--text);
   animation: editorial-wave 22s ease-in-out infinite alternate-reverse;
 }
 .footer-emblem {
@@ -885,13 +749,13 @@
   height: 94px;
   border-radius: 50%;
   position: relative;
-  background: radial-gradient(ellipse, #aa78f020, transparent 70%);
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--muted) 12.55%, transparent), transparent 70%);
 }
 .footer-emblem > span::before {
   content: "";
   position: absolute;
   inset: 0;
-  border: 1px solid #e2c66f36;
+  border: 1px solid color-mix(in srgb, var(--accent-text) 21.18%, transparent);
   border-radius: 50%;
 }
 .footer-emblem > span::after {
@@ -900,7 +764,7 @@
   inset: -6px;
   border-radius: 50%;
   border: 1px solid transparent;
-  border-top-color: #c6a0fb88;
+  border-top-color: color-mix(in srgb, var(--accent-text) 53.33%, transparent);
   animation: editorial-emblem 16s linear infinite;
 }
 .footer-emblem strong {
@@ -925,8 +789,8 @@
   gap: 15px;
 }
 .footer-social-row .social-icons a {
-  border-color: #ffffff21;
-  background: #ffffff06;
+  border-color: color-mix(in srgb, var(--text) 12.94%, transparent);
+  background: color-mix(in srgb, var(--text) 2.35%, transparent);
 }
 .footer-email-icon {
   display: flex;
@@ -1176,23 +1040,6 @@
     gap: 8px;
     margin-top: 17px;
   }
-  .editorial-love .love-stage {
-    padding: 20px 35px;
-  }
-  .editorial-love .love-card {
-    padding: 25px;
-  }
-  .love-preview-card {
-    top: 40px;
-    bottom: 40px;
-    padding: 15px;
-  }
-  .love-preview-left {
-    left: -27%;
-  }
-  .love-preview-right {
-    right: -27%;
-  }
   .editorial-contact {
     padding-bottom: 70px;
   }
@@ -1310,53 +1157,6 @@
   }
   .domain-card > p {
     font-size: 12px;
-  }
-  .editorial-love .love-stage {
-    padding: 16px 15px;
-    margin-top: 25px;
-  }
-  .editorial-love .love-card {
-    padding: 22px;
-    min-height: 360px;
-    border-radius: 19px;
-  }
-  .editorial-love .love-card-top .eyebrow {
-    font-size: 7px;
-    letter-spacing: 0.7px;
-  }
-  .editorial-love .love-card-top > svg {
-    width: 24px;
-  }
-  .editorial-love .love-count {
-    font-size: 8px;
-  }
-  .editorial-love .love-slide-area {
-    min-height: 220px;
-  }
-  .editorial-love .review-avatar {
-    width: 44px;
-    height: 44px;
-  }
-  .editorial-love .review-person {
-    gap: 11px;
-  }
-  .editorial-love .review-person strong {
-    font-size: 10px;
-  }
-  .editorial-love .love-controls {
-    gap: 12px;
-  }
-  .editorial-love .love-progress span {
-    width: 12px;
-  }
-  .editorial-love .love-progress .current {
-    width: 22px;
-  }
-  .love-preview-left {
-    left: -30%;
-  }
-  .love-preview-right {
-    right: -30%;
   }
   .contact-paper {
     border-radius: 20px;

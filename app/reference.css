@@ -1,14 +1,4 @@
 /* Layout adaptation from the owner's supplied screenshots, using Elvora's identity. */
-:root {
-  --ref-card: #191920;
-  --ref-soft: #24242d;
-  --ref-shadow: 0 18px 34px #00000026;
-}
-[data-theme="light"] {
-  --ref-card: #fffefa;
-  --ref-soft: #eeebe3;
-  --ref-shadow: 0 14px 35px #38301e0a;
-}
 .text-reveal {
   white-space: normal;
 }
@@ -73,7 +63,7 @@
   transform: translateY(-6px);
   border-color: var(--line-bright);
   background:
-    radial-gradient(ellipse at 0 0, #d4af3707, transparent 70%), var(--ref-card);
+    radial-gradient(ellipse at 0 0, color-mix(in srgb, var(--muted) 2.75%, transparent), transparent 70%), var(--ref-card);
 }
 .reference-service-icon {
   display: grid;
@@ -82,8 +72,8 @@
   height: 46px;
   margin-bottom: 23px;
   color: var(--gold);
-  background: #d4af3718;
-  border: 1px solid #d4af3715;
+  background: color-mix(in srgb, var(--accent-text) 9.41%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-text) 8.24%, transparent);
   border-radius: 50%;
 }
 .reference-services .studio-service h3 {
@@ -170,8 +160,8 @@
   place-items: center;
   width: 34px;
   height: 34px;
-  background: linear-gradient(135deg, #ecd18c, #d4af37);
-  color: #1c1709;
+  background: linear-gradient(135deg, var(--muted), var(--muted));
+  color: var(--text);
   border-radius: 50%;
   font-size: 12px;
   font-weight: 600;
@@ -335,7 +325,7 @@
   bottom: -12px;
   right: -13px;
   border-radius: 24px;
-  background: #d4af3728;
+  background: color-mix(in srgb, var(--accent-text) 15.69%, transparent);
   z-index: -1;
 }
 .reference-about .about-portrait-image {
@@ -344,7 +334,7 @@
   border: 1px solid var(--line-bright);
   box-shadow: var(--ref-shadow);
   background:
-    radial-gradient(ellipse at center, #7c5cff14, transparent 70%),
+    radial-gradient(ellipse at center, color-mix(in srgb, var(--muted) 7.84%, transparent), transparent 70%),
     var(--ref-card);
 }
 .reference-about .about-portrait:hover {
@@ -401,43 +391,6 @@
   line-height: 1.85;
 }
 /* One live carousel slide with the soft side-card structure from the references. */
-.reference-love-heading {
-  display: block;
-  max-width: 750px;
-  text-align: center;
-  margin: 0 auto;
-}
-.reference-love-heading h2 {
-  font-size: clamp(30px, 3.6vw, 47px);
-  line-height: 1.15;
-  margin: 17px 0 20px;
-}
-.reference-love-heading > p {
-  margin: auto;
-  max-width: 550px;
-  font-size: 13px;
-}
-.love-section > .motion-reveal > .eyebrow {
-  text-align: center;
-}
-.love-stage {
-  margin-top: 45px;
-}
-.love-card {
-  background: var(--ref-card);
-  border-radius: 28px;
-}
-.love-offset {
-  background: var(--ref-card);
-  border-radius: 28px;
-  opacity: 0.75;
-}
-.love-slide-area blockquote {
-  font-size: 23px;
-}
-.love-card-top .eyebrow {
-  color: var(--muted);
-}
 /* A broad contact sheet: real screenshots, six new visual UI studies, no client-count claim. */
 .reference-bunch .reference-heading {
   margin-bottom: 35px;
@@ -486,7 +439,7 @@
 /* Three-column footer and quiet legal line from the supplied footer reference. */
 .reference-footer {
   background:
-    radial-gradient(ellipse at bottom, #7c5cff09, transparent 65%), var(--bg);
+    radial-gradient(ellipse at bottom, color-mix(in srgb, var(--muted) 3.53%, transparent), transparent 65%), var(--bg);
 }
 .reference-footer .footer-invitation > .motion-reveal:first-child {
   grid-column: 1/-1;
@@ -755,18 +708,6 @@
   .reference-about .fundamental-card {
     padding: 23px;
     border-radius: 21px;
-  }
-  .reference-love-heading {
-    text-align: center;
-  }
-  .reference-love-heading h2 {
-    font-size: 32px;
-  }
-  .reference-love-heading > p {
-    font-size: 12px;
-  }
-  .love-slide-area blockquote {
-    font-size: 20px;
   }
   .reference-bunch .bunch-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

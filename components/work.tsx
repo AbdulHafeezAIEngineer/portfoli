@@ -12,6 +12,7 @@ import { site } from "@/data/site";
 import { Reveal } from "./reveal";
 import { ProjectCard } from "./project-card";
 import { TextReveal } from "./text-reveal";
+import { WorkShowcaseVideo } from "./WorkShowcaseVideo";
 
 const BotServices = dynamic(
   () => import("./bot-services").then((m) => m.BotServices),
@@ -88,6 +89,7 @@ export function Work({
           </div>
           <p>{site.work.description}</p>
         </div>
+        <WorkShowcaseVideo />
         <div
           className="work-filters"
           role="tablist"

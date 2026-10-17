@@ -132,7 +132,7 @@
   padding: 26px 32px;
   margin-top: 35px;
   border-left: 2px solid var(--gold);
-  background: linear-gradient(90deg, #d4af3709, transparent);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--muted) 3.53%, transparent), transparent);
   font-family: var(--font-space), sans-serif;
   font-size: 18px;
   line-height: 1.7;
@@ -216,10 +216,10 @@
   gap: 9px;
   padding: 10px 15px;
   white-space: nowrap;
-  background: #0a0a12e8;
-  color: #f3f1eb;
+  background: color-mix(in srgb, var(--neutral-black) 90.98%, transparent);
+  color: var(--text);
   font-size: 11px;
-  border: 1px solid #ffffff30;
+  border: 1px solid color-mix(in srgb, var(--text) 18.82%, transparent);
   border-radius: 6px;
 }
 .certificate-info {
@@ -268,11 +268,11 @@
   border: 0;
   padding: 20px;
   margin: 0;
-  background: #0a0a12e8;
+  background: color-mix(in srgb, var(--neutral-black) 90.98%, transparent);
   color: var(--text);
 }
 .certificate-dialog::backdrop {
-  background: #0a0a12ee;
+  background: color-mix(in srgb, var(--neutral-black) 93.33%, transparent);
   backdrop-filter: blur(15px);
 }
 .certificate-view-shell {
@@ -447,7 +447,7 @@
   font-size: 12px;
 }
 .form-field [aria-invalid="true"] {
-  border-color: #da8484;
+  border-color: var(--accent-text);
 }
 .form-field input:focus-visible,
 .form-field textarea:focus-visible {
@@ -470,7 +470,7 @@
   flex-shrink: 0;
 }
 .field-error {
-  color: #f0a4a4;
+  color: var(--accent-text);
   font-size: 11px;
   line-height: 1.7;
   margin-top: 8px;
@@ -497,9 +497,9 @@
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  color: #9bd8bd;
-  background: #71c9970b;
-  border: 1px solid #71c99730;
+  color: var(--accent-text);
+  background: color-mix(in srgb, var(--accent-text) 4.31%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-text) 18.82%, transparent);
   border-radius: 7px;
   padding: 15px;
   font-size: 12px;
@@ -511,8 +511,8 @@
   margin-top: 2px;
 }
 .form-failure {
-  color: #f0a4a4;
-  border: 1px solid #da848440;
+  color: var(--accent-text);
+  border: 1px solid color-mix(in srgb, var(--accent-text) 25.1%, transparent);
   border-radius: 7px;
   padding: 15px;
   font-size: 12px;
@@ -527,10 +527,10 @@
 }
 [data-theme="light"] .field-error,
 [data-theme="light"] .form-failure {
-  color: #943e3e;
+  color: var(--accent-text);
 }
 [data-theme="light"] .form-success {
-  color: #256648;
+  color: var(--accent-text);
 }
 .elvora-contact {
   padding-bottom: 90px;

@@ -10,7 +10,6 @@ export function ToolMark({ name }: { name: string }) {
       aria-hidden="true"
       style={
         {
-          "--mark-color": mark?.color || "var(--gold)",
           ...(mark?.icon
             ? { "--mark-image": `url('/tool-marks/${mark.icon}.svg')` }
             : {}),

@@ -1,0 +1,45 @@
+{
+  "scope": "Local production Chromium; WCAG A/AA automated scans are not a full accessibility certification.",
+  "contrast": {
+    "light": {
+      "textOnBackground": 18.95,
+      "textOnSurface": 19.75,
+      "mutedOnBackground": 5.14,
+      "mutedOnSurface": 5.36,
+      "linksOnSurface": 5.7,
+      "buttonText": 5.7,
+      "buttonHover": 7.1
+    },
+    "dark": {
+      "textOnBackground": 18.01,
+      "textOnSurface": 16.7,
+      "mutedOnBackground": 7.45,
+      "mutedOnSurface": 6.91,
+      "linksOnSurface": 6.73,
+      "buttonText": 4.66,
+      "buttonHover": 7.26
+    }
+  },
+  "axe": [
+    {
+      "width": 1440,
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "violations": []
+    }
+  ]
+}

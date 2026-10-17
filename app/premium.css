@@ -1,16 +1,6 @@
-:root {
-  --glass: #14141ec9;
-  --line-bright: #d4af3738;
-  --shadow-luxe: 0 22px 65px #00000026, inset 0 1px 0 #ffffff08;
-}
 #top {
   position: relative;
   isolation: isolate;
-}
-[data-theme="light"] {
-  --glass: #fffefae6;
-  --line-bright: #80651455;
-  --shadow-luxe: 0 20px 55px #3027420c, inset 0 1px 0 #fff;
 }
 .scroll-progress {
   position: fixed;
@@ -19,36 +9,36 @@
   z-index: 60;
   transform-origin: left;
   transform: scaleX(0);
-  background: linear-gradient(90deg, #987944, #edcf81 55%, #a58bff);
-  box-shadow: 0 0 18px #d4af3738;
+  background: linear-gradient(90deg, var(--muted), var(--muted) 55%, var(--muted));
+  box-shadow: 0 0 18px color-mix(in srgb, var(--neutral-black) 21.96%, transparent);
   pointer-events: none;
 }
 .ambient-background {
   background-image: radial-gradient(
     ellipse at 70% 2%,
-    #7c5cff0e,
+    color-mix(in srgb, var(--muted) 5.49%, transparent),
     transparent 45%
   );
 }
 .ambient-background span {
   width: min(90vw, 1000px);
   height: min(90vw, 1000px);
-  background: radial-gradient(circle, #7c5cff15, transparent 65%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--muted) 8.24%, transparent), transparent 65%);
 }
 .ambient-background span:last-child {
-  background: radial-gradient(circle, #c9a35a13, transparent 67%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--muted) 7.45%, transparent), transparent 67%);
 }
 .site-header {
   background: color-mix(in srgb, var(--bg) 80%, transparent);
-  box-shadow: 0 8px 40px #00000008;
+  box-shadow: 0 8px 40px color-mix(in srgb, var(--neutral-black) 3.14%, transparent);
 }
 .brand-symbol {
-  box-shadow: 0 5px 18px #00000025;
+  box-shadow: 0 5px 18px color-mix(in srgb, var(--neutral-black) 14.51%, transparent);
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .wordmark:hover .brand-symbol {
   transform: rotate(-7deg) translateY(-2px);
-  box-shadow: 0 6px 25px #d4af371c;
+  box-shadow: 0 6px 25px color-mix(in srgb, var(--neutral-black) 10.98%, transparent);
 }
 .desktop-nav a {
   position: relative;
@@ -60,7 +50,7 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, var(--gold), transparent);
+  background: linear-gradient(90deg, var(--muted), transparent);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.3s;
@@ -88,10 +78,10 @@ h1 {
   color: var(--gold);
   background-image: linear-gradient(
     105deg,
-    #b68f40,
-    #f1df9b 40%,
-    #c7a04c 62%,
-    #e4c57c
+    var(--muted),
+    var(--muted) 40%,
+    var(--muted) 62%,
+    var(--muted)
   );
   background-size: 200% 100%;
   -webkit-background-clip: text;
@@ -102,7 +92,7 @@ h1 {
   animation: gold-light 10s ease-in-out infinite;
 }
 [data-theme="light"] .gold-text {
-  background-image: linear-gradient(105deg, #70531b, #896716 45%, #5e4514);
+  background-image: linear-gradient(105deg, var(--muted), var(--muted) 45%, var(--muted));
 }
 .hero-visual::before {
   content: "";
@@ -110,8 +100,8 @@ h1 {
   inset: 12% 0 -5%;
   background: radial-gradient(
     ellipse,
-    #9b7df518,
-    #c5a15908 45%,
+    color-mix(in srgb, var(--muted) 9.41%, transparent),
+    color-mix(in srgb, var(--muted) 3.14%, transparent) 45%,
     transparent 70%
   );
   pointer-events: none;
@@ -119,9 +109,9 @@ h1 {
 .portrait-card {
   border-color: var(--line-bright);
   box-shadow:
-    0 35px 80px #00000030,
-    0 0 50px #7c5cff08,
-    inset 0 1px 0 #ffffff12;
+    0 35px 80px color-mix(in srgb, var(--neutral-black) 18.82%, transparent),
+    0 0 50px color-mix(in srgb, var(--neutral-black) 3.14%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--neutral-white) 7.06%, transparent);
   animation: portrait-drift 9s ease-in-out infinite;
 }
 .portrait-orbit {
@@ -147,7 +137,7 @@ h1 {
   position: absolute;
   inset: -80% auto -80% -90%;
   width: 45%;
-  background: linear-gradient(90deg, transparent, #ffffff38, transparent);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--text) 21.96%, transparent), transparent);
   transform: rotate(25deg);
   transition: none;
   pointer-events: none;
@@ -157,14 +147,14 @@ h1 {
   left: 145%;
 }
 .button-gold {
-  background: linear-gradient(115deg, #d1a745, #edd18b 55%, #caa24b);
-  border-color: #e8c87a;
+  background: linear-gradient(115deg, var(--muted), var(--muted) 55%, var(--muted));
+  border-color: var(--accent-text);
   box-shadow:
-    0 6px 25px #d4af3714,
-    inset 0 1px 0 #ffffff45;
+    0 6px 25px color-mix(in srgb, var(--neutral-black) 7.84%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--neutral-white) 27.06%, transparent);
 }
 .button-gold:hover {
-  background: linear-gradient(115deg, #e1b653, #f4dda5 55%, #d2aa54);
+  background: linear-gradient(115deg, var(--muted), var(--muted) 55%, var(--muted));
 }
 .section-heading h2,
 .experience-section h2,
@@ -190,14 +180,14 @@ h1 {
 }
 .service-tabs button {
   border-radius: 14px;
-  box-shadow: inset 0 1px 0 #ffffff05;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--neutral-white) 1.96%, transparent);
   transition: none;
 }
 .service-tabs [aria-selected="true"] {
-  background: linear-gradient(115deg, #d4af370b, #7c5cff05), var(--surface);
+  background: linear-gradient(115deg, color-mix(in srgb, var(--muted) 4.31%, transparent), color-mix(in srgb, var(--muted) 1.96%, transparent)), var(--surface);
   box-shadow:
-    inset 0 1px 0 #d4af3720,
-    0 8px 30px #00000012;
+    inset 0 1px 0 color-mix(in srgb, var(--neutral-black) 12.55%, transparent),
+    0 8px 30px color-mix(in srgb, var(--neutral-black) 7.06%, transparent);
 }
 .project-card {
   border-radius: 20px;
@@ -208,8 +198,8 @@ h1 {
 .project-card:hover {
   transform: translateY(-7px);
   box-shadow:
-    0 30px 70px #00000030,
-    0 0 45px #d4af3706;
+    0 30px 70px color-mix(in srgb, var(--neutral-black) 18.82%, transparent),
+    0 0 45px color-mix(in srgb, var(--neutral-black) 2.35%, transparent);
 }
 .device-stage {
   border-radius: 14px;
@@ -221,7 +211,7 @@ h1 {
   border-radius: inherit;
   background: radial-gradient(
     450px circle at var(--pointer-x, 50%) var(--pointer-y, 40%),
-    #e9c9820c,
+    color-mix(in srgb, var(--muted) 4.71%, transparent),
     transparent 65%
   );
   opacity: 0;
@@ -256,22 +246,22 @@ h1 {
   scale: 1.045;
 }
 .artwork-project .device-stage {
-  background: #0b0910;
+  background: var(--bg);
 }
 .artwork-project .device-view {
   z-index: 2;
   padding: 12px 16px;
-  border: 1px solid #ffffff20;
+  border: 1px solid color-mix(in srgb, var(--text) 12.55%, transparent);
   border-radius: 9px;
-  background: #0a0a12cc;
-  color: #f3f1eb;
+  background: color-mix(in srgb, var(--neutral-black) 80%, transparent);
+  color: var(--text);
   backdrop-filter: blur(12px);
 }
 .artwork-light {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(165deg, #f6db9a08, transparent 40%, #0a0a1230);
+  background: linear-gradient(165deg, color-mix(in srgb, var(--muted) 3.14%, transparent), transparent 40%, color-mix(in srgb, var(--neutral-black) 18.82%, transparent));
 }
 .about-portrait {
   max-width: 365px;
@@ -287,8 +277,8 @@ h1 {
 .about-portrait:hover {
   transform: perspective(1000px) rotateY(0) rotateZ(0) translateY(-5px);
   box-shadow:
-    0 25px 60px #00000028,
-    0 0 35px #d4af3709;
+    0 25px 60px color-mix(in srgb, var(--neutral-black) 15.69%, transparent),
+    0 0 35px color-mix(in srgb, var(--neutral-black) 3.53%, transparent);
 }
 .about-portrait-image {
   position: relative;
@@ -308,7 +298,7 @@ h1 {
   content: "";
   position: absolute;
   inset: 60% 0 0;
-  background: linear-gradient(transparent, #08081099);
+  background: linear-gradient(transparent, color-mix(in srgb, var(--neutral-black) 60%, transparent));
   pointer-events: none;
 }
 .about-portrait-status {
@@ -316,7 +306,7 @@ h1 {
   bottom: 16px;
   left: 16px;
   z-index: 1;
-  color: #f3f1eb;
+  color: var(--text);
   font-size: 9px;
   letter-spacing: 1px;
 }
@@ -367,8 +357,8 @@ h1 {
 .contact-form:focus-within {
   border-color: var(--line-bright);
   box-shadow:
-    0 20px 50px #0000001c,
-    inset 0 1px 0 #d4af3715;
+    0 20px 50px color-mix(in srgb, var(--neutral-black) 10.98%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--neutral-black) 8.24%, transparent);
 }
 .process-card:hover,
 .skill-group:hover {
@@ -397,7 +387,7 @@ h1 {
   left: 0;
   width: 40%;
   height: 1px;
-  background: linear-gradient(90deg, var(--gold), transparent);
+  background: linear-gradient(90deg, var(--muted), transparent);
   transition: none;
 }
 .fundamental-card:hover::before {
@@ -411,21 +401,21 @@ h1 {
 }
 .experience-facts {
   border-style: solid;
-  background: linear-gradient(120deg, #d4af3704, #7c5cff04);
+  background: linear-gradient(120deg, color-mix(in srgb, var(--muted) 1.57%, transparent), color-mix(in srgb, var(--muted) 1.57%, transparent));
 }
 .skill-group li {
   transition: transform 0.3s;
 }
 .skill-group li:hover {
   border-color: var(--line-bright);
-  background: #d4af3708;
+  background: color-mix(in srgb, var(--accent-text) 3.14%, transparent);
   transform: translateY(-2px);
 }
 .certificate-preview {
-  background: radial-gradient(ellipse, #d4af370b, transparent 70%);
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--muted) 4.31%, transparent), transparent 70%);
 }
 .certificate-preview img {
-  box-shadow: 0 14px 40px #00000025;
+  box-shadow: 0 14px 40px color-mix(in srgb, var(--neutral-black) 14.51%, transparent);
 }
 .footer {
   margin-top: 35px;

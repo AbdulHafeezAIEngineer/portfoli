@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "prebuild": "node scripts/generate-theme-assets.mjs",
     "dev": "next dev --hostname 0.0.0.0",
     "build": "node --env-file-if-exists=.env.local --import tsx scripts/prepare-production.ts && next build",
     "start": "next start --hostname 0.0.0.0",
@@ -33,6 +34,7 @@
     "test:login-fields:browser": "node tests/login-fields.browser.mjs",
     "test:video-motion:browser": "node tests/video-motion.browser.mjs",
     "test:reviews:browser": "node tests/review-motion.browser.mjs",
+    "test:showcase:browser": "node tests/showcase-videos.browser.mjs",
     "images:previews": "node scripts/generate-image-previews.mjs"
   },
   "dependencies": {

@@ -1867,24 +1867,16 @@ try {
         );
       }
     }
-    // Browser emulation checks desktop Windows reduced-motion, live changes, and explicit opt-in.
-    await page.getByLabel("Animation preference").selectOption("system");
-    await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.waitForFunction(
-      () => !document.documentElement.dataset.motionReveals,
+    // Fresh visitors get On, including when the OS asks for reduced motion.
+    assert.equal(
+      await page.getByLabel("Animation preference").inputValue(),
+      "full",
     );
     assert.equal(
-      await page
-        .locator(".tool-marquee > div")
-        .evaluate((el) => getComputedStyle(el).animationName),
-      "none",
-    );
-    await page.emulateMedia({ reducedMotion: "no-preference" });
-    await page.waitForFunction(
-      () => document.documentElement.dataset.motionReveals === "enabled",
+      await page.getByLabel("Animation preference").locator("option").count(),
+      2,
     );
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.getByLabel("Animation preference").selectOption("full");
     await page.waitForFunction(
       () => document.documentElement.dataset.motionReveals === "enabled",
     );
@@ -1923,7 +1915,7 @@ try {
       assert.equal(await button.getAttribute("aria-expanded"), "false");
     }
     console.log(
-      `PASS ${width}px: both themes, categories, live OS preference, On/Off persistence, no overflow or unsolicited AI traffic.`,
+      `PASS ${width}px: both themes, categories, default On, manual Off persistence, no overflow or unsolicited AI traffic.`,
     );
     await context.close();
   }
@@ -2344,42 +2336,34 @@ try {
 ## tests/review-motion.browser.mjs
 
 ``````javascript
-/** Actual review component with explicit local QA records; no provider, CMS or public fixture route. */
+/** Real testimonial component, with local QA records that never enter site content. */
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import http from "node:http";
 import path from "node:path";
 import { build } from "esbuild";
 import { chromium } from "@playwright/test";
-
-const root = process.cwd();
 const bundle = await build({
   stdin: {
-    contents: `import React from 'react'; import {createRoot} from 'react-dom/client';
-      import {MotionProvider} from './components/motion-provider';
-      import {MotionControl} from './components/motion-preference';
-      import {WallOfLove} from './components/wall-of-love';
-      const reviews = [1,2,3].map(n=>({id:'local-qa-'+n,name:'Local review fixture '+n,role:'Browser verification only',portrait:'',quote:'Explicit QA review '+n+'. This is test content for checking smooth card transitions, keyboard controls and touch navigation. It is never published as a client endorsement.'}));
-      createRoot(document.getElementById('root')).render(<MotionProvider><MotionControl/><WallOfLove testimonials={reviews}/></MotionProvider>);`,
-    resolveDir: root,
+    contents: `import React from 'react';import{createRoot}from'react-dom/client';import{MotionProvider}from'./components/motion-provider';import{Testimonials}from'./components/testimonials';const reviews=location.search?[1,2,3,4].map(n=>({id:'qa-'+n,name:'Local QA record '+n,role:'Browser verification only',portrait:'',quote:'Explicit test record '+n+'. This is local verification content, never published as an endorsement.'})):[];createRoot(document.getElementById('root')).render(<MotionProvider><Testimonials testimonials={reviews}/></MotionProvider>);`,
+    resolveDir: process.cwd(),
     loader: "tsx",
   },
   bundle: true,
   write: false,
   format: "iife",
   jsx: "automatic",
-  tsconfig: path.join(root, "tsconfig.json"),
+  tsconfig: path.resolve("tsconfig.json"),
   define: { "process.env.NODE_ENV": '"production"' },
   plugins: [
     {
       name: "unused-portrait",
-      setup(builder) {
-        // These QA records have no portraits. The real image component is covered by application tests.
-        builder.onResolve({ filter: /^next\/image$/ }, () => ({
-          path: "unused-image",
+      setup(b) {
+        b.onResolve({ filter: /^next\/image$/ }, () => ({
+          path: "image",
           namespace: "qa",
         }));
-        builder.onLoad({ filter: /.*/, namespace: "qa" }, () => ({
+        b.onLoad({ filter: /.*/, namespace: "qa" }, () => ({
           contents: "export default function Image(){return null}",
           loader: "js",
         }));
@@ -2393,127 +2377,75 @@ const styles = [
   "editorial",
   "refinement",
   "reference-motion",
+  "theme-tokens",
+  "atelier",
 ]
-  .map((name) => fs.readFileSync(path.join(root, "app", name + ".css"), "utf8"))
-  .join("\n") + "\n.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}";
-const server = http.createServer((request, response) => {
-  if (request.url === "/bundle.js") {
-    response.setHeader("Content-Type", "text/javascript");
-    response.end(bundle.outputFiles[0].text);
-  } else if (request.url === "/style.css") {
-    response.setHeader("Content-Type", "text/css");
-    response.end(styles);
-  } else {
-    response.setHeader("Content-Type", "text/html");
-    response.end(
-      '<!doctype html><html lang="en" data-theme="dark" data-motion="full"><head><title>Local review motion QA</title><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/style.css"></head><body><main id="root"></main><script src="/bundle.js"></script></body></html>',
+  .map((n) => fs.readFileSync("app/" + n + ".css", "utf8"))
+  .join("\n");
+const server = http.createServer((req, res) => {
+  if (req.url === "/bundle.js") {
+    res.setHeader("Content-Type", "text/javascript");
+    res.end(bundle.outputFiles[0].text);
+  } else if (req.url === "/styles.css") {
+    res.setHeader("Content-Type", "text/css");
+    res.end(styles);
+  } else
+    res.end(
+      '<!doctype html><html lang="en" data-theme="light" data-motion="full"><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Local testimonial QA</title><link rel="stylesheet" href="/styles.css"></head><body><main id="root"></main><script src="/bundle.js"></script></body></html>',
     );
-  }
 });
-await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
-const base = `http://127.0.0.1:${server.address().port}`;
+await new Promise((r) => server.listen(0, "127.0.0.1", r));
 const browser = await chromium.launch({
-  executablePath:
-    process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE || "/usr/bin/chromium",
+  executablePath: "/usr/bin/chromium",
   args: ["--no-sandbox"],
 });
 try {
-  const page = await browser.newPage({
-    viewport: { width: 1440, height: 1000 },
-  });
+  const page = await browser.newPage();
   const errors = [];
-  page.on("pageerror", (error) => errors.push(error.message));
-  await page.goto(base);
-  const stage = page.getByRole("region", { name: "Testimonials" });
-  await stage.scrollIntoViewIfNeeded();
-  await page.waitForFunction(
-    () =>
-      document.querySelector(".love-stage").dataset.rotationActive === "true",
-  );
-  const slide = page.getByRole("group", { name: /^Review \d of 3$/ });
-  await page.waitForFunction(
-    () =>
-      document.querySelector(".love-stage").dataset.rotationActive === "true",
-  );
-  assert.equal(await slide.count(), 1);
-  await page.getByRole("button", { name: "Next review" }).click();
-  await page.getByRole("group", { name: "Review 2 of 3" }).waitFor();
-  assert.equal(await slide.count(), 1);
-  assert.equal(
-    await page.locator(".love-stage").getAttribute("data-rotation-active"),
-    "false",
-  );
-  await stage.focus();
-  await page.keyboard.press("ArrowLeft");
-  await page.getByRole("group", { name: "Review 1 of 3" }).waitFor();
-  // Restart, then remove focus/hover so autoplay can run; entering the card pauses it.
-  await page.getByRole("button", { name: "Play review rotation" }).click();
-  await page.evaluate(() => document.activeElement.blur());
-  await page.mouse.move(0, 0);
-  await page.waitForFunction(
-    () =>
-      document.querySelector(".love-stage").dataset.rotationActive === "true",
-  );
-  await page
-    .getByRole("group", { name: "Review 2 of 3" })
-    .waitFor({ timeout: 9000 });
-  await stage.hover();
-  await page.waitForFunction(
-    () =>
-      document.querySelector(".love-stage").dataset.rotationActive === "false",
-  );
-  await page.getByLabel("Animation preference").selectOption("system");
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.waitForFunction(
-    () => document.querySelector(".love-progress").dataset.autoplay === "false",
-  );
-  assert.equal(
-    await page
-      .getByRole("button", { name: "Play review rotation" })
-      .isDisabled(),
-    true,
-  );
-  await page.getByRole("button", { name: "Next review" }).click();
-  await page.getByRole("group", { name: "Review 3 of 3" }).waitFor();
+  page.on("pageerror", (e) => errors.push(e.message));
+  for (const width of [390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const genuine of [false, true]) {
+      await page.goto(
+        `http://127.0.0.1:${server.address().port}/${genuine ? "?genuine" : ""}`,
+      );
+      await page
+        .getByRole("heading", { name: "Testimonials", exact: true })
+        .waitFor();
+      assert.equal(await page.locator(".testimonial-card").count(), 4);
+      assert.equal(
+        await page.locator('[data-sample="true"]').count(),
+        genuine ? 0 : 4,
+      );
+      assert.equal(
+        await page.locator(".testimonial-sample-note").count(),
+        genuine ? 0 : 1,
+      );
+      const columns = await page
+        .locator(".testimonials-grid")
+        .evaluate(
+          (el) => getComputedStyle(el).gridTemplateColumns.split(" ").length,
+        );
+      assert.equal(columns, width === 390 ? 1 : width === 768 ? 2 : 4);
+      assert.ok(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      );
+      if (genuine)
+        assert.match(
+          await page.locator(".testimonial-card").first().innerText(),
+          /Local QA record 1/,
+        );
+    }
+  }
   assert.deepEqual(errors, []);
-  await page.close();
-  const touch = await browser.newPage({
-    viewport: { width: 390, height: 900 },
-    hasTouch: true,
-    isMobile: true,
-  });
-  await touch.goto(base);
-  await touch
-    .getByRole("region", { name: "Testimonials" })
-    .scrollIntoViewIfNeeded();
-  await touch
-    .locator(".love-stage")
-    .dispatchEvent("pointerdown", {
-      pointerType: "touch",
-      clientX: 300,
-      clientY: 350,
-    });
-  await touch
-    .locator(".love-stage")
-    .dispatchEvent("pointerup", {
-      pointerType: "touch",
-      clientX: 150,
-      clientY: 355,
-    });
-  await touch.getByRole("group", { name: "Review 2 of 3" }).waitFor();
-  assert.equal(
-    await touch.evaluate(
-      () => document.documentElement.scrollWidth <= innerWidth,
-    ),
-    true,
-  );
-  await touch.close();
   console.log(
-    "PASS actual review component: one accessible slide, next/keyboard controls, autoplay advance, focus/hover pause, touch swipe and mobile overflow. QA records never enter application content.",
+    "PASS testimonials: four/two/one columns, labeled samples, genuine reviews replace samples, no overflow or runtime errors.",
   );
 } finally {
   await browser.close();
-  await new Promise((resolve) => server.close(resolve));
+  await new Promise((r) => server.close(r));
 }
 ``````
 
@@ -2936,6 +2868,170 @@ test("login limiter uses provisioned KV REST credentials and enforces shared lim
 });
 ``````
 
+## tests/showcase-videos.browser.mjs
+
+``````javascript
+import assert from "node:assert/strict";
+import { chromium } from "@playwright/test";
+const base = process.env.PUBLIC_TEST_URL || "http://127.0.0.1:3008";
+if (!/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(base))
+  throw Error("Local production app required");
+const browser = await chromium.launch({
+  executablePath: "/usr/bin/chromium",
+  args: ["--no-sandbox"],
+});
+try {
+  const page = await browser.newPage({
+    viewport: { width: 1440, height: 1000 },
+  });
+  const errors = [];
+  const requests = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  page.on("request", (r) => requests.push(r.url()));
+  await page.goto(base);
+  await page.getByRole("button", { name: "Reject All", exact: true }).click();
+  assert.equal(
+    await page.getByLabel("Animation preference").inputValue(),
+    "full",
+  );
+  const work = page.locator('[data-showcase-video="work-showcase"]');
+  await work.locator("video").waitFor();
+  assert.equal(
+    requests.filter((x) => /\.(webm|mp4)(\?|$)/.test(x)).length,
+    0,
+    "preload none does not fetch videos above the fold",
+  );
+  const attributes = await work.locator("video").evaluate((v) => ({
+    muted: v.muted,
+    loop: v.loop,
+    inline: v.playsInline,
+    preload: v.preload,
+    poster: v.getAttribute("poster"),
+    types: [...v.querySelectorAll("source")].map((s) => s.type),
+  }));
+  assert.deepEqual(attributes, {
+    muted: true,
+    loop: true,
+    inline: true,
+    preload: "none",
+    poster: "/videos/work-showcase-poster.webp",
+    types: ["video/webm", "video/mp4"],
+  });
+  await work.locator(".showcase-video-frame").scrollIntoViewIfNeeded();
+  await page.waitForFunction(() => {
+    const v = document.querySelector(
+      '[data-showcase-video="work-showcase"] video',
+    );
+    return v && !v.paused && v.currentTime > 0.1;
+  });
+  await work
+    .getByRole("button", { name: "Pause website showcase video" })
+    .click();
+  assert.equal(await work.locator("video").evaluate((v) => v.paused), true);
+  await work
+    .getByRole("button", { name: "Play website showcase video" })
+    .click();
+  await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
+  await page.waitForFunction(
+    () =>
+      document.querySelector('[data-showcase-video="work-showcase"] video')
+        .paused,
+  );
+  await work.locator(".showcase-video-frame").scrollIntoViewIfNeeded();
+  await page.waitForFunction(
+    () =>
+      !document.querySelector('[data-showcase-video="work-showcase"] video')
+        .paused,
+  );
+  await page.getByRole("tab", { name: /AI chatbots & demos/ }).click();
+  const bot = page.locator('[data-showcase-video="ai-bot"]');
+  await bot.locator(".showcase-video-frame").scrollIntoViewIfNeeded();
+  await page.waitForFunction(() => {
+    const v = document.querySelector('[data-showcase-video="ai-bot"] video');
+    return v && !v.paused && v.duration > 0;
+  });
+  assert.equal(await bot.locator("video").evaluate((v) => v.loop), false);
+  await bot.getByRole("button", { name: "Pause AI bot video" }).click();
+  await bot.getByRole("button", { name: "Play AI bot video" }).click();
+  await page.waitForFunction(
+    () =>
+      !document.querySelector('[data-showcase-video="ai-bot"] video').paused,
+  );
+  await bot
+    .locator("video")
+    .evaluate((v) => (v.currentTime = v.duration - 0.15));
+  await bot.getByRole("button", { name: "Replay AI bot video" }).waitFor();
+  await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
+  await bot.scrollIntoViewIfNeeded();
+  assert.equal(
+    await bot.locator("video").evaluate((v) => v.paused),
+    true,
+    "ended AI video never auto-restarts",
+  );
+  await bot.getByRole("button", { name: "Replay AI bot video" }).click();
+  await page.waitForFunction(() => {
+    const v = document.querySelector('[data-showcase-video="ai-bot"] video');
+    return !v.paused && v.currentTime < 3;
+  });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await bot.locator("img").waitFor();
+  assert.equal(await page.locator(".showcase-video video").count(), 0);
+  assert.equal(
+    await page.getByLabel("Animation preference").inputValue(),
+    "full",
+    "videos respect OS independently of general On",
+  );
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await bot.locator("video").waitFor();
+  await page.getByLabel("Animation preference").selectOption("reduced");
+  await bot.locator("img").waitFor();
+  assert.equal(await page.locator(".showcase-video video").count(), 0);
+  assert.equal(
+    requests.filter((x) => /botpress|api\.openai/.test(x)).length,
+    0,
+    "consent/Botpress unchanged",
+  );
+  assert.deepEqual(errors, []);
+  await page.close();
+  for (const config of [
+    { width: 390, reduce: false },
+    { width: 767, reduce: false },
+    { width: 1440, reduce: true },
+  ]) {
+    const p = await browser.newPage({
+      viewport: { width: config.width, height: 900 },
+      reducedMotion: config.reduce ? "reduce" : "no-preference",
+    });
+    const media = [];
+    p.on("request", (r) => {
+      if (/\.(webm|mp4)(\?|$)/.test(r.url())) media.push(r.url());
+    });
+    await p.goto(base);
+    await p.getByRole("button", { name: "Reject All", exact: true }).click();
+    await p
+      .locator('[data-showcase-video="work-showcase"] img')
+      .scrollIntoViewIfNeeded();
+    await p.getByRole("tab", { name: /AI chatbots & demos/ }).click();
+    await p
+      .locator('[data-showcase-video="ai-bot"] img')
+      .scrollIntoViewIfNeeded();
+    assert.equal(await p.locator(".showcase-video video").count(), 0);
+    assert.deepEqual(media, []);
+    assert.ok(
+      await p.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    );
+    await p.close();
+  }
+  console.log(
+    "PASS videos: deferred native playback, WebM/MP4 order, visible loop/pause, AI once/replay, OS/explicit reduced motion and mobile poster-only, no consent bypass.",
+  );
+} finally {
+  await browser.close();
+}
+``````
+
 ## tests/video-motion.browser.mjs
 
 ``````javascript
@@ -3088,15 +3184,18 @@ try {
     );
     assert.ok(
       await page
-        .getByRole("heading", { name: "Wall of love.", exact: true })
+        .getByRole("heading", { name: "Testimonials", exact: true })
         .isVisible(),
     );
     assert.equal(
-      await page.locator(".love-card").count(),
-      0,
-      "No invented reviews in file mode.",
+      await page.locator('.testimonial-card[data-sample="true"]').count(),
+      4,
+      "Layout samples are explicitly labeled.",
     );
-    assert.equal(await page.locator(".love-empty").count(), 1);
+    assert.match(
+      await page.locator(".testimonial-sample-note").innerText(),
+      /not client endorsements/,
+    );
     assert.equal(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,
@@ -3106,7 +3205,7 @@ try {
     assert.deepEqual(errors, []);
     await context.close();
     console.log(
-      `PASS ${touch ? "touch" : "desktop"}: two-face flip, visible-only shine, reversible reading emphasis, stable word widths, reduced-motion cleanup and honest review empty state.`,
+      `PASS ${touch ? "touch" : "desktop"}: two-face flip, visible-only shine, reversible reading emphasis, stable word widths, reduced-motion cleanup and labeled testimonial layout samples.`,
     );
   }
   const nojs = await browser.newContext({ javaScriptEnabled: false });

@@ -1,5 +1,7 @@
 "use client";
 
+import artColors from "@/data/project-art-colors.json";
+
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
@@ -133,11 +135,11 @@ function RoomPlan({ variant }: { variant: number }) {
 }
 
 function CarDrawing({ color }: { color: string }) {
-  return <svg viewBox="0 0 700 330" aria-hidden="true"><defs><linearGradient id="car-paint" x2=".4" y2="1"><stop stopColor={color} /><stop offset="1" stopColor="#171b1b" /></linearGradient></defs><path d="M60 245h580M95 257h510" stroke="#b1c471" strokeOpacity=".2" /><path d="m78 220 20-45 109-20 92-66h163l105 66 59 20 28 45-35 18H99z" fill="url(#car-paint)" stroke="#c7ccbd" strokeWidth="1.5" /><path d="m229 153 75-51h145l84 51z" fill="#101615" stroke="#bec9b9" /><path d="M370 104v49M102 186h71m378-13h58M204 169h325M408 168v60" fill="none" stroke="#a7b09f" strokeWidth="1.5" /><path d="m83 208 32-3m480-4 43 8" stroke="#d9fa82" strokeWidth="4" /><g fill="#0b1010" stroke="#a8b09c" strokeWidth="2"><circle cx="187" cy="232" r="39" /><circle cx="535" cy="232" r="39" /></g><g fill="none" stroke="#75816d" strokeWidth="2"><circle cx="187" cy="232" r="24" /><circle cx="535" cy="232" r="24" /><path d="m164 232 46 0m-23-23v46m325-23h46m-23-23v46" /></g></svg>;
+  return <svg viewBox="0 0 700 330" aria-hidden="true"><defs><linearGradient id="car-paint" x2=".4" y2="1"><stop stopColor={color} /><stop offset="1" stopColor={artColors.tone42} /></linearGradient></defs><path d="M60 245h580M95 257h510" stroke={artColors.tone43} strokeOpacity=".2" /><path d="m78 220 20-45 109-20 92-66h163l105 66 59 20 28 45-35 18H99z" fill="url(#car-paint)" stroke={artColors.tone44} strokeWidth="1.5" /><path d="m229 153 75-51h145l84 51z" fill={artColors.tone45} stroke={artColors.tone46} /><path d="M370 104v49M102 186h71m378-13h58M204 169h325M408 168v60" fill="none" stroke={artColors.tone47} strokeWidth="1.5" /><path d="m83 208 32-3m480-4 43 8" stroke={artColors.tone48} strokeWidth="4" /><g fill={artColors.tone49} stroke={artColors.tone50} strokeWidth="2"><circle cx="187" cy="232" r="39" /><circle cx="535" cy="232" r="39" /></g><g fill="none" stroke={artColors.tone51} strokeWidth="2"><circle cx="187" cy="232" r="24" /><circle cx="535" cy="232" r="24" /><path d="m164 232 46 0m-23-23v46m325-23h46m-23-23v46" /></g></svg>;
 }
 
 function SpaceStudy({ variant }: { variant: number }) {
-  return <svg viewBox="0 0 420 280" aria-hidden="true"><path d="m40 225 153-80 190 75-149 49z" fill="#00000009" /><path d="m70 121 130-57 143 48-130 62z" fill={variant === 1 ? "#b6a18a" : "#d4cbbd"} /><path d="m70 121 143 53v68L70 188z" fill="#a49b8e" /><path d="m213 174 130-62v69l-130 61z" fill="#6a655d" /><path d="m98 114 104-42 109 37-103 48z" fill="#e8e0d2" /><path d="m96 142 96 36v45l-96-36zM232 183l88-42v34l-88 43z" fill="#363d38" /><path d="m246 188 58-28M245 198l58-28" stroke="#b6b5a0" /><circle cx="143" cy="163" r={variant === 2 ? "19" : "13"} fill="#c9c3b1" /><path d="M355 190v-52m-12 23 12-30 14 30z" fill="#838d71" stroke="#838d71" /></svg>;
+  return <svg viewBox="0 0 420 280" aria-hidden="true"><path d="m40 225 153-80 190 75-149 49z" fill={artColors.tone52} /><path d="m70 121 130-57 143 48-130 62z" fill={variant === 1 ? artColors.tone53 : artColors.tone54} /><path d="m70 121 143 53v68L70 188z" fill={artColors.tone55} /><path d="m213 174 130-62v69l-130 61z" fill={artColors.tone56} /><path d="m98 114 104-42 109 37-103 48z" fill={artColors.tone57} /><path d="m96 142 96 36v45l-96-36zM232 183l88-42v34l-88 43z" fill={artColors.tone58} /><path d="m246 188 58-28M245 198l58-28" stroke={artColors.tone59} /><circle cx="143" cy="163" r={variant === 2 ? "19" : "13"} fill={artColors.tone60} /><path d="M355 190v-52m-12 23 12-30 14 30z" fill={artColors.tone61} stroke={artColors.tone61} /></svg>;
 }
 
 function FloorStudy() {

@@ -1,0 +1,250 @@
+/* Shared chrome only. Project artwork, demo palettes and custom layouts stay intact. */
+.ambient-background span {
+  background: none;
+}
+.scene-wash {
+  background: radial-gradient(
+    ellipse at 78% 30%,
+    var(--muted),
+    transparent 65%
+  );
+}
+.scroll-progress {
+  background: var(--accent);
+  box-shadow: none;
+}
+.hero-title-reveal .text-reveal-line:nth-child(2) {
+  color: var(--text);
+}
+.gold-text,
+[data-theme="light"] .gold-text {
+  color: var(--text);
+  background-image: linear-gradient(
+    105deg,
+    var(--text),
+    var(--muted) 45%,
+    var(--text) 70%
+  );
+}
+.hero-emblem {
+  background: none;
+}
+.emblem-ring {
+  border-color: var(--line-bright);
+}
+.emblem-orbit-a {
+  border-left-color: var(--line-bright);
+}
+.emblem-orbit-b {
+  border-right-color: var(--line-bright);
+}
+.button-gold,
+.contact-paper .button-gold,
+.skip-link {
+  color: var(--on-accent);
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: none;
+}
+.button-gold:hover,
+.contact-paper .button-gold:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  box-shadow: none;
+}
+.contact-paper {
+  background: var(--surface);
+}
+.chat-send,
+.service-bottom a:hover {
+  color: var(--on-accent);
+}
+.footer-signoff,
+.testimonial-card {
+  --bg: var(--inverse-bg);
+  --surface: var(--inverse-surface);
+  --raised: var(--neutral-charcoal);
+  --text: var(--inverse-text);
+  --muted: var(--inverse-muted);
+  --line: var(--inverse-border);
+  --accent-text: var(--inverse-accent);
+  --gold: var(--accent-text);
+  color: var(--text);
+  background: var(--bg);
+}
+.footer-waves path {
+  fill: var(--inverse-bg);
+}
+.footer-waves path:first-child {
+  fill: var(--neutral-charcoal);
+}
+.footer-waves path:nth-child(2) {
+  fill: var(--inverse-surface);
+}
+
+/* Local media is mounted only on desktop without a reduced-motion preference. */
+.showcase-video {
+  margin-block: 36px 44px;
+}
+.showcase-video-frame {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  isolation: isolate;
+}
+.showcase-video-frame video,
+.showcase-video-frame > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.showcase-video-control {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--inverse-muted);
+  border-radius: 999px;
+  background: var(--inverse-bg);
+  color: var(--inverse-text);
+  font-size: 11px;
+}
+.showcase-video-control:hover {
+  color: var(--inverse-accent);
+}
+.showcase-video > figcaption {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* The reference's simple four-card composition; no carousel or empty invitation. */
+.testimonials-section {
+  padding-block: clamp(72px, 9vw, 128px);
+  scroll-margin-top: 104px;
+}
+.testimonials-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 40px;
+}
+.testimonials-heading h2 {
+  font-size: clamp(42px, 5.4vw, 76px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.065em;
+}
+.testimonial-sample-note {
+  max-width: 30ch;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+.testimonials-grid > .motion-reveal {
+  min-width: 0;
+}
+.testimonial-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 320px;
+  padding: 24px 20px 22px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  transition: transform 0.35s var(--ease-editorial);
+}
+[data-motion="full"] .testimonial-card:hover {
+  transform: translateY(-6px);
+}
+.testimonial-sample-label {
+  margin-bottom: 16px;
+  color: var(--neutral-silver);
+  font-size: 8px;
+  letter-spacing: 1.3px;
+}
+.testimonial-card blockquote {
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+  font-weight: 450;
+  line-height: 1.55;
+  letter-spacing: -0.045em;
+  overflow-wrap: anywhere;
+}
+.testimonial-card figcaption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 36px;
+}
+.testimonial-avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--neutral-charcoal);
+  color: var(--neutral-silver);
+  overflow: hidden;
+}
+.testimonial-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.testimonial-card strong {
+  display: block;
+  font-size: 11px;
+  line-height: 1.5;
+  font-weight: 550;
+}
+.testimonial-card small {
+  display: block;
+  margin-top: 3px;
+  color: var(--neutral-silver);
+  font-size: 10px;
+  line-height: 1.5;
+}
+@media (max-width: 1023px) {
+  .testimonials-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .testimonial-card {
+    min-height: 280px;
+  }
+}
+@media (max-width: 600px) {
+  .testimonials-heading {
+    display: block;
+    margin-bottom: 28px;
+  }
+  .testimonial-sample-note {
+    margin-top: 18px;
+    max-width: 40ch;
+  }
+  .testimonials-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+  .testimonial-card {
+    min-height: 250px;
+    padding: 24px;
+  }
+}

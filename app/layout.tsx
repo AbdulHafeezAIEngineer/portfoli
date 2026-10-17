@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { site } from "@/data/site";
+import palette from "@/data/theme-tokens.json";
 import { MotionProvider } from "@/components/motion-provider";
 import "./globals.css";
 import "./bots.css";
@@ -17,6 +18,9 @@ import "./refinement.css";
 import "./showcase.css";
 import "./finishing.css";
 import "./reference-motion.css";
+import "./theme-tokens.css";
+import "./project-art-tokens.css";
+import "./atelier.css";
 import { ConsentProvider } from "@/components/consent-provider";
 
 const inter = localFont({
@@ -71,12 +75,12 @@ export function generateMetadata(): Metadata {
 }
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0A0A12" },
-    { media: "(prefers-color-scheme: light)", color: "#F7F6F2" },
+    { media: "(prefers-color-scheme: dark)", color: palette.dark.background },
+    { media: "(prefers-color-scheme: light)", color: palette.light.background },
   ],
 };
 
-const themeScript = `(function(){var t='dark',m='system';try{var s=localStorage.getItem('portfolio-theme');if(s==='light'||s==='dark')t=s;var p=localStorage.getItem('elvora-motion');if(p==='full'||p==='reduced')m=p;}catch(e){}document.documentElement.dataset.theme=t;document.documentElement.dataset.motion=m;if(window.IntersectionObserver&&(m==='full'||(m==='system'&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches)))document.documentElement.dataset.motionReveals='enabled';})();`;
+const themeScript = `(function(){var t='dark',m='full';try{var s=localStorage.getItem('portfolio-theme');if(s==='light'||s==='dark')t=s;var p=localStorage.getItem('elvora-motion');if(p==='full'||p==='reduced')m=p;}catch(e){}document.documentElement.dataset.theme=t;document.documentElement.dataset.motion=m;if(window.IntersectionObserver&&m==='full')document.documentElement.dataset.motionReveals='enabled';})();`;
 
 export default async function RootLayout({
   children,

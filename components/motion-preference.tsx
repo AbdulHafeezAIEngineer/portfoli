@@ -2,12 +2,12 @@
 
 import { createContext, useContext } from "react";
 
-export type MotionPreference = "system" | "full" | "reduced";
+export type MotionPreference = "full" | "reduced";
 export const MotionPreferenceContext = createContext<{
   preference: MotionPreference;
   reduced: boolean;
   setPreference: (value: MotionPreference) => void;
-}>({ preference: "system", reduced: true, setPreference: () => {} });
+}>({ preference: "full", reduced: false, setPreference: () => {} });
 
 export const useMotionPreference = () => useContext(MotionPreferenceContext);
 
@@ -23,7 +23,6 @@ export function MotionControl() {
           setPreference(event.target.value as MotionPreference)
         }
       >
-        <option value="system">Auto</option>
         <option value="full">On</option>
         <option value="reduced">Off</option>
       </select>

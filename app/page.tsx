@@ -30,7 +30,7 @@ import {
   Journey,
   WorkBunch,
 } from "@/components/studio-sections";
-import { WallOfLove } from "@/components/wall-of-love";
+import { Testimonials } from "@/components/testimonials";
 
 // Public CMS metadata belongs to the public page, so private sign-in can render during a CMS outage.
 export async function generateMetadata(): Promise<Metadata> {
@@ -104,7 +104,7 @@ export default async function Home() {
         <Skills skills={skills} />
         <Certifications certificates={certificates} />
         <Workflow />
-        <WallOfLove testimonials={reviews} />
+        <Testimonials testimonials={reviews} />
         <FaqSection faqs={faqs} />
         <Contact email={identity.email} />
       </main>

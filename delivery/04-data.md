@@ -1534,6 +1534,100 @@ export const legal = {
 } as const;
 ``````
 
+## data/project-art-colors.json
+
+``````json
+{
+  "tone01": "#acbdc0",
+  "tone02": "#e6dfc8",
+  "tone03": "#52645c",
+  "tone04": "#82968b",
+  "tone05": "#2c403c",
+  "tone06": "#d4c5a9",
+  "tone07": "#ece2cb",
+  "tone08": "#fff0d2",
+  "tone09": "#b6b29c",
+  "tone10": "#d9d0b7",
+  "tone11": "#e9dfc6",
+  "tone12": "#bdb69f",
+  "tone13": "#d8cdb2",
+  "tone14": "#f0e3c8",
+  "tone15": "#749c9a",
+  "tone16": "#a5c6bf",
+  "tone17": "#68775d",
+  "tone18": "#7e7255",
+  "tone19": "#667a56",
+  "tone20": "#6f785a",
+  "tone21": "#948d74",
+  "tone22": "#a47c5d",
+  "tone23": "#cec8ba",
+  "tone24": "#303432",
+  "tone25": "#d0aa86",
+  "tone26": "#f3ede0",
+  "tone27": "#666961",
+  "tone28": "#916b50",
+  "tone29": "#b7b1a4",
+  "tone30": "#282c2b",
+  "tone31": "#473b2d",
+  "tone32": "#b48b68",
+  "tone33": "#e0d8ca",
+  "tone34": "#8a654c",
+  "tone35": "#b0a999",
+  "tone36": "#715d4b",
+  "tone37": "#5b4739",
+  "tone38": "#fff",
+  "tone39": "#e6e0cf",
+  "tone40": "#242927",
+  "tone41": "#644e3b",
+  "tone42": "#171b1b",
+  "tone43": "#b1c471",
+  "tone44": "#c7ccbd",
+  "tone45": "#101615",
+  "tone46": "#bec9b9",
+  "tone47": "#a7b09f",
+  "tone48": "#d9fa82",
+  "tone49": "#0b1010",
+  "tone50": "#a8b09c",
+  "tone51": "#75816d",
+  "tone52": "#00000009",
+  "tone53": "#b6a18a",
+  "tone54": "#d4cbbd",
+  "tone55": "#a49b8e",
+  "tone56": "#6a655d",
+  "tone57": "#e8e0d2",
+  "tone58": "#363d38",
+  "tone59": "#b6b5a0",
+  "tone60": "#c9c3b1",
+  "tone61": "#838d71",
+  "tone62": "#0009",
+  "tone63": "#0005",
+  "tone64": "#424248",
+  "tone65": "#1a1a20",
+  "tone66": "#777269",
+  "tone67": "#565656",
+  "tone68": "#000",
+  "tone69": "#13141b",
+  "tone70": "#a1a1a1",
+  "tone71": "#ffffff06",
+  "tone72": "#ffffff1c",
+  "tone73": "#ffffff04",
+  "tone74": "#93928e",
+  "tone75": "#4b4b4b",
+  "tone76": "#898881",
+  "tone77": "#23232a",
+  "tone78": "#25252a",
+  "tone79": "#777",
+  "tone80": "#5b5650",
+  "tone81": "#17171b",
+  "tone82": "#0006",
+  "tone83": "#262627",
+  "tone84": "#151519",
+  "tone85": "#ffffff08",
+  "tone86": "#d4af3733",
+  "tone87": "#0004"
+}
+``````
+
 ## data/project-presentation.ts
 
 ``````ts
@@ -2223,22 +2317,6 @@ export const studio = {
       "In your pocket",
     ],
   },
-  love: {
-    eyebrow: "WALL OF LOVE",
-    title: "Wall of love.",
-    intro: "A space for the people behind the projects.",
-    previewLabel: "REVIEW LAYOUT PREVIEW",
-    notice:
-      "Genuine testimonials and approved portraits have not been supplied yet. These labeled entries preview the animation and are not client endorsements.",
-    previous: "Previous review",
-    next: "Next review",
-    play: "Play review rotation",
-    pause: "Pause review rotation",
-    personPlaceholder: "Approved client portrait pending",
-    quotePlaceholder:
-      "[PLACEHOLDER] A genuine client review will appear here, shared with their permission.",
-    rolePlaceholder: "[PLACEHOLDER] Client name & role",
-  },
   ending: {
     eyebrow: "YOUR IDEA DESERVES A THOUGHTFUL HOME",
     title: "Let's make\nsomething matter.",
@@ -2279,24 +2357,43 @@ export const studio = {
     },
   ],
 } as const;
+``````
 
-export type Testimonial = {
-  id: string;
-  quote: string;
-  name: string;
-  role: string;
-  portrait: string | null;
-  placeholder: boolean;
-};
-// Publish only genuine, owner-approved reviews and portraits, with permission.
-export const testimonials: Testimonial[] = ["01", "02", "03"].map((id) => ({
-  id,
-  quote: studio.love.quotePlaceholder,
-  name: studio.love.rolePlaceholder,
-  role: `Review preview ${id}`,
-  portrait: null,
-  placeholder: true,
-}));
+## data/theme-tokens.json
+
+``````json
+{
+  "dark": {
+    "background": "#0A0A0F",
+    "surface": "#14141C",
+    "border": "#262633",
+    "text": "#F5F3FF",
+    "muted": "#A09CB5",
+    "accent": "#8B5CF6",
+    "accentHover": "#A78BFA",
+    "accentSoft": "rgba(139,92,246,0.12)"
+  },
+  "light": {
+    "background": "#FAFAFC",
+    "surface": "#FFFFFF",
+    "border": "#E6E4EE",
+    "text": "#0A0A0F",
+    "muted": "#6B6880",
+    "accent": "#7C3AED",
+    "accentHover": "#6D28D9",
+    "accentSoft": "rgba(124,58,237,0.08)"
+  },
+  "neutral": {
+    "black": "#000000",
+    "white": "#FFFFFF",
+    "ink": "#111111",
+    "charcoal": "#222222",
+    "slate": "#444444",
+    "gray": "#888888",
+    "silver": "#BBBBBB",
+    "paper": "#F5F5F5"
+  }
+}
 ``````
 
 ## data/tool-marks.ts
@@ -2304,22 +2401,22 @@ export const testimonials: Testimonial[] = ["01", "02", "03"].map((id) => ({
 ``````ts
 export const toolMarks: Record<
   string,
-  { icon?: string; text?: string; color: string }
+  { icon?: string; text?: string }
 > = {
-  Claude: { icon: "claude", color: "#d9a381" },
-  ChatGPT: { icon: "openai", color: "#83bea5" },
-  Gemini: { icon: "googlegemini", color: "#a9a5fa" },
-  "GitHub Copilot": { icon: "githubcopilot", color: "#b6b8dd" },
-  Botpress: { text: "bp", color: "#ab9bf0" },
-  "OpenAI API": { icon: "openai", color: "#d9be7b" },
-  "Python basics": { icon: "python", color: "#7eb9dc" },
-  GitHub: { icon: "github", color: "currentColor" },
-  Git: { icon: "git", color: "#ef8067" },
-  HTML: { icon: "html5", color: "#e88560" },
-  CSS: { icon: "css", color: "#a5a5ff" },
-  "Next.js": { icon: "nextdotjs", color: "currentColor" },
-  React: { icon: "react", color: "#69c7dc" },
-  TypeScript: { icon: "typescript", color: "#73abe0" },
-  "Tailwind CSS": { icon: "tailwindcss", color: "#6cc5d4" },
+  Claude: { icon: "claude" },
+  ChatGPT: { icon: "openai" },
+  Gemini: { icon: "googlegemini" },
+  "GitHub Copilot": { icon: "githubcopilot" },
+  Botpress: { text: "bp" },
+  "OpenAI API": { icon: "openai" },
+  "Python basics": { icon: "python" },
+  GitHub: { icon: "github" },
+  Git: { icon: "git" },
+  HTML: { icon: "html5" },
+  CSS: { icon: "css" },
+  "Next.js": { icon: "nextdotjs" },
+  React: { icon: "react" },
+  TypeScript: { icon: "typescript" },
+  "Tailwind CSS": { icon: "tailwindcss" },
 };
 ``````

@@ -30,7 +30,7 @@
   color: var(--muted);
 }
 .admin-sidebar nav a[aria-current="page"] {
-  background: #d4af3711;
+  background: color-mix(in srgb, var(--accent-text) 6.67%, transparent);
   color: var(--gold);
 }
 .admin-back {
@@ -186,7 +186,7 @@
   width: 20px;
   height: 20px;
   min-height: 0;
-  accent-color: #d4af37;
+  accent-color: var(--accent-text);
 }
 .admin-editor input[readonly] {
   color: var(--muted);
@@ -223,7 +223,7 @@
   display: grid;
   place-items: center;
   padding: 30px;
-  background: radial-gradient(ellipse at 50% 20%, #7c5cff0b, transparent 60%);
+  background: radial-gradient(ellipse at 50% 20%, color-mix(in srgb, var(--muted) 4.31%, transparent), transparent 60%);
 }
 .admin-login form {
   width: min(420px, 100%);

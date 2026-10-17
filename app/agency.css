@@ -221,7 +221,7 @@
   max-width: calc(100vw - 32px);
 }
 .admin-confirm::backdrop {
-  background: #0009;
+  background: color-mix(in srgb, var(--neutral-black) 60%, transparent);
 }
 .admin-confirm h2 {
   margin-bottom: 20px;

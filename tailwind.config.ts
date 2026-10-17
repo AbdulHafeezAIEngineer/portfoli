@@ -6,9 +6,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        midnight: "#0A0A12",
-        champagne: "#D4AF37",
-        violet: "#7C5CFF",
+        background: "var(--bg)",
+        surface: "var(--surface)",
+        border: "var(--line)",
+        foreground: "var(--text)",
+        muted: "var(--muted)",
+        accent: "var(--accent)",
+        "accent-hover": "var(--accent-hover)",
+        "accent-soft": "var(--accent-soft)",
+        midnight: "var(--bg)",
+        champagne: "var(--accent-text)",
+        violet: "var(--accent)",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],
