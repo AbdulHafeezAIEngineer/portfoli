@@ -31,6 +31,8 @@
     "test:owner:setup": "node tests/owner-setup.integration.mjs",
     "test:finishing:browser": "node tests/finishing.browser.mjs",
     "test:login-fields:browser": "node tests/login-fields.browser.mjs",
+    "test:video-motion:browser": "node tests/video-motion.browser.mjs",
+    "test:reviews:browser": "node tests/review-motion.browser.mjs",
     "images:previews": "node scripts/generate-image-previews.mjs"
   },
   "dependencies": {

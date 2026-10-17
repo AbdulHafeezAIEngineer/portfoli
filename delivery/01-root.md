@@ -910,6 +910,14 @@ To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQ
 
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
+## Motion from the supplied video
+
+The 19.38-second reference shows a profile flip and progressive reading emphasis; it does not include its testimonials section. Elvora's existing logo now has a two-face scroll-linked flip and visible-only shine on desktop/touch. Hero/About/selected introduction copy gains reversible word emphasis using one inline word element plus a CSS ink layer, with stable widths, an accessible full-text copy and native no-JavaScript readability. Minor icon/arrow feedback is gated by motion preferences.
+
+The review carousel now has angled preview cards, larger quotes, word-staggered transitions, touch swipe, interval-preserving pause/resume and viewport/focus/visibility/reduced-motion controls. No genuine reviews were supplied to file mode: the public page shows an explicit invitation state. QA records exist only in a separate loopback component harness; CMS permission/publication filtering is unchanged.
+
+Production build (including lint/types) passed. Six-width/both-theme browser checks, gallery/FAQ interaction checks and new desktop/touch logo/reading checks passed. The actual review component passed next/keyboard navigation, timed advance, focus/hover pause, OS reduced motion and swipe checks with local QA data. Desktop/mobile axe scans in both themes found zero WCAG A/AA violations. No fresh Lighthouse/field-INP/physical-device-60fps claim is made. Credentials and live hosting were not changed or verified. See [implementation and test details](docs/VIDEO_MOTION_UPDATE.md).
+
 ## Contact palette and project presentation follow-up
 
 The contact section now follows dark/light theme palettes instead of always showing a white panel. Website concepts use a wider staggered editorial layout with larger device previews, clearer titles and fewer nested borders. Mobile remains one column; categories, galleries, form behavior and the curved work wall are preserved. Production build/lint/types and both responsive/motion browser suites passed, covering six widths and both themes. Desktop/mobile axe scans in both themes found zero WCAG A/AA violations, including after contact validation. See [the presentation change record and screenshots](docs/PRESENTATION_UPDATE.md). Lighthouse was not rerun for this follow-up; no earlier measurement should be presented as a fresh score. Production hosting and owner setup remain unverified.
@@ -9579,6 +9587,8 @@ export default nextConfig;
     "test:owner:setup": "node tests/owner-setup.integration.mjs",
     "test:finishing:browser": "node tests/finishing.browser.mjs",
     "test:login-fields:browser": "node tests/login-fields.browser.mjs",
+    "test:video-motion:browser": "node tests/video-motion.browser.mjs",
+    "test:reviews:browser": "node tests/review-motion.browser.mjs",
     "images:previews": "node scripts/generate-image-previews.mjs"
   },
   "dependencies": {

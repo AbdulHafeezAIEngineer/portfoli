@@ -16,6 +16,7 @@ export { WorkBunch } from "./work-bunch";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
 import { ToolMark } from "./tool-mark";
+import { ReadingText } from "./reading-text";
 const serviceIcons = [Braces, Bot, WorkflowIcon, Search];
 
 export function Services({ services }: { services: Service[] }) {
@@ -31,7 +32,7 @@ export function Services({ services }: { services: Service[] }) {
         </Reveal>
         <TextReveal id="services-title" text={studio.services.title} />
         <Reveal>
-          <p>{studio.services.intro}</p>
+          <ReadingText text={studio.services.intro} />
         </Reveal>
       </div>
       <div className="studio-services">
@@ -81,7 +82,7 @@ export function Workflow() {
         </Reveal>
         <TextReveal id="workflow-title" text={studio.workflow.title} />
         <Reveal>
-          <p>{studio.workflow.intro}</p>
+          <ReadingText text={studio.workflow.intro} />
         </Reveal>
       </div>
       <div className="workflow-cards">

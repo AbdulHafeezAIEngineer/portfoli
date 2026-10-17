@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { site } from "@/data/site";
+import { LogoMotion } from "./logo-motion";
 export function HeroEmblem() {
   return (
     <div
@@ -12,9 +13,16 @@ export function HeroEmblem() {
       <div className="emblem-ring emblem-ring-one" aria-hidden="true" />
       <div className="emblem-ring emblem-ring-two" aria-hidden="true" />
       <div className="emblem-plinth" aria-hidden="true" />
-      <div className="emblem-object" aria-hidden="true">
-        <Image src={site.logo.src} alt="" width={240} height={240} priority />
-        <span className="emblem-shine" />
+      <LogoMotion />
+      <div className="emblem-object" data-logo-flip aria-hidden="true">
+        <div className="emblem-face emblem-face-front">
+          <Image src={site.logo.src} alt="" width={240} height={240} priority />
+          <span className="emblem-shine" />
+        </div>
+        <div className="emblem-face emblem-face-back">
+          <Image src={site.logo.src} alt="" width={240} height={240} />
+          <span className="emblem-shine" />
+        </div>
       </div>
       <span className="emblem-label">
         {site.brand.toUpperCase()}

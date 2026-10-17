@@ -56,6 +56,7 @@ app/page.tsx
 app/premium.css
 app/privacy/page.tsx
 app/profile.css
+app/reference-motion.css
 app/reference.css
 app/refinement.css
 app/robots.ts
@@ -90,11 +91,14 @@ components/forte-preview.tsx
 components/hero-emblem.tsx
 components/hero.tsx
 components/legal-page.tsx
+components/logo-motion.tsx
 components/motion-preference.tsx
 components/motion-provider.tsx
 components/navbar.tsx
 components/project-card.tsx
 components/project-gallery.tsx
+components/reading-effects.tsx
+components/reading-text.tsx
 components/reveal-observer.tsx
 components/reveal.tsx
 components/scroll-ambience.tsx
@@ -133,6 +137,7 @@ docs/BRIEF_COMPLETION.md
 docs/EDITORIAL_UPGRADE.md
 docs/PRESENTATION_UPDATE.md
 docs/SHOWCASE_UPDATE.md
+docs/VIDEO_MOTION_UPDATE.md
 docs/about-preview.png
 docs/agency-about-desktop.png
 docs/agency-about-mobile.png
@@ -186,9 +191,15 @@ docs/forte-bot-card.png
 docs/image-optimization.json
 docs/lighthouse-summary.json
 docs/login-fields-mobile.png
+docs/logo-flipped.png
+docs/logo-front.png
 docs/mobile-about-preview.png
 docs/new-work-preview.png
 docs/preview.png
+docs/reading-desktop-dark.png
+docs/reading-desktop-light.png
+docs/reading-mobile-dark.png
+docs/reading-mobile-light.png
 docs/reference-about-preview.png
 docs/reference-footer-preview.png
 docs/reference-hero-preview.png
@@ -202,6 +213,10 @@ docs/reference-tools-preview.png
 docs/reference-wall-of-love-preview.png
 docs/reference-work-bunch-preview.png
 docs/reference-workflow-preview.png
+docs/reviews-empty-desktop-dark.png
+docs/reviews-empty-desktop-light.png
+docs/reviews-empty-mobile-dark.png
+docs/reviews-empty-mobile-light.png
 docs/showcase-1440-dark.png
 docs/showcase-1440-light.png
 docs/showcase-390-light.png
@@ -354,7 +369,9 @@ tests/finishing.browser.mjs
 tests/helpers/https-proxy.mjs
 tests/login-fields.browser.mjs
 tests/owner-setup.integration.mjs
+tests/review-motion.browser.mjs
 tests/security.test.mjs
+tests/video-motion.browser.mjs
 tsconfig.json
 types/gmail-smtp.d.ts
 types/next-auth.d.ts

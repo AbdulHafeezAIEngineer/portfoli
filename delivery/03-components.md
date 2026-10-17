@@ -3643,6 +3643,7 @@ import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
 import { SocialLinks } from "./social-links";
 import { site } from "@/data/site";
+import { ReadingText } from "./reading-text";
 const fundamentalsIcons = {
   frontend: Blocks,
   backend: Braces,
@@ -3694,9 +3695,9 @@ export function Experience() {
           </Reveal>
           <TextReveal id="experience-title" text={copy.title} />
           <Reveal>
-            <p className="experience-lead">{copy.lead}</p>
+            <ReadingText className="experience-lead" text={copy.lead} />
             {copy.paragraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
+              <ReadingText key={paragraph} text={paragraph} />
             ))}
             <SocialLinks />
           </Reveal>
@@ -3987,6 +3988,7 @@ export function FortePreview({ name }: { name: string }) {
 ``````tsx
 import Image from "next/image";
 import { site } from "@/data/site";
+import { LogoMotion } from "./logo-motion";
 export function HeroEmblem() {
   return (
     <div
@@ -3999,9 +4001,16 @@ export function HeroEmblem() {
       <div className="emblem-ring emblem-ring-one" aria-hidden="true" />
       <div className="emblem-ring emblem-ring-two" aria-hidden="true" />
       <div className="emblem-plinth" aria-hidden="true" />
-      <div className="emblem-object" aria-hidden="true">
-        <Image src={site.logo.src} alt="" width={240} height={240} priority />
-        <span className="emblem-shine" />
+      <LogoMotion />
+      <div className="emblem-object" data-logo-flip aria-hidden="true">
+        <div className="emblem-face emblem-face-front">
+          <Image src={site.logo.src} alt="" width={240} height={240} priority />
+          <span className="emblem-shine" />
+        </div>
+        <div className="emblem-face emblem-face-back">
+          <Image src={site.logo.src} alt="" width={240} height={240} />
+          <span className="emblem-shine" />
+        </div>
       </div>
       <span className="emblem-label">
         {site.brand.toUpperCase()}
@@ -4023,6 +4032,7 @@ import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { site } from "@/data/site";
 import { TextReveal } from "./text-reveal";
 import { HeroEmblem } from "./hero-emblem";
+import { ReadingText } from "./reading-text";
 
 export function Hero() {
   return (
@@ -4041,7 +4051,7 @@ export function Hero() {
           />
         </div>
         <div>
-          <p className="hero-intro">{site.hero.intro}</p>
+          <ReadingText className="hero-intro" text={site.hero.intro} />
           <p className="hero-tagline">{site.hero.tagline}</p>
           <div className="hero-actions">
             <a href="#work" className="button button-gold">
@@ -4147,6 +4157,52 @@ export function LegalPage({ page }: { page: keyof typeof legal.pages }) {
       <Footer brand={site.brand} />
     </div>
   );
+}
+``````
+
+## components/logo-motion.tsx
+
+``````tsx
+"use client";
+import { useEffect } from "react";
+import { subscribeScroll } from "@/lib/scroll";
+import { useMotionPreference } from "./motion-preference";
+
+/** Scroll-scrubbed flip, including touch; the shared stream adds no extra scroll listener. */
+export function LogoMotion() {
+  const { reduced } = useMotionPreference();
+  useEffect(() => {
+    const logo = document.querySelector<HTMLElement>("[data-logo-flip]");
+    if (!logo || reduced) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      logo.dataset.logoVisible = String(entry.isIntersecting);
+    });
+    observer.observe(logo);
+    const unsubscribe = subscribeScroll(({ y, viewport }) => {
+      const scene = logo.closest<HTMLElement>(".hero-emblem")!;
+      const start = Math.max(
+        0,
+        scene.getBoundingClientRect().top +
+          y +
+          logo.offsetTop -
+          viewport * 0.65,
+      );
+      const progress = Math.max(
+        0,
+        Math.min(1, (y - start) / (viewport * 0.72)),
+      );
+      logo.style.setProperty("--logo-turn", `${progress * 360}deg`);
+      logo.style.setProperty("--logo-lift", `${progress * -18}px`);
+    });
+    return () => {
+      unsubscribe();
+      observer.disconnect();
+      logo.style.removeProperty("--logo-turn");
+      logo.style.removeProperty("--logo-lift");
+      delete logo.dataset.logoVisible;
+    };
+  }, [reduced]);
+  return null;
 }
 ``````
 
@@ -4837,6 +4893,113 @@ export default function ProjectGallery({
 }
 ``````
 
+## components/reading-effects.tsx
+
+``````tsx
+"use client";
+import { useEffect } from "react";
+import { subscribeScroll } from "@/lib/scroll";
+import { useMotionPreference } from "./motion-preference";
+
+export function ReadingEffects() {
+  const { reduced } = useMotionPreference();
+  useEffect(() => {
+    if (reduced) return;
+    const paragraphs = [
+      ...document.querySelectorAll<HTMLElement>("[data-reading-text]"),
+    ];
+    const records = new Map(
+      paragraphs.map((element) => [
+        element,
+        {
+          words: [...element.querySelectorAll<HTMLElement>(".reading-word")],
+          count: 0,
+        },
+      ]),
+    );
+    const visible = new Set<HTMLElement>();
+    const update = (viewport: number) => {
+      const changes = [...visible].map((element) => {
+        const rect = element.getBoundingClientRect();
+        const record = records.get(element)!;
+        const progress = Math.max(
+          0,
+          Math.min(1, (viewport * 0.65 - rect.top) / Math.max(1, rect.height)),
+        );
+        return {
+          element,
+          record,
+          count: Math.round(progress * record.words.length),
+        };
+      });
+      for (const { record, count } of changes) {
+        for (
+          let index = Math.min(record.count, count);
+          index < Math.max(record.count, count);
+          index++
+        )
+          record.words[index].classList.toggle("is-read", index < count);
+        record.count = count;
+      }
+    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) visible.add(entry.target as HTMLElement);
+          else visible.delete(entry.target as HTMLElement);
+        }
+        update(window.innerHeight);
+      },
+      { rootMargin: "15% 0px" },
+    );
+    for (const element of paragraphs) {
+      element.dataset.readingActive = "true";
+      observer.observe(element);
+    }
+    const unsubscribe = subscribeScroll(({ viewport }) => update(viewport));
+    return () => {
+      unsubscribe();
+      observer.disconnect();
+      for (const [element, record] of records) {
+        delete element.dataset.readingActive;
+        for (const word of record.words) word.classList.remove("is-read");
+      }
+    };
+  }, [reduced]);
+  return null;
+}
+``````
+
+## components/reading-text.tsx
+
+``````tsx
+/** The base words stay readable; an ink layer adds emphasis without changing text widths. */
+export function ReadingText({
+  text,
+  className = "",
+}: {
+  text: string;
+  className?: string;
+}) {
+  return (
+    <p className={`reading-text ${className}`} data-reading-text>
+      <span className="sr-only">{text}</span>
+      <span aria-hidden="true">
+        {text.split(/\s+/).map((word, index) => (
+          <span
+            key={index}
+            className="reading-word reading-base"
+            data-word={word}
+          >
+            {word}{" "}
+          </span>
+        ))}
+      </span>
+    </p>
+  );
+}
+``````
+
 ## components/reveal-observer.tsx
 
 ``````tsx
@@ -5239,6 +5402,7 @@ export { WorkBunch } from "./work-bunch";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
 import { ToolMark } from "./tool-mark";
+import { ReadingText } from "./reading-text";
 const serviceIcons = [Braces, Bot, WorkflowIcon, Search];
 
 export function Services({ services }: { services: Service[] }) {
@@ -5254,7 +5418,7 @@ export function Services({ services }: { services: Service[] }) {
         </Reveal>
         <TextReveal id="services-title" text={studio.services.title} />
         <Reveal>
-          <p>{studio.services.intro}</p>
+          <ReadingText text={studio.services.intro} />
         </Reveal>
       </div>
       <div className="studio-services">
@@ -5304,7 +5468,7 @@ export function Workflow() {
         </Reveal>
         <TextReveal id="workflow-title" text={studio.workflow.title} />
         <Reveal>
-          <p>{studio.workflow.intro}</p>
+          <ReadingText text={studio.workflow.intro} />
         </Reveal>
       </div>
       <div className="workflow-cards">
@@ -5610,6 +5774,7 @@ import { studio } from "@/data/studio";
 import type { Testimonial } from "@/data/agency";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
+import type { CSSProperties } from "react";
 
 export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
   const ref = useRef<HTMLElement>(null);
@@ -5621,8 +5786,10 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
   const [playing, setPlaying] = useState(true);
   const [interacting, setInteracting] = useState(false);
   const [visible, setVisible] = useState(true);
+  const swipe = useRef<{ x: number; y: number; time: number } | null>(null);
+  const remaining = useRef(6500);
   const review = testimonials[index];
-  const autoplay = hydrated && playing && !reduced;
+  const autoplay = hydrated && playing && !reduced && testimonials.length > 1;
   const active = autoplay && !interacting && inView && visible;
   useEffect(() => {
     setHydrated(true);
@@ -5632,14 +5799,53 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
     return () => document.removeEventListener("visibilitychange", update);
   }, []);
   useEffect(() => {
+    remaining.current = 6500;
+  }, [index, reduced]);
+  useEffect(() => {
     if (!active || testimonials.length < 2) return;
+    const started = performance.now();
     const timer = window.setTimeout(() => {
       setDirection(1);
       setIndex((current) => (current + 1) % testimonials.length);
-    }, 6500);
-    return () => window.clearTimeout(timer);
+    }, remaining.current);
+    return () => {
+      window.clearTimeout(timer);
+      remaining.current = Math.max(
+        0,
+        remaining.current - (performance.now() - started),
+      );
+    };
   }, [active, index, testimonials.length]);
-  if (!testimonials.length) return null;
+  if (!testimonials.length)
+    return (
+      <section
+        id="wall-of-love"
+        className="container studio-section love-section editorial-love"
+        aria-labelledby="love-title"
+      >
+        <Reveal>
+          <p className="eyebrow">{studio.love.eyebrow}</p>
+          <div className="studio-heading reference-love-heading">
+            <TextReveal id="love-title" text={studio.love.title} />
+          </div>
+          <div className="love-empty">
+            <span className="love-empty-mark" aria-hidden="true">
+              “
+            </span>
+            <div>
+              <p className="eyebrow">PEOPLE / PROJECTS / PERSPECTIVE</p>
+              <h3>The next story could start here.</h3>
+              <p>
+                Client stories will appear here when shared with permission.
+              </p>
+              <a href="#contact" className="text-link">
+                Start a conversation <ArrowRight size={18} aria-hidden="true" />
+              </a>
+            </div>
+          </div>
+        </Reveal>
+      </section>
+    );
   function go(next: number) {
     setPlaying(false);
     setDirection(next > index ? 1 : -1);
@@ -5661,6 +5867,7 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
       </Reveal>
       <div
         className="love-stage"
+        data-rotation-active={active}
         role="region"
         aria-roledescription="carousel"
         aria-label="Testimonials"
@@ -5679,27 +5886,62 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
           if (!event.currentTarget.contains(event.relatedTarget as Node))
             setInteracting(false);
         }}
+        onPointerDown={(event) => {
+          if (
+            event.pointerType !== "touch" ||
+            (event.target as Element).closest("button")
+          )
+            return;
+          swipe.current = {
+            x: event.clientX,
+            y: event.clientY,
+            time: performance.now(),
+          };
+        }}
+        onPointerCancel={() => {
+          swipe.current = null;
+        }}
+        onPointerUp={(event) => {
+          const start = swipe.current;
+          swipe.current = null;
+          if (!start || performance.now() - start.time > 800) return;
+          const x = event.clientX - start.x;
+          const y = event.clientY - start.y;
+          if (Math.abs(x) > 48 && Math.abs(x) > Math.abs(y) * 1.2)
+            go(index + (x < 0 ? 1 : -1));
+        }}
       >
-        {[-1, 1].map((offset) => {
-          const adjacent =
-            testimonials[
-              (index + offset + testimonials.length) % testimonials.length
-            ];
-          return (
-            <div
-              className={`love-preview-card ${offset < 0 ? "love-preview-left" : "love-preview-right"}`}
-              key={offset}
-              aria-hidden="true"
-            >
-              <Quote size={29} strokeWidth={1} />
-              <p>{adjacent.quote}</p>
-              <span className="love-preview-person">
-                <UserRound size={23} strokeWidth={1} />
-                <span>{adjacent.role}</span>
-              </span>
-            </div>
-          );
-        })}
+        {testimonials.length > 1 &&
+          [-1, 1].map((offset) => {
+            const adjacent =
+              testimonials[
+                (index + offset + testimonials.length) % testimonials.length
+              ];
+            return (
+              <m.div
+                className={`love-preview-card ${offset < 0 ? "love-preview-left" : "love-preview-right"}`}
+                key={`${offset}-${adjacent.id}`}
+                aria-hidden="true"
+                initial={
+                  reduced
+                    ? false
+                    : { opacity: 0, x: offset * 18, rotate: offset * 5 }
+                }
+                animate={{ opacity: 0.5, x: 0, rotate: offset * 5 }}
+                transition={{
+                  duration: reduced ? 0 : 0.65,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                <Quote size={29} strokeWidth={1} />
+                <p>{adjacent.quote}</p>
+                <span className="love-preview-person">
+                  <UserRound size={23} strokeWidth={1} />
+                  <span>{adjacent.role}</span>
+                </span>
+              </m.div>
+            );
+          })}
         <div className="love-card">
           <div className="love-card-top">
             <Quote size={35} strokeWidth={1} aria-hidden="true" />
@@ -5726,22 +5968,52 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
                   enter: (travel: number) =>
                     reduced
                       ? { opacity: 1, x: 0 }
-                      : { opacity: 0, x: travel * 40 },
-                  center: { opacity: 1, x: 0 },
+                      : {
+                          opacity: 0,
+                          x: travel * 28,
+                          y: 8,
+                          rotate: travel * 1.2,
+                        },
+                  center: { opacity: 1, x: 0, y: 0, rotate: 0 },
                   leave: (travel: number) =>
                     reduced
                       ? { opacity: 1, x: 0 }
-                      : { opacity: 0, x: travel * -40 },
+                      : {
+                          opacity: 0,
+                          x: travel * -22,
+                          y: -4,
+                          rotate: travel * -0.6,
+                        },
                 }}
                 initial="enter"
                 animate="center"
                 exit="leave"
-                transition={{ duration: reduced ? 0 : 0.4 }}
+                transition={{
+                  duration: reduced ? 0 : 0.45,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
                 role="group"
                 aria-roledescription="slide"
                 aria-label={`Review ${index + 1} of ${testimonials.length}`}
               >
-                <blockquote>{review.quote}</blockquote>
+                <blockquote>
+                  <span className="sr-only">{review.quote}</span>
+                  <span aria-hidden="true">
+                    {review.quote.split(/\s+/).map((word, number) => (
+                      <span
+                        className="review-word"
+                        key={number}
+                        style={
+                          {
+                            "--review-word-delay": `${Math.min(number, 35) * 0.022}s`,
+                          } as CSSProperties
+                        }
+                      >
+                        {word}{" "}
+                      </span>
+                    ))}
+                  </span>
+                </blockquote>
                 <div className="review-person">
                   <div className="review-avatar">
                     {review.portrait && !review.placeholder ? (
@@ -5768,7 +6040,12 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
             </AnimatePresence>
           </div>
           <div className="love-controls">
-            <div className="love-progress" aria-hidden="true">
+            <div
+              key={review.id}
+              className="love-progress"
+              aria-hidden="true"
+              data-autoplay={hydrated && !reduced && testimonials.length > 1}
+            >
               {testimonials.map((item, i) => (
                 <span key={item.id} className={i === index ? "current" : ""} />
               ))}
@@ -5778,6 +6055,7 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
                 type="button"
                 className="icon-button"
                 onClick={() => go(index - 1)}
+                disabled={testimonials.length < 2}
                 aria-label={studio.love.previous}
               >
                 <ArrowLeft size={18} />
@@ -5785,7 +6063,9 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
               <button
                 type="button"
                 className="icon-button"
-                disabled={hydrated && Boolean(reduced)}
+                disabled={
+                  (hydrated && Boolean(reduced)) || testimonials.length < 2
+                }
                 onClick={() => setPlaying((value) => !value)}
                 aria-label={autoplay ? studio.love.pause : studio.love.play}
               >
@@ -5795,6 +6075,7 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
                 type="button"
                 className="icon-button"
                 onClick={() => go(index + 1)}
+                disabled={testimonials.length < 2}
                 aria-label={studio.love.next}
               >
                 <ArrowRight size={18} />

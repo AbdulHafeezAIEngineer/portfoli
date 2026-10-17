@@ -16,6 +16,7 @@ import { studio } from "@/data/studio";
 import type { Testimonial } from "@/data/agency";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
+import type { CSSProperties } from "react";
 
 export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
   const ref = useRef<HTMLElement>(null);
@@ -27,8 +28,10 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
   const [playing, setPlaying] = useState(true);
   const [interacting, setInteracting] = useState(false);
   const [visible, setVisible] = useState(true);
+  const swipe = useRef<{ x: number; y: number; time: number } | null>(null);
+  const remaining = useRef(6500);
   const review = testimonials[index];
-  const autoplay = hydrated && playing && !reduced;
+  const autoplay = hydrated && playing && !reduced && testimonials.length > 1;
   const active = autoplay && !interacting && inView && visible;
   useEffect(() => {
     setHydrated(true);
@@ -38,14 +41,53 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
     return () => document.removeEventListener("visibilitychange", update);
   }, []);
   useEffect(() => {
+    remaining.current = 6500;
+  }, [index, reduced]);
+  useEffect(() => {
     if (!active || testimonials.length < 2) return;
+    const started = performance.now();
     const timer = window.setTimeout(() => {
       setDirection(1);
       setIndex((current) => (current + 1) % testimonials.length);
-    }, 6500);
-    return () => window.clearTimeout(timer);
+    }, remaining.current);
+    return () => {
+      window.clearTimeout(timer);
+      remaining.current = Math.max(
+        0,
+        remaining.current - (performance.now() - started),
+      );
+    };
   }, [active, index, testimonials.length]);
-  if (!testimonials.length) return null;
+  if (!testimonials.length)
+    return (
+      <section
+        id="wall-of-love"
+        className="container studio-section love-section editorial-love"
+        aria-labelledby="love-title"
+      >
+        <Reveal>
+          <p className="eyebrow">{studio.love.eyebrow}</p>
+          <div className="studio-heading reference-love-heading">
+            <TextReveal id="love-title" text={studio.love.title} />
+          </div>
+          <div className="love-empty">
+            <span className="love-empty-mark" aria-hidden="true">
+              “
+            </span>
+            <div>
+              <p className="eyebrow">PEOPLE / PROJECTS / PERSPECTIVE</p>
+              <h3>The next story could start here.</h3>
+              <p>
+                Client stories will appear here when shared with permission.
+              </p>
+              <a href="#contact" className="text-link">
+                Start a conversation <ArrowRight size={18} aria-hidden="true" />
+              </a>
+            </div>
+          </div>
+        </Reveal>
+      </section>
+    );
   function go(next: number) {
     setPlaying(false);
     setDirection(next > index ? 1 : -1);
@@ -67,6 +109,7 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
       </Reveal>
       <div
         className="love-stage"
+        data-rotation-active={active}
         role="region"
         aria-roledescription="carousel"
         aria-label="Testimonials"
@@ -85,27 +128,62 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
           if (!event.currentTarget.contains(event.relatedTarget as Node))
             setInteracting(false);
         }}
+        onPointerDown={(event) => {
+          if (
+            event.pointerType !== "touch" ||
+            (event.target as Element).closest("button")
+          )
+            return;
+          swipe.current = {
+            x: event.clientX,
+            y: event.clientY,
+            time: performance.now(),
+          };
+        }}
+        onPointerCancel={() => {
+          swipe.current = null;
+        }}
+        onPointerUp={(event) => {
+          const start = swipe.current;
+          swipe.current = null;
+          if (!start || performance.now() - start.time > 800) return;
+          const x = event.clientX - start.x;
+          const y = event.clientY - start.y;
+          if (Math.abs(x) > 48 && Math.abs(x) > Math.abs(y) * 1.2)
+            go(index + (x < 0 ? 1 : -1));
+        }}
       >
-        {[-1, 1].map((offset) => {
-          const adjacent =
-            testimonials[
-              (index + offset + testimonials.length) % testimonials.length
-            ];
-          return (
-            <div
-              className={`love-preview-card ${offset < 0 ? "love-preview-left" : "love-preview-right"}`}
-              key={offset}
-              aria-hidden="true"
-            >
-              <Quote size={29} strokeWidth={1} />
-              <p>{adjacent.quote}</p>
-              <span className="love-preview-person">
-                <UserRound size={23} strokeWidth={1} />
-                <span>{adjacent.role}</span>
-              </span>
-            </div>
-          );
-        })}
+        {testimonials.length > 1 &&
+          [-1, 1].map((offset) => {
+            const adjacent =
+              testimonials[
+                (index + offset + testimonials.length) % testimonials.length
+              ];
+            return (
+              <m.div
+                className={`love-preview-card ${offset < 0 ? "love-preview-left" : "love-preview-right"}`}
+                key={`${offset}-${adjacent.id}`}
+                aria-hidden="true"
+                initial={
+                  reduced
+                    ? false
+                    : { opacity: 0, x: offset * 18, rotate: offset * 5 }
+                }
+                animate={{ opacity: 0.5, x: 0, rotate: offset * 5 }}
+                transition={{
+                  duration: reduced ? 0 : 0.65,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                <Quote size={29} strokeWidth={1} />
+                <p>{adjacent.quote}</p>
+                <span className="love-preview-person">
+                  <UserRound size={23} strokeWidth={1} />
+                  <span>{adjacent.role}</span>
+                </span>
+              </m.div>
+            );
+          })}
         <div className="love-card">
           <div className="love-card-top">
             <Quote size={35} strokeWidth={1} aria-hidden="true" />
@@ -132,22 +210,52 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
                   enter: (travel: number) =>
                     reduced
                       ? { opacity: 1, x: 0 }
-                      : { opacity: 0, x: travel * 40 },
-                  center: { opacity: 1, x: 0 },
+                      : {
+                          opacity: 0,
+                          x: travel * 28,
+                          y: 8,
+                          rotate: travel * 1.2,
+                        },
+                  center: { opacity: 1, x: 0, y: 0, rotate: 0 },
                   leave: (travel: number) =>
                     reduced
                       ? { opacity: 1, x: 0 }
-                      : { opacity: 0, x: travel * -40 },
+                      : {
+                          opacity: 0,
+                          x: travel * -22,
+                          y: -4,
+                          rotate: travel * -0.6,
+                        },
                 }}
                 initial="enter"
                 animate="center"
                 exit="leave"
-                transition={{ duration: reduced ? 0 : 0.4 }}
+                transition={{
+                  duration: reduced ? 0 : 0.45,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
                 role="group"
                 aria-roledescription="slide"
                 aria-label={`Review ${index + 1} of ${testimonials.length}`}
               >
-                <blockquote>{review.quote}</blockquote>
+                <blockquote>
+                  <span className="sr-only">{review.quote}</span>
+                  <span aria-hidden="true">
+                    {review.quote.split(/\s+/).map((word, number) => (
+                      <span
+                        className="review-word"
+                        key={number}
+                        style={
+                          {
+                            "--review-word-delay": `${Math.min(number, 35) * 0.022}s`,
+                          } as CSSProperties
+                        }
+                      >
+                        {word}{" "}
+                      </span>
+                    ))}
+                  </span>
+                </blockquote>
                 <div className="review-person">
                   <div className="review-avatar">
                     {review.portrait && !review.placeholder ? (
@@ -174,7 +282,12 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
             </AnimatePresence>
           </div>
           <div className="love-controls">
-            <div className="love-progress" aria-hidden="true">
+            <div
+              key={review.id}
+              className="love-progress"
+              aria-hidden="true"
+              data-autoplay={hydrated && !reduced && testimonials.length > 1}
+            >
               {testimonials.map((item, i) => (
                 <span key={item.id} className={i === index ? "current" : ""} />
               ))}
@@ -184,6 +297,7 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
                 type="button"
                 className="icon-button"
                 onClick={() => go(index - 1)}
+                disabled={testimonials.length < 2}
                 aria-label={studio.love.previous}
               >
                 <ArrowLeft size={18} />
@@ -191,7 +305,9 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
               <button
                 type="button"
                 className="icon-button"
-                disabled={hydrated && Boolean(reduced)}
+                disabled={
+                  (hydrated && Boolean(reduced)) || testimonials.length < 2
+                }
                 onClick={() => setPlaying((value) => !value)}
                 aria-label={autoplay ? studio.love.pause : studio.love.play}
               >
@@ -201,6 +317,7 @@ export function WallOfLove({ testimonials }: { testimonials: Testimonial[] }) {
                 type="button"
                 className="icon-button"
                 onClick={() => go(index + 1)}
+                disabled={testimonials.length < 2}
                 aria-label={studio.love.next}
               >
                 <ArrowRight size={18} />

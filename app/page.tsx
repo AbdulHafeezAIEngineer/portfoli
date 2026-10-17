@@ -22,6 +22,7 @@ import { Contact } from "@/components/contact";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { EditorialEffects } from "@/components/editorial-effects";
 import { ScrollAmbience } from "@/components/scroll-ambience";
+import { ReadingEffects } from "@/components/reading-effects";
 
 import {
   Services,
@@ -87,6 +88,7 @@ export default async function Home() {
       <ScrollProgress />
       <EditorialEffects />
       <ScrollAmbience />
+      <ReadingEffects />
       <div className="ambient-background" aria-hidden="true">
         <span />
         <span />

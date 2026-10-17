@@ -2,6 +2,7 @@ import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { site } from "@/data/site";
 import { TextReveal } from "./text-reveal";
 import { HeroEmblem } from "./hero-emblem";
+import { ReadingText } from "./reading-text";
 
 export function Hero() {
   return (
@@ -20,7 +21,7 @@ export function Hero() {
           />
         </div>
         <div>
-          <p className="hero-intro">{site.hero.intro}</p>
+          <ReadingText className="hero-intro" text={site.hero.intro} />
           <p className="hero-tagline">{site.hero.tagline}</p>
           <div className="hero-actions">
             <a href="#work" className="button button-gold">

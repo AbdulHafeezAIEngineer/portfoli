@@ -206,6 +206,45 @@ Validation: production build, lint and type checking passed. Local production br
 Implementation: `components/work-bunch.tsx`, `app/showcase.css`, `components/studio-sections.tsx`, `data/studio.ts`, and the stylesheet import in `app/layout.tsx`.
 ``````
 
+## docs/VIDEO_MOTION_UPDATE.md
+
+``````md
+# Motion from the supplied video
+
+The supplied recording is 19.38 seconds long. It visibly shows a profile card turning through a narrow edge into an About composition, followed by words gaining emphasis in reading order as the page scrolls. It ends around the services introduction; it does not show the reference testimonials. The implementation follows those visible motion ideas in Elvora's existing design rather than copying another person's profile, text or branding.
+
+## Implementation
+
+- **Logo:** the existing Elvora vector now has two correctly oriented faces, hidden reverse surfaces, a full scroll-scrubbed 3D turn and a restrained light sweep. The scroll range accounts for the logo's position on narrow screens, so the flip is visible on mobile too. Shine pauses offscreen; motion Off/OS reduced motion disables the effects.
+- **Reading text:** hero introduction, About paragraphs and selected section introductions gain ink emphasis one word at a time, including reverse scrolling. A consistent reading line advances through each paragraph before reaching the next. The base copy remains readable at all times. An absolutely positioned ink layer changes opacity/translation without changing font widths or moving the lines. Screen readers get one complete copy, and text remains available without JavaScript.
+- **Small interactions:** service icons and detail/contact arrows gain short, restrained transform feedback. Existing magnetic buttons, reveal timings, velocity marquees and theme-aware presentation remain.
+- **Reviews:** published reviews use larger editorial quotes, softly angled adjacent cards, word-staggered entry, progress, previous/next and touch swipe. Autoplay pauses on hover, focus, offscreen, hidden document and reduced motion. Pausing preserves the remaining interval. Manual navigation stops autoplay; single-review controls are disabled. Only one active slide is exposed to assistive technology.
+- **No reviews supplied:** the public file-backed page displays a clearly worded invitation state instead of fabricated client names or endorsements. Existing CMS permission/publication filters remain. The animated carousel is checked with explicit local QA records in a separate loopback-only component harness; those records are never added to application data or a public fixture route.
+
+## Files
+
+`components/logo-motion.tsx`, `hero-emblem.tsx`, `reading-text.tsx`, `reading-effects.tsx`, `hero.tsx`, `experience.tsx`, `studio-sections.tsx`, `wall-of-love.tsx`, `app/reference-motion.css` and the page/layout composition. The existing shared scroll stream handles both new effects; there is no additional global scroll listener or animation dependency.
+
+## Checks
+
+Production build, lint and TypeScript checks passed. Browser regressions passed logo faces/shine, desktop and touch flip timing, forward/reverse reading order, stable word widths, reduced-motion cleanup, no-JavaScript copy, honest review state and actual carousel controls/autoplay/swipe/OS reduced motion with QA-only records. Existing responsive, theme, consent and form checks passed at 360, 390, 768, 1024, 1440 and 1920px; gallery and FAQ checks also passed. Desktop/mobile axe scans in both themes found zero WCAG A/AA violations. See the newest entry in [verification](../VERIFICATION.md).
+
+[Logo front and shine](logo-front.png) / [logo after scrolling](logo-flipped.png). [Reading emphasis, desktop light](reading-desktop-light.png) / [desktop dark](reading-desktop-dark.png) / [mobile light](reading-mobile-light.png) / [mobile dark](reading-mobile-dark.png). [Public review invitation, desktop dark](reviews-empty-desktop-dark.png) / [desktop light](reviews-empty-desktop-light.png) / [mobile dark](reviews-empty-mobile-dark.png) / [mobile light](reviews-empty-mobile-light.png). These captures show the actual public page; they do not substitute QA records for genuine testimonials.
+
+```sh
+npm run build
+npm start -- --port 3008
+# Separate terminal, after the local production server is ready:
+npm run test:video-motion:browser
+npm run test:motion:browser
+npm run test:finishing:browser
+# Independent local component harness, no database/provider needed:
+npm run test:reviews:browser
+```
+
+These are local checks, not proof of physical-device 60fps, a fresh Lighthouse score, a working live owner account or successful Vercel production deployment. No credentials, database records or authenticator settings were changed.
+``````
+
 ## docs/about-preview.png
 
 Binary asset: 701410 bytes. SHA-256 `33c5edb3c85019d356f3a28d62f1e9c7e92f16e4bc07ae21adc08572118f030e`. Available in the repository and source ZIP.
@@ -690,6 +729,14 @@ Binary asset: 56227 bytes. SHA-256 `7fd938fd1da1dbc92babcd12adae4062f6fe3a1e7db3
 
 Binary asset: 78961 bytes. SHA-256 `97e805e6864f01d06f02cd5933c6a5d2d6fa69ea077bc0cfb08476a48a76e2ee`. Available in the repository and source ZIP.
 
+## docs/logo-flipped.png
+
+Binary asset: 144508 bytes. SHA-256 `e1ba15a079232154cd7b689cc38a8e4860399c31bd22ad8234833c6f79800f5c`. Available in the repository and source ZIP.
+
+## docs/logo-front.png
+
+Binary asset: 148486 bytes. SHA-256 `f33f6eab9cccaa67caa81834426c225c5053a70ca7005188af9f7f0b0bf24866`. Available in the repository and source ZIP.
+
 ## docs/mobile-about-preview.png
 
 Binary asset: 139652 bytes. SHA-256 `c43073f9bda4da3745f6961c2a17d66e594bc231607c7332fa0499ee5dd13e8a`. Available in the repository and source ZIP.
@@ -701,6 +748,22 @@ Binary asset: 1052258 bytes. SHA-256 `efa86397780d804c8cc4b0c285a3e591c0d9e835fe
 ## docs/preview.png
 
 Binary asset: 1052258 bytes. SHA-256 `efa86397780d804c8cc4b0c285a3e591c0d9e835fe2caab09136fb7a07735476`. Available in the repository and source ZIP.
+
+## docs/reading-desktop-dark.png
+
+Binary asset: 445472 bytes. SHA-256 `304e89e7e9b4ef451d366d8ef60ca79473ff1a52447ebf9574b4e420451f6cf4`. Available in the repository and source ZIP.
+
+## docs/reading-desktop-light.png
+
+Binary asset: 451188 bytes. SHA-256 `19e3663f2427e679349cb2269e5f9337daf091a92d36a314c855d6747831ef5b`. Available in the repository and source ZIP.
+
+## docs/reading-mobile-dark.png
+
+Binary asset: 175344 bytes. SHA-256 `f16209c8027f274d49644d4452ec7151e2c56105d6bbad9daff3fdb0279cf17e`. Available in the repository and source ZIP.
+
+## docs/reading-mobile-light.png
+
+Binary asset: 180239 bytes. SHA-256 `a8e0ec3890d29f22a24380692e63d0fe31bb1e85ad0b5460e8e8af273dc208ee`. Available in the repository and source ZIP.
 
 ## docs/reference-about-preview.png
 
@@ -753,6 +816,22 @@ Binary asset: 723689 bytes. SHA-256 `fe6849f1a3dc2c78769060ced64cc02a4bd4b0e2014
 ## docs/reference-workflow-preview.png
 
 Binary asset: 202277 bytes. SHA-256 `d0ce6a82ce67c89d56d9afa19fd5fc489c7480909978944267637f8fec950a4f`. Available in the repository and source ZIP.
+
+## docs/reviews-empty-desktop-dark.png
+
+Binary asset: 143383 bytes. SHA-256 `012edfbb575e41e6c672c6eafb28e8746c507461906d99524103d78d18802b2f`. Available in the repository and source ZIP.
+
+## docs/reviews-empty-desktop-light.png
+
+Binary asset: 144909 bytes. SHA-256 `e3d63829111ce0e9b9f37c157697995547d3e28e82b0f211cfbeec4ffe698573`. Available in the repository and source ZIP.
+
+## docs/reviews-empty-mobile-dark.png
+
+Binary asset: 62544 bytes. SHA-256 `96945a63d05957fdcb47995afe56e406b5675f44068a454eb95cb89a94e8fba0`. Available in the repository and source ZIP.
+
+## docs/reviews-empty-mobile-light.png
+
+Binary asset: 64169 bytes. SHA-256 `8cd511560b11f6a9ce7be527bf624d48de1ffd8df0528a73fbcc55a3eef05bb2`. Available in the repository and source ZIP.
 
 ## docs/showcase-1440-dark.png
 

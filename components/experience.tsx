@@ -11,6 +11,7 @@ import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
 import { SocialLinks } from "./social-links";
 import { site } from "@/data/site";
+import { ReadingText } from "./reading-text";
 const fundamentalsIcons = {
   frontend: Blocks,
   backend: Braces,
@@ -62,9 +63,9 @@ export function Experience() {
           </Reveal>
           <TextReveal id="experience-title" text={copy.title} />
           <Reveal>
-            <p className="experience-lead">{copy.lead}</p>
+            <ReadingText className="experience-lead" text={copy.lead} />
             {copy.paragraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
+              <ReadingText key={paragraph} text={paragraph} />
             ))}
             <SocialLinks />
           </Reveal>
