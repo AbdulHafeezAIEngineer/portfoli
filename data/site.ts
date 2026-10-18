@@ -1,3 +1,4 @@
+import { primaryNavigation } from "./navigation";
 export const site = {
   brand: "Elvora",
   logo: { src: "/elvora-logo.svg" },
@@ -8,15 +9,7 @@ export const site = {
   title: "Elvora — Thoughtful websites. Intelligent experiences.",
   description:
     "Elvora is Abdul Hafeez's portfolio for thoughtful websites, AI chatbot concepts, and voice experiences. Explore the work and start a conversation.",
-  nav: [
-    { label: "Services", href: "#services" },
-    { label: "Work", href: "#work" },
-    { label: "AI Bots", href: "#ai-bots" },
-    { label: "About Me", href: "#experience" },
-    { label: "Skills", href: "#skills" },
-    { label: "Certification", href: "#certification" },
-    { label: "Contact", href: "#contact" },
-  ],
+  nav: primaryNavigation,
   hero: {
     eyebrow: "INDEPENDENT DEVELOPER · BUILT WITH INTENTION",
     heading: ["Thoughtful websites.", "Intelligent", "experiences."],
@@ -42,7 +35,11 @@ export const site = {
     description:
       "Four original concepts. Four distinct worlds. Bespoke websites for hospitality, electric mobility, private care and architecture—built to explore, not just look at.",
     tabs: [
-      { id: "web", title: "Web Development", detail: "04 bespoke concept websites" },
+      {
+        id: "web",
+        title: "Web Development",
+        detail: "04 bespoke concept websites",
+      },
       {
         id: "bots",
         title: "AI Chatbot Services",

@@ -24,11 +24,11 @@ export function Hero() {
           <ReadingText className="hero-intro" text={site.hero.intro} />
           <p className="hero-tagline">{site.hero.tagline}</p>
           <div className="hero-actions">
-            <a href="#work" className="button button-gold">
+            <a href="/ai-websites" className="button button-gold">
               {site.hero.primary}
               <ArrowDownRight size={18} aria-hidden="true" />
             </a>
-            <a href="#contact" className="button button-outline">
+            <a href="/contact" className="button button-outline">
               {site.hero.secondary}
               <ArrowUpRight size={18} aria-hidden="true" />
             </a>
@@ -59,8 +59,12 @@ export function Hero() {
             ))}
           </div>
         </div>
-        <a href="#work" className="scroll-link" aria-label={site.hero.primary}>
-          <span aria-hidden="true">SCROLL TO EXPLORE</span>
+        <a
+          href="/ai-websites"
+          className="scroll-link"
+          aria-label={site.hero.primary}
+        >
+          <span aria-hidden="true">EXPLORE THE WEBSITES</span>
           <ArrowDownRight size={18} />
         </a>
       </div>

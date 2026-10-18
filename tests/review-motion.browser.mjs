@@ -41,6 +41,7 @@ const styles = [
   "reference-motion",
   "theme-tokens",
   "atelier",
+  "pages",
 ]
   .map((n) => fs.readFileSync("app/" + n + ".css", "utf8"))
   .join("\n");
@@ -65,14 +66,14 @@ try {
   const page = await browser.newPage();
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
-  for (const width of [390, 768, 1440]) {
+  for (const width of [390, 700, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     for (const genuine of [false, true]) {
       await page.goto(
         `http://127.0.0.1:${server.address().port}/${genuine ? "?genuine" : ""}`,
       );
       await page
-        .getByRole("heading", { name: "Testimonials", exact: true })
+        .getByRole("heading", { name: "Testimonials.", exact: true })
         .waitFor();
       assert.equal(await page.locator(".testimonial-card").count(), 4);
       assert.equal(
@@ -88,7 +89,7 @@ try {
         .evaluate(
           (el) => getComputedStyle(el).gridTemplateColumns.split(" ").length,
         );
-      assert.equal(columns, width === 390 ? 1 : width === 768 ? 2 : 4);
+      assert.equal(columns, width === 390 ? 1 : width === 700 ? 2 : 3);
       assert.ok(
         await page.evaluate(
           () => document.documentElement.scrollWidth <= innerWidth,
@@ -103,7 +104,7 @@ try {
   }
   assert.deepEqual(errors, []);
   console.log(
-    "PASS testimonials: four/two/one columns, labeled samples, genuine reviews replace samples, no overflow or runtime errors.",
+    "PASS testimonials: three/two/one columns, labeled samples, genuine reviews replace samples, no overflow or runtime errors.",
   );
 } finally {
   await browser.close();

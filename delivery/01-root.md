@@ -578,6 +578,14 @@ Current UI/video update: [purple palette, preserved custom designs, visibility-c
 
 Latest playback/navigation update: [wide looping videos, interactive desktop windows and measured page readiness](docs/READY_PLAYBACK_UPDATE.md).
 
+## Categorized public pages
+
+The homepage is now a short introduction and directory. AI Websites, AI Bots, Bunch of Work, About Me, Journey, Technical Domains, Skills & Tools, Certificates, How I Build, Testimonials, Services and Contact each have a dedicated route. How I Embed Bots lives under AI Bots. About pages have ordered secondary tabs; saved links to former homepage sections redirect to the appropriate page.
+
+Project previews are unboxed, without concept badges, counters, device-format labels or floating controls. Original website art/device models and the 54-tile curved collection are preserved. Visible device previews now float on mobile and use native-scroll 3D movement; desktop pointer tilt and Motion Off remain available.
+
+See [the current page map, screenshots and verification](docs/CATEGORIZED_PAGES.md). Earlier single-page reports below describe previous revisions.
+
 ## Agency features
 
 Services and project-note routes, native FAQs, a private service/FAQ/review CMS, searchable paginated inquiries with status and private notes, actual dashboard counts and audit history. Contact acceptance distinguishes database storage from optional SMTP notification. Genuine approved reviews appear only after publication; the About section uses original Elvora brand artwork.
@@ -913,6 +921,12 @@ To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQ
 # Verification — 17 October 2026
 
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
+
+## Current categorized pages and clean project previews
+
+The public homepage now contains only the hero and a page directory. Thirteen separate content routes, including the AI Bots embedding sub-page, share route-aware desktop/mobile navigation. Profile tabs follow About → Journey → Technical Domains → Skills & Tools → Certificates → How I Build. The original curved wall has a larger dedicated page; Testimonials has its own editorial card layout. Project cards retain the original device models/artwork while removing white panels, counters and metadata clutter. Mobile device previews gain visible-only floating and scroll-linked 3D transforms without replacing native touch scrolling.
+
+Production build, lint and TypeScript pass. Browser checks cover all thirteen routes with JavaScript and without it, canonical URLs, sitemap, legacy section links, mobile/desktop keyboard navigation, active states, both themes at six widths, mobile 3D, both looping videos, four interactive demo forms/windows, galleries, certificates, contact validation, FAQ, reading and logo motion. The testimonial harness verifies that approved records replace explicitly labeled sample cards. Consent/contact/chat/security suites pass all 46 tests. Twenty-four WCAG A/AA scans across six page types, two themes and two widths found zero violations. See [page map and evidence](docs/CATEGORIZED_PAGES.md), [accessibility results](docs/pages-accessibility.json) and [page loading observations](docs/pages-scroll-readiness.json). These local checks do not prove live Vercel deployment, private service delivery or owner login. Prior single-page loading counts and Lighthouse measurements below are historical.
 
 ## Latest playback, window navigation and page readiness
 
@@ -9609,6 +9623,7 @@ export default nextConfig;
     "test:showcase:browser": "node tests/showcase-videos.browser.mjs",
     "images:previews": "node scripts/generate-image-previews.mjs",
     "test:windows:browser": "node --import tsx tests/demo-windows.browser.mjs",
+    "test:pages:browser": "node tests/pages.browser.mjs",
     "test:scroll:browser": "node tests/scroll-readiness.browser.mjs"
   },
   "dependencies": {

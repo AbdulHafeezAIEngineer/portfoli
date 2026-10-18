@@ -30,7 +30,7 @@ export default async function Page({ params }: Props) {
     <>
       <Navbar identity={identity} rootLinks />
       <main id="main-content" className="container agency-detail">
-        <Link href="/#work" className="eyebrow">
+        <Link href="/ai-websites" className="eyebrow">
           ELVORA / SELECTED WORK
         </Link>
         <header className="agency-detail-hero">

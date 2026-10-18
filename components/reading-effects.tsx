@@ -1,10 +1,12 @@
 "use client";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { subscribeScroll } from "@/lib/scroll";
 import { useMotionPreference } from "./motion-preference";
 
 export function ReadingEffects() {
   const { reduced } = useMotionPreference();
+  const pathname = usePathname();
   useEffect(() => {
     if (reduced) return;
     const paragraphs = [
@@ -67,6 +69,6 @@ export function ReadingEffects() {
         for (const word of record.words) word.classList.remove("is-read");
       }
     };
-  }, [reduced]);
+  }, [reduced, pathname]);
   return null;
 }

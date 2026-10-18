@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { getServices, getProjects } from "@/lib/content-loader";
 import { site } from "@/data/site";
 import { studies } from "@/data/studies";
+import { portfolioPages } from "@/data/navigation";
 import { concepts } from "@/data/concepts";
 
 export const dynamic = "force-dynamic";
@@ -11,6 +12,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getProjects(),
   ]);
   return [
+    ...Object.values(portfolioPages).map((page) => ({
+      url: `${site.url}${page.href}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    })),
     ...services.map((service) => ({
       url: `${site.url}/services/${service.id}`,
       priority: 0.7,

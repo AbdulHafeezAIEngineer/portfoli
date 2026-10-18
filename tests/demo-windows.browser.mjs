@@ -20,30 +20,25 @@ try {
     page.on("pageerror", (e) => errors.push(e.message));
     await page.goto(base);
     await page.getByRole("button", { name: "Reject All", exact: true }).click();
-    assert.equal(await page.getByRole("tab").count(), 3);
-    assert.equal(await page.locator(".interface-study-card").count(), 0);
+    await page.goto(base + "/ai-websites");
+    assert.equal(await page.getByRole("tab").count(), 0);
     assert.equal(
-      await page.locator("#ai-bots .bot-card").count(),
-      4,
-      "AI content exists before any tab click",
+      await page
+        .locator(
+          ".interface-study-card, .bot-card, .project-footer, .curated-project-index",
+        )
+        .count(),
+      0,
     );
-    await page
-      .locator(".bot-card")
-      .first()
-      .evaluate((el) => (el.dataset.qaRetained = "yes"));
-    await page.getByRole("tab", { name: /Website concepts/ }).click();
-    await page.getByRole("tab", { name: /AI chatbots & demos/ }).click();
-    assert.equal(
-      await page.locator(".bot-card").first().getAttribute("data-qa-retained"),
-      "yes",
+    assert.equal(await page.locator(".project-card").count(), 4);
+    await page.waitForFunction(
+      () =>
+        [...document.querySelectorAll('main img[loading="eager"]')].every(
+          (img) => img.complete && img.naturalWidth > 0,
+        ),
+      null,
+      { polling: 100 },
     );
-    await page.getByRole("tab", { name: /^All/ }).click();
-    await page.waitForFunction(() =>
-      [...document.querySelectorAll('main img[loading="eager"]')].every(
-        (img) => img.complete && img.naturalWidth > 0,
-      ),
-    );
-    assert.ok((await page.locator("main img[loading=eager]").count()) > 50);
     assert.equal(
       await page.locator("[data-reveal]:not(.is-revealed)").count(),
       0,
@@ -139,8 +134,7 @@ try {
       await page
         .getByRole("link", { name: "Back to website", exact: true })
         .click();
-      await page.waitForURL("**/#work");
-      await page.getByRole("tab", { name: /^All/ }).click();
+      await page.waitForURL("**/ai-websites");
     }
     await page.goto(base + "/studies/noma");
     await page
@@ -150,7 +144,7 @@ try {
     assert.deepEqual(errors, []);
     await page.close();
     console.log(
-      `PASS ${width}px: removed category, initial/persistent AI content, ready imagery, four direct framed websites, nested scrolling, maximize/Escape/back, sample forms/reset and retained study route.`,
+      `PASS ${width}px: separate website page, unboxed cards, ready imagery, four direct framed websites, nested scrolling, maximize/Escape/back, sample forms/reset and retained study route.`,
     );
   }
 } finally {

@@ -37,6 +37,7 @@
     "test:showcase:browser": "node tests/showcase-videos.browser.mjs",
     "images:previews": "node scripts/generate-image-previews.mjs",
     "test:windows:browser": "node --import tsx tests/demo-windows.browser.mjs",
+    "test:pages:browser": "node tests/pages.browser.mjs",
     "test:scroll:browser": "node tests/scroll-readiness.browser.mjs"
   },
   "dependencies": {

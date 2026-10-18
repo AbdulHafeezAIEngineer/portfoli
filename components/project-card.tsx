@@ -4,38 +4,72 @@ import Image from "next/image";
 import Link from "next/link";
 import { imagePreview } from "@/lib/image-preview";
 import { m, useMotionValue, useSpring } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import type { ProjectView } from "@/data/projects";
-import { site } from "@/data/site";
+import { subscribeScroll } from "@/lib/scroll";
 import { projectPresentation } from "@/data/project-presentation";
-export function ProjectCard({
-  project,
-  index,
-  total,
-}: {
-  project: ProjectView;
-  index: number;
-  total: number;
-}) {
+export function ProjectCard({ project }: { project: ProjectView }) {
   const { reduced } = useMotionPreference();
+  const card = useRef<HTMLAnchorElement>(null);
   const [finePointer, setFinePointer] = useState(false);
   const x = useMotionValue(0),
     y = useMotionValue(0);
   const rotateX = useSpring(x, { stiffness: 110, damping: 22 });
   const rotateY = useSpring(y, { stiffness: 110, damping: 22 });
   useEffect(() => {
-    const media = matchMedia("(hover: hover) and (pointer: fine)");
+    const media = matchMedia(
+      "(min-width: 768px) and (hover: hover) and (pointer: fine)",
+    );
     const sync = () => setFinePointer(media.matches);
     sync();
     media.addEventListener("change", sync);
     return () => media.removeEventListener("change", sync);
   }, []);
+  useEffect(() => {
+    const element = card.current;
+    if (!element || reduced) {
+      x.set(0);
+      y.set(0);
+      return;
+    }
+    let visible = false;
+    const update = (viewport: number) => {
+      if (!visible || finePointer) return;
+      const rect = element.getBoundingClientRect();
+      const position = Math.max(
+        -1,
+        Math.min(1, (viewport / 2 - rect.top - rect.height / 2) / viewport),
+      );
+      x.set(position * -5);
+      y.set(position * 7);
+    };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        element.dataset.deviceVisible = String(visible);
+        update(window.innerHeight);
+      },
+      { rootMargin: "60px" },
+    );
+    observer.observe(element);
+    const unsubscribe = finePointer
+      ? undefined
+      : subscribeScroll(({ viewport }) => update(viewport));
+    return () => {
+      observer.disconnect();
+      unsubscribe?.();
+      delete element.dataset.deviceVisible;
+      x.set(0);
+      y.set(0);
+    };
+  }, [reduced, finePointer, x, y]);
   const tilt = finePointer && !reduced;
   const presentation = projectPresentation(project.id);
   const mobile = project.screenshots[2] || project.screenshots[0];
   return (
     <Link
+      ref={card}
       className={`project-card device-project curated-project${presentation.artwork ? " artwork-project" : ""}`}
       href={project.demoUrl || `/work/${project.id}`}
       aria-label={`Explore website: ${project.title}`}
@@ -56,33 +90,18 @@ export function ProjectCard({
         y.set(((event.clientX - rect.left - rect.width / 2) / rect.width) * 12);
       }}
       onPointerLeave={() => {
+        if (!tilt) return;
         x.set(0);
         y.set(0);
       }}
     >
-      <div className="project-info">
-        <div>
-          <span className="project-industry">{project.industry}</span>
-          <h3>{project.title}</h3>
-          <p>{project.subtitle}</p>
-        </div>
-        <span className="curated-project-index" aria-hidden="true">
-          {String(index + 1).padStart(2, "0")}
-        </span>
-      </div>
       <div
         className="device-stage"
         data-parallax="image"
         style={{ "--project-accent": project.accent } as React.CSSProperties}
       >
-        <span className="curated-format" aria-hidden="true">
-          {presentation.artwork ? "FEATURED WEBSITE" : "DESKTOP / MOBILE"}
-        </span>
         {presentation.artwork ? (
-          <m.div
-            className="artwork-composition"
-            style={tilt ? { rotateX, rotateY } : undefined}
-          >
+          <m.div className="artwork-composition" style={{ rotateX, rotateY }}>
             <Image
               loading="eager"
               fetchPriority="low"
@@ -100,7 +119,7 @@ export function ProjectCard({
             <div className="device-float">
               <m.div
                 className="device-composition"
-                style={tilt ? { rotateX, rotateY } : undefined}
+                style={{ rotateX, rotateY }}
               >
                 <div className="device-laptop">
                   <div className="device-laptop-lid">
@@ -141,19 +160,11 @@ export function ProjectCard({
             </div>
           </>
         )}
-        <span className="device-view">
-          {site.work.view}
-          <ArrowUpRight size={18} aria-hidden="true" />
-        </span>
       </div>
-      <div className="project-footer">
+      <div className="project-title-row">
+        <h3>{project.title}</h3>
         <span>
-          <i style={{ background: project.accent }} />
-          {presentation.label}
-        </span>
-        <span>
-          {String(index + 1).padStart(2, "0")} /{" "}
-          {String(total).padStart(2, "0")}
+          Explore <ArrowUpRight size={17} aria-hidden="true" />
         </span>
       </div>
     </Link>

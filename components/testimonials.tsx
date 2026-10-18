@@ -54,12 +54,16 @@ export function Testimonials({
   return (
     <section
       id="testimonials"
-      className="container testimonials-section"
+      className="container testimonials-section testimonials-page"
       aria-labelledby="testimonials-title"
     >
       <Reveal>
         <div className="testimonials-heading">
-          <TextReveal id="testimonials-title" text="Testimonials" />
+          <p className="eyebrow">PEOPLE / PROJECTS / PERSPECTIVE</p>
+          <TextReveal as="h1" id="testimonials-title" text="Testimonials." />
+          <p className="testimonials-subtitle">
+            What people say about working with me.
+          </p>
           {preview && (
             <p className="testimonial-sample-note">
               Design preview — sample content, not client endorsements.
@@ -74,6 +78,9 @@ export function Testimonials({
               className="testimonial-card"
               data-sample={review.placeholder ? "true" : undefined}
             >
+              <span className="testimonial-quote-mark" aria-hidden="true">
+                “
+              </span>
               {review.placeholder && (
                 <span className="testimonial-sample-label">SAMPLE REVIEW</span>
               )}

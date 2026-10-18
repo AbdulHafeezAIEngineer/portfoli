@@ -1732,12 +1732,16 @@ export function BotServices({ bots }: { bots: Bot[] }) {
     };
   }, []);
   return (
-    <section id="ai-bots" className="bot-services" aria-labelledby="bots-title">
+    <section
+      id="ai-bots"
+      className="container bot-services"
+      aria-labelledby="bots-title"
+    >
       <Reveal>
         <div className="section-heading bots-heading">
           <div>
             <p className="eyebrow">{copy.eyebrow}</p>
-            <h2 id="bots-title">{copy.title}</h2>
+            <h1 id="bots-title">{copy.title}</h1>
           </div>
           <p>{copy.description}</p>
         </div>
@@ -1753,15 +1757,31 @@ export function BotServices({ bots }: { bots: Bot[] }) {
                 className={`bot-card bot-card-${bot.id}`}
                 aria-labelledby={`bot-name-${bot.id}`}
               >
-                {forte && <button type="button" className="forte-card-hitarea" aria-haspopup="dialog" aria-label={`${copy.open}: ${bot.name}`} onClick={() => setActive(bot)} />}
-                <div className={forte ? "bot-card-top forte-card-top" : "bot-card-top"}>
-                  {forte ? <FortePreview name={bot.name} /> : <div className="bot-art" aria-hidden="true">
-                    <span />
-                    <Icon size={42} strokeWidth={1.2} />
-                    <i />
-                    <i />
-                    <i />
-                  </div>}
+                {forte && (
+                  <button
+                    type="button"
+                    className="forte-card-hitarea"
+                    aria-haspopup="dialog"
+                    aria-label={`${copy.open}: ${bot.name}`}
+                    onClick={() => setActive(bot)}
+                  />
+                )}
+                <div
+                  className={
+                    forte ? "bot-card-top forte-card-top" : "bot-card-top"
+                  }
+                >
+                  {forte ? (
+                    <FortePreview name={bot.name} />
+                  ) : (
+                    <div className="bot-art" aria-hidden="true">
+                      <span />
+                      <Icon size={42} strokeWidth={1.2} />
+                      <i />
+                      <i />
+                      <i />
+                    </div>
+                  )}
                   <span className="method-badge">
                     <Code2 size={12} aria-hidden="true" />
                     {copy.methods[bot.method]}
@@ -1779,15 +1799,22 @@ export function BotServices({ bots }: { bots: Bot[] }) {
                     ))}
                   </ul>
                   <div className="bot-card-action">
-                    {forte ? <span className="button button-outline">{copy.open}<ArrowUpRight size={16} aria-hidden="true" /></span> : <button
-                      className="button button-outline"
-                      aria-haspopup="dialog"
-                      aria-label={`${copy.try}: ${bot.name}`}
-                      onClick={() => setActive(bot)}
-                    >
-                      {copy.try}
-                      <ArrowUpRight size={16} aria-hidden="true" />
-                    </button>}
+                    {forte ? (
+                      <span className="button button-outline">
+                        {copy.open}
+                        <ArrowUpRight size={16} aria-hidden="true" />
+                      </span>
+                    ) : (
+                      <button
+                        className="button button-outline"
+                        aria-haspopup="dialog"
+                        aria-label={`${copy.try}: ${bot.name}`}
+                        onClick={() => setActive(bot)}
+                      >
+                        {copy.try}
+                        <ArrowUpRight size={16} aria-hidden="true" />
+                      </button>
+                    )}
                     {!bot.configured && (
                       <span className="connection-pending">{copy.pending}</span>
                     )}
@@ -1806,53 +1833,6 @@ export function BotServices({ bots }: { bots: Bot[] }) {
           <span>{copy.budget}</span>
         </p>
       </div>
-      <section
-        id="embed-methods"
-        className="embed-section"
-        aria-labelledby="embed-title"
-      >
-        <Reveal>
-          <p className="eyebrow">{copy.integrationEyebrow}</p>
-          <h3 id="embed-title">{copy.embedTitle}</h3>
-          <p className="embed-intro">{copy.embedDescription}</p>
-        </Reveal>
-        <div className="embed-grid">
-          {embedMethods.map((method, index) => (
-            <article className="embed-card glass" key={method.id}>
-              <span className="embed-number">0{index + 1}</span>
-              <h4>{method.title}</h4>
-              <p>{method.description}</p>
-              <pre aria-label={`${method.title}: ${copy.example}`} tabIndex={0}>
-                <code>{method.code}</code>
-              </pre>
-              <h5>{copy.pros}</h5>
-              <ul>
-                {method.pros.map((pro) => (
-                  <li key={pro}>{pro}</li>
-                ))}
-              </ul>
-              <h5>{copy.cons}</h5>
-              <ul>
-                {method.cons.map((con) => (
-                  <li key={con}>{con}</li>
-                ))}
-              </ul>
-              <div className="embed-used">
-                <span className="eyebrow">{copy.usedBy}</span>
-                <p>
-                  {bots
-                    .filter((bot) => bot.method === method.id)
-                    .map(
-                      (bot) =>
-                        `${bot.name}${!bot.configured ? ` (${copy.pending.toLowerCase()})` : ""}`,
-                    )
-                    .join(" · ") || copy.unusedMethod}
-                </p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
       {active && (
         <ChatPanel
           bot={active}
@@ -1863,6 +1843,58 @@ export function BotServices({ bots }: { bots: Bot[] }) {
           onClose={() => setActive(null)}
         />
       )}
+    </section>
+  );
+}
+
+export function BotEmbedding({ bots }: { bots: Bot[] }) {
+  return (
+    <section
+      id="embed-methods"
+      className="container embed-section"
+      aria-labelledby="embed-title"
+    >
+      <Reveal>
+        <p className="eyebrow">{copy.integrationEyebrow}</p>
+        <h1 id="embed-title">{copy.embedTitle}</h1>
+        <p className="embed-intro">{copy.embedDescription}</p>
+      </Reveal>
+      <div className="embed-grid">
+        {embedMethods.map((method, index) => (
+          <article className="embed-card glass" key={method.id}>
+            <span className="embed-number">0{index + 1}</span>
+            <h2>{method.title}</h2>
+            <p>{method.description}</p>
+            <pre aria-label={`${method.title}: ${copy.example}`} tabIndex={0}>
+              <code>{method.code}</code>
+            </pre>
+            <h3>{copy.pros}</h3>
+            <ul>
+              {method.pros.map((pro) => (
+                <li key={pro}>{pro}</li>
+              ))}
+            </ul>
+            <h3>{copy.cons}</h3>
+            <ul>
+              {method.cons.map((con) => (
+                <li key={con}>{con}</li>
+              ))}
+            </ul>
+            <div className="embed-used">
+              <span className="eyebrow">{copy.usedBy}</span>
+              <p>
+                {bots
+                  .filter((bot) => bot.method === method.id)
+                  .map(
+                    (bot) =>
+                      `${bot.name}${!bot.configured ? ` (${copy.pending.toLowerCase()})` : ""}`,
+                  )
+                  .join(" · ") || copy.unusedMethod}
+              </p>
+            </div>
+          </article>
+        ))}
+      </div>
     </section>
   );
 }
@@ -2073,7 +2105,7 @@ export function Certifications({
     >
       <Reveal>
         <p className="eyebrow">{copy.eyebrow}</p>
-        <h2 id="certification-title">{copy.title}</h2>
+        <h1 id="certification-title">{copy.title}</h1>
         <p className="section-intro">{copy.description}</p>
       </Reveal>
       {certificates.map((certificate) => (
@@ -2203,7 +2235,7 @@ export function ConceptSite({ slug }: { slug: ConceptSlug }) {
     </div>
   </div>;
   return <main id="main-content" className={`concept-site concept-${slug}`}>
-    <div className="concept-ribbon"><Link href="/#work"><ArrowLeft size={13} />{ui.back}</Link><span>{ui.concept} / {d.category}</span><span>{ui.independent}</span></div>
+    <div className="concept-ribbon"><Link href="/ai-websites"><ArrowLeft size={13} />{ui.back}</Link><span>{ui.concept} / {d.category}</span><span>{ui.independent}</span></div>
     <header className="concept-header">
       <a className="concept-logo" href="#concept-top">{slug === "aster" && <span className="aster-mark" aria-hidden="true">✳</span>}{d.wordmark}{slug === "vanta" && <small>MOTORS</small>}{slug === "kovo" && <small>STUDIO / ARCHITECTURE</small>}</a>
       <nav id="concept-navigation" className={menu ? "concept-nav is-open" : "concept-nav"} aria-label={`${d.name} navigation`}>
@@ -2270,7 +2302,7 @@ export function ConceptSite({ slug }: { slug: ConceptSlug }) {
         {summary && <div className="concept-summary" role="status"><span className="concept-kicker">{ui.demo}</span><p>{summary.text}</p><strong>{summary.details}</strong><button type="button" onClick={() => setSummary(null)}>{ui.reset}<ArrowRight size={14} /></button></div>}
       </form>
     </section>
-    <footer className="concept-footer"><div><a className="concept-logo" href="#concept-top">{d.wordmark}</a><p>{d.footer}</p></div><div><span>{ui.footer}</span><Link href="/#work">{ui.back}<ArrowUpRight size={16} /></Link></div></footer>
+    <footer className="concept-footer"><div><a className="concept-logo" href="#concept-top">{d.wordmark}</a><p>{d.footer}</p></div><div><span>{ui.footer}</span><Link href="/ai-websites">{ui.back}<ArrowUpRight size={16} /></Link></div></footer>
   </main>;
 }
 
@@ -2823,7 +2855,7 @@ export function Contact({ email }: { email: string }) {
             <Reveal>
               <p className="eyebrow">{copy.eyebrow}</p>
             </Reveal>
-            <TextReveal id="contact-title" text={copy.title} />
+            <TextReveal as="h1" id="contact-title" text={copy.title} />
             <Reveal>
               <p className="contact-invitation">{copy.description}</p>
             </Reveal>
@@ -2879,7 +2911,7 @@ export function DemoSite({ slug }: { slug: DemoSlug }) {
   return (
     <main id="main-content" className={`demo-site demo-${slug}`}>
       <div className="demo-concept-bar">
-        <Link href="/#work">
+        <Link href="/ai-websites">
           <ArrowLeft size={12} />
           {ui.back}
         </Link>
@@ -3141,7 +3173,7 @@ export function DemoSite({ slug }: { slug: DemoSlug }) {
           {d.name}
         </a>
         <p>{d.note}</p>
-        <Link href="/#work">
+        <Link href="/ai-websites">
           {ui.back}
           <ArrowRight size={15} />
         </Link>
@@ -3389,7 +3421,7 @@ export function DemoWindow({
   return (
     <div className="demo-desktop">
       <header className="demo-desktop-menu">
-        <Link href="/#work">Elvora Studio</Link>
+        <Link href="/ai-websites">Elvora Studio</Link>
         <span>Website concepts</span>
         <span>Interactive preview</span>
       </header>
@@ -3420,7 +3452,7 @@ export function DemoWindow({
             >
               {maximized ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
             </button>
-            <Link href="/#work">
+            <Link href="/ai-websites">
               <ArrowLeft size={14} />
               <span>Back to website</span>
             </Link>
@@ -3449,7 +3481,7 @@ export function DemoWindow({
             <small>{concept.name}</small>
           </Link>
         ))}
-        <Link href="/#work">
+        <Link href="/ai-websites">
           <span aria-hidden="true">
             <PanelTop size={21} />
           </span>
@@ -3731,7 +3763,7 @@ export function DesignStudy({ study }: { study: Study }) {
       style={{ "--study-accent": study.accent } as React.CSSProperties}
     >
       <div className="study-notice">
-        <Link href="/#work-bunch">{copy.back}</Link>
+        <Link href="/bunch-of-work">{copy.back}</Link>
         <span>{copy.label}</span>
         <span>{study.industry}</span>
       </div>
@@ -3751,7 +3783,7 @@ export function DesignStudy({ study }: { study: Study }) {
             </h2>
             <p>{copy.note}</p>
           </div>
-          <Link href="/#work-bunch">
+          <Link href="/bunch-of-work">
             {copy.back}
             <ChevronRight size={17} aria-hidden="true" />
           </Link>
@@ -3934,7 +3966,7 @@ export function Experience() {
           <Reveal>
             <p className="eyebrow">{copy.eyebrow}</p>
           </Reveal>
-          <TextReveal id="experience-title" text={copy.title} />
+          <TextReveal as="h1" id="experience-title" text={copy.title} />
           <Reveal>
             <ReadingText className="experience-lead" text={copy.lead} />
             {copy.paragraphs.map((paragraph) => (
@@ -3944,56 +3976,66 @@ export function Experience() {
           </Reveal>
         </div>
       </div>
-      <div
-        className="fundamentals-section domains-section"
-        aria-labelledby="fundamentals-title"
-      >
-        <Reveal>
-          <p className="eyebrow">{copy.fundamentals.eyebrow}</p>
-        </Reveal>
-        <TextReveal id="fundamentals-title" text={copy.fundamentals.title} />
-        <Reveal>
-          <p className="section-intro">{copy.fundamentals.description}</p>
-        </Reveal>
-        <div className="domains-bento">
-          {copy.fundamentals.blocks.map((block, index) => {
-            const Icon = fundamentalsIcons[block.id];
-            return (
-              <Reveal key={block.id} delay={index * 0.05}>
-                <article className={`domain-card domain-${block.id}`}>
-                  <div className="domain-heading">
-                    <span className="domain-icon">
-                      <Icon size={24} strokeWidth={1.4} aria-hidden="true" />
-                    </span>
-                    <h3>{block.title}</h3>
-                    <span className="domain-index" aria-hidden="true">
-                      0{index + 1}
-                    </span>
-                  </div>
-                  <p>{block.description}</p>
-                  <ul
-                    className="domain-tags"
-                    aria-label={`${block.title} technologies`}
-                  >
-                    {block.tags.map((tag) => (
-                      <li key={tag}>{tag}</li>
-                    ))}
-                  </ul>
-                  {block.id === "ai" && (
-                    <a href="#ai-bots" className="domain-demo-link">
-                      Explore the AI demos
-                      <ArrowUpRight size={17} aria-hidden="true" />
-                    </a>
-                  )}
-                </article>
-              </Reveal>
-            );
-          })}
-        </div>
-        <Reveal>
-          <p className="fundamentals-closing">{copy.fundamentals.closing}</p>
-        </Reveal>
+    </section>
+  );
+}
+
+export function TechnicalDomains() {
+  return (
+    <section
+      id="fundamentals"
+      className="container fundamentals-section domains-section"
+      aria-labelledby="fundamentals-title"
+    >
+      <Reveal>
+        <p className="eyebrow">{copy.fundamentals.eyebrow}</p>
+      </Reveal>
+      <TextReveal
+        as="h1"
+        id="fundamentals-title"
+        text={copy.fundamentals.title}
+      />
+      <Reveal>
+        <p className="section-intro">{copy.fundamentals.description}</p>
+      </Reveal>
+      <div className="domains-bento">
+        {copy.fundamentals.blocks.map((block, index) => {
+          const Icon = fundamentalsIcons[block.id];
+          return (
+            <Reveal key={block.id} delay={index * 0.05}>
+              <article className={`domain-card domain-${block.id}`}>
+                <div className="domain-heading">
+                  <span className="domain-icon">
+                    <Icon size={24} strokeWidth={1.4} aria-hidden="true" />
+                  </span>
+                  <h3>{block.title}</h3>
+                  <span className="domain-index" aria-hidden="true">
+                    0{index + 1}
+                  </span>
+                </div>
+                <p>{block.description}</p>
+                <ul
+                  className="domain-tags"
+                  aria-label={`${block.title} technologies`}
+                >
+                  {block.tags.map((tag) => (
+                    <li key={tag}>{tag}</li>
+                  ))}
+                </ul>
+                {block.id === "ai" && (
+                  <a href="/ai-bots" className="domain-demo-link">
+                    Explore the AI demos
+                    <ArrowUpRight size={17} aria-hidden="true" />
+                  </a>
+                )}
+              </article>
+            </Reveal>
+          );
+        })}
       </div>
+      <Reveal>
+        <p className="fundamentals-closing">{copy.fundamentals.closing}</p>
+      </Reveal>
     </section>
   );
 }
@@ -4069,16 +4111,66 @@ import { site } from "@/data/site";
 import { studio } from "@/data/studio";
 import { SocialLinks } from "./social-links";
 import { CookieSettingsButton } from "./consent-provider";
+import { aboutPages, portfolioPages } from "@/data/navigation";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
 
 export function Footer({
   brand,
   email = site.email,
+  compact = false,
 }: {
   brand: string;
   email?: string;
+  compact?: boolean;
 }) {
+  if (compact)
+    return (
+      <footer className="compact-footer">
+        <div className="container">
+          <div className="compact-footer-top">
+            <Link href="/" className="compact-footer-brand">
+              {brand}
+              <span>.</span>
+            </Link>
+            <a href={`mailto:${email}`}>
+              {email}
+              <ArrowUpRight size={15} aria-hidden="true" />
+            </a>
+          </div>
+          <nav className="compact-footer-pages" aria-label="Footer navigation">
+            {[
+              ...site.nav,
+              ...aboutPages
+                .filter((id) => id !== "about")
+                .map((id) => portfolioPages[id]),
+              portfolioPages.services,
+            ].map((item) => (
+              <Link key={item.href} href={item.href}>
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+          <div className="compact-footer-bottom">
+            <p>
+              © {new Date().getFullYear()} {brand}. {studio.ending.copyright}
+            </p>
+            <nav aria-label="Legal information">
+              {studio.ending.legalLinks.map((item) => (
+                <Link key={item.href} href={item.href}>
+                  {item.label}
+                </Link>
+              ))}
+              <CookieSettingsButton />
+            </nav>
+            <a href="#top" aria-label={site.ui.back}>
+              ↑
+            </a>
+          </div>
+        </div>
+        <BackToTop />
+      </footer>
+    );
   return (
     <footer className="editorial-footer">
       <div className="container footer-top-grid">
@@ -4096,7 +4188,7 @@ export function Footer({
             <h3>{studio.ending.navigation}</h3>
             <div>
               {studio.ending.navLinks.map((item) => (
-                <a key={item.href} href={`/${item.href}`}>
+                <a key={item.href} href={item.href}>
                   {item.label}
                 </a>
               ))}
@@ -4110,7 +4202,7 @@ export function Footer({
               {email}
               <ArrowUpRight size={17} aria-hidden="true" />
             </a>
-            <Link href="/#contact" className="footer-brief-link">
+            <Link href="/contact" className="footer-brief-link">
               {studio.ending.action}
               <ArrowUpRight size={16} aria-hidden="true" />
             </Link>
@@ -4273,11 +4365,11 @@ export function Hero() {
           <ReadingText className="hero-intro" text={site.hero.intro} />
           <p className="hero-tagline">{site.hero.tagline}</p>
           <div className="hero-actions">
-            <a href="#work" className="button button-gold">
+            <a href="/ai-websites" className="button button-gold">
               {site.hero.primary}
               <ArrowDownRight size={18} aria-hidden="true" />
             </a>
-            <a href="#contact" className="button button-outline">
+            <a href="/contact" className="button button-outline">
               {site.hero.secondary}
               <ArrowUpRight size={18} aria-hidden="true" />
             </a>
@@ -4308,13 +4400,113 @@ export function Hero() {
             ))}
           </div>
         </div>
-        <a href="#work" className="scroll-link" aria-label={site.hero.primary}>
-          <span aria-hidden="true">SCROLL TO EXPLORE</span>
+        <a
+          href="/ai-websites"
+          className="scroll-link"
+          aria-label={site.hero.primary}
+        >
+          <span aria-hidden="true">EXPLORE THE WEBSITES</span>
           <ArrowDownRight size={18} />
         </a>
       </div>
     </section>
   );
+}
+``````
+
+## components/home-directory.tsx
+
+``````tsx
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { portfolioPages } from "@/data/navigation";
+
+const chapters = [
+  { id: "websites", note: "Original concepts. Real interfaces.", number: "01" },
+  { id: "bots", note: "Conversations, made useful.", number: "02" },
+  {
+    id: "collection",
+    note: "Different worlds. One point of view.",
+    number: "03",
+  },
+  { id: "about", note: "The person behind the pixels.", number: "04" },
+  {
+    id: "process",
+    note: "From a first idea to the final detail.",
+    number: "05",
+  },
+  {
+    id: "testimonials",
+    note: "Perspectives on working together.",
+    number: "06",
+  },
+] as const;
+
+export function HomeDirectory() {
+  return (
+    <section
+      className="container home-directory"
+      aria-labelledby="directory-title"
+    >
+      <div className="directory-heading">
+        <div>
+          <p className="eyebrow">EXPLORE ELVORA</p>
+          <h2 id="directory-title">A little more direction.</h2>
+        </div>
+        <p>
+          The work, the process and the person behind it. Each with a space of
+          its own.
+        </p>
+      </div>
+      <div className="directory-grid">
+        {chapters.map(({ id, note, number }) => (
+          <Link
+            className="directory-card"
+            key={id}
+            href={portfolioPages[id].href}
+          >
+            <span className="directory-number">{number} /</span>
+            <h3>{portfolioPages[id].label}</h3>
+            <p>{note}</p>
+            <ArrowUpRight size={22} strokeWidth={1.5} aria-hidden="true" />
+          </Link>
+        ))}
+      </div>
+      <div className="directory-end">
+        <Link href="/services">
+          Explore services <ArrowUpRight size={15} aria-hidden="true" />
+        </Link>
+        <Link href="/contact">
+          Have a project in mind? Let’s talk.{" "}
+          <ArrowUpRight size={15} aria-hidden="true" />
+        </Link>
+      </div>
+    </section>
+  );
+}
+``````
+
+## components/legacy-section-redirect.tsx
+
+``````tsx
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { legacySections } from "@/data/navigation";
+
+/** Keep saved links to the former one-page portfolio useful. */
+export function LegacySectionRedirect() {
+  const router = useRouter();
+  useEffect(() => {
+    const sync = () => {
+      const destination = legacySections[window.location.hash];
+      if (destination) router.replace(destination);
+    };
+    sync();
+    window.addEventListener("hashchange", sync);
+    return () => window.removeEventListener("hashchange", sync);
+  }, [router]);
+  return null;
 }
 ``````
 
@@ -4513,74 +4705,71 @@ export function MotionProvider({ children }: { children: React.ReactNode }) {
 ``````tsx
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Menu, Moon, Sun, X } from "lucide-react";
+import { ChevronDown, Menu, Moon, Sun, X } from "lucide-react";
 import { site } from "@/data/site";
+import { aboutPages, portfolioPages } from "@/data/navigation";
 import { BrandMark } from "./brand-mark";
 import { MotionControl } from "./motion-preference";
-import { subscribeScroll } from "@/lib/scroll";
 
 export function Navbar({
   identity,
-  rootLinks = false,
 }: {
   identity: { brand: string };
   rootLinks?: boolean;
 }) {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
   const [theme, setTheme] = useState("dark");
-  const [hidden, setHidden] = useState(false);
-  const [active, setActive] = useState("");
   const menuButton = useRef<HTMLButtonElement>(null);
+  const aboutButton = useRef<HTMLButtonElement>(null);
   const menu = useRef<HTMLDivElement>(null);
+  const aboutMenu = useRef<HTMLDivElement>(null);
+  const inAbout = aboutPages.some((id) => portfolioPages[id].href === pathname);
+  const current = (href: string) =>
+    href === "/about"
+      ? inAbout
+      : href === "/ai-bots"
+        ? pathname.startsWith("/ai-bots")
+        : pathname === href;
+  const close = () => {
+    setOpen(false);
+    setAboutOpen(false);
+  };
 
   useEffect(() => {
-    let previous = window.scrollY;
-    const unsubscribe = subscribeScroll(({ y: current }) => {
-      if (Math.abs(current - previous) > 8) {
-        setHidden(current > 160 && current > previous);
-        previous = current;
-      }
-    });
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries)
-          if (entry.isIntersecting) setActive(`#${entry.target.id}`);
-      },
-      { rootMargin: "-15% 0px -65% 0px", threshold: 0 },
-    );
-    for (const item of site.nav) {
-      const element = document.querySelector(item.href);
-      if (element) observer.observe(element);
-    }
-    return () => {
-      unsubscribe();
-      observer.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
+    setOpen(false);
+    setAboutOpen(false);
     setTheme(document.documentElement.dataset.theme || "dark");
-    const media = window.matchMedia("(min-width: 1024px)");
-    const close = () => setOpen(false);
-    media.addEventListener("change", close);
-    return () => media.removeEventListener("change", close);
-  }, []);
-
+  }, [pathname]);
   useEffect(() => {
-    if (!open) return;
+    const media = window.matchMedia("(min-width: 1200px)");
+    const changed = () => {
+      setOpen(false);
+      setAboutOpen(false);
+    };
+    media.addEventListener("change", changed);
+    return () => media.removeEventListener("change", changed);
+  }, []);
+  useEffect(() => {
+    if (!open && !aboutOpen) return;
     const escape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setOpen(false);
-        menuButton.current?.focus();
-      }
+      if (event.key !== "Escape") return;
+      setOpen(false);
+      setAboutOpen(false);
+      (open ? menuButton : aboutButton).current?.focus();
     };
     const outside = (event: PointerEvent) => {
+      const target = event.target as Node;
       if (
-        !menu.current?.contains(event.target as Node) &&
-        !menuButton.current?.contains(event.target as Node)
+        !menu.current?.contains(target) &&
+        !menuButton.current?.contains(target)
       )
         setOpen(false);
+      if (!aboutMenu.current?.contains(target)) setAboutOpen(false);
     };
     document.addEventListener("keydown", escape);
     document.addEventListener("pointerdown", outside);
@@ -4588,7 +4777,7 @@ export function Navbar({
       document.removeEventListener("keydown", escape);
       document.removeEventListener("pointerdown", outside);
     };
-  }, [open]);
+  }, [open, aboutOpen]);
 
   function toggleTheme() {
     const next = theme === "dark" ? "light" : "dark";
@@ -4597,35 +4786,86 @@ export function Navbar({
     try {
       localStorage.setItem("portfolio-theme", next);
     } catch {
-      /* Storage can be unavailable. */
+      /* Optional persistence. */
     }
   }
-
   return (
-    <header
-      className={`site-header${hidden && !open ? " is-scroll-hidden" : ""}`}
-    >
+    <header className="site-header portfolio-header">
       <nav className="container nav-row" aria-label="Main navigation">
-        <a
-          href={rootLinks ? "/#top" : "#top"}
+        <Link
+          href="/"
           className="wordmark"
           aria-label={`${identity.brand} — Home`}
-          onClick={() => setOpen(false)}
+          onClick={close}
         >
           <BrandMark brand={identity.brand} />
-        </a>
+        </Link>
         <div className="desktop-nav">
-          {site.nav.map((item) => (
-            <a
-              key={item.href}
-              href={rootLinks ? `/${item.href}` : item.href}
-              aria-current={
-                !rootLinks && active === item.href ? "location" : undefined
-              }
-            >
-              {item.label}
-            </a>
-          ))}
+          {site.nav.map((item) =>
+            item.href === "/about" ? (
+              <div
+                key={item.href}
+                className="nav-about-group"
+                ref={aboutMenu}
+                onBlur={(event) => {
+                  if (
+                    !event.currentTarget.contains(event.relatedTarget as Node)
+                  )
+                    setAboutOpen(false);
+                }}
+              >
+                <Link
+                  href={item.href}
+                  data-active={inAbout || undefined}
+                  aria-current={pathname === item.href ? "page" : undefined}
+                  onClick={close}
+                >
+                  {item.label}
+                </Link>
+                <button
+                  ref={aboutButton}
+                  className="nav-about-toggle"
+                  aria-label="Explore About Me"
+                  aria-expanded={aboutOpen}
+                  aria-controls="about-navigation"
+                  onClick={() => setAboutOpen(!aboutOpen)}
+                >
+                  <ChevronDown size={13} aria-hidden="true" />
+                </button>
+                <div
+                  id="about-navigation"
+                  className="about-navigation"
+                  hidden={!aboutOpen}
+                >
+                  <p>THE PERSON & THE PROCESS</p>
+                  {aboutPages.map((id) => (
+                    <Link
+                      key={id}
+                      href={portfolioPages[id].href}
+                      aria-current={
+                        pathname === portfolioPages[id].href
+                          ? "page"
+                          : undefined
+                      }
+                      onClick={close}
+                    >
+                      {portfolioPages[id].label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <Link
+                key={item.href}
+                href={item.href}
+                data-active={current(item.href) || undefined}
+                aria-current={pathname === item.href ? "page" : undefined}
+                onClick={close}
+              >
+                {item.label}
+              </Link>
+            ),
+          )}
         </div>
         <div className="nav-actions">
           <MotionControl />
@@ -4645,7 +4885,11 @@ export function Navbar({
             aria-expanded={open}
             aria-controls="mobile-navigation"
           >
-            {open ? <X size={22} /> : <Menu size={22} />}
+            {open ? (
+              <X size={22} aria-hidden="true" />
+            ) : (
+              <Menu size={22} aria-hidden="true" />
+            )}
           </button>
         </div>
         <div
@@ -4653,6 +4897,7 @@ export function Navbar({
           className="mobile-nav"
           ref={menu}
           hidden={!open}
+          data-native-scroll
           onBlur={(event) => {
             if (
               !event.currentTarget.contains(event.relatedTarget as Node) &&
@@ -4661,18 +4906,102 @@ export function Navbar({
               setOpen(false);
           }}
         >
-          {site.nav.map((item) => (
-            <a
+          <p className="mobile-nav-label">EXPLORE</p>
+          {site.nav.slice(0, 4).map((item) => (
+            <Link
               key={item.href}
-              href={rootLinks ? `/${item.href}` : item.href}
-              onClick={() => setOpen(false)}
+              href={item.href}
+              aria-current={pathname === item.href ? "page" : undefined}
+              onClick={close}
             >
               {item.label}
-            </a>
+            </Link>
           ))}
+          <p className="mobile-nav-label">ABOUT & PROCESS</p>
+          {aboutPages.map((id) => (
+            <Link
+              key={id}
+              href={portfolioPages[id].href}
+              aria-current={
+                pathname === portfolioPages[id].href ? "page" : undefined
+              }
+              onClick={close}
+            >
+              {portfolioPages[id].label}
+            </Link>
+          ))}
+          <p className="mobile-nav-label">LET’S CONNECT</p>
+          {["testimonials", "services", "contact"].map((id) => {
+            const item =
+              portfolioPages[id as "testimonials" | "services" | "contact"];
+            return (
+              <Link
+                key={id}
+                href={item.href}
+                aria-current={pathname === item.href ? "page" : undefined}
+                onClick={close}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </div>
       </nav>
     </header>
+  );
+}
+``````
+
+## components/page-tabs.tsx
+
+``````tsx
+"use client";
+
+import { useEffect, useRef } from "react";
+import Link from "next/link";
+import {
+  aboutPages,
+  portfolioPages,
+  type PortfolioPage,
+} from "@/data/navigation";
+
+export function PageTabs({ page }: { page: PortfolioPage }) {
+  const row = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const active = row.current?.querySelector<HTMLElement>(
+      '[aria-current="page"]',
+    );
+    if (active && row.current)
+      row.current.scrollLeft =
+        active.offsetLeft -
+        row.current.offsetLeft -
+        (row.current.clientWidth - active.offsetWidth) / 2;
+  }, [page]);
+  const profile = aboutPages.some((id) => id === page);
+  const bots = page === "bots" || page === "embedding";
+  const pages = profile
+    ? aboutPages
+    : bots
+      ? (["bots", "embedding"] as const)
+      : null;
+  if (!pages) return null;
+  return (
+    <nav
+      className="page-tabs"
+      aria-label={profile ? "About Me pages" : "AI Bots pages"}
+    >
+      <div className="container page-tabs-inner" ref={row}>
+        {pages.map((id) => (
+          <Link
+            key={id}
+            href={portfolioPages[id].href}
+            aria-current={id === page ? "page" : undefined}
+          >
+            {portfolioPages[id].label}
+          </Link>
+        ))}
+      </div>
+    </nav>
   );
 }
 ``````
@@ -4686,38 +5015,72 @@ import Image from "next/image";
 import Link from "next/link";
 import { imagePreview } from "@/lib/image-preview";
 import { m, useMotionValue, useSpring } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import type { ProjectView } from "@/data/projects";
-import { site } from "@/data/site";
+import { subscribeScroll } from "@/lib/scroll";
 import { projectPresentation } from "@/data/project-presentation";
-export function ProjectCard({
-  project,
-  index,
-  total,
-}: {
-  project: ProjectView;
-  index: number;
-  total: number;
-}) {
+export function ProjectCard({ project }: { project: ProjectView }) {
   const { reduced } = useMotionPreference();
+  const card = useRef<HTMLAnchorElement>(null);
   const [finePointer, setFinePointer] = useState(false);
   const x = useMotionValue(0),
     y = useMotionValue(0);
   const rotateX = useSpring(x, { stiffness: 110, damping: 22 });
   const rotateY = useSpring(y, { stiffness: 110, damping: 22 });
   useEffect(() => {
-    const media = matchMedia("(hover: hover) and (pointer: fine)");
+    const media = matchMedia(
+      "(min-width: 768px) and (hover: hover) and (pointer: fine)",
+    );
     const sync = () => setFinePointer(media.matches);
     sync();
     media.addEventListener("change", sync);
     return () => media.removeEventListener("change", sync);
   }, []);
+  useEffect(() => {
+    const element = card.current;
+    if (!element || reduced) {
+      x.set(0);
+      y.set(0);
+      return;
+    }
+    let visible = false;
+    const update = (viewport: number) => {
+      if (!visible || finePointer) return;
+      const rect = element.getBoundingClientRect();
+      const position = Math.max(
+        -1,
+        Math.min(1, (viewport / 2 - rect.top - rect.height / 2) / viewport),
+      );
+      x.set(position * -5);
+      y.set(position * 7);
+    };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        element.dataset.deviceVisible = String(visible);
+        update(window.innerHeight);
+      },
+      { rootMargin: "60px" },
+    );
+    observer.observe(element);
+    const unsubscribe = finePointer
+      ? undefined
+      : subscribeScroll(({ viewport }) => update(viewport));
+    return () => {
+      observer.disconnect();
+      unsubscribe?.();
+      delete element.dataset.deviceVisible;
+      x.set(0);
+      y.set(0);
+    };
+  }, [reduced, finePointer, x, y]);
   const tilt = finePointer && !reduced;
   const presentation = projectPresentation(project.id);
   const mobile = project.screenshots[2] || project.screenshots[0];
   return (
     <Link
+      ref={card}
       className={`project-card device-project curated-project${presentation.artwork ? " artwork-project" : ""}`}
       href={project.demoUrl || `/work/${project.id}`}
       aria-label={`Explore website: ${project.title}`}
@@ -4738,33 +5101,18 @@ export function ProjectCard({
         y.set(((event.clientX - rect.left - rect.width / 2) / rect.width) * 12);
       }}
       onPointerLeave={() => {
+        if (!tilt) return;
         x.set(0);
         y.set(0);
       }}
     >
-      <div className="project-info">
-        <div>
-          <span className="project-industry">{project.industry}</span>
-          <h3>{project.title}</h3>
-          <p>{project.subtitle}</p>
-        </div>
-        <span className="curated-project-index" aria-hidden="true">
-          {String(index + 1).padStart(2, "0")}
-        </span>
-      </div>
       <div
         className="device-stage"
         data-parallax="image"
         style={{ "--project-accent": project.accent } as React.CSSProperties}
       >
-        <span className="curated-format" aria-hidden="true">
-          {presentation.artwork ? "FEATURED WEBSITE" : "DESKTOP / MOBILE"}
-        </span>
         {presentation.artwork ? (
-          <m.div
-            className="artwork-composition"
-            style={tilt ? { rotateX, rotateY } : undefined}
-          >
+          <m.div className="artwork-composition" style={{ rotateX, rotateY }}>
             <Image
               loading="eager"
               fetchPriority="low"
@@ -4782,7 +5130,7 @@ export function ProjectCard({
             <div className="device-float">
               <m.div
                 className="device-composition"
-                style={tilt ? { rotateX, rotateY } : undefined}
+                style={{ rotateX, rotateY }}
               >
                 <div className="device-laptop">
                   <div className="device-laptop-lid">
@@ -4823,19 +5171,11 @@ export function ProjectCard({
             </div>
           </>
         )}
-        <span className="device-view">
-          {site.work.view}
-          <ArrowUpRight size={18} aria-hidden="true" />
-        </span>
       </div>
-      <div className="project-footer">
+      <div className="project-title-row">
+        <h3>{project.title}</h3>
         <span>
-          <i style={{ background: project.accent }} />
-          {presentation.label}
-        </span>
-        <span>
-          {String(index + 1).padStart(2, "0")} /{" "}
-          {String(total).padStart(2, "0")}
+          Explore <ArrowUpRight size={17} aria-hidden="true" />
         </span>
       </div>
     </Link>
@@ -5115,12 +5455,14 @@ export default function ProjectGallery({
 
 ``````tsx
 "use client";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { subscribeScroll } from "@/lib/scroll";
 import { useMotionPreference } from "./motion-preference";
 
 export function ReadingEffects() {
   const { reduced } = useMotionPreference();
+  const pathname = usePathname();
   useEffect(() => {
     if (reduced) return;
     const paragraphs = [
@@ -5183,7 +5525,7 @@ export function ReadingEffects() {
         for (const word of record.words) word.classList.remove("is-read");
       }
     };
-  }, [reduced]);
+  }, [reduced, pathname]);
   return null;
 }
 ``````
@@ -5222,18 +5564,20 @@ export function ReadingText({
 
 ``````tsx
 "use client";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { useMotionPreference } from "./motion-preference";
 
 /** Page content is present and readable immediately, never gated by scrolling. */
 export function RevealObserver() {
   const { reduced } = useMotionPreference();
+  const pathname = usePathname();
   useEffect(() => {
     if (reduced) delete document.documentElement.dataset.motionReveals;
     else document.documentElement.dataset.motionReveals = "enabled";
     for (const element of document.querySelectorAll("[data-reveal]"))
       element.classList.add("is-revealed");
-  }, [reduced]);
+  }, [reduced, pathname]);
   return null;
 }
 ``````
@@ -5268,6 +5612,7 @@ export function Reveal({
 ``````tsx
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { subscribeScroll } from "@/lib/scroll";
 import { useMotionPreference } from "./motion-preference";
@@ -5275,6 +5620,7 @@ import { useMotionPreference } from "./motion-preference";
 export function ScrollAmbience() {
   const wash = useRef<HTMLDivElement>(null);
   const { reduced } = useMotionPreference();
+  const pathname = usePathname();
   useEffect(() => {
     if (reduced) return;
     const scene = wash.current;
@@ -5375,7 +5721,7 @@ export function ScrollAmbience() {
       for (const animation of animations) animation.updatePlaybackRate(1);
       if (scene) scene.style.opacity = "0";
     };
-  }, [reduced]);
+  }, [reduced, pathname]);
   return <div ref={wash} className="scene-wash" aria-hidden="true" />;
 }
 ``````
@@ -5417,6 +5763,46 @@ export function ScrollProgress() {
 }
 ``````
 
+## components/site-shell.tsx
+
+``````tsx
+import type { ReactNode } from "react";
+import { getIdentity } from "@/lib/content-loader";
+import type { PortfolioPage } from "@/data/navigation";
+import { Navbar } from "./navbar";
+import { Footer } from "./footer";
+import { PageTabs } from "./page-tabs";
+import { ScrollProgress } from "./scroll-progress";
+import { EditorialEffects } from "./editorial-effects";
+import { ScrollAmbience } from "./scroll-ambience";
+import { ReadingEffects } from "./reading-effects";
+
+export async function SiteShell({
+  children,
+  page,
+}: {
+  children: ReactNode;
+  page?: PortfolioPage;
+}) {
+  const identity = await getIdentity();
+  return (
+    <div
+      id="top"
+      className={`portfolio-shell${page ? ` route-page route-${page}` : " route-home"}`}
+    >
+      <ScrollProgress />
+      <EditorialEffects />
+      <ScrollAmbience />
+      <ReadingEffects />
+      <Navbar identity={identity} />
+      {page && <PageTabs page={page} />}
+      <main id="main-content">{children}</main>
+      <Footer brand={identity.brand} email={identity.email} compact />
+    </div>
+  );
+}
+``````
+
 ## components/skills.tsx
 
 ``````tsx
@@ -5452,7 +5838,7 @@ export function Skills({ skills }: { skills: Skill[] }) {
           <Reveal>
             <p className="eyebrow">{copy.eyebrow}</p>
           </Reveal>
-          <TextReveal id="skills-title" text={copy.title} />
+          <TextReveal as="h1" id="skills-title" text={copy.title} />
         </div>
         <Reveal>
           <p>
@@ -5606,7 +5992,7 @@ export function Services({ services }: { services: Service[] }) {
         <Reveal>
           <p className="eyebrow">01 / {studio.services.eyebrow}</p>
         </Reveal>
-        <TextReveal id="services-title" text={studio.services.title} />
+        <TextReveal as="h1" id="services-title" text={studio.services.title} />
         <Reveal>
           <ReadingText text={studio.services.intro} />
         </Reveal>
@@ -5656,7 +6042,7 @@ export function Workflow() {
         <Reveal>
           <p className="eyebrow">{studio.workflow.eyebrow}</p>
         </Reveal>
-        <TextReveal id="workflow-title" text={studio.workflow.title} />
+        <TextReveal as="h1" id="workflow-title" text={studio.workflow.title} />
         <Reveal>
           <ReadingText text={studio.workflow.intro} />
         </Reveal>
@@ -5702,6 +6088,7 @@ export function Journey() {
           <p className="eyebrow">{studio.journey.eyebrow}</p>
         </Reveal>
         <TextReveal
+          as="h1"
           id="journey-title"
           className="split-display"
           text={studio.journey.displayTitle}
@@ -5865,12 +6252,16 @@ export function Testimonials({
   return (
     <section
       id="testimonials"
-      className="container testimonials-section"
+      className="container testimonials-section testimonials-page"
       aria-labelledby="testimonials-title"
     >
       <Reveal>
         <div className="testimonials-heading">
-          <TextReveal id="testimonials-title" text="Testimonials" />
+          <p className="eyebrow">PEOPLE / PROJECTS / PERSPECTIVE</p>
+          <TextReveal as="h1" id="testimonials-title" text="Testimonials." />
+          <p className="testimonials-subtitle">
+            What people say about working with me.
+          </p>
           {preview && (
             <p className="testimonial-sample-note">
               Design preview — sample content, not client endorsements.
@@ -5885,6 +6276,9 @@ export function Testimonials({
               className="testimonial-card"
               data-sample={review.placeholder ? "true" : undefined}
             >
+              <span className="testimonial-quote-mark" aria-hidden="true">
+                “
+              </span>
               {review.placeholder && (
                 <span className="testimonial-sample-label">SAMPLE REVIEW</span>
               )}
@@ -6069,7 +6463,13 @@ import { useMotionPreference } from "./motion-preference";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
 
-export function WorkBunch({ projects }: { projects: ProjectView[] }) {
+export function WorkBunch({
+  projects,
+  standalone = false,
+}: {
+  projects: ProjectView[];
+  standalone?: boolean;
+}) {
   const gallery = useRef<HTMLDivElement>(null);
   const { reduced } = useMotionPreference();
   const selected = projects.slice(0, 4);
@@ -6136,7 +6536,7 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
   return (
     <section
       id="work-bunch"
-      className="studio-section dome-showcase"
+      className={`studio-section dome-showcase${standalone ? " collection-page" : ""}`}
       aria-labelledby="bunch-title"
     >
       <div className="container dome-heading">
@@ -6144,12 +6544,16 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
           <Reveal>
             <p className="eyebrow">{studio.bunch.eyebrow}</p>
           </Reveal>
-          <TextReveal id="bunch-title" text={studio.bunch.title} />
+          <TextReveal
+            as={standalone ? "h1" : "h2"}
+            id="bunch-title"
+            text={studio.bunch.title}
+          />
           <Reveal>
             <p className="dome-intro">{studio.bunch.intro}</p>
           </Reveal>
         </div>
-        <a href="#work" className="dome-view-all">
+        <a href="/ai-websites" className="dome-view-all">
           Explore the work <ArrowUpRight size={17} aria-hidden="true" />
         </a>
       </div>
@@ -6242,33 +6646,20 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
 ``````tsx
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ArrowUpRight } from "lucide-react";
 import { getImageProps } from "next/image";
 import { concepts } from "@/data/concepts";
 import type { ProjectView } from "@/data/projects";
-import type { Bot as BotData } from "@/data/bots";
 import { site } from "@/data/site";
 import { Reveal } from "./reveal";
 import { ProjectCard } from "./project-card";
 import { TextReveal } from "./text-reveal";
 import { WorkShowcaseVideo } from "./WorkShowcaseVideo";
-import { BotServices } from "./bot-services";
 import Gallery from "./project-gallery";
 
-const categories = [
-  { id: "all", title: "All" },
-  { id: "web", title: "Website concepts" },
-  { id: "bots", title: "AI chatbots & demos" },
-] as const;
-
-export function Work({
-  projects,
-  bots,
-}: {
-  projects: ProjectView[];
-  bots: BotData[];
-}) {
+export function Work({ projects }: { projects: ProjectView[] }) {
   const router = useRouter();
   useEffect(() => {
     for (const item of projects) {
@@ -6292,32 +6683,7 @@ export function Work({
       image.src = props.src;
     }
   }, [projects, router]);
-  const [tab, setTab] = useState(0);
   const [project, setProject] = useState<ProjectView | null>(null);
-  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
-  const counts = [projects.length + bots.length, projects.length, bots.length];
-  useEffect(() => {
-    const sync = () => {
-      if (["#ai-bots", "#embed-methods"].includes(location.hash)) setTab(2);
-      else if (location.hash === "#work") setTab(0);
-    };
-    sync();
-    window.addEventListener("hashchange", sync);
-    return () => window.removeEventListener("hashchange", sync);
-  }, []);
-  useEffect(() => {
-    if (tab !== 2 || !["#ai-bots", "#embed-methods"].includes(location.hash))
-      return;
-    const frame = requestAnimationFrame(() =>
-      document.getElementById(location.hash.slice(1))?.scrollIntoView(),
-    );
-    return () => cancelAnimationFrame(frame);
-  }, [tab]);
-  function selectTab(next: number) {
-    setTab(next);
-    if (next !== 2 && ["#ai-bots", "#embed-methods"].includes(location.hash))
-      history.replaceState(null, "", "#work");
-  }
   return (
     <section
       id="work"
@@ -6328,98 +6694,32 @@ export function Work({
         <div className="section-heading">
           <div>
             <p className="eyebrow">02 / SELECTED EXPLORATIONS</p>
-            <TextReveal id="work-title" text={site.work.title} />
+            <TextReveal as="h1" id="work-title" text={site.work.title} />
           </div>
           <p>{site.work.description}</p>
         </div>
       </Reveal>
       <WorkShowcaseVideo />
-      <div
-        className="work-filters"
-        role="tablist"
-        aria-label="Portfolio categories"
-      >
-        {categories.map((item, index) => (
-          <button
-            key={item.id}
-            ref={(node) => {
-              tabs.current[index] = node;
-            }}
-            id={`tab-${item.id}`}
-            role="tab"
-            aria-selected={tab === index}
-            aria-controls="work-results"
-            tabIndex={tab === index ? 0 : -1}
-            onClick={() => selectTab(index)}
-            onKeyDown={(event) => {
-              if (
-                !["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)
-              )
-                return;
-              event.preventDefault();
-              const next =
-                event.key === "Home"
-                  ? 0
-                  : event.key === "End"
-                    ? categories.length - 1
-                    : (tab +
-                        (event.key === "ArrowRight"
-                          ? 1
-                          : categories.length - 1)) %
-                      categories.length;
-              selectTab(next);
-              tabs.current[next]?.focus();
-            }}
-          >
-            {item.title}
-            <span>{String(counts[index]).padStart(2, "0")}</span>
-          </button>
+      <div className="projects-grid curated-projects-grid">
+        {projects.map((item) => (
+          <Reveal key={item.id}>
+            <ProjectCard project={item} />
+            <button
+              className="project-screenshots-link"
+              aria-haspopup="dialog"
+              aria-label={`View screenshots: ${item.title}`}
+              onClick={() => setProject(item)}
+            >
+              View screenshots <ArrowUpRight size={13} aria-hidden="true" />
+            </button>
+          </Reveal>
         ))}
       </div>
-      {/* Content mounts once in the initial HTML. Filters change visibility only. */}
-      <div
-        role="tabpanel"
-        id="work-results"
-        aria-labelledby={`tab-${categories[tab].id}`}
-        tabIndex={0}
-        className="work-panel"
-      >
-        <div hidden={tab === 2}>
-          <div className="work-collection-label">
-            <span>THE WEBSITE EDIT</span>
-            <span>
-              {String(projects.length).padStart(2, "0")} / INDEPENDENT CONCEPTS
-            </span>
-          </div>
-          <div className="projects-grid curated-projects-grid">
-            {projects.map((item, number) => (
-              <Reveal key={item.id}>
-                <ProjectCard
-                  project={item}
-                  index={number}
-                  total={projects.length}
-                />
-                <button
-                  className="project-screenshots-link"
-                  aria-haspopup="dialog"
-                  aria-label={`View screenshots: ${item.title}`}
-                  onClick={() => setProject(item)}
-                >
-                  View screenshots <span aria-hidden="true">↗</span>
-                </button>
-              </Reveal>
-            ))}
-          </div>
-          <p className="work-disclaimer">
-            {site.work.disclaimer}
-            <br />
-            <span>{site.work.screenshotNote}</span>
-          </p>
-        </div>
-        <div hidden={tab === 1}>
-          <BotServices bots={bots} />
-        </div>
-      </div>
+      <p className="work-disclaimer">
+        {site.work.disclaimer}
+        <br />
+        <span>{site.work.screenshotNote}</span>
+      </p>
       {project && (
         <Gallery project={project} onClose={() => setProject(null)} />
       )}

@@ -18,12 +18,7 @@ try {
   await page.goto(base, { waitUntil: "domcontentloaded" });
   await page.getByRole("button", { name: "Reject All", exact: true }).click();
   await page.getByLabel("Animation preference").selectOption("full");
-  assert.equal(
-    await page.locator("#faq").getAttribute("data-faq-enhanced"),
-    "true",
-    "FAQ code is ready before scrolling.",
-  );
-  assert.equal(await page.locator("[data-velocity-marquee]").count(), 2);
+  assert.equal(await page.locator("[data-velocity-marquee]").count(), 1);
   await page.mouse.wheel(0, 350);
   await page.waitForFunction(() =>
     [...document.querySelectorAll("[data-velocity-marquee]")].some((el) =>
@@ -35,7 +30,7 @@ try {
       .querySelector("[data-parallax=hero]")
       ?.style.getPropertyValue("--image-drift"),
   );
-  await page.getByRole("tab", { name: /Website concepts/ }).click();
+  await page.goto(base + "/ai-websites");
   await page
     .getByRole("button", { name: /^View screenshots:/ })
     .first()
@@ -51,11 +46,13 @@ try {
     .click();
   await page.keyboard.press("Escape");
   await gallery.waitFor({ state: "detached" });
+  await page.goto(base + "/certificates");
   await page.locator(".certificate-preview").first().click();
   await page.getByRole("dialog").waitFor();
   await page.getByRole("button", { name: "Zoom in", exact: true }).click();
   await page.keyboard.press("Escape");
   await page.getByRole("dialog").waitFor({ state: "detached" });
+  await page.goto(base + "/contact");
   await page
     .locator("#faq")
     .evaluate((el) =>
@@ -106,17 +103,11 @@ try {
       .evaluate((el) => el.getAnimations().length),
     0,
   );
-  assert.equal(
-    await page
-      .locator("[data-parallax=hero]")
-      .evaluate((el) => el.style.getPropertyValue("--image-drift")),
-    "",
-  );
   assert.deepEqual(errors, []);
   await page.close();
   const bare = await browser.newContext({ javaScriptEnabled: false });
   const p = await bare.newPage();
-  await p.goto(base);
+  await p.goto(base + "/contact");
   const native = p.locator("#faq details").first();
   await native.locator("summary").click();
   assert.equal(await native.getAttribute("open"), "");

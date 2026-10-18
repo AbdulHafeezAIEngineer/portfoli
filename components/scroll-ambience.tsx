@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { subscribeScroll } from "@/lib/scroll";
 import { useMotionPreference } from "./motion-preference";
@@ -7,6 +8,7 @@ import { useMotionPreference } from "./motion-preference";
 export function ScrollAmbience() {
   const wash = useRef<HTMLDivElement>(null);
   const { reduced } = useMotionPreference();
+  const pathname = usePathname();
   useEffect(() => {
     if (reduced) return;
     const scene = wash.current;
@@ -107,6 +109,6 @@ export function ScrollAmbience() {
       for (const animation of animations) animation.updatePlaybackRate(1);
       if (scene) scene.style.opacity = "0";
     };
-  }, [reduced]);
+  }, [reduced, pathname]);
   return <div ref={wash} className="scene-wash" aria-hidden="true" />;
 }

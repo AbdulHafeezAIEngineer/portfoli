@@ -8,6 +8,14 @@ Current UI/video update: [purple palette, preserved custom designs, visibility-c
 
 Latest playback/navigation update: [wide looping videos, interactive desktop windows and measured page readiness](docs/READY_PLAYBACK_UPDATE.md).
 
+## Categorized public pages
+
+The homepage is now a short introduction and directory. AI Websites, AI Bots, Bunch of Work, About Me, Journey, Technical Domains, Skills & Tools, Certificates, How I Build, Testimonials, Services and Contact each have a dedicated route. How I Embed Bots lives under AI Bots. About pages have ordered secondary tabs; saved links to former homepage sections redirect to the appropriate page.
+
+Project previews are unboxed, without concept badges, counters, device-format labels or floating controls. Original website art/device models and the 54-tile curved collection are preserved. Visible device previews now float on mobile and use native-scroll 3D movement; desktop pointer tilt and Motion Off remain available.
+
+See [the current page map, screenshots and verification](docs/CATEGORIZED_PAGES.md). Earlier single-page reports below describe previous revisions.
+
 ## Agency features
 
 Services and project-note routes, native FAQs, a private service/FAQ/review CMS, searchable paginated inquiries with status and private notes, actual dashboard counts and audit history. Contact acceptance distinguishes database storage from optional SMTP notification. Genuine approved reviews appear only after publication; the About section uses original Elvora brand artwork.

@@ -1,15 +1,17 @@
 "use client";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { useMotionPreference } from "./motion-preference";
 
 /** Page content is present and readable immediately, never gated by scrolling. */
 export function RevealObserver() {
   const { reduced } = useMotionPreference();
+  const pathname = usePathname();
   useEffect(() => {
     if (reduced) delete document.documentElement.dataset.motionReveals;
     else document.documentElement.dataset.motionReveals = "enabled";
     for (const element of document.querySelectorAll("[data-reveal]"))
       element.classList.add("is-revealed");
-  }, [reduced]);
+  }, [reduced, pathname]);
   return null;
 }

@@ -12,7 +12,13 @@ import { useMotionPreference } from "./motion-preference";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
 
-export function WorkBunch({ projects }: { projects: ProjectView[] }) {
+export function WorkBunch({
+  projects,
+  standalone = false,
+}: {
+  projects: ProjectView[];
+  standalone?: boolean;
+}) {
   const gallery = useRef<HTMLDivElement>(null);
   const { reduced } = useMotionPreference();
   const selected = projects.slice(0, 4);
@@ -79,7 +85,7 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
   return (
     <section
       id="work-bunch"
-      className="studio-section dome-showcase"
+      className={`studio-section dome-showcase${standalone ? " collection-page" : ""}`}
       aria-labelledby="bunch-title"
     >
       <div className="container dome-heading">
@@ -87,12 +93,16 @@ export function WorkBunch({ projects }: { projects: ProjectView[] }) {
           <Reveal>
             <p className="eyebrow">{studio.bunch.eyebrow}</p>
           </Reveal>
-          <TextReveal id="bunch-title" text={studio.bunch.title} />
+          <TextReveal
+            as={standalone ? "h1" : "h2"}
+            id="bunch-title"
+            text={studio.bunch.title}
+          />
           <Reveal>
             <p className="dome-intro">{studio.bunch.intro}</p>
           </Reveal>
         </div>
-        <a href="#work" className="dome-view-all">
+        <a href="/ai-websites" className="dome-view-all">
           Explore the work <ArrowUpRight size={17} aria-hidden="true" />
         </a>
       </div>

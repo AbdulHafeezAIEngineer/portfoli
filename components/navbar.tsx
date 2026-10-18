@@ -1,73 +1,70 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Menu, Moon, Sun, X } from "lucide-react";
+import { ChevronDown, Menu, Moon, Sun, X } from "lucide-react";
 import { site } from "@/data/site";
+import { aboutPages, portfolioPages } from "@/data/navigation";
 import { BrandMark } from "./brand-mark";
 import { MotionControl } from "./motion-preference";
-import { subscribeScroll } from "@/lib/scroll";
 
 export function Navbar({
   identity,
-  rootLinks = false,
 }: {
   identity: { brand: string };
   rootLinks?: boolean;
 }) {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
   const [theme, setTheme] = useState("dark");
-  const [hidden, setHidden] = useState(false);
-  const [active, setActive] = useState("");
   const menuButton = useRef<HTMLButtonElement>(null);
+  const aboutButton = useRef<HTMLButtonElement>(null);
   const menu = useRef<HTMLDivElement>(null);
+  const aboutMenu = useRef<HTMLDivElement>(null);
+  const inAbout = aboutPages.some((id) => portfolioPages[id].href === pathname);
+  const current = (href: string) =>
+    href === "/about"
+      ? inAbout
+      : href === "/ai-bots"
+        ? pathname.startsWith("/ai-bots")
+        : pathname === href;
+  const close = () => {
+    setOpen(false);
+    setAboutOpen(false);
+  };
 
   useEffect(() => {
-    let previous = window.scrollY;
-    const unsubscribe = subscribeScroll(({ y: current }) => {
-      if (Math.abs(current - previous) > 8) {
-        setHidden(current > 160 && current > previous);
-        previous = current;
-      }
-    });
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries)
-          if (entry.isIntersecting) setActive(`#${entry.target.id}`);
-      },
-      { rootMargin: "-15% 0px -65% 0px", threshold: 0 },
-    );
-    for (const item of site.nav) {
-      const element = document.querySelector(item.href);
-      if (element) observer.observe(element);
-    }
-    return () => {
-      unsubscribe();
-      observer.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
+    setOpen(false);
+    setAboutOpen(false);
     setTheme(document.documentElement.dataset.theme || "dark");
-    const media = window.matchMedia("(min-width: 1024px)");
-    const close = () => setOpen(false);
-    media.addEventListener("change", close);
-    return () => media.removeEventListener("change", close);
-  }, []);
-
+  }, [pathname]);
   useEffect(() => {
-    if (!open) return;
+    const media = window.matchMedia("(min-width: 1200px)");
+    const changed = () => {
+      setOpen(false);
+      setAboutOpen(false);
+    };
+    media.addEventListener("change", changed);
+    return () => media.removeEventListener("change", changed);
+  }, []);
+  useEffect(() => {
+    if (!open && !aboutOpen) return;
     const escape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setOpen(false);
-        menuButton.current?.focus();
-      }
+      if (event.key !== "Escape") return;
+      setOpen(false);
+      setAboutOpen(false);
+      (open ? menuButton : aboutButton).current?.focus();
     };
     const outside = (event: PointerEvent) => {
+      const target = event.target as Node;
       if (
-        !menu.current?.contains(event.target as Node) &&
-        !menuButton.current?.contains(event.target as Node)
+        !menu.current?.contains(target) &&
+        !menuButton.current?.contains(target)
       )
         setOpen(false);
+      if (!aboutMenu.current?.contains(target)) setAboutOpen(false);
     };
     document.addEventListener("keydown", escape);
     document.addEventListener("pointerdown", outside);
@@ -75,7 +72,7 @@ export function Navbar({
       document.removeEventListener("keydown", escape);
       document.removeEventListener("pointerdown", outside);
     };
-  }, [open]);
+  }, [open, aboutOpen]);
 
   function toggleTheme() {
     const next = theme === "dark" ? "light" : "dark";
@@ -84,35 +81,86 @@ export function Navbar({
     try {
       localStorage.setItem("portfolio-theme", next);
     } catch {
-      /* Storage can be unavailable. */
+      /* Optional persistence. */
     }
   }
-
   return (
-    <header
-      className={`site-header${hidden && !open ? " is-scroll-hidden" : ""}`}
-    >
+    <header className="site-header portfolio-header">
       <nav className="container nav-row" aria-label="Main navigation">
-        <a
-          href={rootLinks ? "/#top" : "#top"}
+        <Link
+          href="/"
           className="wordmark"
           aria-label={`${identity.brand} — Home`}
-          onClick={() => setOpen(false)}
+          onClick={close}
         >
           <BrandMark brand={identity.brand} />
-        </a>
+        </Link>
         <div className="desktop-nav">
-          {site.nav.map((item) => (
-            <a
-              key={item.href}
-              href={rootLinks ? `/${item.href}` : item.href}
-              aria-current={
-                !rootLinks && active === item.href ? "location" : undefined
-              }
-            >
-              {item.label}
-            </a>
-          ))}
+          {site.nav.map((item) =>
+            item.href === "/about" ? (
+              <div
+                key={item.href}
+                className="nav-about-group"
+                ref={aboutMenu}
+                onBlur={(event) => {
+                  if (
+                    !event.currentTarget.contains(event.relatedTarget as Node)
+                  )
+                    setAboutOpen(false);
+                }}
+              >
+                <Link
+                  href={item.href}
+                  data-active={inAbout || undefined}
+                  aria-current={pathname === item.href ? "page" : undefined}
+                  onClick={close}
+                >
+                  {item.label}
+                </Link>
+                <button
+                  ref={aboutButton}
+                  className="nav-about-toggle"
+                  aria-label="Explore About Me"
+                  aria-expanded={aboutOpen}
+                  aria-controls="about-navigation"
+                  onClick={() => setAboutOpen(!aboutOpen)}
+                >
+                  <ChevronDown size={13} aria-hidden="true" />
+                </button>
+                <div
+                  id="about-navigation"
+                  className="about-navigation"
+                  hidden={!aboutOpen}
+                >
+                  <p>THE PERSON & THE PROCESS</p>
+                  {aboutPages.map((id) => (
+                    <Link
+                      key={id}
+                      href={portfolioPages[id].href}
+                      aria-current={
+                        pathname === portfolioPages[id].href
+                          ? "page"
+                          : undefined
+                      }
+                      onClick={close}
+                    >
+                      {portfolioPages[id].label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <Link
+                key={item.href}
+                href={item.href}
+                data-active={current(item.href) || undefined}
+                aria-current={pathname === item.href ? "page" : undefined}
+                onClick={close}
+              >
+                {item.label}
+              </Link>
+            ),
+          )}
         </div>
         <div className="nav-actions">
           <MotionControl />
@@ -132,7 +180,11 @@ export function Navbar({
             aria-expanded={open}
             aria-controls="mobile-navigation"
           >
-            {open ? <X size={22} /> : <Menu size={22} />}
+            {open ? (
+              <X size={22} aria-hidden="true" />
+            ) : (
+              <Menu size={22} aria-hidden="true" />
+            )}
           </button>
         </div>
         <div
@@ -140,6 +192,7 @@ export function Navbar({
           className="mobile-nav"
           ref={menu}
           hidden={!open}
+          data-native-scroll
           onBlur={(event) => {
             if (
               !event.currentTarget.contains(event.relatedTarget as Node) &&
@@ -148,15 +201,45 @@ export function Navbar({
               setOpen(false);
           }}
         >
-          {site.nav.map((item) => (
-            <a
+          <p className="mobile-nav-label">EXPLORE</p>
+          {site.nav.slice(0, 4).map((item) => (
+            <Link
               key={item.href}
-              href={rootLinks ? `/${item.href}` : item.href}
-              onClick={() => setOpen(false)}
+              href={item.href}
+              aria-current={pathname === item.href ? "page" : undefined}
+              onClick={close}
             >
               {item.label}
-            </a>
+            </Link>
           ))}
+          <p className="mobile-nav-label">ABOUT & PROCESS</p>
+          {aboutPages.map((id) => (
+            <Link
+              key={id}
+              href={portfolioPages[id].href}
+              aria-current={
+                pathname === portfolioPages[id].href ? "page" : undefined
+              }
+              onClick={close}
+            >
+              {portfolioPages[id].label}
+            </Link>
+          ))}
+          <p className="mobile-nav-label">LET’S CONNECT</p>
+          {["testimonials", "services", "contact"].map((id) => {
+            const item =
+              portfolioPages[id as "testimonials" | "services" | "contact"];
+            return (
+              <Link
+                key={id}
+                href={item.href}
+                aria-current={pathname === item.href ? "page" : undefined}
+                onClick={close}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </div>
       </nav>
     </header>

@@ -30,7 +30,7 @@ export function Services({ services }: { services: Service[] }) {
         <Reveal>
           <p className="eyebrow">01 / {studio.services.eyebrow}</p>
         </Reveal>
-        <TextReveal id="services-title" text={studio.services.title} />
+        <TextReveal as="h1" id="services-title" text={studio.services.title} />
         <Reveal>
           <ReadingText text={studio.services.intro} />
         </Reveal>
@@ -80,7 +80,7 @@ export function Workflow() {
         <Reveal>
           <p className="eyebrow">{studio.workflow.eyebrow}</p>
         </Reveal>
-        <TextReveal id="workflow-title" text={studio.workflow.title} />
+        <TextReveal as="h1" id="workflow-title" text={studio.workflow.title} />
         <Reveal>
           <ReadingText text={studio.workflow.intro} />
         </Reveal>
@@ -126,6 +126,7 @@ export function Journey() {
           <p className="eyebrow">{studio.journey.eyebrow}</p>
         </Reveal>
         <TextReveal
+          as="h1"
           id="journey-title"
           className="split-display"
           text={studio.journey.displayTitle}

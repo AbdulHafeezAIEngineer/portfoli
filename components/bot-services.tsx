@@ -47,12 +47,16 @@ export function BotServices({ bots }: { bots: Bot[] }) {
     };
   }, []);
   return (
-    <section id="ai-bots" className="bot-services" aria-labelledby="bots-title">
+    <section
+      id="ai-bots"
+      className="container bot-services"
+      aria-labelledby="bots-title"
+    >
       <Reveal>
         <div className="section-heading bots-heading">
           <div>
             <p className="eyebrow">{copy.eyebrow}</p>
-            <h2 id="bots-title">{copy.title}</h2>
+            <h1 id="bots-title">{copy.title}</h1>
           </div>
           <p>{copy.description}</p>
         </div>
@@ -68,15 +72,31 @@ export function BotServices({ bots }: { bots: Bot[] }) {
                 className={`bot-card bot-card-${bot.id}`}
                 aria-labelledby={`bot-name-${bot.id}`}
               >
-                {forte && <button type="button" className="forte-card-hitarea" aria-haspopup="dialog" aria-label={`${copy.open}: ${bot.name}`} onClick={() => setActive(bot)} />}
-                <div className={forte ? "bot-card-top forte-card-top" : "bot-card-top"}>
-                  {forte ? <FortePreview name={bot.name} /> : <div className="bot-art" aria-hidden="true">
-                    <span />
-                    <Icon size={42} strokeWidth={1.2} />
-                    <i />
-                    <i />
-                    <i />
-                  </div>}
+                {forte && (
+                  <button
+                    type="button"
+                    className="forte-card-hitarea"
+                    aria-haspopup="dialog"
+                    aria-label={`${copy.open}: ${bot.name}`}
+                    onClick={() => setActive(bot)}
+                  />
+                )}
+                <div
+                  className={
+                    forte ? "bot-card-top forte-card-top" : "bot-card-top"
+                  }
+                >
+                  {forte ? (
+                    <FortePreview name={bot.name} />
+                  ) : (
+                    <div className="bot-art" aria-hidden="true">
+                      <span />
+                      <Icon size={42} strokeWidth={1.2} />
+                      <i />
+                      <i />
+                      <i />
+                    </div>
+                  )}
                   <span className="method-badge">
                     <Code2 size={12} aria-hidden="true" />
                     {copy.methods[bot.method]}
@@ -94,15 +114,22 @@ export function BotServices({ bots }: { bots: Bot[] }) {
                     ))}
                   </ul>
                   <div className="bot-card-action">
-                    {forte ? <span className="button button-outline">{copy.open}<ArrowUpRight size={16} aria-hidden="true" /></span> : <button
-                      className="button button-outline"
-                      aria-haspopup="dialog"
-                      aria-label={`${copy.try}: ${bot.name}`}
-                      onClick={() => setActive(bot)}
-                    >
-                      {copy.try}
-                      <ArrowUpRight size={16} aria-hidden="true" />
-                    </button>}
+                    {forte ? (
+                      <span className="button button-outline">
+                        {copy.open}
+                        <ArrowUpRight size={16} aria-hidden="true" />
+                      </span>
+                    ) : (
+                      <button
+                        className="button button-outline"
+                        aria-haspopup="dialog"
+                        aria-label={`${copy.try}: ${bot.name}`}
+                        onClick={() => setActive(bot)}
+                      >
+                        {copy.try}
+                        <ArrowUpRight size={16} aria-hidden="true" />
+                      </button>
+                    )}
                     {!bot.configured && (
                       <span className="connection-pending">{copy.pending}</span>
                     )}
@@ -121,53 +148,6 @@ export function BotServices({ bots }: { bots: Bot[] }) {
           <span>{copy.budget}</span>
         </p>
       </div>
-      <section
-        id="embed-methods"
-        className="embed-section"
-        aria-labelledby="embed-title"
-      >
-        <Reveal>
-          <p className="eyebrow">{copy.integrationEyebrow}</p>
-          <h3 id="embed-title">{copy.embedTitle}</h3>
-          <p className="embed-intro">{copy.embedDescription}</p>
-        </Reveal>
-        <div className="embed-grid">
-          {embedMethods.map((method, index) => (
-            <article className="embed-card glass" key={method.id}>
-              <span className="embed-number">0{index + 1}</span>
-              <h4>{method.title}</h4>
-              <p>{method.description}</p>
-              <pre aria-label={`${method.title}: ${copy.example}`} tabIndex={0}>
-                <code>{method.code}</code>
-              </pre>
-              <h5>{copy.pros}</h5>
-              <ul>
-                {method.pros.map((pro) => (
-                  <li key={pro}>{pro}</li>
-                ))}
-              </ul>
-              <h5>{copy.cons}</h5>
-              <ul>
-                {method.cons.map((con) => (
-                  <li key={con}>{con}</li>
-                ))}
-              </ul>
-              <div className="embed-used">
-                <span className="eyebrow">{copy.usedBy}</span>
-                <p>
-                  {bots
-                    .filter((bot) => bot.method === method.id)
-                    .map(
-                      (bot) =>
-                        `${bot.name}${!bot.configured ? ` (${copy.pending.toLowerCase()})` : ""}`,
-                    )
-                    .join(" · ") || copy.unusedMethod}
-                </p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
       {active && (
         <ChatPanel
           bot={active}
@@ -178,6 +158,58 @@ export function BotServices({ bots }: { bots: Bot[] }) {
           onClose={() => setActive(null)}
         />
       )}
+    </section>
+  );
+}
+
+export function BotEmbedding({ bots }: { bots: Bot[] }) {
+  return (
+    <section
+      id="embed-methods"
+      className="container embed-section"
+      aria-labelledby="embed-title"
+    >
+      <Reveal>
+        <p className="eyebrow">{copy.integrationEyebrow}</p>
+        <h1 id="embed-title">{copy.embedTitle}</h1>
+        <p className="embed-intro">{copy.embedDescription}</p>
+      </Reveal>
+      <div className="embed-grid">
+        {embedMethods.map((method, index) => (
+          <article className="embed-card glass" key={method.id}>
+            <span className="embed-number">0{index + 1}</span>
+            <h2>{method.title}</h2>
+            <p>{method.description}</p>
+            <pre aria-label={`${method.title}: ${copy.example}`} tabIndex={0}>
+              <code>{method.code}</code>
+            </pre>
+            <h3>{copy.pros}</h3>
+            <ul>
+              {method.pros.map((pro) => (
+                <li key={pro}>{pro}</li>
+              ))}
+            </ul>
+            <h3>{copy.cons}</h3>
+            <ul>
+              {method.cons.map((con) => (
+                <li key={con}>{con}</li>
+              ))}
+            </ul>
+            <div className="embed-used">
+              <span className="eyebrow">{copy.usedBy}</span>
+              <p>
+                {bots
+                  .filter((bot) => bot.method === method.id)
+                  .map(
+                    (bot) =>
+                      `${bot.name}${!bot.configured ? ` (${copy.pending.toLowerCase()})` : ""}`,
+                  )
+                  .join(" · ") || copy.unusedMethod}
+              </p>
+            </div>
+          </article>
+        ))}
+      </div>
     </section>
   );
 }

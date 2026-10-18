@@ -265,7 +265,7 @@ export function DesignStudy({ study }: { study: Study }) {
       style={{ "--study-accent": study.accent } as React.CSSProperties}
     >
       <div className="study-notice">
-        <Link href="/#work-bunch">{copy.back}</Link>
+        <Link href="/bunch-of-work">{copy.back}</Link>
         <span>{copy.label}</span>
         <span>{study.industry}</span>
       </div>
@@ -285,7 +285,7 @@ export function DesignStudy({ study }: { study: Study }) {
             </h2>
             <p>{copy.note}</p>
           </div>
-          <Link href="/#work-bunch">
+          <Link href="/bunch-of-work">
             {copy.back}
             <ChevronRight size={17} aria-hidden="true" />
           </Link>

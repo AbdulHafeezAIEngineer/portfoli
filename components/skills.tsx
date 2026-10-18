@@ -30,7 +30,7 @@ export function Skills({ skills }: { skills: Skill[] }) {
           <Reveal>
             <p className="eyebrow">{copy.eyebrow}</p>
           </Reveal>
-          <TextReveal id="skills-title" text={copy.title} />
+          <TextReveal as="h1" id="skills-title" text={copy.title} />
         </div>
         <Reveal>
           <p>

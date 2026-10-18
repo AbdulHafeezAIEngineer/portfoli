@@ -18,7 +18,7 @@ export function Contact({ email }: { email: string }) {
             <Reveal>
               <p className="eyebrow">{copy.eyebrow}</p>
             </Reveal>
-            <TextReveal id="contact-title" text={copy.title} />
+            <TextReveal as="h1" id="contact-title" text={copy.title} />
             <Reveal>
               <p className="contact-invitation">{copy.description}</p>
             </Reveal>

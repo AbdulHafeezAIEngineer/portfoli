@@ -61,7 +61,7 @@ export function Experience() {
           <Reveal>
             <p className="eyebrow">{copy.eyebrow}</p>
           </Reveal>
-          <TextReveal id="experience-title" text={copy.title} />
+          <TextReveal as="h1" id="experience-title" text={copy.title} />
           <Reveal>
             <ReadingText className="experience-lead" text={copy.lead} />
             {copy.paragraphs.map((paragraph) => (
@@ -71,56 +71,66 @@ export function Experience() {
           </Reveal>
         </div>
       </div>
-      <div
-        className="fundamentals-section domains-section"
-        aria-labelledby="fundamentals-title"
-      >
-        <Reveal>
-          <p className="eyebrow">{copy.fundamentals.eyebrow}</p>
-        </Reveal>
-        <TextReveal id="fundamentals-title" text={copy.fundamentals.title} />
-        <Reveal>
-          <p className="section-intro">{copy.fundamentals.description}</p>
-        </Reveal>
-        <div className="domains-bento">
-          {copy.fundamentals.blocks.map((block, index) => {
-            const Icon = fundamentalsIcons[block.id];
-            return (
-              <Reveal key={block.id} delay={index * 0.05}>
-                <article className={`domain-card domain-${block.id}`}>
-                  <div className="domain-heading">
-                    <span className="domain-icon">
-                      <Icon size={24} strokeWidth={1.4} aria-hidden="true" />
-                    </span>
-                    <h3>{block.title}</h3>
-                    <span className="domain-index" aria-hidden="true">
-                      0{index + 1}
-                    </span>
-                  </div>
-                  <p>{block.description}</p>
-                  <ul
-                    className="domain-tags"
-                    aria-label={`${block.title} technologies`}
-                  >
-                    {block.tags.map((tag) => (
-                      <li key={tag}>{tag}</li>
-                    ))}
-                  </ul>
-                  {block.id === "ai" && (
-                    <a href="#ai-bots" className="domain-demo-link">
-                      Explore the AI demos
-                      <ArrowUpRight size={17} aria-hidden="true" />
-                    </a>
-                  )}
-                </article>
-              </Reveal>
-            );
-          })}
-        </div>
-        <Reveal>
-          <p className="fundamentals-closing">{copy.fundamentals.closing}</p>
-        </Reveal>
+    </section>
+  );
+}
+
+export function TechnicalDomains() {
+  return (
+    <section
+      id="fundamentals"
+      className="container fundamentals-section domains-section"
+      aria-labelledby="fundamentals-title"
+    >
+      <Reveal>
+        <p className="eyebrow">{copy.fundamentals.eyebrow}</p>
+      </Reveal>
+      <TextReveal
+        as="h1"
+        id="fundamentals-title"
+        text={copy.fundamentals.title}
+      />
+      <Reveal>
+        <p className="section-intro">{copy.fundamentals.description}</p>
+      </Reveal>
+      <div className="domains-bento">
+        {copy.fundamentals.blocks.map((block, index) => {
+          const Icon = fundamentalsIcons[block.id];
+          return (
+            <Reveal key={block.id} delay={index * 0.05}>
+              <article className={`domain-card domain-${block.id}`}>
+                <div className="domain-heading">
+                  <span className="domain-icon">
+                    <Icon size={24} strokeWidth={1.4} aria-hidden="true" />
+                  </span>
+                  <h3>{block.title}</h3>
+                  <span className="domain-index" aria-hidden="true">
+                    0{index + 1}
+                  </span>
+                </div>
+                <p>{block.description}</p>
+                <ul
+                  className="domain-tags"
+                  aria-label={`${block.title} technologies`}
+                >
+                  {block.tags.map((tag) => (
+                    <li key={tag}>{tag}</li>
+                  ))}
+                </ul>
+                {block.id === "ai" && (
+                  <a href="/ai-bots" className="domain-demo-link">
+                    Explore the AI demos
+                    <ArrowUpRight size={17} aria-hidden="true" />
+                  </a>
+                )}
+              </article>
+            </Reveal>
+          );
+        })}
       </div>
+      <Reveal>
+        <p className="fundamentals-closing">{copy.fundamentals.closing}</p>
+      </Reveal>
     </section>
   );
 }

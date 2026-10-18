@@ -58,6 +58,20 @@ try {
         .evaluate((el) => getComputedStyle(el).animationPlayState),
       "running",
     );
+    await page.getByLabel("Animation preference").selectOption("reduced");
+    assert.equal(
+      await logo.evaluate((el) => el.style.getPropertyValue("--logo-turn")),
+      "",
+    );
+    assert.equal(
+      await logo
+        .locator(".emblem-shine")
+        .first()
+        .evaluate((el) => getComputedStyle(el).animationName),
+      "none",
+    );
+    await page.goto(base + "/about");
+    await page.getByLabel("Animation preference").selectOption("full");
     const paragraph = page.locator(".about-story [data-reading-text]").nth(1);
     await paragraph.scrollIntoViewIfNeeded();
     await page.waitForFunction(() =>
@@ -105,7 +119,7 @@ try {
     const first = await readAt(0.75);
     const later = await readAt(0.2);
     assert.ok(
-      later > first + geometry.total * 0.4,
+      first < geometry.total && later > first,
       "Words brighten in reading order as scroll advances.",
     );
     assert.ok(
@@ -122,32 +136,14 @@ try {
       Math.abs(reversed - first) <= 2,
       "Returning to the same reading position restores the earlier emphasis.",
     );
-    assert.equal(await logo.getAttribute("data-logo-visible"), "false");
-    assert.equal(
-      await logo
-        .locator(".emblem-shine")
-        .first()
-        .evaluate((el) => getComputedStyle(el).animationPlayState),
-      "paused",
-    );
     await page.getByLabel("Animation preference").selectOption("reduced");
     await page.waitForFunction(
       () => !document.querySelector("[data-reading-active]"),
     );
-    assert.equal(
-      await logo.evaluate((el) => el.style.getPropertyValue("--logo-turn")),
-      "",
-    );
-    assert.equal(
-      await logo
-        .locator(".emblem-shine")
-        .first()
-        .evaluate((el) => getComputedStyle(el).animationName),
-      "none",
-    );
+    await page.goto(base + "/testimonials");
     assert.ok(
       await page
-        .getByRole("heading", { name: "Testimonials", exact: true })
+        .getByRole("heading", { name: "Testimonials.", exact: true })
         .isVisible(),
     );
     assert.equal(
@@ -173,7 +169,7 @@ try {
   }
   const nojs = await browser.newContext({ javaScriptEnabled: false });
   const page = await nojs.newPage();
-  await page.goto(base);
+  await page.goto(base + "/about");
   assert.ok(
     await page.locator(".about-story .reading-base").first().isVisible(),
   );

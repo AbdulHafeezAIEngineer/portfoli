@@ -1,3 +1,22 @@
+## app/about/page.tsx
+
+``````tsx
+import { Experience } from "@/components/experience";
+import { SiteShell } from "@/components/site-shell";
+import { pageMetadata } from "@/lib/page-metadata";
+
+export const dynamic = "force-dynamic";
+export const metadata = pageMetadata("about");
+
+export default function Page() {
+  return (
+    <SiteShell page="about">
+      <Experience />
+    </SiteShell>
+  );
+}
+``````
+
 ## app/admin/[[...path]]/loading.tsx
 
 ``````tsx
@@ -838,6 +857,69 @@ html[data-motion="reduced"] [data-reveal] .motion-word {
 .admin-setup-notice p {
   margin-bottom: 18px;
   line-height: 1.7;
+}
+``````
+
+## app/ai-bots/how-i-embed-bots/page.tsx
+
+``````tsx
+import { BotEmbedding } from "@/components/bot-services";
+import { SiteShell } from "@/components/site-shell";
+import { pageMetadata } from "@/lib/page-metadata";
+import { getBots } from "@/lib/content-loader";
+
+export const dynamic = "force-dynamic";
+export const metadata = pageMetadata("embedding");
+
+export default async function Page() {
+  const bots = await getBots();
+  return (
+    <SiteShell page="embedding">
+      <BotEmbedding bots={bots} />
+    </SiteShell>
+  );
+}
+``````
+
+## app/ai-bots/page.tsx
+
+``````tsx
+import { BotServices } from "@/components/bot-services";
+import { SiteShell } from "@/components/site-shell";
+import { pageMetadata } from "@/lib/page-metadata";
+import { getBots } from "@/lib/content-loader";
+
+export const dynamic = "force-dynamic";
+export const metadata = pageMetadata("bots");
+
+export default async function Page() {
+  const bots = await getBots();
+  return (
+    <SiteShell page="bots">
+      <BotServices bots={bots} />
+    </SiteShell>
+  );
+}
+``````
+
+## app/ai-websites/page.tsx
+
+``````tsx
+import { Work } from "@/components/work";
+import { SiteShell } from "@/components/site-shell";
+import { pageMetadata } from "@/lib/page-metadata";
+import { getProjects } from "@/lib/content-loader";
+
+export const dynamic = "force-dynamic";
+export const metadata = pageMetadata("websites");
+
+export default async function Page() {
+  const projects = await getProjects();
+  return (
+    <SiteShell page="websites">
+      <Work projects={projects} />
+    </SiteShell>
+  );
 }
 ``````
 
@@ -2953,6 +3035,69 @@ html[data-motion="reduced"] .forte-preview {
 }
 ``````
 
+## app/bunch-of-work/page.tsx
+
+``````tsx
+import { WorkBunch } from "@/components/work-bunch";
+import { SiteShell } from "@/components/site-shell";
+import { pageMetadata } from "@/lib/page-metadata";
+import { getProjects } from "@/lib/content-loader";
+
+export const dynamic = "force-dynamic";
+export const metadata = pageMetadata("collection");
+
+export default async function Page() {
+  const projects = await getProjects();
+  return (
+    <SiteShell page="collection">
+      <WorkBunch standalone projects={projects} />
+    </SiteShell>
+  );
+}
+``````
+
+## app/certificates/page.tsx
+
+``````tsx
+import { Certifications } from "@/components/certifications";
+import { SiteShell } from "@/components/site-shell";
+import { pageMetadata } from "@/lib/page-metadata";
+import { getCertificates } from "@/lib/content-loader";
+
+export const dynamic = "force-dynamic";
+export const metadata = pageMetadata("certificates");
+
+export default async function Page() {
+  const certificates = await getCertificates();
+  return (
+    <SiteShell page="certificates">
+      <Certifications certificates={certificates} />
+    </SiteShell>
+  );
+}
+``````
+
+## app/contact/page.tsx
+
+``````tsx
+import { Contact } from "@/components/contact";
+import { FaqSection } from "@/components/faq-section";
+import { SiteShell } from "@/components/site-shell";
+import { getIdentity, getFaqs } from "@/lib/content-loader";
+import { pageMetadata } from "@/lib/page-metadata";
+export const dynamic = "force-dynamic";
+export const metadata = pageMetadata("contact");
+export default async function Page() {
+  const [identity, faqs] = await Promise.all([getIdentity(), getFaqs()]);
+  return (
+    <SiteShell page="contact">
+      <Contact email={identity.email} />
+      <FaqSection faqs={faqs} />
+    </SiteShell>
+  );
+}
+``````
+
 ## app/cookies/page.tsx
 
 ``````tsx
@@ -4908,14 +5053,6 @@ html[data-motion="reduced"] .demo-window-content {
   to {
     opacity: 1;
     scale: 1;
-  }
-}
-@media (hover: none), (pointer: coarse) {
-  .device-float {
-    animation: none;
-  }
-  .device-composition {
-    transform: none !important;
   }
 }
 @media (max-width: 700px) {
@@ -8006,6 +8143,25 @@ html[data-motion="reduced"] {
 }
 ``````
 
+## app/how-i-build/page.tsx
+
+``````tsx
+import { Workflow } from "@/components/studio-sections";
+import { SiteShell } from "@/components/site-shell";
+import { pageMetadata } from "@/lib/page-metadata";
+
+export const dynamic = "force-dynamic";
+export const metadata = pageMetadata("process");
+
+export default function Page() {
+  return (
+    <SiteShell page="process">
+      <Workflow />
+    </SiteShell>
+  );
+}
+``````
+
 ## app/icon.svg
 
 ``````xml
@@ -8015,6 +8171,25 @@ html[data-motion="reduced"] {
   <path d="M69 30H31V70H69M31 50H49" fill="none" stroke="#F5F3FF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
   <circle cx="65.5" cy="50" r="6.5" fill="#8B5CF6"/>
 </svg>
+``````
+
+## app/journey/page.tsx
+
+``````tsx
+import { Journey } from "@/components/studio-sections";
+import { SiteShell } from "@/components/site-shell";
+import { pageMetadata } from "@/lib/page-metadata";
+
+export const dynamic = "force-dynamic";
+export const metadata = pageMetadata("journey");
+
+export default function Page() {
+  return (
+    <SiteShell page="journey">
+      <Journey />
+    </SiteShell>
+  );
+}
 ``````
 
 ## app/layout.tsx
@@ -8043,6 +8218,7 @@ import "./reference-motion.css";
 import "./theme-tokens.css";
 import "./project-art-tokens.css";
 import "./atelier.css";
+import "./pages.css";
 import { ConsentProvider } from "@/components/consent-provider";
 
 const inter = localFont({
@@ -8243,38 +8419,11 @@ export default function OpenGraphImage() {
 
 ``````tsx
 import type { Metadata } from "next";
-import { FaqSection } from "@/components/faq-section";
-import { Footer } from "@/components/footer";
+import { getIdentity } from "@/lib/content-loader";
 import { Hero } from "@/components/hero";
-import { Navbar } from "@/components/navbar";
-import { Work } from "@/components/work";
-import {
-  getServices,
-  getFaqs,
-  getTestimonials,
-  getProjects,
-  getBots,
-  getSkills,
-  getCertificates,
-  getIdentity,
-} from "@/lib/content-loader";
-
-import { Experience } from "@/components/experience";
-import { Skills } from "@/components/skills";
-import { Certifications } from "@/components/certifications";
-import { Contact } from "@/components/contact";
-import { ScrollProgress } from "@/components/scroll-progress";
-import { EditorialEffects } from "@/components/editorial-effects";
-import { ScrollAmbience } from "@/components/scroll-ambience";
-import { ReadingEffects } from "@/components/reading-effects";
-
-import {
-  Services,
-  Workflow,
-  Journey,
-  WorkBunch,
-} from "@/components/studio-sections";
-import { Testimonials } from "@/components/testimonials";
+import { HomeDirectory } from "@/components/home-directory";
+import { LegacySectionRedirect } from "@/components/legacy-section-redirect";
+import { SiteShell } from "@/components/site-shell";
 
 // Public CMS metadata belongs to the public page, so private sign-in can render during a CMS outage.
 export async function generateMetadata(): Promise<Metadata> {
@@ -8307,54 +8456,613 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export const dynamic = "force-dynamic";
-export default async function Home() {
-  const [
-    projects,
-    skills,
-    certificates,
-    bots,
-    identity,
-    services,
-    faqs,
-    reviews,
-  ] = await Promise.all([
-    getProjects(),
-    getSkills(),
-    getCertificates(),
-    getBots(),
-    getIdentity(),
-    getServices(),
-    getFaqs(),
-    getTestimonials(),
-  ]);
+export default function Home() {
   return (
-    <div id="top">
-      <ScrollProgress />
-      <EditorialEffects />
-      <ScrollAmbience />
-      <ReadingEffects />
-      <div className="ambient-background" aria-hidden="true">
-        <span />
-        <span />
-      </div>
-      <Navbar identity={identity} />
-      <main id="main-content">
-        <Hero />
-        <Services services={services} />
-        <Work projects={projects} bots={bots} />
-        <WorkBunch projects={projects} />
-        <Experience />
-        <Journey />
-        <Skills skills={skills} />
-        <Certifications certificates={certificates} />
-        <Workflow />
-        <Testimonials testimonials={reviews} />
-        <FaqSection faqs={faqs} />
-        <Contact email={identity.email} />
-      </main>
-      <Footer brand={identity.brand} email={identity.email} />
-    </div>
+    <SiteShell>
+      <LegacySectionRedirect />
+      <Hero />
+      <HomeDirectory />
+    </SiteShell>
   );
+}
+``````
+
+## app/pages.css
+
+``````css
+/* Page structure and shared navigation. Original project artwork remains untouched. */
+.portfolio-shell {
+  min-height: 100svh;
+}
+.portfolio-header {
+  background: var(--glass);
+}
+.portfolio-header .nav-row {
+  height: 76px;
+  gap: 22px;
+}
+.portfolio-header .desktop-nav {
+  gap: clamp(8px, 1.25vw, 20px);
+}
+.portfolio-header .desktop-nav a {
+  white-space: nowrap;
+  padding: 11px 8px;
+  font-size: 12px;
+  border-radius: 8px;
+}
+.portfolio-header .desktop-nav a[aria-current="page"],
+.portfolio-header .desktop-nav a[data-active] {
+  color: var(--accent-text);
+  background: var(--accent-soft);
+}
+.nav-about-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.nav-about-toggle {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  min-height: 44px;
+  color: var(--muted);
+  border-radius: 6px;
+}
+.nav-about-toggle:hover {
+  color: var(--accent-text);
+}
+.about-navigation {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 260px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: 0 16px 40px
+    color-mix(in srgb, var(--neutral-black) 16%, transparent);
+}
+.about-navigation p {
+  padding: 8px 8px 14px;
+  font-size: 9px;
+  letter-spacing: 0.13em;
+  color: var(--muted);
+}
+.portfolio-header .about-navigation a {
+  display: block;
+  padding: 12px;
+}
+.portfolio-header .about-navigation a:hover {
+  background: var(--accent-soft);
+}
+.page-tabs {
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+.page-tabs-inner {
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 3vw, 42px);
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.page-tabs a {
+  position: relative;
+  white-space: nowrap;
+  padding: 20px 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.page-tabs a[aria-current="page"] {
+  color: var(--text);
+}
+.page-tabs a[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--accent);
+}
+.page-tabs a:hover {
+  color: var(--accent-text);
+}
+.route-page main {
+  min-height: 60svh;
+}
+.route-page main > section {
+  padding-block: clamp(56px, 7vw, 100px);
+  scroll-margin-top: 95px;
+}
+.route-page main > section:first-child {
+  margin-top: 0;
+}
+.route-page h1 {
+  margin-top: 18px;
+  font-size: clamp(40px, 4.6vw, 68px);
+  line-height: 1.12;
+  letter-spacing: -0.055em;
+}
+.route-page .section-heading h1 {
+  max-width: 700px;
+}
+.route-page .reference-heading h1 {
+  font-size: clamp(36px, 4.3vw, 60px);
+  margin-bottom: 22px;
+}
+.route-page .journey-editorial-heading .split-display {
+  font-size: clamp(68px, 9vw, 140px);
+}
+.route-page .experience-intro {
+  margin-bottom: 0;
+}
+.route-page .toolkit-heading h1 {
+  margin-top: 18px;
+}
+.route-page .contact-paper h1 {
+  font-size: clamp(54px, 6.7vw, 94px);
+  letter-spacing: -0.07em;
+}
+.route-page .embed-section {
+  border-top: 0;
+}
+.route-page .embed-grid {
+  margin-top: 40px;
+}
+.route-page .embed-card h2 {
+  font-size: 22px;
+  margin: 18px 0 12px;
+}
+.route-page .embed-card h3 {
+  font-size: 12px;
+  margin: 22px 0 10px;
+}
+.route-page .bot-services {
+  margin-top: 0;
+}
+.route-page .bot-usage-note {
+  margin-bottom: 0;
+}
+.route-page .work-collection-label {
+  margin-top: 58px;
+}
+.home-directory {
+  padding-block: clamp(64px, 8vw, 120px);
+}
+.directory-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+.directory-heading h2 {
+  font-size: clamp(30px, 3.4vw, 48px);
+  margin-top: 16px;
+  letter-spacing: -0.05em;
+}
+.directory-heading > p {
+  max-width: 34ch;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+.directory-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+}
+.directory-card {
+  position: relative;
+  padding: 34px 28px 40px 0;
+  border-bottom: 1px solid var(--line);
+}
+.directory-card:nth-child(3n + 2),
+.directory-card:nth-child(3n) {
+  padding-left: 28px;
+  border-left: 1px solid var(--line);
+}
+.directory-number {
+  color: var(--accent-text);
+  font-size: 10px;
+  letter-spacing: 0.13em;
+}
+.directory-card h3 {
+  font-size: clamp(22px, 2.2vw, 31px);
+  font-weight: 550;
+  margin: 30px 0 12px;
+  letter-spacing: -0.04em;
+}
+.directory-card p {
+  max-width: 27ch;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+.directory-card > svg {
+  position: absolute;
+  right: 24px;
+  top: 30px;
+  color: var(--muted);
+  transition: transform 0.25s;
+}
+.directory-card:hover h3,
+.directory-card:hover > svg {
+  color: var(--accent-text);
+}
+[data-motion="full"] .directory-card:hover > svg {
+  transform: translate(3px, -3px);
+}
+.directory-end {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding-top: 28px;
+}
+.directory-end a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.directory-end a:hover {
+  color: var(--accent-text);
+}
+.compact-footer {
+  border-top: 1px solid var(--line);
+  padding-block: 38px 24px;
+  background: var(--bg);
+}
+.compact-footer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.compact-footer-brand {
+  font-size: 28px;
+  font-weight: 650;
+  letter-spacing: -0.06em;
+}
+.compact-footer-brand span {
+  color: var(--accent-text);
+  margin-left: 3px;
+}
+.compact-footer-top > a:last-child {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 13px;
+}
+.compact-footer-pages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  padding-block: 28px;
+}
+.compact-footer-pages a {
+  font-size: 11px;
+  color: var(--muted);
+  padding-block: 6px;
+}
+.compact-footer a:hover {
+  color: var(--accent-text);
+}
+.compact-footer-bottom {
+  border-top: 1px solid var(--line);
+  padding-top: 22px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  color: var(--muted);
+  font-size: 10px;
+}
+.compact-footer-bottom nav {
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+}
+.compact-footer-bottom button {
+  font-size: inherit;
+  color: inherit;
+  padding-block: 6px;
+}
+.compact-footer-bottom > a {
+  font-size: 20px;
+}
+/* An entire page for the original curved collection, with a larger visible canvas. */
+.collection-page .dome-heading {
+  justify-content: center;
+  text-align: center;
+}
+.collection-page .dome-heading h1 {
+  font-size: clamp(44px, 5.5vw, 84px);
+}
+.collection-page .dome-intro {
+  margin-inline: auto;
+}
+.collection-page .dome-view-all {
+  display: none;
+}
+.collection-page .dome-gallery {
+  height: clamp(580px, 65vw, 1040px);
+}
+/* Testimonial editorial grid: restrained, spacious, and independent of other pages. */
+.testimonials-page {
+  max-width: 1180px;
+}
+.testimonials-page .testimonials-heading {
+  display: block;
+  text-align: center;
+  margin-bottom: clamp(48px, 7vw, 90px);
+}
+.testimonials-page h1 {
+  font-size: clamp(44px, 5.5vw, 76px);
+  font-weight: 600;
+}
+.testimonials-subtitle {
+  margin-top: 20px;
+  font-size: clamp(14px, 1.5vw, 18px);
+  color: var(--muted);
+}
+.testimonials-page .testimonial-sample-note {
+  max-width: none;
+  margin-top: 16px;
+  font-size: 10px;
+}
+.testimonials-page .testimonials-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+.testimonials-page .testimonials-grid > .motion-reveal:first-child {
+  grid-column: span 2;
+}
+.testimonials-page .testimonial-card {
+  background: var(--surface);
+  color: var(--text);
+  padding: clamp(24px, 3vw, 40px);
+  min-height: 300px;
+  border-radius: 24px;
+  border-color: var(--line);
+  box-shadow: none;
+}
+.testimonial-quote-mark {
+  font-family: Georgia, serif;
+  font-size: 64px;
+  height: 48px;
+  line-height: 1;
+  color: var(--accent-text);
+}
+.testimonials-page .testimonial-card blockquote {
+  font-size: 15px;
+  line-height: 1.85;
+  letter-spacing: -0.015em;
+}
+.testimonials-page .testimonial-card strong {
+  font-size: 13px;
+}
+.testimonials-page .testimonial-card small,
+.testimonials-page .testimonial-sample-label {
+  color: var(--muted);
+}
+.testimonials-page .testimonial-avatar {
+  background: var(--raised);
+  color: var(--muted);
+  border: 1px solid var(--line);
+}
+@media (max-width: 1199px) {
+  .portfolio-header .desktop-nav {
+    display: none;
+  }
+  .portfolio-header .menu-toggle {
+    display: inline-flex;
+  }
+  .portfolio-header .mobile-nav {
+    max-height: calc(100svh - 92px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: 1px solid var(--line);
+    border-radius: 0 0 18px 18px;
+    left: 0;
+    right: 0;
+    padding: 20px;
+  }
+  .portfolio-header .mobile-nav a {
+    padding: 12px;
+    border-radius: 8px;
+    min-height: 44px;
+    font-size: 14px;
+  }
+  .portfolio-header .mobile-nav a[aria-current="page"] {
+    background: var(--accent-soft);
+    color: var(--accent-text);
+  }
+  .mobile-nav-label {
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.14em;
+    padding: 20px 12px 8px;
+  }
+  .mobile-nav-label:first-child {
+    padding-top: 0;
+  }
+}
+@media (max-width: 767px) {
+  .portfolio-header .nav-row {
+    height: 70px;
+    gap: 12px;
+  }
+  .page-tabs-inner {
+    width: 100%;
+    padding-inline: 24px;
+  }
+  .page-tabs a {
+    font-size: 11px;
+    padding-block: 17px;
+  }
+  .directory-heading {
+    display: block;
+  }
+  .directory-heading > p {
+    margin-top: 20px;
+    max-width: 42ch;
+  }
+  .directory-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .directory-card {
+    padding: 28px 20px 30px 0;
+  }
+  .directory-card:nth-child(n) {
+    border-left: 0;
+  }
+  .directory-card:nth-child(even) {
+    border-left: 1px solid var(--line);
+    padding-left: 20px;
+  }
+  .directory-card:nth-child(odd) {
+    padding-left: 0;
+  }
+  .directory-card h3 {
+    font-size: 23px;
+  }
+  .directory-card > svg {
+    right: 12px;
+    top: 25px;
+    width: 18px;
+  }
+  .directory-end {
+    flex-direction: column;
+  }
+  .compact-footer-top {
+    align-items: start;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .compact-footer-bottom {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .compact-footer-bottom nav {
+    order: 3;
+    width: 100%;
+    margin-left: 0;
+  }
+  .compact-footer-bottom > a {
+    margin-left: auto;
+  }
+  .testimonials-page .testimonials-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .testimonials-page .testimonials-grid > .motion-reveal:first-child {
+    grid-column: span 2;
+  }
+  .collection-page .dome-gallery {
+    height: 650px;
+  }
+}
+@media (max-width: 520px) {
+  .testimonials-page .testimonials-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .testimonials-page .testimonials-grid > .motion-reveal:first-child {
+    grid-column: auto;
+  }
+  .testimonials-page .testimonial-card {
+    min-height: 0;
+    padding: 28px;
+  }
+  .directory-card h3 {
+    font-size: 21px;
+  }
+}
+
+/* Unboxed project presentation: no counters, category strips or floating pill controls. */
+.route-websites .curated-projects-grid {
+  margin-top: 48px;
+  gap: 64px 44px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.route-websites .curated-projects-grid > .motion-reveal:nth-child(n) {
+  grid-column: auto;
+  margin-top: 0;
+}
+.route-websites .curated-project {
+  background: none;
+  border: 0;
+  box-shadow: none;
+}
+.route-websites .curated-project .device-stage {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  aspect-ratio: 1.45;
+  box-shadow: none;
+}
+.route-websites .curated-project .device-float {
+  inset: 3% 0 5%;
+}
+.route-websites .device-floor {
+  display: none;
+}
+.route-websites .project-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 22px;
+}
+.route-websites .project-title-row h3 {
+  margin: 0;
+  font-size: clamp(23px, 2.4vw, 34px);
+  line-height: 1.2;
+  letter-spacing: -0.045em;
+  font-weight: 550;
+}
+.route-websites .project-title-row > span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--accent-text);
+}
+.route-websites .project-screenshots-link {
+  border: 0;
+  background: none;
+  box-shadow: none;
+  margin-top: 8px;
+  padding: 8px 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+.route-websites .project-screenshots-link:hover {
+  color: var(--accent-text);
+}
+/* Animate only visible cards on both touch and desktop; Motion Off still stops all motion. */
+html[data-motion="full"] .device-project .device-float {
+  animation: device-float 7s ease-in-out infinite;
+  animation-play-state: paused;
+}
+html[data-motion="full"]
+  .device-project[data-device-visible="true"]
+  .device-float {
+  animation-play-state: running;
+}
+@media (max-width: 767px) {
+  .route-websites .curated-projects-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 46px;
+  }
+  .route-websites .project-title-row {
+    padding-top: 16px;
+  }
 }
 ``````
 
@@ -11255,14 +11963,14 @@ export default async function Page({ params }: Props) {
     <>
       <Navbar identity={identity} rootLinks />
       <main id="main-content" className="container agency-detail">
-        <Link className="eyebrow" href="/#services">
+        <Link className="eyebrow" href="/services">
           ELVORA / SERVICES
         </Link>
         <header className="agency-detail-hero">
           <p className="eyebrow">A PRACTICAL SCOPE. BUILT AROUND YOU.</p>
           <h1>{service.title}</h1>
           <p>{service.description}</p>
-          <Link href="/#contact" className="button button-gold">
+          <Link href="/contact" className="button button-gold">
             Discuss your project <ArrowUpRight size={18} aria-hidden="true" />
           </Link>
         </header>
@@ -11304,6 +12012,27 @@ export default async function Page({ params }: Props) {
       </main>
       <Footer brand={identity.brand} email={identity.email} />
     </>
+  );
+}
+``````
+
+## app/services/page.tsx
+
+``````tsx
+import { Services } from "@/components/studio-sections";
+import { SiteShell } from "@/components/site-shell";
+import { pageMetadata } from "@/lib/page-metadata";
+import { getServices } from "@/lib/content-loader";
+
+export const dynamic = "force-dynamic";
+export const metadata = pageMetadata("services");
+
+export default async function Page() {
+  const services = await getServices();
+  return (
+    <SiteShell page="services">
+      <Services services={services} />
+    </SiteShell>
   );
 }
 ``````
@@ -11729,6 +12458,7 @@ import type { MetadataRoute } from "next";
 import { getServices, getProjects } from "@/lib/content-loader";
 import { site } from "@/data/site";
 import { studies } from "@/data/studies";
+import { portfolioPages } from "@/data/navigation";
 import { concepts } from "@/data/concepts";
 
 export const dynamic = "force-dynamic";
@@ -11738,6 +12468,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getProjects(),
   ]);
   return [
+    ...Object.values(portfolioPages).map((page) => ({
+      url: `${site.url}${page.href}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    })),
     ...services.map((service) => ({
       url: `${site.url}/services/${service.id}`,
       priority: 0.7,
@@ -11763,6 +12498,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.5,
     })),
   ];
+}
+``````
+
+## app/skills/page.tsx
+
+``````tsx
+import { Skills } from "@/components/skills";
+import { SiteShell } from "@/components/site-shell";
+import { pageMetadata } from "@/lib/page-metadata";
+import { getSkills } from "@/lib/content-loader";
+
+export const dynamic = "force-dynamic";
+export const metadata = pageMetadata("skills");
+
+export default async function Page() {
+  const skills = await getSkills();
+  return (
+    <SiteShell page="skills">
+      <Skills skills={skills} />
+    </SiteShell>
+  );
 }
 ``````
 
@@ -14525,6 +15281,25 @@ html[data-motion="reduced"] .footer-art > span {
 }
 ``````
 
+## app/technical-domains/page.tsx
+
+``````tsx
+import { TechnicalDomains } from "@/components/experience";
+import { SiteShell } from "@/components/site-shell";
+import { pageMetadata } from "@/lib/page-metadata";
+
+export const dynamic = "force-dynamic";
+export const metadata = pageMetadata("domains");
+
+export default function Page() {
+  return (
+    <SiteShell page="domains">
+      <TechnicalDomains />
+    </SiteShell>
+  );
+}
+``````
+
 ## app/terms/page.tsx
 
 ``````tsx
@@ -14536,6 +15311,27 @@ export const metadata: Metadata = {
 };
 export default function Page() {
   return <LegalPage page="terms" />;
+}
+``````
+
+## app/testimonials/page.tsx
+
+``````tsx
+import { Testimonials } from "@/components/testimonials";
+import { SiteShell } from "@/components/site-shell";
+import { pageMetadata } from "@/lib/page-metadata";
+import { getTestimonials } from "@/lib/content-loader";
+
+export const dynamic = "force-dynamic";
+export const metadata = pageMetadata("testimonials");
+
+export default async function Page() {
+  const testimonials = await getTestimonials();
+  return (
+    <SiteShell page="testimonials">
+      <Testimonials testimonials={testimonials} />
+    </SiteShell>
+  );
 }
 ``````
 
@@ -14641,7 +15437,7 @@ export default async function Page({ params }: Props) {
     <>
       <Navbar identity={identity} rootLinks />
       <main id="main-content" className="container agency-detail">
-        <Link href="/#work" className="eyebrow">
+        <Link href="/ai-websites" className="eyebrow">
           ELVORA / SELECTED WORK
         </Link>
         <header className="agency-detail-hero">

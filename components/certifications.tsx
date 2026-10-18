@@ -26,7 +26,7 @@ export function Certifications({
     >
       <Reveal>
         <p className="eyebrow">{copy.eyebrow}</p>
-        <h2 id="certification-title">{copy.title}</h2>
+        <h1 id="certification-title">{copy.title}</h1>
         <p className="section-intro">{copy.description}</p>
       </Reveal>
       {certificates.map((certificate) => (

@@ -34,6 +34,9 @@ try {
       "full",
     );
     for (const name of ["work-showcase", "ai-bot"]) {
+      await page.goto(
+        base + (name === "work-showcase" ? "/ai-websites" : "/ai-bots"),
+      );
       const banner = page.locator(`[data-showcase-video="${name}"]`);
       await banner.scrollIntoViewIfNeeded();
       await page.waitForFunction((n) => {
@@ -75,32 +78,30 @@ try {
         const v = document.querySelector(`[data-showcase-video="${n}"] video`);
         return v.currentTime < 2 && !v.paused && !v.ended;
       }, name);
+      await page.getByLabel("Animation preference").selectOption("reduced");
+      await page.waitForFunction(
+        () => document.querySelectorAll(".showcase-video video").length === 0,
+      );
+      assert.equal(await banner.locator("img").count(), 1);
+      await page.getByLabel("Animation preference").selectOption("full");
+      await banner.scrollIntoViewIfNeeded();
+      await page.waitForFunction(
+        (n) =>
+          !document.querySelector(`[data-showcase-video="${n}"] video`).paused,
+        name,
+      );
+      await page.locator(".compact-footer").scrollIntoViewIfNeeded();
+      await page.waitForFunction(
+        (n) =>
+          document.querySelector(`[data-showcase-video="${n}"] video`).paused,
+        name,
+      );
+      assert.ok(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      );
     }
-    await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
-    await page.waitForFunction(() =>
-      [...document.querySelectorAll(".showcase-video video")].every(
-        (v) => v.paused,
-      ),
-    );
-    await page.getByLabel("Animation preference").selectOption("reduced");
-    await page.waitForFunction(
-      () => document.querySelectorAll(".showcase-video video").length === 0,
-    );
-    assert.equal(await page.locator(".showcase-video img").count(), 2);
-    await page.getByLabel("Animation preference").selectOption("full");
-    await page
-      .locator('[data-showcase-video="work-showcase"]')
-      .scrollIntoViewIfNeeded();
-    await page.waitForFunction(
-      () =>
-        !document.querySelector('[data-showcase-video="work-showcase"] video')
-          .paused,
-    );
-    assert.ok(
-      await page.evaluate(
-        () => document.documentElement.scrollWidth <= innerWidth,
-      ),
-    );
     assert.deepEqual(errors, []);
     assert.deepEqual(external, []);
     await page.close();

@@ -248,14 +248,6 @@
     scale: 1;
   }
 }
-@media (hover: none), (pointer: coarse) {
-  .device-float {
-    animation: none;
-  }
-  .device-composition {
-    transform: none !important;
-  }
-}
 @media (max-width: 700px) {
   .device-stage {
     aspect-ratio: 1.18;

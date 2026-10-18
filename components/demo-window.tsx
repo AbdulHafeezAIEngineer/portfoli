@@ -17,7 +17,7 @@ export function DemoWindow({
   return (
     <div className="demo-desktop">
       <header className="demo-desktop-menu">
-        <Link href="/#work">Elvora Studio</Link>
+        <Link href="/ai-websites">Elvora Studio</Link>
         <span>Website concepts</span>
         <span>Interactive preview</span>
       </header>
@@ -48,7 +48,7 @@ export function DemoWindow({
             >
               {maximized ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
             </button>
-            <Link href="/#work">
+            <Link href="/ai-websites">
               <ArrowLeft size={14} />
               <span>Back to website</span>
             </Link>
@@ -77,7 +77,7 @@ export function DemoWindow({
             <small>{concept.name}</small>
           </Link>
         ))}
-        <Link href="/#work">
+        <Link href="/ai-websites">
           <span aria-hidden="true">
             <PanelTop size={21} />
           </span>
