@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMotionPreference } from "./motion-preference";
 
 /** A background showcase, controlled by the site's single Motion switch. */
@@ -22,7 +22,11 @@ export function VisibilityVideo({
   const { reduced } = useMotionPreference();
   const frame = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
-  const poster = `/videos/${name}-poster.webp`;
+  const [opaqueFallback, setOpaqueFallback] = useState(false);
+  const mp4Only = name === "home-collection" && opaqueFallback;
+  const mediaName =
+    name === "home-collection" ? "home-collection-transparent" : name;
+  const poster = `/videos/${mediaName}-poster.webp`;
 
   useEffect(() => {
     const media = video.current;
@@ -32,6 +36,27 @@ export function VisibilityVideo({
     // Set both properties before play(): some mobile browsers check defaultMuted.
     media.muted = true;
     media.defaultMuted = true;
+    let alphaChecked = name !== "home-collection" || mp4Only;
+    const checkTransparency = () => {
+      if (alphaChecked || media.readyState < 2) return true;
+      alphaChecked = true;
+      try {
+        // Some browsers decode VP9 but discard its alpha plane. Probe one clear
+        // corner once; the local MP4 fallback already matches the purple panel.
+        const canvas = document.createElement("canvas");
+        canvas.width = canvas.height = 1;
+        const context = canvas.getContext("2d", { willReadFrequently: true });
+        if (context) {
+          context.drawImage(media, 0, 0, 1, 1, 0, 0, 1, 1);
+          if (context.getImageData(0, 0, 1, 1).data[3] < 250) return true;
+        }
+      } catch {
+        // Restricted canvas access can still use the precomposited video.
+      }
+      media.pause();
+      setOpaqueFallback(true);
+      return false;
+    };
     const resume = () => {
       if (
         !visible ||
@@ -42,6 +67,7 @@ export function VisibilityVideo({
         media.pause();
         return;
       }
+      if (!checkTransparency()) return;
       media.autoplay = true;
       if (media.paused)
         void media.play().catch(() => {
@@ -56,6 +82,7 @@ export function VisibilityVideo({
       { threshold: 0, rootMargin: "100px 0px" },
     );
     observer.observe(container);
+    media.addEventListener("loadeddata", resume);
     media.addEventListener("canplay", resume);
     document.addEventListener("visibilitychange", resume);
     document.addEventListener("pointerdown", resume, { passive: true });
@@ -63,17 +90,25 @@ export function VisibilityVideo({
     return () => {
       observer.disconnect();
       media.pause();
+      media.removeEventListener("loadeddata", resume);
       media.removeEventListener("canplay", resume);
       document.removeEventListener("visibilitychange", resume);
       document.removeEventListener("pointerdown", resume);
       document.removeEventListener("keydown", resume);
     };
-  }, [reduced]);
+  }, [reduced, name, mp4Only]);
 
   return (
     <figure
       className={`showcase-video${presentation === "card" ? " showcase-video-card" : ""}`}
       data-showcase-video={name}
+      data-video-background={
+        name === "home-collection"
+          ? mp4Only
+            ? "composited"
+            : "alpha"
+          : undefined
+      }
     >
       <div ref={frame} className="showcase-video-frame">
         {reduced ? (
@@ -86,6 +121,7 @@ export function VisibilityVideo({
           />
         ) : (
           <video
+            key={`${name}-${mp4Only ? "mp4" : "webm"}`}
             ref={video}
             muted
             loop
@@ -95,18 +131,22 @@ export function VisibilityVideo({
             aria-label={caption}
             disablePictureInPicture
           >
+            {!mp4Only && (
+              <source
+                src={`/videos/${mediaName}-mobile.webm`}
+                type="video/webm"
+                media="(max-width: 767px)"
+              />
+            )}
             <source
-              src={`/videos/${name}-mobile.webm`}
-              type="video/webm"
-              media="(max-width: 767px)"
-            />
-            <source
-              src={`/videos/${name}-mobile.mp4`}
+              src={`/videos/${mediaName}-mobile.mp4`}
               type="video/mp4"
               media="(max-width: 767px)"
             />
-            <source src={`/videos/${name}.webm`} type="video/webm" />
-            <source src={`/videos/${name}.mp4`} type="video/mp4" />
+            {!mp4Only && (
+              <source src={`/videos/${mediaName}.webm`} type="video/webm" />
+            )}
+            <source src={`/videos/${mediaName}.mp4`} type="video/mp4" />
           </video>
         )}
       </div>

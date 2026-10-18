@@ -3643,6 +3643,37 @@ try {
       if (name.startsWith("home-")) {
         const isWebsite = name === "home-websites";
         const isCollection = name === "home-collection";
+        if (isCollection) {
+          assert.equal(
+            await banner.getAttribute("data-video-background"),
+            "alpha",
+          );
+          const alpha = await banner.locator("video").evaluate((media) => {
+            const canvas = document.createElement("canvas");
+            canvas.width = 2;
+            canvas.height = 1;
+            const context = canvas.getContext("2d");
+            context.drawImage(media, 0, 0, 1, 1, 0, 0, 1, 1);
+            context.drawImage(
+              media,
+              media.videoWidth / 2,
+              media.videoHeight / 2,
+              1,
+              1,
+              1,
+              0,
+              1,
+              1,
+            );
+            const pixels = context.getImageData(0, 0, 2, 1).data;
+            return [pixels[3], pixels[7]];
+          });
+          assert.deepEqual(
+            alpha,
+            [0, 255],
+            "Clear outer background; dark gallery center remains opaque",
+          );
+        }
         const preview = page.locator(
           isWebsite
             ? ".home-website-preview"
@@ -3749,6 +3780,68 @@ try {
     await page.close();
     console.log(
       `PASS ${width}px / OS reduced ${osReduced}: all five silent loops, no controls, actual loop wrap, Off/On, offscreen pause and consent intact.`,
+    );
+  }
+  for (const width of [390, 1440]) {
+    const page = await browser.newPage({
+      viewport: { width, height: 900 },
+      isMobile: width < 768,
+      hasTouch: width < 768,
+    });
+    await page.addInitScript(() => {
+      const read = CanvasRenderingContext2D.prototype.getImageData;
+      CanvasRenderingContext2D.prototype.getImageData = function (...args) {
+        const pixels = read.apply(this, args);
+        if (this.canvas.width === 1 && this.canvas.height === 1)
+          pixels.data[3] = 255;
+        return pixels;
+      };
+    });
+    await page.goto(base);
+    await page.getByRole("button", { name: "Reject All", exact: true }).click();
+    const banner = page.locator('[data-showcase-video="home-collection"]');
+    await banner.scrollIntoViewIfNeeded();
+    await page.waitForFunction(() => {
+      const v = document.querySelector(
+        '[data-showcase-video="home-collection"] video',
+      );
+      return (
+        v && v.currentSrc.endsWith(".mp4") && !v.paused && v.currentTime > 0.1
+      );
+    });
+    assert.equal(
+      await banner.getAttribute("data-video-background"),
+      "composited",
+    );
+    const pixel = await banner.locator("video").evaluate((v) => {
+      const c = document.createElement("canvas");
+      c.width = 2;
+      c.height = 1;
+      const context = c.getContext("2d");
+      context.drawImage(v, 0, 0, 1, 1, 0, 0, 1, 1);
+      return [...context.getImageData(0, 0, 1, 1).data];
+    });
+    assert.ok(
+      pixel.slice(0, 3).every((v, i) => Math.abs(v - [27, 13, 52][i]) < 5),
+      "MP4 background matches the purple panel",
+    );
+    await page.getByLabel("Animation preference").selectOption("reduced");
+    await page.waitForFunction(
+      () =>
+        !document.querySelector(
+          '[data-showcase-video="home-collection"] video',
+        ),
+    );
+    await page.getByLabel("Animation preference").selectOption("full");
+    await page.waitForFunction(() => {
+      const v = document.querySelector(
+        '[data-showcase-video="home-collection"] video',
+      );
+      return v && v.currentSrc.endsWith(".mp4") && !v.paused;
+    });
+    await page.close();
+    console.log(
+      `PASS ${width}px: simulated missing alpha support selects purple MP4, including Motion Off/On.`,
     );
   }
 } finally {

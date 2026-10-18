@@ -40,6 +40,8 @@ Production build, six-width/both-theme layout and all four native video checks p
 
 ## Homepage collection video
 
+The subsequent [portrait/transparency update](PORTRAIT_TRANSPARENT_COLLECTION.md) removes the collection clip's outer backdrop and updates media URLs to `home-collection-transparent*`; the MP4 fallback matches this purple section.
+
 The static Bunch of Work collage is replaced by the owner's supplied eight-second rotating website-design video. It uses a natural 16:9 frame, rounded clipping on all four corners, silent inline looping and the same visibility/Motion Off controls as the other previews. Local WebM/MP4 encodes at 1280px and 854px, plus a matching poster, are stored as `public/videos/home-collection*`.
 
 The purple section, heading and `/bunch-of-work` destination remain. The original interactive curved wall on that dedicated page is untouched. Removing the unused collage also removes its project/study imports and the homepage's unnecessary project query; subject pages continue loading their own content.

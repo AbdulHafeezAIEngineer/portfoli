@@ -1,3 +1,4 @@
+import Image from "next/image";
 import {
   Blocks,
   Braces,
@@ -29,22 +30,19 @@ export function Experience() {
       <div className="experience-intro">
         <Reveal>
           <figure className="about-portrait">
-            <div
-              className="about-portrait-image about-brand-poster"
-              aria-label="Elvora: code, context, craft"
-            >
-              <span className="eyebrow">INDEPENDENT BY DESIGN</span>
-              <span className="poster-emblem" aria-hidden="true">
-                E<span>.</span>
+            <div className="about-portrait-image about-owner-photo">
+              <Image
+                src="/abdul-hafeez.webp"
+                alt={site.name}
+                className="about-owner-image"
+                fill
+                priority
+                sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1100px) 42vw, 480px"
+              />
+              <span className="about-photo-label">INDEPENDENT BY DESIGN</span>
+              <span className="about-photo-caption">
+                DESIGN + WEB DEVELOPMENT
               </span>
-              <strong>
-                Code.
-                <br />
-                Context.
-                <br />
-                Craft.
-              </strong>
-              <span>DESIGN + WEB DEVELOPMENT</span>
             </div>
             <figcaption>
               <div>

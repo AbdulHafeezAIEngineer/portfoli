@@ -580,6 +580,8 @@ Latest playback/navigation update: [wide looping videos, interactive desktop win
 
 ## Categorized public pages
 
+Latest media update: the owner's original PDF portrait is fitted into the About frame, and the rotating collection video uses real transparency with a matching purple MP4 fallback. See [implementation, validation and previews](docs/PORTRAIT_TRANSPARENT_COLLECTION.md).
+
 Latest homepage presentation: full-width light and black sections, with a white/deep-purple split for AI Bots and Bunch of Work. Theme switching, original artwork and motion remain functional. See [current desktop/mobile previews and checks](docs/HOMEPAGE_BANDS.md).
 
 The homepage Websites and AI Bots previews use the owner's supplied architectural and delivery-chat videos as silent loops on desktop and phones. The website video has rounded corners on all four sides. Motion Off shows matching posters; the subject pages keep their own showcases.
@@ -598,7 +600,7 @@ See [the restored homepage and content grouping](docs/RESTORED_HOMEPAGE.md) and 
 
 ## Agency features
 
-Services and project-note routes, native FAQs, a private service/FAQ/review CMS, searchable paginated inquiries with status and private notes, actual dashboard counts and audit history. Contact acceptance distinguishes database storage from optional SMTP notification. Genuine approved reviews appear only after publication; the About section uses original Elvora brand artwork.
+Services and project-note routes, native FAQs, a private service/FAQ/review CMS, searchable paginated inquiries with status and private notes, actual dashboard counts and audit history. Contact acceptance distinguishes database storage from optional SMTP notification. Genuine approved reviews appear only after publication; the About section shows the owner's original supplied portrait within the Elvora frame.
 
 The public hero is readable immediately. Shared CSS/viewport reveals retain the motion style while reducing per-word client work. Cookie choices still control optional embeds, and public text remains visible without JavaScript.
 
@@ -933,6 +935,8 @@ To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQ
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
 ## Current homepage: contrasting sections
+
+Latest update: the exact portrait extracted from the owner's PDF replaces the About poster text inside its original frame. The rotating collection video has a transparent outer background and a purple MP4 fallback for browsers without alpha support. Native decoded pixels, forced fallback, transparent Motion Off poster, portrait framing and both themes were verified; four About WCAG A/AA scans found zero violations. See [current details and previews](docs/PORTRAIT_TRANSPARENT_COLLECTION.md). Local production build passed; live deployment remains unverified.
 
 The static Bunch of Work homepage collage is replaced by the owner's eight-second rotating-design video. Its local desktop/mobile encodes use a rounded 16:9 frame and the shared motion-controlled player. Production build and native checks for all five showcases passed at 390/1440px, covering actual looping, silent inline playback, no controls, rounded corners, Off/On and offscreen pause. The dedicated collection wall and its destination remain unchanged. See [current video frames](docs/HOMEPAGE_BANDS.md#homepage-collection-video).
 

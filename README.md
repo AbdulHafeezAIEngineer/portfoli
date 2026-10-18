@@ -10,6 +10,8 @@ Latest playback/navigation update: [wide looping videos, interactive desktop win
 
 ## Categorized public pages
 
+Latest media update: the owner's original PDF portrait is fitted into the About frame, and the rotating collection video uses real transparency with a matching purple MP4 fallback. See [implementation, validation and previews](docs/PORTRAIT_TRANSPARENT_COLLECTION.md).
+
 Latest homepage presentation: full-width light and black sections, with a white/deep-purple split for AI Bots and Bunch of Work. Theme switching, original artwork and motion remain functional. See [current desktop/mobile previews and checks](docs/HOMEPAGE_BANDS.md).
 
 The homepage Websites and AI Bots previews use the owner's supplied architectural and delivery-chat videos as silent loops on desktop and phones. The website video has rounded corners on all four sides. Motion Off shows matching posters; the subject pages keep their own showcases.
@@ -28,7 +30,7 @@ See [the restored homepage and content grouping](docs/RESTORED_HOMEPAGE.md) and 
 
 ## Agency features
 
-Services and project-note routes, native FAQs, a private service/FAQ/review CMS, searchable paginated inquiries with status and private notes, actual dashboard counts and audit history. Contact acceptance distinguishes database storage from optional SMTP notification. Genuine approved reviews appear only after publication; the About section uses original Elvora brand artwork.
+Services and project-note routes, native FAQs, a private service/FAQ/review CMS, searchable paginated inquiries with status and private notes, actual dashboard counts and audit history. Contact acceptance distinguishes database storage from optional SMTP notification. Genuine approved reviews appear only after publication; the About section shows the owner's original supplied portrait within the Elvora frame.
 
 The public hero is readable immediately. Shared CSS/viewport reveals retain the motion style while reducing per-word client work. Cookie choices still control optional embeds, and public text remains visible without JavaScript.
 

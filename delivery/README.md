@@ -171,6 +171,7 @@ docs/BRIEF_COMPLETION.md
 docs/CATEGORIZED_PAGES.md
 docs/EDITORIAL_UPGRADE.md
 docs/HOMEPAGE_BANDS.md
+docs/PORTRAIT_TRANSPARENT_COLLECTION.md
 docs/PRESENTATION_UPDATE.md
 docs/PURPLE_VIDEO_UPDATE.md
 docs/READY_PLAYBACK_UPDATE.md
@@ -250,6 +251,8 @@ docs/logo-flipped.png
 docs/logo-front.png
 docs/mobile-about-preview.png
 docs/new-work-preview.png
+docs/owner-portrait-1440.png
+docs/owner-portrait-390.png
 docs/pages-accessibility.json
 docs/pages-ai-websites-1440.png
 docs/pages-ai-websites-390.png
@@ -260,6 +263,7 @@ docs/pages-home-390.png
 docs/pages-scroll-readiness.json
 docs/pages-testimonials-1440.png
 docs/pages-testimonials-390.png
+docs/portrait-transparency-accessibility.json
 docs/preview.png
 docs/purple-accessibility.json
 docs/purple-ai-video.png
@@ -380,6 +384,7 @@ prisma/migrations/202610170001_agency_content_and_leads/migration.sql
 prisma/migrations/migration_lock.toml
 prisma/schema.prisma
 prisma/seed.ts
+public/abdul-hafeez.webp
 public/avatars/demo-ethan.svg
 public/avatars/demo-maya.svg
 public/avatars/demo-nora.svg
@@ -464,11 +469,11 @@ public/videos/home-ai-bot-mobile.webm
 public/videos/home-ai-bot-poster.webp
 public/videos/home-ai-bot.mp4
 public/videos/home-ai-bot.webm
-public/videos/home-collection-mobile.mp4
-public/videos/home-collection-mobile.webm
-public/videos/home-collection-poster.webp
-public/videos/home-collection.mp4
-public/videos/home-collection.webm
+public/videos/home-collection-transparent-mobile.mp4
+public/videos/home-collection-transparent-mobile.webm
+public/videos/home-collection-transparent-poster.webp
+public/videos/home-collection-transparent.mp4
+public/videos/home-collection-transparent.webm
 public/videos/home-websites-mobile.mp4
 public/videos/home-websites-mobile.webm
 public/videos/home-websites-poster.webp
@@ -487,6 +492,7 @@ scripts/generate-client.mjs
 scripts/generate-image-previews.mjs
 scripts/generate-theme-assets.mjs
 scripts/package-source.py
+scripts/prepare-collection-transparency.py
 scripts/prepare-production.ts
 scripts/reset-admin.ts
 tailwind.config.ts
