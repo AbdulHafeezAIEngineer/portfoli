@@ -1398,13 +1398,13 @@ export const portfolioPages = {
     href: "/websites",
     label: "Websites",
     description:
-      "Explore original website concepts, responsive previews and the thinking behind each interface.",
+      "Custom website design and development for businesses worldwide. Clear service pages, mobile-friendly layouts and simple ways for customers to contact you.",
   },
   bots: {
     href: "/ai-bots",
     label: "AI Bots",
     description:
-      "Explore website chatbots, conversational demos and optional voice experiences.",
+      "AI chatbot integration for your website, using your business information. Help customers find answers about your products, services and policies.",
   },
   embedding: {
     href: "/ai-bots#embed-methods",
@@ -1877,20 +1877,20 @@ export const site = {
   role: "Web Developer & Chatbot Builder",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.elvoraai.online",
   email: "abdulhafeez@elvoraai.online",
-  title: "Elvora — Thoughtful websites. Built with intention.",
+  title: "Web Design & Development by Abdul Hafeez | Elvora",
   description:
-    "Elvora is Abdul Hafeez's portfolio for website design, web development and optional chatbot integrations. Explore original work, the tools behind it and the process from idea to launch.",
+    "Custom websites and AI chatbots by Abdul Hafeez, for businesses worldwide. Help visitors find answers, understand your services and contact you.",
   nav: primaryNavigation,
   hero: {
-    eyebrow: "INDEPENDENT DEVELOPER · BUILT WITH INTENTION",
-    heading: ["Thoughtful websites.", "Built with intention."],
+    eyebrow: "WEB DESIGN, DEVELOPMENT & AI CHATBOTS",
+    heading: ["Custom websites.", "Helpful AI chatbots."],
     intro:
-      "Elvora is my space for original websites, thoughtful interfaces and the craft behind them. Explore the work, see the tools and process, and find a direction for your own project.",
+      "I'm Abdul Hafeez. I build websites and AI chatbots for businesses around the world.",
     tagline:
-      "I'm Abdul Hafeez. Design, code and careful testing lead every build. I use a practical development stack, with AI assistance for selected tasks.",
+      "Make your services clear, help visitors get answers and give them an easy way to contact you. Your chatbot answers questions using the business information you provide.",
     primary: "View Work",
     secondary: "Contact Me",
-    note: "A little design. A lot of possibility.",
+    note: "Built for your business. Ready for your customers.",
     portrait: "/portrait-placeholder.svg",
     portraitAlt:
       "Abstract portrait placeholder for Abdul Hafeez; personal photo coming soon",

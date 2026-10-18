@@ -176,6 +176,7 @@ docs/PRESENTATION_UPDATE.md
 docs/PURPLE_VIDEO_UPDATE.md
 docs/READY_PLAYBACK_UPDATE.md
 docs/RESTORED_HOMEPAGE.md
+docs/SEO_COPY_AND_PAGESPEED_REVIEW.md
 docs/SHOWCASE_UPDATE.md
 docs/VIDEO_MOTION_UPDATE.md
 docs/WEBSITES_TESTIMONIALS.md
@@ -312,6 +313,8 @@ docs/reviews-empty-desktop-dark.png
 docs/reviews-empty-desktop-light.png
 docs/reviews-empty-mobile-dark.png
 docs/reviews-empty-mobile-light.png
+docs/seo-home-1440.png
+docs/seo-home-390.png
 docs/showcase-1440-dark.png
 docs/showcase-1440-light.png
 docs/showcase-390-light.png

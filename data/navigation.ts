@@ -4,13 +4,13 @@ export const portfolioPages = {
     href: "/websites",
     label: "Websites",
     description:
-      "Explore original website concepts, responsive previews and the thinking behind each interface.",
+      "Custom website design and development for businesses worldwide. Clear service pages, mobile-friendly layouts and simple ways for customers to contact you.",
   },
   bots: {
     href: "/ai-bots",
     label: "AI Bots",
     description:
-      "Explore website chatbots, conversational demos and optional voice experiences.",
+      "AI chatbot integration for your website, using your business information. Help customers find answers about your products, services and policies.",
   },
   embedding: {
     href: "/ai-bots#embed-methods",

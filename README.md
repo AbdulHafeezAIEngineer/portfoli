@@ -10,6 +10,8 @@ Latest playback/navigation update: [wide looping videos, interactive desktop win
 
 ## Categorized public pages
 
+Latest copy/SEO update: clear website-development and custom-data chatbot services for international clients, with distinct homepage/service search titles and plain-English homepage wording. The supplied PageSpeed report is reviewed separately; performance behavior is unchanged. See [copy, metadata, audit priorities and validation](docs/SEO_COPY_AND_PAGESPEED_REVIEW.md).
+
 Latest media update: the owner's original PDF portrait is fitted into the About frame, and the rotating collection video uses real transparency with a matching purple MP4 fallback. See [implementation, validation and previews](docs/PORTRAIT_TRANSPARENT_COLLECTION.md).
 
 Latest homepage presentation: full-width light and black sections, with a white/deep-purple split for AI Bots and Bunch of Work. Theme switching, original artwork and motion remain functional. See [current desktop/mobile previews and checks](docs/HOMEPAGE_BANDS.md).

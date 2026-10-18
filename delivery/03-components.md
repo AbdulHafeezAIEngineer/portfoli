@@ -4524,12 +4524,12 @@ export function HomeDirectory() {
       aria-labelledby="directory-title"
     >
       <div className="home-purpose home-band-light">
-        <p className="eyebrow">THE PURPOSE BEHIND ELVORA</p>
+        <p className="eyebrow">WHAT I CAN BUILD FOR YOU</p>
         <TextReveal
           id="directory-title"
-          text={"Human ideas.\nUseful digital experiences."}
+          text={"Show what you do.\nMake it easy to get in touch."}
         />
-        <ReadingText text="This is a place to explore what I create and how I create it: websites with their own identity, useful integrations and the thoughtful decisions behind them. AI assistants are an optional part of that work. See the work in action, follow the process, or start a conversation about your own idea." />
+        <ReadingText text="A clear website helps people understand your business and take the next step: ask a question, request a quote or contact you. I also build AI chatbots that use your own product details, service information and common questions to help customers find answers. Explore the examples below to see what I can build for your business." />
       </div>
       <nav className="home-feature-grid" aria-label="Explore Elvora's work">
         <Link
@@ -4538,10 +4538,11 @@ export function HomeDirectory() {
         >
           <div className="home-feature-copy">
             <p className="eyebrow">WEBSITES</p>
-            <h3>Made with a point of view.</h3>
+            <h3>A website built for your business.</h3>
             <p>
-              Original website concepts, built around an idea. Explore the
-              interfaces and the creative process behind them.
+              Custom design and development that explains your services and
+              makes it easy to contact you. Explore the concept websites and see
+              how I build them.
             </p>
             <span>
               Explore websites <ArrowUpRight size={16} aria-hidden="true" />
@@ -4561,10 +4562,11 @@ export function HomeDirectory() {
         >
           <div className="home-feature-copy">
             <p className="eyebrow">AI BOTS</p>
-            <h3>A question. A useful answer.</h3>
+            <h3>Your business. Your chatbot.</h3>
             <p>
-              Meet the assistants, try the demos, and see how I build, ground
-              and embed a bot into a website.
+              An AI chatbot added to your website, using your own business
+              information to answer customer questions. Try the demos and see
+              how it works.
             </p>
             <span>
               Explore AI bots <ArrowUpRight size={16} aria-hidden="true" />
@@ -4616,7 +4618,7 @@ export function HomeDirectory() {
               {
                 href: "/about",
                 title: "About Me",
-                text: "My journey, technical foundations and the tools I work with.",
+                text: "Meet the developer, see my work and explore the tools I use.",
               },
               {
                 href: "/testimonials",
@@ -4626,7 +4628,7 @@ export function HomeDirectory() {
               {
                 href: "/contact",
                 title: "Let’s talk",
-                text: "Tell me what you have in mind. Let’s find a thoughtful way forward.",
+                text: "Need a website or a chatbot? Tell me about your business and what you need.",
               },
             ].map((item) => (
               <Link key={item.href} href={item.href}>

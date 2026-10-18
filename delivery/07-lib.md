@@ -2331,9 +2331,14 @@ import type { Metadata } from "next";
 import { portfolioPages, type PortfolioPage } from "@/data/navigation";
 import { site } from "@/data/site";
 
+const serviceTitles: Partial<Record<PortfolioPage, string>> = {
+  websites: "Web Design & Development Services | Elvora",
+  bots: "Custom AI Chatbot Integration for Websites | Elvora",
+};
+
 export function pageMetadata(page: PortfolioPage): Metadata {
   const { label, href, description } = portfolioPages[page];
-  const title = `${label} — ${site.brand}`;
+  const title = serviceTitles[page] || `${label} — ${site.brand}`;
   return {
     title,
     description,

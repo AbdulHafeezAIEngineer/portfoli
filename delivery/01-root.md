@@ -580,6 +580,8 @@ Latest playback/navigation update: [wide looping videos, interactive desktop win
 
 ## Categorized public pages
 
+Latest copy/SEO update: clear website-development and custom-data chatbot services for international clients, with distinct homepage/service search titles and plain-English homepage wording. The supplied PageSpeed report is reviewed separately; performance behavior is unchanged. See [copy, metadata, audit priorities and validation](docs/SEO_COPY_AND_PAGESPEED_REVIEW.md).
+
 Latest media update: the owner's original PDF portrait is fitted into the About frame, and the rotating collection video uses real transparency with a matching purple MP4 fallback. See [implementation, validation and previews](docs/PORTRAIT_TRANSPARENT_COLLECTION.md).
 
 Latest homepage presentation: full-width light and black sections, with a white/deep-purple split for AI Bots and Bunch of Work. Theme switching, original artwork and motion remain functional. See [current desktop/mobile previews and checks](docs/HOMEPAGE_BANDS.md).
@@ -935,6 +937,8 @@ To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQ
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
 ## Current homepage: contrasting sections
+
+Latest copy/SEO update: the homepage explains custom websites and business-data chatbots for international clients in plain English. Homepage, Websites and AI Bots titles/descriptions are distinct and verified in server HTML, including social tags and canonicals. Lint, production build and desktop/mobile page checks passed. Original visuals and behavior remain unchanged. The owner's supplied PageSpeed report is reviewed with prioritized recommendations; no performance changes or fresh score are claimed. See [the copy and audit record](docs/SEO_COPY_AND_PAGESPEED_REVIEW.md).
 
 Latest update: the exact portrait extracted from the owner's PDF replaces the About poster text inside its original frame. The rotating collection video has a transparent outer background and a purple MP4 fallback for browsers without alpha support. Native decoded pixels, forced fallback, transparent Motion Off poster, portrait framing and both themes were verified; four About WCAG A/AA scans found zero violations. See [current details and previews](docs/PORTRAIT_TRANSPARENT_COLLECTION.md). Local production build passed; live deployment remains unverified.
 

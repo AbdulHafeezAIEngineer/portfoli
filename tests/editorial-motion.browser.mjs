@@ -120,7 +120,7 @@ try {
   await page.goto(base);
   assert.match(
     await page.locator("h1").getAttribute("aria-label"),
-    /Thoughtful websites/,
+    /Custom websites/,
   );
   await page.goto(base + "/websites");
   assert.equal(await page.locator(".project-card").count(), 4);
