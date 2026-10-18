@@ -59,7 +59,7 @@ export function ConceptSite({ slug }: { slug: ConceptSlug }) {
     </div>
   </div>;
   return <main id="main-content" className={`concept-site concept-${slug}`}>
-    <div className="concept-ribbon"><Link href="/ai-websites"><ArrowLeft size={13} />{ui.back}</Link><span>{ui.concept} / {d.category}</span><span>{ui.independent}</span></div>
+    <div className="concept-ribbon"><Link href="/websites"><ArrowLeft size={13} />{ui.back}</Link><span>{ui.concept} / {d.category}</span><span>{ui.independent}</span></div>
     <header className="concept-header">
       <a className="concept-logo" href="#concept-top">{slug === "aster" && <span className="aster-mark" aria-hidden="true">✳</span>}{d.wordmark}{slug === "vanta" && <small>MOTORS</small>}{slug === "kovo" && <small>STUDIO / ARCHITECTURE</small>}</a>
       <nav id="concept-navigation" className={menu ? "concept-nav is-open" : "concept-nav"} aria-label={`${d.name} navigation`}>
@@ -126,7 +126,7 @@ export function ConceptSite({ slug }: { slug: ConceptSlug }) {
         {summary && <div className="concept-summary" role="status"><span className="concept-kicker">{ui.demo}</span><p>{summary.text}</p><strong>{summary.details}</strong><button type="button" onClick={() => setSummary(null)}>{ui.reset}<ArrowRight size={14} /></button></div>}
       </form>
     </section>
-    <footer className="concept-footer"><div><a className="concept-logo" href="#concept-top">{d.wordmark}</a><p>{d.footer}</p></div><div><span>{ui.footer}</span><Link href="/ai-websites">{ui.back}<ArrowUpRight size={16} /></Link></div></footer>
+    <footer className="concept-footer"><div><a className="concept-logo" href="#concept-top">{d.wordmark}</a><p>{d.footer}</p></div><div><span>{ui.footer}</span><Link href="/websites">{ui.back}<ArrowUpRight size={16} /></Link></div></footer>
   </main>;
 }
 

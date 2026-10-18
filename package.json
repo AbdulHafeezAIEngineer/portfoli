@@ -33,6 +33,7 @@
     "test:finishing:browser": "node tests/finishing.browser.mjs",
     "test:login-fields:browser": "node tests/login-fields.browser.mjs",
     "test:video-motion:browser": "node tests/video-motion.browser.mjs",
+    "test:testimonials:browser": "node tests/testimonials-floating.browser.mjs",
     "test:reviews:browser": "node tests/review-motion.browser.mjs",
     "test:showcase:browser": "node tests/showcase-videos.browser.mjs",
     "images:previews": "node scripts/generate-image-previews.mjs",

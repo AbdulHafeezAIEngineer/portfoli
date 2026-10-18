@@ -35,7 +35,7 @@ try {
     );
     for (const name of ["work-showcase", "ai-bot"]) {
       await page.goto(
-        base + (name === "work-showcase" ? "/ai-websites" : "/ai-bots"),
+        base + (name === "work-showcase" ? "/websites" : "/ai-bots"),
       );
       const banner = page.locator(`[data-showcase-video="${name}"]`);
       await banner.scrollIntoViewIfNeeded();

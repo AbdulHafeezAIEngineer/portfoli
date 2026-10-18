@@ -4,12 +4,11 @@ const base = process.env.PUBLIC_TEST_URL || "http://127.0.0.1:3008";
 if (!/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(base))
   throw Error("Local app required");
 const routes = [
-  ["/ai-websites", "#work", ".project-card", 4],
+  ["/websites", "#work", ".project-card", 4],
   ["/ai-bots", "#ai-bots", ".bot-card", 4],
   ["/bunch-of-work", "#work-bunch", ".dome-tile", 54],
   ["/about", "#experience"],
   ["/journey", "#journey"],
-  ["/technical-domains", "#fundamentals", ".domain-card", 5],
   ["/skills", "#skills"],
   ["/certificates", "#certification"],
   ["/testimonials", "#testimonials", ".testimonial-card", 4],
@@ -79,11 +78,18 @@ try {
       3,
     );
     assert.equal(await page.locator(".compact-footer").count(), 0);
+    assert.equal(
+      await page
+        .getByRole("link", { name: "AI Websites", exact: true })
+        .count(),
+      0,
+    );
+    assert.equal((await page.locator('a[href="/websites"]').count()) > 0, true);
     for (const [path, id, selector, count] of routes) {
       // Navigate through an actual link so route effects and persisted preferences are exercised.
       // Exercise the actual header for principal pages and ordered About tabs for profile pages.
       const principal = [
-        "/ai-websites",
+        "/websites",
         "/ai-bots",
         "/bunch-of-work",
         "/about",
@@ -147,8 +153,24 @@ try {
         await page.locator(".editorial-footer .footer-emblem").count(),
         1,
       );
-      if (path === "/ai-websites") {
+      if (path === "/websites") {
         assert.ok(await page.locator("#workflow").isVisible());
+        assert.equal(
+          await page.locator("#fundamentals .domain-card").count(),
+          5,
+        );
+        assert.equal(
+          await page
+            .locator("#fundamentals-title")
+            .evaluate((el) => el.tagName),
+          "H2",
+        );
+        assert.ok(
+          await page
+            .getByRole("navigation", { name: "Websites sections", exact: true })
+            .getByRole("link", { name: "Technical Domains", exact: true })
+            .count(),
+        );
         assert.equal(await page.locator("#workflow .workflow-step").count(), 5);
         assert.ok(
           await page
@@ -180,24 +202,38 @@ try {
             "none",
           );
       }
+      if (path === "/skills") {
+        const headings = await page
+          .locator(".toolkit-row h3")
+          .allTextContents();
+        assert.match(headings[0], /Web interfaces/);
+        assert.match(headings[1], /APIs & data/);
+        assert.match(headings[2], /Development tools/);
+        assert.ok(
+          (await page.locator(".tool-marquee").innerText()).indexOf("React") <
+            (await page.locator(".tool-marquee").innerText()).indexOf("Claude"),
+        );
+      }
       if (path === "/about") {
+        assert.match(
+          await page.locator(".about-story").innerText(),
+          /AI is a powerful tool/,
+        );
+        assert.match(
+          await page.locator(".about-story").innerText(),
+          /databases and deployment/,
+        );
         assert.equal(
           await page.locator(".domain-card").count(),
           0,
-          "Domains have their own page",
+          "Domains belong beneath website content",
         );
         assert.deepEqual(
           await page
             .getByRole("navigation", { name: "About Me pages" })
             .getByRole("link")
             .allTextContents(),
-          [
-            "About Me",
-            "My Journey",
-            "Technical Domains",
-            "Skills & Tools",
-            "Certificates",
-          ],
+          ["About Me", "My Journey", "Skills & Tools", "Certificates"],
         );
       }
       if (path === "/ai-bots") {
@@ -251,7 +287,7 @@ try {
       });
       await menu.click();
       const mobile = page.locator("#mobile-navigation");
-      assert.equal(await mobile.getByRole("link").count(), 12);
+      assert.equal(await mobile.getByRole("link").count(), 11);
       await page.keyboard.press("Escape");
       assert.equal(await menu.getAttribute("aria-expanded"), "false");
       assert.ok(await menu.evaluate((el) => el === document.activeElement));
@@ -267,7 +303,7 @@ try {
         exact: true,
       });
       await button.click();
-      assert.equal(await page.locator("#about-navigation a").count(), 5);
+      assert.equal(await page.locator("#about-navigation a").count(), 4);
       await page.keyboard.press("Escape");
       assert.equal(await button.getAttribute("aria-expanded"), "false");
       await button.click();
@@ -279,10 +315,10 @@ try {
     }
     await page.getByLabel("Animation preference").selectOption("reduced");
     await page
-      .locator('.footer-quick-links a[href="/ai-websites"]')
+      .locator('.footer-quick-links a[href="/websites"]')
       .first()
       .click();
-    await page.waitForURL("**/ai-websites");
+    await page.waitForURL("**/websites");
     assert.equal(
       await page.getByLabel("Animation preference").inputValue(),
       "reduced",
@@ -325,19 +361,23 @@ try {
         "none",
       );
     }
+    await page.goto(base + "/ai-websites");
+    await page.waitForURL("**/websites");
+    await page.goto(base + "/technical-domains");
+    await page.waitForURL("**/websites#fundamentals");
     await page.goto(base + "/#work");
-    await page.waitForURL("**/ai-websites");
+    await page.waitForURL("**/websites");
     await page.goto(base + "/#embed-methods");
     await page.waitForURL("**/ai-bots#embed-methods");
     await page.goto(base + "/how-i-build");
-    await page.waitForURL("**/ai-websites#workflow");
+    await page.waitForURL("**/websites#workflow");
     await page.goto(base + "/ai-bots/how-i-embed-bots");
     await page.waitForURL("**/ai-bots#embed-methods");
     assert.deepEqual(errors, []);
     assert.deepEqual(external, []);
     await page.close();
     console.log(
-      `PASS ${width}px: 11 subject pages, real navigation, isolated content, canonical URLs, clean previews, theme layout, keyboard menus, saved Motion Off, mobile 3D and legacy links.`,
+      `PASS ${width}px: 10 subject pages, real navigation, isolated content, canonical URLs, clean previews, theme layout, keyboard menus, saved Motion Off, mobile 3D and legacy links.`,
     );
   }
   const page = await b.newPage({ javaScriptEnabled: false });

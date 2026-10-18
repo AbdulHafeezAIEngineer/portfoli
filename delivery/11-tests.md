@@ -1819,7 +1819,7 @@ try {
     page.on("pageerror", (e) => errors.push(e.message));
     await page.goto(base);
     await page.getByRole("button", { name: "Reject All", exact: true }).click();
-    await page.goto(base + "/ai-websites");
+    await page.goto(base + "/websites");
     assert.equal(await page.getByRole("tab").count(), 0);
     assert.equal(
       await page
@@ -1933,7 +1933,7 @@ try {
       await page
         .getByRole("link", { name: "Back to website", exact: true })
         .click();
-      await page.waitForURL("**/ai-websites");
+      await page.waitForURL("**/websites");
     }
     await page.goto(base + "/studies/noma");
     await page
@@ -1989,7 +1989,7 @@ try {
       2,
     );
     for (const path of [
-      "/ai-websites",
+      "/websites",
       "/ai-bots",
       "/about",
       "/skills",
@@ -2077,7 +2077,7 @@ try {
     await page.locator("h1").getAttribute("aria-label"),
     /Thoughtful websites/,
   );
-  await page.goto(base + "/ai-websites");
+  await page.goto(base + "/websites");
   assert.equal(await page.locator(".project-card").count(), 4);
   await page.goto(base + "/contact");
   assert.ok(await page.locator("#contact").innerText());
@@ -2125,7 +2125,7 @@ try {
       .querySelector("[data-parallax=hero]")
       ?.style.getPropertyValue("--image-drift"),
   );
-  await page.goto(base + "/ai-websites");
+  await page.goto(base + "/websites");
   await page
     .getByRole("button", { name: /^View screenshots:/ })
     .first()
@@ -2456,12 +2456,11 @@ const base = process.env.PUBLIC_TEST_URL || "http://127.0.0.1:3008";
 if (!/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(base))
   throw Error("Local app required");
 const routes = [
-  ["/ai-websites", "#work", ".project-card", 4],
+  ["/websites", "#work", ".project-card", 4],
   ["/ai-bots", "#ai-bots", ".bot-card", 4],
   ["/bunch-of-work", "#work-bunch", ".dome-tile", 54],
   ["/about", "#experience"],
   ["/journey", "#journey"],
-  ["/technical-domains", "#fundamentals", ".domain-card", 5],
   ["/skills", "#skills"],
   ["/certificates", "#certification"],
   ["/testimonials", "#testimonials", ".testimonial-card", 4],
@@ -2531,11 +2530,18 @@ try {
       3,
     );
     assert.equal(await page.locator(".compact-footer").count(), 0);
+    assert.equal(
+      await page
+        .getByRole("link", { name: "AI Websites", exact: true })
+        .count(),
+      0,
+    );
+    assert.equal((await page.locator('a[href="/websites"]').count()) > 0, true);
     for (const [path, id, selector, count] of routes) {
       // Navigate through an actual link so route effects and persisted preferences are exercised.
       // Exercise the actual header for principal pages and ordered About tabs for profile pages.
       const principal = [
-        "/ai-websites",
+        "/websites",
         "/ai-bots",
         "/bunch-of-work",
         "/about",
@@ -2599,8 +2605,24 @@ try {
         await page.locator(".editorial-footer .footer-emblem").count(),
         1,
       );
-      if (path === "/ai-websites") {
+      if (path === "/websites") {
         assert.ok(await page.locator("#workflow").isVisible());
+        assert.equal(
+          await page.locator("#fundamentals .domain-card").count(),
+          5,
+        );
+        assert.equal(
+          await page
+            .locator("#fundamentals-title")
+            .evaluate((el) => el.tagName),
+          "H2",
+        );
+        assert.ok(
+          await page
+            .getByRole("navigation", { name: "Websites sections", exact: true })
+            .getByRole("link", { name: "Technical Domains", exact: true })
+            .count(),
+        );
         assert.equal(await page.locator("#workflow .workflow-step").count(), 5);
         assert.ok(
           await page
@@ -2632,24 +2654,38 @@ try {
             "none",
           );
       }
+      if (path === "/skills") {
+        const headings = await page
+          .locator(".toolkit-row h3")
+          .allTextContents();
+        assert.match(headings[0], /Web interfaces/);
+        assert.match(headings[1], /APIs & data/);
+        assert.match(headings[2], /Development tools/);
+        assert.ok(
+          (await page.locator(".tool-marquee").innerText()).indexOf("React") <
+            (await page.locator(".tool-marquee").innerText()).indexOf("Claude"),
+        );
+      }
       if (path === "/about") {
+        assert.match(
+          await page.locator(".about-story").innerText(),
+          /AI is a powerful tool/,
+        );
+        assert.match(
+          await page.locator(".about-story").innerText(),
+          /databases and deployment/,
+        );
         assert.equal(
           await page.locator(".domain-card").count(),
           0,
-          "Domains have their own page",
+          "Domains belong beneath website content",
         );
         assert.deepEqual(
           await page
             .getByRole("navigation", { name: "About Me pages" })
             .getByRole("link")
             .allTextContents(),
-          [
-            "About Me",
-            "My Journey",
-            "Technical Domains",
-            "Skills & Tools",
-            "Certificates",
-          ],
+          ["About Me", "My Journey", "Skills & Tools", "Certificates"],
         );
       }
       if (path === "/ai-bots") {
@@ -2703,7 +2739,7 @@ try {
       });
       await menu.click();
       const mobile = page.locator("#mobile-navigation");
-      assert.equal(await mobile.getByRole("link").count(), 12);
+      assert.equal(await mobile.getByRole("link").count(), 11);
       await page.keyboard.press("Escape");
       assert.equal(await menu.getAttribute("aria-expanded"), "false");
       assert.ok(await menu.evaluate((el) => el === document.activeElement));
@@ -2719,7 +2755,7 @@ try {
         exact: true,
       });
       await button.click();
-      assert.equal(await page.locator("#about-navigation a").count(), 5);
+      assert.equal(await page.locator("#about-navigation a").count(), 4);
       await page.keyboard.press("Escape");
       assert.equal(await button.getAttribute("aria-expanded"), "false");
       await button.click();
@@ -2731,10 +2767,10 @@ try {
     }
     await page.getByLabel("Animation preference").selectOption("reduced");
     await page
-      .locator('.footer-quick-links a[href="/ai-websites"]')
+      .locator('.footer-quick-links a[href="/websites"]')
       .first()
       .click();
-    await page.waitForURL("**/ai-websites");
+    await page.waitForURL("**/websites");
     assert.equal(
       await page.getByLabel("Animation preference").inputValue(),
       "reduced",
@@ -2777,19 +2813,23 @@ try {
         "none",
       );
     }
+    await page.goto(base + "/ai-websites");
+    await page.waitForURL("**/websites");
+    await page.goto(base + "/technical-domains");
+    await page.waitForURL("**/websites#fundamentals");
     await page.goto(base + "/#work");
-    await page.waitForURL("**/ai-websites");
+    await page.waitForURL("**/websites");
     await page.goto(base + "/#embed-methods");
     await page.waitForURL("**/ai-bots#embed-methods");
     await page.goto(base + "/how-i-build");
-    await page.waitForURL("**/ai-websites#workflow");
+    await page.waitForURL("**/websites#workflow");
     await page.goto(base + "/ai-bots/how-i-embed-bots");
     await page.waitForURL("**/ai-bots#embed-methods");
     assert.deepEqual(errors, []);
     assert.deepEqual(external, []);
     await page.close();
     console.log(
-      `PASS ${width}px: 11 subject pages, real navigation, isolated content, canonical URLs, clean previews, theme layout, keyboard menus, saved Motion Off, mobile 3D and legacy links.`,
+      `PASS ${width}px: 10 subject pages, real navigation, isolated content, canonical URLs, clean previews, theme layout, keyboard menus, saved Motion Off, mobile 3D and legacy links.`,
     );
   }
   const page = await b.newPage({ javaScriptEnabled: false });
@@ -2913,6 +2953,18 @@ try {
           () => document.documentElement.scrollWidth <= innerWidth,
         ),
       );
+      if (!genuine) {
+        assert.equal(
+          await page.locator(".testimonial-sample-label").count(),
+          4,
+        );
+        assert.equal(
+          new Set(
+            await page.locator(".testimonial-card strong").allTextContents(),
+          ).size,
+          4,
+        );
+      }
       if (genuine)
         assert.match(
           await page.locator(".testimonial-card").first().innerText(),
@@ -2944,7 +2996,7 @@ const b = await chromium.launch({
 const results = [];
 try {
   for (const width of [1440, 390]) {
-    for (const route of ["/", "/ai-websites", "/bunch-of-work"]) {
+    for (const route of ["/", "/websites", "/bunch-of-work"]) {
       const p = await b.newPage({
         viewport: { width, height: 900 },
         isMobile: width < 768,
@@ -3534,7 +3586,7 @@ try {
     );
     for (const name of ["work-showcase", "ai-bot"]) {
       await page.goto(
-        base + (name === "work-showcase" ? "/ai-websites" : "/ai-bots"),
+        base + (name === "work-showcase" ? "/websites" : "/ai-bots"),
       );
       const banner = page.locator(`[data-showcase-video="${name}"]`);
       await banner.scrollIntoViewIfNeeded();
@@ -3608,6 +3660,209 @@ try {
       `PASS ${width}px / OS reduced ${osReduced}: both wide silent loops, no controls, actual loop wrap, Off/On, offscreen pause and consent intact.`,
     );
   }
+} finally {
+  await browser.close();
+}
+``````
+
+## tests/testimonials-floating.browser.mjs
+
+``````javascript
+import assert from "node:assert/strict";
+import { chromium } from "@playwright/test";
+const base = process.env.PUBLIC_TEST_URL || "http://127.0.0.1:3008";
+if (!/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(base))
+  throw Error("Local app required");
+const browser = await chromium.launch({
+  executablePath: "/usr/bin/chromium",
+  args: ["--no-sandbox"],
+});
+try {
+  for (const [width, osReduced] of [
+    [1440, false],
+    [390, false],
+    [390, true],
+  ]) {
+    const page = await browser.newPage({
+      viewport: { width, height: 900 },
+      isMobile: width < 768,
+      hasTouch: width < 768,
+      reducedMotion: osReduced ? "reduce" : "no-preference",
+    });
+    const errors = [],
+      external = [];
+    page.on("pageerror", (e) => errors.push(e.message));
+    page.on("request", (r) => {
+      if (!r.url().startsWith(base)) external.push(r.url());
+    });
+    await page.goto(base + "/testimonials");
+    await page.getByRole("button", { name: "Reject All", exact: true }).click();
+    await page.mouse.move(0, 0);
+    const scene = page.locator(".testimonial-scene");
+    await page.waitForFunction(
+      () =>
+        document.querySelector(".testimonial-scene").dataset
+          .testimonialsActive === "true",
+    );
+    assert.equal(await page.locator(".testimonial-float").count(), 4);
+    assert.equal(await page.locator(".testimonial-star").count(), 28);
+    assert.equal(await page.locator('[data-sample="true"]').count(), 4);
+    assert.match(
+      await page.locator(".testimonial-sample-note").innerText(),
+      /fictional profiles/,
+    );
+    assert.equal(
+      new Set(await page.locator(".testimonial-card strong").allTextContents())
+        .size,
+      4,
+    );
+    assert.equal(
+      await page
+        .locator('.testimonial-card img[src*="/avatars/demo-"]')
+        .count(),
+      4,
+    );
+    await page.waitForFunction(
+      () =>
+        [...document.querySelectorAll(".testimonial-avatar img")].every(
+          (img) => img.complete && img.naturalWidth > 0,
+        ),
+      null,
+      { polling: 100 },
+    );
+    const card = page.locator(".testimonial-float").first();
+    const star = page.locator(".testimonial-star").first();
+    const state = async (el) =>
+      el.evaluate((e) => ({
+        transform: getComputedStyle(e).transform,
+        play: getComputedStyle(e).animationPlayState,
+        animation: getComputedStyle(e).animationName,
+      }));
+    const before = await state(card),
+      starBefore = await state(star);
+    assert.equal(before.play, "running");
+    await page.waitForTimeout(500);
+    assert.notEqual(
+      (await state(card)).transform,
+      before.transform,
+      "Cards actually float",
+    );
+    assert.notEqual(
+      (await state(star)).transform,
+      starBefore.transform,
+      "Background actually moves",
+    );
+    const activate = async (button) =>
+      width < 768 ? button.tap() : button.click();
+    await activate(
+      page.getByRole("button", {
+        name: "Pause testimonial animations",
+        exact: true,
+      }),
+    );
+    await page.waitForFunction(
+      () =>
+        document.querySelector(".testimonial-scene").dataset
+          .testimonialsActive === "false",
+    );
+    const stopped = await state(card),
+      starStopped = await state(star);
+    assert.equal(stopped.play, "paused");
+    await page.waitForTimeout(250);
+    assert.equal((await state(card)).transform, stopped.transform);
+    assert.equal((await state(star)).transform, starStopped.transform);
+    await activate(
+      page.getByRole("button", {
+        name: "Resume testimonial animations",
+        exact: true,
+      }),
+    );
+    await page.mouse.move(0, 0);
+    await page.waitForFunction(
+      () =>
+        document.querySelector(".testimonial-scene").dataset
+          .testimonialsActive === "true",
+    );
+    if (width === 1440) {
+      const box = await card.boundingBox();
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      assert.equal(
+        (await state(card)).play,
+        "paused",
+        "Hover pauses for reading",
+      );
+      await page.mouse.move(0, 0);
+      assert.equal((await state(card)).play, "running");
+    }
+    for (const theme of ["light", "dark"]) {
+      await page.evaluate(
+        (t) => (document.documentElement.dataset.theme = t),
+        theme,
+      );
+      assert.ok(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth + 1,
+        ),
+      );
+    }
+    if (!osReduced)
+      await page.screenshot({
+        path: `docs/testimonials-floating-${width}.png`,
+        fullPage: true,
+      });
+    await page.getByLabel("Animation preference").selectOption("reduced");
+    assert.equal((await state(card)).animation, "none");
+    assert.equal((await state(star)).animation, "none");
+    assert.ok(
+      await page
+        .getByRole("button", {
+          name: "Pause testimonial animations",
+          exact: true,
+        })
+        .isDisabled(),
+    );
+    await page.getByLabel("Animation preference").selectOption("full");
+    await page.evaluate(() =>
+      scrollTo({
+        top: document.querySelector(".editorial-footer").offsetTop + 180,
+        behavior: "instant",
+      }),
+    );
+    await page.waitForFunction(
+      () =>
+        document.querySelector(".testimonial-scene").dataset
+          .testimonialsActive === "false",
+    );
+    assert.equal((await state(card)).play, "paused");
+    assert.equal((await state(star)).play, "paused");
+    await scene.scrollIntoViewIfNeeded();
+    await page.waitForFunction(
+      () =>
+        document.querySelector(".testimonial-scene").dataset
+          .testimonialsActive === "true",
+    );
+    assert.deepEqual(errors, []);
+    assert.deepEqual(external, []);
+    await page.close();
+    console.log(
+      `PASS ${width}px / OS reduced ${osReduced}: labeled fictional profiles, local portraits, moving cards/background, pause/resume, hover, global Off, visible-only activity and no overflow or external requests.`,
+    );
+  }
+  const page = await browser.newPage({ javaScriptEnabled: false });
+  await page.goto(base + "/testimonials");
+  assert.equal(await page.locator(".testimonial-card").count(), 4);
+  assert.ok(await page.locator(".testimonial-card").first().isVisible());
+  assert.equal(
+    await page
+      .locator(".testimonial-float")
+      .first()
+      .evaluate((e) => getComputedStyle(e).animationPlayState),
+    "paused",
+  );
+  await page.close();
+  console.log(
+    "PASS no-JavaScript testimonial content remains visible and static.",
+  );
 } finally {
   await browser.close();
 }

@@ -1,9 +1,9 @@
 export const studio = {
   services: {
     eyebrow: "WHAT I CAN HELP YOU BUILD",
-    title: "Websites + AI.\nBuilt with purpose.",
+    title: "Design + Development.\nBuilt with purpose.",
     intro:
-      "Design, development and useful AI—connected around what your business actually needs.",
+      "Website design, development and practical integrations—shaped around what your business actually needs.",
     action: "Let's discuss your project",
     more: "Let's talk",
     items: [
@@ -31,14 +31,14 @@ export const studio = {
       },
       {
         id: "automation",
-        title: "AI Automation & Integrations",
+        title: "Automation & Integrations",
         description:
-          "I connect AI tools to websites and business workflows through APIs and webhooks, helping reduce repetitive tasks with practical, clearly scoped automation.",
+          "I connect websites and business services through APIs and webhooks, helping reduce repetitive tasks with practical, clearly scoped automation.",
         tags: [
           "API connections",
           "Form-to-inbox flows",
           "Lead routing",
-          "AI-assisted replies",
+          "Validated workflows",
         ],
         detail:
           "The right connection, with validation and human review where it matters.",
@@ -82,14 +82,14 @@ export const studio = {
       {
         title: "Build & Connect",
         description:
-          "I turn the design into a responsive website and connect the services it needs. For selected tasks, we use our own custom-trained AI assistants grounded in approved project information, with human review. Chatbots, voice and lead capture are added when they serve the project.",
-        note: "Custom AI where it adds value",
+          "I build the interface with React, Next.js, TypeScript and Tailwind CSS, then connect APIs, data and the services the website needs. AI assists with selected tasks and is always reviewed. Chatbots, voice and lead capture are added when they serve the project.",
+        note: "The right tools, carefully applied",
         icon: "build",
       },
       {
         title: "Test & Refine",
         description:
-          "I test the website on mobile and desktop, checking navigation, forms, accessibility and performance. Any custom AI features are reviewed too, and the details are refined before launch.",
+          "I test the website on mobile and desktop, checking navigation, forms, accessibility and performance. Optional assistant features are reviewed too, and the details are refined before launch.",
         note: "Care lives in the details",
         icon: "test",
       },
@@ -107,7 +107,7 @@ export const studio = {
     title: "From a Curious Kid\nto an Independent Developer",
     displayTitle: "MY\nJOURNEY.",
     intro:
-      "My journey began with curiosity: exploring different fields, learning the basics of Python, and experimenting with AI tools to understand what technology could make possible. Over time, I found myself drawn to web development—the ability to turn an idea into something people can actually use.",
+      "My journey began with curiosity: exploring different fields, learning the basics of Python, and experimenting with web technologies to understand what technology could make possible. Over time, I found myself drawn to web development—the ability to turn an idea into something people can actually use.",
     note: "Still curious. Always building.",
     chapters: [
       {
@@ -115,7 +115,7 @@ export const studio = {
         label: "CURIOSITY → CRAFT",
         phase: "Foundations",
         points: [
-          "Explored Python and AI tools",
+          "Explored Python and web technologies",
           "Learned through building and experimentation",
           "Found a direction in web development",
         ],
@@ -152,21 +152,69 @@ export const studio = {
         phase: "In progress",
         points: [
           "Working toward an independent startup",
-          "Bringing web development and AI together",
+          "Bringing creative direction and development together",
           "Continuing to learn, build and improve",
         ],
         description:
-          "Today, I'm working toward building my own independent startup, combining my interest in web development and AI to create useful digital products. What started as curiosity has grown into a journey of learning, building, and creating something of my own.",
+          "Today, I'm working toward building my own independent startup, combining design, web development and useful integrations to create practical digital products. What started as curiosity has grown into a journey of learning, building, and creating something of my own.",
       },
     ],
   },
   tools: {
-    eyebrow: "HUMAN DIRECTION. INTELLIGENT TOOLS.",
+    eyebrow: "DESIGN JUDGMENT. PRACTICAL TOOLS.",
     title: "CREATIVE\nTOOLKIT.",
     intro:
-      "AI can accelerate an idea. Clear prompts, technical understanding, testing and thoughtful refinement turn it into useful work.",
+      "React, Next.js, TypeScript and a practical engineering stack form the foundation. AI assists with selected tasks; design judgment, testing and the final decisions stay human.",
     note: "Tools in the creative and development toolkit; selected to suit each project. Product names belong to their respective owners. No partnership or certification is implied.",
     items: [
+      {
+        name: "React",
+        mark: "R",
+        purpose: "Component-based interfaces",
+        color: "var(--text)",
+      },
+      {
+        name: "Next.js",
+        mark: "N",
+        purpose: "Web application framework",
+        color: "var(--text)",
+      },
+      {
+        name: "TypeScript",
+        mark: "TS",
+        purpose: "Typed application code",
+        color: "var(--text)",
+      },
+      {
+        name: "Tailwind CSS",
+        mark: "TW",
+        purpose: "Responsive interface styling",
+        color: "var(--text)",
+      },
+      {
+        name: "Git",
+        mark: "Git",
+        purpose: "Version control",
+        color: "var(--text)",
+      },
+      {
+        name: "GitHub",
+        mark: "GH",
+        purpose: "Code collaboration",
+        color: "var(--text)",
+      },
+      {
+        name: "Prisma",
+        mark: "P",
+        purpose: "Typed data access",
+        color: "var(--text)",
+      },
+      {
+        name: "PostgreSQL",
+        mark: "PG",
+        purpose: "Structured application data",
+        color: "var(--text)",
+      },
       {
         name: "Claude",
         mark: "✳︎",
@@ -200,20 +248,8 @@ export const studio = {
       {
         name: "OpenAI API",
         mark: "API",
-        purpose: "AI inside the product",
+        purpose: "Optional assistant integrations",
         color: "#e4cc88",
-      },
-      {
-        name: "Next.js",
-        mark: "N",
-        purpose: "Web application framework",
-        color: "#f5f5f5",
-      },
-      {
-        name: "GitHub",
-        mark: "GH",
-        purpose: "Code & version control",
-        color: "#f5f5f5",
       },
     ],
   },
@@ -237,17 +273,17 @@ export const studio = {
     eyebrow: "YOUR IDEA DESERVES A THOUGHTFUL HOME",
     title: "Let's make\nsomething matter.",
     description:
-      "A website with character. AI with a purpose. An experience worth coming back to.",
+      "A website with character. Engineering with purpose. An experience worth coming back to.",
     action: "Tell me what you have in mind",
     signature:
-      "Thoughtful websites and useful AI experiences, designed around people and the businesses they build.",
+      "Thoughtful websites and useful digital experiences, designed around people and the businesses they build.",
     navigation: "/Quick links",
     navLinks: [
       { label: "Home", href: "/" },
       { label: "Services", href: "/services" },
-      { label: "Work", href: "/ai-websites" },
+      { label: "Work", href: "/websites" },
       { label: "About Me", href: "/about" },
-      { label: "Workflow", href: "/ai-websites#workflow" },
+      { label: "Workflow", href: "/websites#workflow" },
       { label: "Contact", href: "/contact" },
     ],
     connect: "/Contact",

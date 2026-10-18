@@ -33,7 +33,7 @@ try {
       2,
     );
     for (const path of [
-      "/ai-websites",
+      "/websites",
       "/ai-bots",
       "/about",
       "/skills",
@@ -121,7 +121,7 @@ try {
     await page.locator("h1").getAttribute("aria-label"),
     /Thoughtful websites/,
   );
-  await page.goto(base + "/ai-websites");
+  await page.goto(base + "/websites");
   assert.equal(await page.locator(".project-card").count(), 4);
   await page.goto(base + "/contact");
   assert.ok(await page.locator("#contact").innerText());

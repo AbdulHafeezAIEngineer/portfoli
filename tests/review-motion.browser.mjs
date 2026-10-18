@@ -95,6 +95,18 @@ try {
           () => document.documentElement.scrollWidth <= innerWidth,
         ),
       );
+      if (!genuine) {
+        assert.equal(
+          await page.locator(".testimonial-sample-label").count(),
+          4,
+        );
+        assert.equal(
+          new Set(
+            await page.locator(".testimonial-card strong").allTextContents(),
+          ).size,
+          4,
+        );
+      }
       if (genuine)
         assert.match(
           await page.locator(".testimonial-card").first().innerText(),

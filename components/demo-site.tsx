@@ -26,7 +26,7 @@ export function DemoSite({ slug }: { slug: DemoSlug }) {
   return (
     <main id="main-content" className={`demo-site demo-${slug}`}>
       <div className="demo-concept-bar">
-        <Link href="/ai-websites">
+        <Link href="/websites">
           <ArrowLeft size={12} />
           {ui.back}
         </Link>
@@ -288,7 +288,7 @@ export function DemoSite({ slug }: { slug: DemoSlug }) {
           {d.name}
         </a>
         <p>{d.note}</p>
-        <Link href="/ai-websites">
+        <Link href="/websites">
           {ui.back}
           <ArrowRight size={15} />
         </Link>

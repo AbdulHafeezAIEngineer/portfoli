@@ -2,7 +2,7 @@
 
 Generated from the current checkout. Private environment values, Git metadata, dependencies and build artifacts are excluded. Binary assets remain in the repository/ZIP; text sections provide their hashes.
 
-Next.js 15.5.28 is the owner-approved upgrade. Public content defaults to files; durable inquiries can be enabled separately. Run reviewed migrations and `npm run admin:bootstrap` with private settings to create the first administrator. `SEED_CONTENT=demo npm run db:seed` is development-only and refuses production. Genuine reviews require publication permission; no invented feedback is shown.
+Next.js 15.5.28 is the owner-approved upgrade. Public content defaults to files; durable inquiries can be enabled separately. Run reviewed migrations and `npm run admin:bootstrap` with private settings to create the first administrator. `SEED_CONTENT=demo npm run db:seed` is development-only and refuses production. Genuine reviews require publication permission; fictional design samples are visibly labeled and never presented as client endorsements.
 
 See [verification](../VERIFICATION.md), [deployment](../DEPLOYMENT.md), [security status](../SECURITY_STATUS.md) and [audit](../AGENCY_AUDIT.md). Production dependency audit is clean; an upstream development-tool finding remains. Local tests do not prove live provider/deployment success.
 
@@ -85,6 +85,7 @@ app/technical-domains/page.tsx
 app/terms/page.tsx
 app/testimonials/page.tsx
 app/theme-tokens.css
+app/websites/page.tsx
 app/work/[slug]/page.tsx
 components/AiBotVideo.tsx
 components/VisibilityVideo.tsx
@@ -133,6 +134,7 @@ components/site-shell.tsx
 components/skills.tsx
 components/social-links.tsx
 components/studio-sections.tsx
+components/testimonial-scene.tsx
 components/testimonials.tsx
 components/text-reveal.tsx
 components/tool-mark.tsx
@@ -161,6 +163,7 @@ data/site.ts
 data/skills.ts
 data/studies.ts
 data/studio.ts
+data/testimonial-samples.ts
 data/theme-tokens.json
 data/tool-marks.ts
 docs/BRIEF_COMPLETION.md
@@ -172,6 +175,7 @@ docs/READY_PLAYBACK_UPDATE.md
 docs/RESTORED_HOMEPAGE.md
 docs/SHOWCASE_UPDATE.md
 docs/VIDEO_MOTION_UPDATE.md
+docs/WEBSITES_TESTIMONIALS.md
 docs/about-preview.png
 docs/agency-about-desktop.png
 docs/agency-about-mobile.png
@@ -299,6 +303,18 @@ docs/studio-tools-preview.png
 docs/studio-wall-of-love-preview.png
 docs/studio-work-bunch-preview.png
 docs/studio-workflow-preview.png
+docs/testimonials-floating-1440.png
+docs/testimonials-floating-390.png
+docs/web-positioning-about-1440.png
+docs/web-positioning-about-390.png
+docs/web-positioning-home-1440.png
+docs/web-positioning-home-390.png
+docs/web-positioning-skills-1440.png
+docs/web-positioning-skills-390.png
+docs/web-positioning-websites-1440.png
+docs/web-positioning-websites-390.png
+docs/websites-testimonials-accessibility.json
+docs/websites-testimonials-readiness.json
 docs/workflow-1440-dark.png
 docs/workflow-1440-light.png
 docs/workflow-390-light.png
@@ -347,6 +363,10 @@ prisma/migrations/202610170001_agency_content_and_leads/migration.sql
 prisma/migrations/migration_lock.toml
 prisma/schema.prisma
 prisma/seed.ts
+public/avatars/demo-ethan.svg
+public/avatars/demo-maya.svg
+public/avatars/demo-nora.svg
+public/avatars/demo-omar.svg
 public/certificates/coursiv-master-of-chatgpt.webp
 public/certificates/prompt-engineering-placeholder.png
 public/concepts/aster-hero.webp
@@ -457,6 +477,7 @@ tests/review-motion.browser.mjs
 tests/scroll-readiness.browser.mjs
 tests/security.test.mjs
 tests/showcase-videos.browser.mjs
+tests/testimonials-floating.browser.mjs
 tests/video-motion.browser.mjs
 tsconfig.json
 types/gmail-smtp.d.ts

@@ -24,7 +24,7 @@ export function Hero() {
           <ReadingText className="hero-intro" text={site.hero.intro} />
           <p className="hero-tagline">{site.hero.tagline}</p>
           <div className="hero-actions">
-            <a href="/ai-websites" className="button button-gold">
+            <a href="/websites" className="button button-gold">
               {site.hero.primary}
               <ArrowDownRight size={18} aria-hidden="true" />
             </a>
@@ -60,7 +60,7 @@ export function Hero() {
           </div>
         </div>
         <a
-          href="/ai-websites"
+          href="/websites"
           className="scroll-link"
           aria-label={site.hero.primary}
         >

@@ -92,24 +92,23 @@ For smoothness review, open Chrome Performance on a production build, use mobile
 ``````md
 # Categorized Elvora portfolio
 
-The homepage now has a purpose-led, monochrome introduction and large visual previews. Eleven subject pages organize the site. Website and bot processes live with their respective projects and demos. See the [latest correction and previews](RESTORED_HOMEPAGE.md). Header navigation is consistent, route-aware and keyboard accessible, with a grouped About menu and a scrollable secondary tab row. Mobile navigation contains every category and closes after navigation or Escape.
+The homepage has a purpose-led, monochrome introduction and large visual previews. Ten subject pages organize the site. Website and bot processes live with their respective projects and demos. Technical Domains belongs below website content. See the [latest changes and previews](WEBSITES_TESTIMONIALS.md). Header navigation is route-aware and keyboard accessible, with a grouped About menu and a scrollable secondary tab row. Mobile navigation contains every page category and closes after navigation or Escape.
 
-| Page | Route | Content |
-| --- | --- | --- |
-| Home | `/` | Purpose-led introduction, original logo motion and visual subject previews |
-| AI Websites | `/ai-websites` | Wide looping showcase, four concepts, interactive demos, screenshot galleries and How I Build Websites |
-| AI Bots | `/ai-bots` | Looping bot video, bot demos, How I Build Bots and all embedding methods; provider consent retained |
-| Bunch of Work | `/bunch-of-work` | Larger original 54-tile curved wall and accessible project index |
-| About Me | `/about` | Original Elvora artwork and personal introduction |
-| My Journey | `/journey` | Existing chapters, in their original order |
-| Technical Domains | `/technical-domains` | Frontend, APIs, data, deployment and AI domains |
-| Skills & Tools | `/skills` | Existing categorized toolkit and tools marquee |
-| Certificates | `/certificates` | Original documents and functional zoom viewer |
-| Testimonials | `/testimonials` | Dedicated editorial card layout; published, permission-approved reviews only |
-| Services | `/services` | Existing service scopes and detail links |
-| Contact | `/contact` | Existing inquiry form, direct contact and native/enhanced FAQs |
+| Page           | Route            | Content                                                                                                                   |
+| -------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Home           | `/`              | Purpose-led introduction, original logo motion and visual subject previews                                                |
+| Websites       | `/websites`      | Wide looping showcase, four concepts, interactive demos, screenshot galleries, How I Build Websites and Technical Domains |
+| AI Bots        | `/ai-bots`       | Looping bot video, bot demos, How I Build Bots and all embedding methods; provider consent retained                       |
+| Bunch of Work  | `/bunch-of-work` | Larger original 54-tile curved wall and accessible project index                                                          |
+| About Me       | `/about`         | Original Elvora artwork and personal introduction                                                                         |
+| My Journey     | `/journey`       | Existing chapters, in their original order                                                                                |
+| Skills & Tools | `/skills`        | Existing categorized toolkit and tools marquee                                                                            |
+| Certificates   | `/certificates`  | Original documents and functional zoom viewer                                                                             |
+| Testimonials   | `/testimonials`  | Dedicated editorial card layout; published, permission-approved reviews only                                              |
+| Services       | `/services`      | Existing service scopes and detail links                                                                                  |
+| Contact        | `/contact`       | Existing inquiry form, direct contact and native/enhanced FAQs                                                            |
 
-The About tab sequence is About Me → My Journey → Technical Domains → Skills & Tools → Certificates. AI Websites and AI Bots have local section links to their processes. The original full footer design is restored; old `/#work`, `/#embed-methods` and other former section links redirect to their new destinations. The former `/how-i-build` and `/ai-bots/how-i-embed-bots` routes redirect to the appropriate parent-page section. Canonical metadata and sitemap list actual subject pages. Existing service, project-note, interactive demo, design-study, legal and private admin URLs remain available.
+The About tab sequence is About Me → My Journey → Skills & Tools → Certificates. Websites and AI Bots have local section links to their processes. Websites also links to Technical Domains. The original full footer design remains; old `/#work`, `/#embed-methods` and other former section links redirect to their destinations. `/ai-websites` redirects to `/websites`; `/technical-domains` redirects to `/websites#fundamentals`. The former `/how-i-build` and `/ai-bots/how-i-embed-bots` routes redirect to the appropriate parent-page section. Canonical metadata and sitemap list actual subject pages. Existing service, project-note, interactive demo, design-study, legal and private admin URLs remain available.
 
 ## Clean previews and mobile motion
 
@@ -119,28 +118,29 @@ Touch previews no longer disable animation. Visible cards float gently and their
 
 Original project art, custom demo colors, 54-tile collection order/geometry, media sources, forms, cookie storage, Botpress permissions and private credentials are preserved. Route transitions rescan reading, reveal and marquee/parallax enhancements. Public text and images remain ready without scroll-triggered mounting.
 
-No real testimonials were supplied to file mode. Layout samples are visibly labeled; genuine approved CMS records replace the samples, with no fabricated clients or copied endorsements.
+No real testimonials were supplied to file mode. Fictional illustrative reviews and original illustrated profile avatars are visibly labeled as design examples, not client endorsements. Genuine approved CMS records replace the samples. Floating cards and background particles work on mobile and desktop, with local pause and global Motion Off.
 
 ## Verification
 
 - `npm run build` (includes lint and TypeScript), `npm run lint`, `npm run typecheck`: passed.
-- `test:pages:browser`: all eleven subject routes at 390/1440px, isolated content, real route links, canonical URLs, inline processes, restored footer, ordered tabs, keyboard menus, saved Motion Off, mobile 3D, legacy redirects, server-rendered content and sitemap.
+- `test:pages:browser`: all ten subject routes at 390/1440px, isolated content, real route links, canonical URLs, inline processes/domains, restored footer, ordered tabs, keyboard menus, saved Motion Off, mobile 3D, legacy redirects, server-rendered content and sitemap.
 - `test:motion:browser`: 360, 390, 768, 1024, 1440, 1920px; both themes, native touch, default On, saved Off and contact validation.
 - `test:showcase:browser`: native playback and actual looping for both videos, desktop/mobile sources, muted/inline/no controls, global Off/On, offscreen pause and consent.
 - `test:windows:browser`: all four interactive concepts, mobile/desktop frames, maximize/Escape/back, nested scrolling, forms/reset and retained study routes.
 - `test:finishing:browser`, `test:video-motion:browser`, `test:reviews:browser`: screenshot/certificate dialogs, FAQ keyboard/reversal/no-JS behavior, logo flip/shine, reversible word emphasis, stable text geometry, genuine-review replacement and labeled previews.
 - Consent, contact, chat and security: 46 tests passed; no optional provider traffic during public browser checks.
-- [12 current WCAG A/AA scans](restored-accessibility.json): home, website and bot pages including the restored footer and inline processes; both themes at 390/1440px, zero violations.
-- [Current scroll/loading observations](restored-scroll-readiness.json): home, website and collection pages at 390/1440px. Each page's images are loaded before scrolling; no image/component-script requests start during the measured scroll. Frame observations are from headless Chromium, not a physical-device FPS guarantee.
+- `test:testimonials:browser`: actual card/background transforms, local portraits, labels, pause/resume, hover pause, OS preference with explicit site On, global Off, offscreen activity and no-JavaScript content.
+- [20 current WCAG A/AA scans](websites-testimonials-accessibility.json): home, websites, About, Skills and Testimonials; both themes at 390/1440px, zero violations.
+- [Current scroll/loading observations](websites-testimonials-readiness.json): home, website and collection pages at 390/1440px. Each page's images are loaded before scrolling; no image/component-script requests start during the measured scroll. Frame observations are from headless Chromium, not a physical-device FPS guarantee.
 
 Local validation does not establish live Vercel deployment, real owner login or provider delivery. No credentials or hosting settings were modified.
 
 ## Previews
 
-- [Desktop home](pages-home-1440.png) · [Mobile home](pages-home-390.png)
-- [Desktop websites](pages-ai-websites-1440.png) · [Mobile unboxed previews](pages-ai-websites-390.png)
+- [Desktop home](web-positioning-home-1440.png) · [Mobile home](web-positioning-home-390.png)
+- [Desktop websites](web-positioning-websites-1440.png) · [Mobile unboxed previews](web-positioning-websites-390.png)
 - [Desktop collection](pages-bunch-of-work-1440.png) · [Mobile collection](pages-bunch-of-work-390.png)
-- [Desktop Testimonials](pages-testimonials-1440.png) · [Mobile Testimonials](pages-testimonials-390.png)
+- [Desktop Testimonials](testimonials-floating-1440.png) · [Mobile Testimonials](testimonials-floating-390.png)
 ``````
 
 ## docs/EDITORIAL_UPGRADE.md
@@ -550,6 +550,66 @@ npm run test:reviews:browser
 ```
 
 These are local checks, not proof of physical-device 60fps, a fresh Lighthouse score, a working live owner account or successful Vercel production deployment. No credentials, database records or authenticator settings were changed.
+``````
+
+## docs/WEBSITES_TESTIMONIALS.md
+
+``````md
+# Website positioning, About copy and floating Testimonials
+
+The site presents website design and development as the main service. Websites replaces AI Websites in public navigation and copy. Its canonical route is `/websites`; `/ai-websites` permanently redirects there. Website projects, How I Build Websites and Technical Domains appear together in that order. `/technical-domains` redirects to `/websites#fundamentals`, and `/how-i-build` redirects to `/websites#workflow`.
+
+About tabs are About Me → My Journey → Skills & Tools → Certificates. AI Bots retains its name, demos, building process and embedding instructions. The full footer, original device artwork, custom demo designs, curved photo collection, video sources/playback, cookie choices and Botpress permissions remain intact.
+
+## Copy and tools
+
+The homepage, metadata, services introduction, journey, footer and About copy lead with design, code and engineering. React, Next.js, TypeScript, Tailwind CSS, Git, GitHub, Prisma and PostgreSQL lead the tools marquee. Skills categories begin with Web interfaces, APIs & data and Development tools. Display labels describe AI as assistance; internal category identifiers are preserved for existing CMS records.
+
+The revised About text includes:
+
+> AI is a powerful tool, but having access to it is only the beginning. Using it well takes experience, clear instructions and the judgment to question, test and improve what it produces. A convincing first draft still needs someone who understands how a website actually works.
+
+> I bring an understanding of the frontend, backend, databases and deployment, together with practical coding foundations. That knowledge helps me guide the tools, connect the pieces and refine the details. Combined with my own creativity and careful testing, it lets me turn your idea into a polished, useful website. AI supports selected tasks; the direction, decisions and final review stay with me.
+
+CMS-managed identity/service overrides are not rewritten. No stored credentials, CMS records or authentication settings were modified.
+
+## Testimonial presentation
+
+The dedicated page uses a large featured card, smaller companion cards, original local illustrated profiles and a subtle particle background. Cards float and rotate gently using CSS transforms on phones and desktops. Motion runs only while the section is near the viewport and the document is visible. Desktop hovering pauses the card group for reading; touch screens keep their animation. Local Pause/Resume and global Motion Off stop the effects. No JavaScript leaves all text visible and the effects static. Motion On remains the owner's explicit default, including an override of the OS preference; saved Off persists.
+
+File mode has no genuine supplied client reviews. Four fictional profiles and illustrative reviews are labeled both above the grid and on each card. They are design examples, not endorsements or real customer photos. Published, permission-approved CMS testimonials replace all samples; the existing publication/permission filter is unchanged. No reference names or reviews were copied, and portraits make no third-party requests.
+
+## Validation
+
+- `npm run build`: passed, including production preparation, lint, TypeScript and route generation in the local file-content configuration.
+- `npm run test:pages:browser`: all ten subject routes at 390/1440px; route navigation, canonicals, sitemap, inline domain/process placement, About order, tools order, new About copy, aliases, mobile 3D, saved Off and no-JavaScript content passed.
+- `npm run test:testimonials:browser`: actual card/particle transforms at 1440/390px, mobile OS-reduced preference with site On, local portraits/labels, pause/resume, desktop hover pause, global Off, offscreen pause, static no-JavaScript content, no overflow or external requests passed.
+- `npm run test:reviews:browser`: approved records replace samples; three/two/one-column layouts passed.
+- `npm run test:motion:browser`: both themes at 360, 390, 768, 1024, 1440 and 1920px, native touch, consent and form validation passed.
+- `npm run test:video-motion:browser`: desktop/touch logo flip/shine, reading emphasis and no-JavaScript text passed.
+- `npm run test:showcase:browser`: both actual looping videos on desktop/phone, no controls, muted/inline playback, global Off/On and offscreen pause passed.
+- `npm run test:windows:browser`: four interactive concepts, responsive frames, navigation, nested scrolling, maximize/Escape/back and sample form/reset behavior passed.
+- [Twenty WCAG A/AA scans](websites-testimonials-accessibility.json): home, websites, Skills, About and Testimonials in both themes at 390/1440px; no violations.
+- [Scroll readiness observations](websites-testimonials-readiness.json): home, websites and curved collection, desktop/mobile. Page images are ready before scrolling and no image/component-script requests start during the measured scroll. Headless frame timings do not establish physical-device performance.
+
+The local checks do not verify live Vercel deployment, owner login or provider delivery. A Git push can trigger the repository's configured hosting integration; this environment cannot confirm that external deployment result.
+
+## Files
+
+- Routes: `app/websites/page.tsx`, `app/ai-websites/page.tsx`, `app/technical-domains/page.tsx`, `app/how-i-build/page.tsx`, `app/work/[slug]/page.tsx`.
+- Data/copy: `data/site.ts`, `data/navigation.ts`, `data/experience.ts`, `data/skills.ts`, `data/studio.ts`, `data/tool-marks.ts`, new `data/testimonial-samples.ts`.
+- UI: `components/hero.tsx`, `components/hero-emblem.tsx`, `components/home-directory.tsx`, `components/experience.tsx`, `components/skills.tsx`, `components/page-tabs.tsx`, `components/testimonials.tsx`, new `components/testimonial-scene.tsx`, `app/pages.css`.
+- Back links: `components/concept-site.tsx`, `components/demo-site.tsx`, `components/demo-window.tsx`, `components/work-bunch.tsx`.
+- Portraits: four original `public/avatars/demo-*.svg` illustrations.
+- Verification: `package.json`, new `tests/testimonials-floating.browser.mjs`; updated page, motion, review, showcase, window, finishing and readiness browser checks; reports and screenshots linked here. README, verification notes, page map and source delivery snapshots are refreshed.
+
+## Previews
+
+- [Testimonials desktop](testimonials-floating-1440.png) · [phone](testimonials-floating-390.png)
+- [Homepage desktop](web-positioning-home-1440.png) · [phone](web-positioning-home-390.png)
+- [About desktop](web-positioning-about-1440.png) · [phone](web-positioning-about-390.png)
+- [Tools desktop](web-positioning-skills-1440.png) · [phone](web-positioning-skills-390.png)
+- [Websites desktop](web-positioning-websites-1440.png) · [phone](web-positioning-websites-390.png)
 ``````
 
 ## docs/about-preview.png
@@ -1314,11 +1374,11 @@ Binary asset: 144687 bytes. SHA-256 `90be81278a61a70304378a8f887155051f4879c6275
 
 ## docs/pages-testimonials-1440.png
 
-Binary asset: 886772 bytes. SHA-256 `6080ae6d4999717495541b234ca458aeba679f32eaebf058bc78ef0bb3baa218`. Available in the repository and source ZIP.
+Binary asset: 1004596 bytes. SHA-256 `732506da140d707061f08a56a9835a642ebd383afb0e0291718a91f4244c083d`. Available in the repository and source ZIP.
 
 ## docs/pages-testimonials-390.png
 
-Binary asset: 438384 bytes. SHA-256 `294221d80e511e3e0fd72e77b3837f8a43f53fa3ac5d551afc46c0f2baf58592`. Available in the repository and source ZIP.
+Binary asset: 540101 bytes. SHA-256 `b8e7f16a6fea579b0d149e72912b68768090bd111760fbc4fb54dcecfb3988e7`. Available in the repository and source ZIP.
 
 ## docs/preview.png
 
@@ -1868,6 +1928,258 @@ Binary asset: 845616 bytes. SHA-256 `8aabb777245d17af26d44e968a31fbab7a7be375d42
 ## docs/studio-workflow-preview.png
 
 Binary asset: 454501 bytes. SHA-256 `1735d85969122e959103186f9ec912ce159531221178846f220ec1dc757ecb77`. Available in the repository and source ZIP.
+
+## docs/testimonials-floating-1440.png
+
+Binary asset: 1113020 bytes. SHA-256 `bd4aa8b162e81a97c41c6847080388dd784d8454a63c08972e0f0ec1a27b1a76`. Available in the repository and source ZIP.
+
+## docs/testimonials-floating-390.png
+
+Binary asset: 573164 bytes. SHA-256 `f539762f0d2e7a11231b139d895c2120f89b4364e38f18442ca8b5009195eb8f`. Available in the repository and source ZIP.
+
+## docs/web-positioning-about-1440.png
+
+Binary asset: 1134753 bytes. SHA-256 `230f6c22650349a8a721720f54b4bae8bed3dd2312857eec88540d1e74e35a90`. Available in the repository and source ZIP.
+
+## docs/web-positioning-about-390.png
+
+Binary asset: 514191 bytes. SHA-256 `3637f0752b972dfd1d45db6375cb49b67cbbc6e290d30a70ecc22ba91c65c847`. Available in the repository and source ZIP.
+
+## docs/web-positioning-home-1440.png
+
+Binary asset: 1748096 bytes. SHA-256 `3ad5e269ac2b4fb633724da4a4dc01993cd7bc64ce54ee69afd77a723601731a`. Available in the repository and source ZIP.
+
+## docs/web-positioning-home-390.png
+
+Binary asset: 681082 bytes. SHA-256 `874f4a08481570d2ebc576b40cb88dfabeb51d948b2c0b941976c34a03a50505`. Available in the repository and source ZIP.
+
+## docs/web-positioning-skills-1440.png
+
+Binary asset: 1076621 bytes. SHA-256 `9666e030a93f894566e23cbb6dfe817e09936aa02a81a09db45f78a8e16b245b`. Available in the repository and source ZIP.
+
+## docs/web-positioning-skills-390.png
+
+Binary asset: 530061 bytes. SHA-256 `d2dd9ea2142428b95b61661baaa8b5e2072f1fd7e63701393be19384bb6665c2`. Available in the repository and source ZIP.
+
+## docs/web-positioning-websites-1440.png
+
+Binary asset: 2472524 bytes. SHA-256 `a7dabd98fc6e546083b1ab984317f0738e75d9ac14a50c7a6396f59cce55ef09`. Available in the repository and source ZIP.
+
+## docs/web-positioning-websites-390.png
+
+Binary asset: 1077953 bytes. SHA-256 `08928dd7137e54119f5c0a46fea057a3936357f5b6c674aa9235706c1c8691c2`. Available in the repository and source ZIP.
+
+## docs/websites-testimonials-accessibility.json
+
+``````json
+[
+  {
+    "width": 390,
+    "path": "/",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "path": "/",
+    "theme": "light",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "path": "/websites",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "path": "/websites",
+    "theme": "light",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "path": "/skills",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "path": "/skills",
+    "theme": "light",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "path": "/about",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "path": "/about",
+    "theme": "light",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "path": "/testimonials",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "path": "/testimonials",
+    "theme": "light",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/",
+    "theme": "light",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/websites",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/websites",
+    "theme": "light",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/skills",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/skills",
+    "theme": "light",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/about",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/about",
+    "theme": "light",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/testimonials",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/testimonials",
+    "theme": "light",
+    "violations": []
+  }
+]
+``````
+
+## docs/websites-testimonials-readiness.json
+
+``````json
+[
+  {
+    "width": 1440,
+    "route": "/",
+    "imagesBefore": 12,
+    "totalImages": 12,
+    "scrollResourceRequests": 2,
+    "scrollImageRequests": 0,
+    "scrollScriptRequests": 0,
+    "framesOver50ms": 0,
+    "worstFrameMs": 22,
+    "longTasks": 0,
+    "longTaskMs": 0
+  },
+  {
+    "width": 1440,
+    "route": "/websites",
+    "imagesBefore": 10,
+    "totalImages": 10,
+    "scrollResourceRequests": 2,
+    "scrollImageRequests": 0,
+    "scrollScriptRequests": 0,
+    "framesOver50ms": 0,
+    "worstFrameMs": 23,
+    "longTasks": 0,
+    "longTaskMs": 0
+  },
+  {
+    "width": 1440,
+    "route": "/bunch-of-work",
+    "imagesBefore": 56,
+    "totalImages": 56,
+    "scrollResourceRequests": 2,
+    "scrollImageRequests": 0,
+    "scrollScriptRequests": 0,
+    "framesOver50ms": 0,
+    "worstFrameMs": 30,
+    "longTasks": 0,
+    "longTaskMs": 0
+  },
+  {
+    "width": 390,
+    "route": "/",
+    "imagesBefore": 12,
+    "totalImages": 12,
+    "scrollResourceRequests": 8,
+    "scrollImageRequests": 0,
+    "scrollScriptRequests": 0,
+    "framesOver50ms": 0,
+    "worstFrameMs": 19,
+    "longTasks": 0,
+    "longTaskMs": 0
+  },
+  {
+    "width": 390,
+    "route": "/websites",
+    "imagesBefore": 10,
+    "totalImages": 10,
+    "scrollResourceRequests": 3,
+    "scrollImageRequests": 0,
+    "scrollScriptRequests": 0,
+    "framesOver50ms": 0,
+    "worstFrameMs": 18,
+    "longTasks": 0,
+    "longTaskMs": 0
+  },
+  {
+    "width": 390,
+    "route": "/bunch-of-work",
+    "imagesBefore": 56,
+    "totalImages": 56,
+    "scrollResourceRequests": 3,
+    "scrollImageRequests": 0,
+    "scrollScriptRequests": 0,
+    "framesOver50ms": 0,
+    "worstFrameMs": 17,
+    "longTasks": 0,
+    "longTaskMs": 0
+  }
+]
+``````
 
 ## docs/workflow-1440-dark.png
 

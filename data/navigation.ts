@@ -1,8 +1,8 @@
 /** Public page map shared by navigation, the home directory and sitemap. */
 export const portfolioPages = {
   websites: {
-    href: "/ai-websites",
-    label: "AI Websites",
+    href: "/websites",
+    label: "Websites",
     description:
       "Explore original website concepts, responsive previews and the thinking behind each interface.",
   },
@@ -36,7 +36,7 @@ export const portfolioPages = {
       "From curiosity about Python and AI to independent web development and building Elvora.",
   },
   domains: {
-    href: "/technical-domains",
+    href: "/websites#fundamentals",
     label: "Technical Domains",
     description:
       "The engineering behind the interface: frontend, APIs, data, deployment and conversational AI.",
@@ -45,7 +45,7 @@ export const portfolioPages = {
     href: "/skills",
     label: "Skills & Tools",
     description:
-      "The practical skills, development tools and AI workflows behind Elvora's projects.",
+      "The development tools, engineering practices and selected assistants behind Elvora's projects.",
   },
   certificates: {
     href: "/certificates",
@@ -54,10 +54,10 @@ export const portfolioPages = {
       "Explore Abdul Hafeez's learning and certificates, with full-size document previews.",
   },
   process: {
-    href: "/ai-websites#workflow",
+    href: "/websites#workflow",
     label: "How I Build",
     description:
-      "How I build websites with my own creativity, design judgment and carefully guided AI tools.",
+      "How I build websites with design judgment, a practical development stack and selected AI assistance.",
   },
   testimonials: {
     href: "/testimonials",
@@ -82,7 +82,6 @@ export type PortfolioPage = keyof typeof portfolioPages;
 export const aboutPages = [
   "about",
   "journey",
-  "domains",
   "skills",
   "certificates",
 ] as const;
@@ -97,17 +96,17 @@ export const primaryNavigation = [
 ];
 export const legacySections: Record<string, string> = {
   "#services": "/services",
-  "#work": "/ai-websites",
+  "#work": "/websites",
   "#work-bunch": "/bunch-of-work",
   "#ai-bots": "/ai-bots",
   "#embed-methods": "/ai-bots#embed-methods",
   "#experience": "/about",
   "#journey": "/journey",
-  "#fundamentals": "/technical-domains",
+  "#fundamentals": "/websites#fundamentals",
   "#skills": "/skills",
   "#creative-toolkit": "/skills",
   "#certification": "/certificates",
-  "#workflow": "/ai-websites#workflow",
+  "#workflow": "/websites#workflow",
   "#testimonials": "/testimonials",
   "#faq": "/contact#faq",
   "#contact": "/contact",

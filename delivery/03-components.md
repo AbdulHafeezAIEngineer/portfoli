@@ -2325,7 +2325,7 @@ export function ConceptSite({ slug }: { slug: ConceptSlug }) {
     </div>
   </div>;
   return <main id="main-content" className={`concept-site concept-${slug}`}>
-    <div className="concept-ribbon"><Link href="/ai-websites"><ArrowLeft size={13} />{ui.back}</Link><span>{ui.concept} / {d.category}</span><span>{ui.independent}</span></div>
+    <div className="concept-ribbon"><Link href="/websites"><ArrowLeft size={13} />{ui.back}</Link><span>{ui.concept} / {d.category}</span><span>{ui.independent}</span></div>
     <header className="concept-header">
       <a className="concept-logo" href="#concept-top">{slug === "aster" && <span className="aster-mark" aria-hidden="true">✳</span>}{d.wordmark}{slug === "vanta" && <small>MOTORS</small>}{slug === "kovo" && <small>STUDIO / ARCHITECTURE</small>}</a>
       <nav id="concept-navigation" className={menu ? "concept-nav is-open" : "concept-nav"} aria-label={`${d.name} navigation`}>
@@ -2392,7 +2392,7 @@ export function ConceptSite({ slug }: { slug: ConceptSlug }) {
         {summary && <div className="concept-summary" role="status"><span className="concept-kicker">{ui.demo}</span><p>{summary.text}</p><strong>{summary.details}</strong><button type="button" onClick={() => setSummary(null)}>{ui.reset}<ArrowRight size={14} /></button></div>}
       </form>
     </section>
-    <footer className="concept-footer"><div><a className="concept-logo" href="#concept-top">{d.wordmark}</a><p>{d.footer}</p></div><div><span>{ui.footer}</span><Link href="/ai-websites">{ui.back}<ArrowUpRight size={16} /></Link></div></footer>
+    <footer className="concept-footer"><div><a className="concept-logo" href="#concept-top">{d.wordmark}</a><p>{d.footer}</p></div><div><span>{ui.footer}</span><Link href="/websites">{ui.back}<ArrowUpRight size={16} /></Link></div></footer>
   </main>;
 }
 
@@ -3001,7 +3001,7 @@ export function DemoSite({ slug }: { slug: DemoSlug }) {
   return (
     <main id="main-content" className={`demo-site demo-${slug}`}>
       <div className="demo-concept-bar">
-        <Link href="/ai-websites">
+        <Link href="/websites">
           <ArrowLeft size={12} />
           {ui.back}
         </Link>
@@ -3263,7 +3263,7 @@ export function DemoSite({ slug }: { slug: DemoSlug }) {
           {d.name}
         </a>
         <p>{d.note}</p>
-        <Link href="/ai-websites">
+        <Link href="/websites">
           {ui.back}
           <ArrowRight size={15} />
         </Link>
@@ -3511,7 +3511,7 @@ export function DemoWindow({
   return (
     <div className="demo-desktop">
       <header className="demo-desktop-menu">
-        <Link href="/ai-websites">Elvora Studio</Link>
+        <Link href="/websites">Elvora Studio</Link>
         <span>Website concepts</span>
         <span>Interactive preview</span>
       </header>
@@ -3542,7 +3542,7 @@ export function DemoWindow({
             >
               {maximized ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
             </button>
-            <Link href="/ai-websites">
+            <Link href="/websites">
               <ArrowLeft size={14} />
               <span>Back to website</span>
             </Link>
@@ -3571,7 +3571,7 @@ export function DemoWindow({
             <small>{concept.name}</small>
           </Link>
         ))}
-        <Link href="/ai-websites">
+        <Link href="/websites">
           <span aria-hidden="true">
             <PanelTop size={21} />
           </span>
@@ -4039,7 +4039,7 @@ export function Experience() {
                 <br />
                 Craft.
               </strong>
-              <span>WEB DEVELOPMENT + APPLIED AI</span>
+              <span>DESIGN + WEB DEVELOPMENT</span>
             </div>
             <figcaption>
               <div>
@@ -4081,7 +4081,7 @@ export function TechnicalDomains() {
         <p className="eyebrow">{copy.fundamentals.eyebrow}</p>
       </Reveal>
       <TextReveal
-        as="h1"
+        as="h2"
         id="fundamentals-title"
         text={copy.fundamentals.title}
       />
@@ -4347,7 +4347,7 @@ export function HeroEmblem() {
     <div
       className="hero-emblem"
       data-parallax="hero"
-      aria-label={`${site.brand}: websites and AI experiences`}
+      aria-label={`${site.brand}: websites and digital experiences`}
       role="img"
     >
       <div className="emblem-grid" aria-hidden="true" />
@@ -4370,7 +4370,7 @@ export function HeroEmblem() {
         <small>{site.hero.floatingLabel}</small>
       </span>
       <span className="emblem-coordinate" aria-hidden="true">
-        E / AI + WEB
+        E / DESIGN + CODE
       </span>
       <span className="emblem-orbit-dot" aria-hidden="true" />
     </div>
@@ -4407,7 +4407,7 @@ export function Hero() {
           <ReadingText className="hero-intro" text={site.hero.intro} />
           <p className="hero-tagline">{site.hero.tagline}</p>
           <div className="hero-actions">
-            <a href="/ai-websites" className="button button-gold">
+            <a href="/websites" className="button button-gold">
               {site.hero.primary}
               <ArrowDownRight size={18} aria-hidden="true" />
             </a>
@@ -4443,7 +4443,7 @@ export function Hero() {
           </div>
         </div>
         <a
-          href="/ai-websites"
+          href="/websites"
           className="scroll-link"
           aria-label={site.hero.primary}
         >
@@ -4471,12 +4471,10 @@ import { TextReveal } from "./text-reveal";
 export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
   const website = projects[0]?.screenshots[0];
   const collection = [
-    ...projects
-      .slice(0, 3)
-      .map((project) => ({
-        src: project.screenshots[0].src,
-        title: project.title,
-      })),
+    ...projects.slice(0, 3).map((project) => ({
+      src: project.screenshots[0].src,
+      title: project.title,
+    })),
     ...studies
       .slice(0, 3)
       .map((study) => ({ src: study.screenshot, title: study.name })),
@@ -4493,18 +4491,15 @@ export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
           id="directory-title"
           text={"Human ideas.\nUseful digital experiences."}
         />
-        <ReadingText text="This is a place to explore what I create and how I create it: websites with their own identity, AI assistants that answer real questions, and the thoughtful decisions behind both. See the work in action, follow the process, or start a conversation about your own idea." />
+        <ReadingText text="This is a place to explore what I create and how I create it: websites with their own identity, useful integrations and the thoughtful decisions behind them. AI assistants are an optional part of that work. See the work in action, follow the process, or start a conversation about your own idea." />
       </div>
       <nav
         className="container home-feature-grid"
         aria-label="Explore Elvora's work"
       >
-        <Link
-          className="home-feature home-feature-websites"
-          href="/ai-websites"
-        >
+        <Link className="home-feature home-feature-websites" href="/websites">
           <div className="home-feature-copy">
-            <p className="eyebrow">AI WEBSITES</p>
+            <p className="eyebrow">WEBSITES</p>
             <h3>Made with a point of view.</h3>
             <p>
               Original website concepts, built around an idea. Explore the
@@ -5107,6 +5102,7 @@ const subjectSections = {
   websites: [
     { id: "work", label: "Website concepts" },
     { id: "workflow", label: "How I Build Websites" },
+    { id: "fundamentals", label: "Technical Domains" },
   ],
   bots: [
     { id: "ai-bots", label: "AI Bots" },
@@ -5153,7 +5149,7 @@ export function PageTabs({ page }: { page: PortfolioPage }) {
       aria-label={
         profile
           ? "About Me pages"
-          : `${page === "bots" ? "AI Bots" : "AI Websites"} sections`
+          : `${page === "bots" ? "AI Bots" : "Websites"} sections`
       }
     >
       <div className="container page-tabs-inner" ref={row}>
@@ -6027,14 +6023,17 @@ export function Skills({ skills }: { skills: Skill[] }) {
       <div className="toolkit-rows">
         {copy.categories.map((category, index) => {
           const Icon = categoryIcons[index];
+          const label =
+            copy.categoryLabels[category as keyof typeof copy.categoryLabels] ||
+            category;
           return (
             <Reveal key={category}>
               <div className="toolkit-row">
                 <h3>
                   <span className="toolkit-index">0{index + 1}</span>
-                  {category}
+                  {label}
                 </h3>
-                <ul aria-label={category}>
+                <ul aria-label={label}>
                   {skills
                     .filter((skill) => skill.category === category)
                     .map((skill) => (
@@ -6369,54 +6368,125 @@ export function ToolOrbit() {
 }
 ``````
 
+## components/testimonial-scene.tsx
+
+``````tsx
+"use client";
+
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
+import { Pause, Play } from "lucide-react";
+import { useMotionPreference } from "./motion-preference";
+
+const stars = Array.from({ length: 28 }, (_, index) => ({
+  left: `${(index * 37 + 7) % 100}%`,
+  top: `${(index * 23 + 4) % 100}%`,
+  duration: `${11 + (index % 7)}s`,
+  delay: `${-index * 1.7}s`,
+  size: `${index % 4 === 0 ? 3 : 2}px`,
+}));
+
+export function TestimonialScene({
+  heading,
+  children,
+}: {
+  heading: ReactNode;
+  children: ReactNode;
+}) {
+  const scene = useRef<HTMLElement>(null);
+  const { reduced } = useMotionPreference();
+  const [visible, setVisible] = useState(false);
+  const [foreground, setForeground] = useState(true);
+  const [paused, setPaused] = useState(false);
+  useEffect(() => {
+    const element = scene.current;
+    if (!element) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { rootMargin: "60px" },
+    );
+    observer.observe(element);
+    const changed = () => setForeground(!document.hidden);
+    changed();
+    document.addEventListener("visibilitychange", changed);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", changed);
+    };
+  }, []);
+  return (
+    <section
+      ref={scene}
+      id="testimonials"
+      className="container testimonials-section testimonials-page testimonial-scene"
+      aria-labelledby="testimonials-title"
+      data-testimonials-active={visible && foreground && !reduced && !paused}
+    >
+      <div className="testimonial-atmosphere" aria-hidden="true">
+        {stars.map((star, index) => (
+          <span
+            className="testimonial-star"
+            key={index}
+            style={
+              {
+                left: star.left,
+                top: star.top,
+                "--star-duration": star.duration,
+                "--star-delay": star.delay,
+                "--star-size": star.size,
+              } as CSSProperties
+            }
+          />
+        ))}
+      </div>
+      {heading}
+      <div className="testimonial-motion-toolbar">
+        <button
+          type="button"
+          className="testimonial-motion-toggle"
+          disabled={reduced}
+          aria-label={
+            paused
+              ? "Resume testimonial animations"
+              : "Pause testimonial animations"
+          }
+          aria-pressed={paused}
+          onClick={() => setPaused((value) => !value)}
+        >
+          {paused || reduced ? (
+            <Play size={13} aria-hidden="true" />
+          ) : (
+            <Pause size={13} aria-hidden="true" />
+          )}
+          {reduced
+            ? "Motion off"
+            : paused
+              ? "Resume animation"
+              : "Pause animation"}
+        </button>
+      </div>
+      {children}
+    </section>
+  );
+}
+``````
+
 ## components/testimonials.tsx
 
 ``````tsx
 import Image from "next/image";
 import { UserRound } from "lucide-react";
+import type { CSSProperties } from "react";
 import type { Testimonial } from "@/data/agency";
+import { testimonialSamples } from "@/data/testimonial-samples";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
-
-/** Explicit layout samples, never attributed to real customers or used as endorsements. */
-const samples: Testimonial[] = [
-  {
-    id: "sample-design",
-    quote:
-      "Sample testimonial about a website's design, clarity and attention to detail. This card previews the space for a client's own words.",
-    name: "Sample client",
-    role: "Website design · layout preview",
-    portrait: "",
-    placeholder: true,
-  },
-  {
-    id: "sample-build",
-    quote:
-      "Sample testimonial about development, responsive layouts and the small interactions that make a website feel considered.",
-    name: "Sample client",
-    role: "Development · layout preview",
-    portrait: "",
-    placeholder: true,
-  },
-  {
-    id: "sample-ai",
-    quote:
-      "Sample testimonial about a useful AI integration and how it fits into a real business workflow. Genuine feedback can replace this sample.",
-    name: "Sample client",
-    role: "AI integration · layout preview",
-    portrait: "",
-    placeholder: true,
-  },
-  {
-    id: "sample-process",
-    quote:
-      "Sample testimonial about communication, collaboration and the experience of bringing a project from its first idea to launch.",
-    name: "Sample client",
-    role: "Collaboration · layout preview",
-    portrait: "",
-    placeholder: true,
-  },
-];
+import { TestimonialScene } from "./testimonial-scene";
 
 export function Testimonials({
   testimonials,
@@ -6424,64 +6494,83 @@ export function Testimonials({
   testimonials: Testimonial[];
 }) {
   const preview = testimonials.length === 0;
-  const reviews = preview ? samples : testimonials;
+  const reviews = preview ? testimonialSamples : testimonials;
   return (
-    <section
-      id="testimonials"
-      className="container testimonials-section testimonials-page"
-      aria-labelledby="testimonials-title"
-    >
-      <Reveal>
-        <div className="testimonials-heading">
-          <p className="eyebrow">PEOPLE / PROJECTS / PERSPECTIVE</p>
-          <TextReveal as="h1" id="testimonials-title" text="Testimonials." />
-          <p className="testimonials-subtitle">
-            What people say about working with me.
-          </p>
-          {preview && (
-            <p className="testimonial-sample-note">
-              Design preview — sample content, not client endorsements.
+    <TestimonialScene
+      heading={
+        <Reveal>
+          <div className="testimonials-heading">
+            <p className="eyebrow">PEOPLE / PROJECTS / PERSPECTIVE</p>
+            <TextReveal as="h1" id="testimonials-title" text="Testimonials." />
+            <p className="testimonials-subtitle">
+              What people say about working with me.
             </p>
-          )}
-        </div>
-      </Reveal>
+            {preview && (
+              <p className="testimonial-sample-note">
+                Design preview: fictional profiles and illustrative reviews, not
+                client endorsements.
+              </p>
+            )}
+          </div>
+        </Reveal>
+      }
+    >
       <div className="testimonials-grid">
         {reviews.map((review, index) => (
           <Reveal key={review.id} delay={(index % 4) * 0.07}>
-            <figure
-              className="testimonial-card"
-              data-sample={review.placeholder ? "true" : undefined}
+            <div
+              className="testimonial-float"
+              style={
+                {
+                  "--review-duration": `${13 + (index % 4) * 2}s`,
+                  "--review-delay": `${-index * 2.3}s`,
+                  "--review-angle": `${index % 2 ? 0.65 : -0.65}deg`,
+                } as CSSProperties
+              }
             >
-              <span className="testimonial-quote-mark" aria-hidden="true">
-                “
-              </span>
-              {review.placeholder && (
-                <span className="testimonial-sample-label">SAMPLE REVIEW</span>
-              )}
-              <blockquote>{review.quote}</blockquote>
-              <figcaption>
-                <span className="testimonial-avatar">
-                  {review.portrait && !review.placeholder ? (
-                    <Image
-                      src={review.portrait}
-                      alt=""
-                      width={40}
-                      height={40}
-                    />
-                  ) : (
-                    <UserRound size={20} strokeWidth={1.5} aria-hidden="true" />
-                  )}
+              <figure
+                className="testimonial-card"
+                data-sample={review.placeholder ? "true" : undefined}
+              >
+                <span className="testimonial-quote-mark" aria-hidden="true">
+                  “
                 </span>
-                <span>
-                  <strong>{review.name}</strong>
-                  <small>{review.role}</small>
-                </span>
-              </figcaption>
-            </figure>
+                {review.placeholder && (
+                  <span className="testimonial-sample-label">
+                    FICTIONAL EXAMPLE
+                  </span>
+                )}
+                <blockquote>{review.quote}</blockquote>
+                <figcaption>
+                  <span className="testimonial-avatar">
+                    {review.portrait ? (
+                      <Image
+                        loading="eager"
+                        fetchPriority="low"
+                        src={review.portrait}
+                        alt=""
+                        width={44}
+                        height={44}
+                      />
+                    ) : (
+                      <UserRound
+                        size={20}
+                        strokeWidth={1.5}
+                        aria-hidden="true"
+                      />
+                    )}
+                  </span>
+                  <span>
+                    <strong>{review.name}</strong>
+                    <small>{review.role}</small>
+                  </span>
+                </figcaption>
+              </figure>
+            </div>
           </Reveal>
         ))}
       </div>
-    </section>
+    </TestimonialScene>
   );
 }
 ``````
@@ -6729,7 +6818,7 @@ export function WorkBunch({
             <p className="dome-intro">{studio.bunch.intro}</p>
           </Reveal>
         </div>
-        <a href="/ai-websites" className="dome-view-all">
+        <a href="/websites" className="dome-view-all">
           Explore the work <ArrowUpRight size={17} aria-hidden="true" />
         </a>
       </div>

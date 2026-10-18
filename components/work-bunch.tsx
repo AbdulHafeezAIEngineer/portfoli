@@ -102,7 +102,7 @@ export function WorkBunch({
             <p className="dome-intro">{studio.bunch.intro}</p>
           </Reveal>
         </div>
-        <a href="/ai-websites" className="dome-view-all">
+        <a href="/websites" className="dome-view-all">
           Explore the work <ArrowUpRight size={17} aria-hidden="true" />
         </a>
       </div>

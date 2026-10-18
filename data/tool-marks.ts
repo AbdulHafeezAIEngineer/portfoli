@@ -1,7 +1,4 @@
-export const toolMarks: Record<
-  string,
-  { icon?: string; text?: string }
-> = {
+export const toolMarks: Record<string, { icon?: string; text?: string }> = {
   Claude: { icon: "claude" },
   ChatGPT: { icon: "openai" },
   Gemini: { icon: "googlegemini" },
@@ -15,6 +12,8 @@ export const toolMarks: Record<
   CSS: { icon: "css" },
   "Next.js": { icon: "nextdotjs" },
   React: { icon: "react" },
+  Prisma: { text: "Pr" },
+  PostgreSQL: { text: "PG" },
   TypeScript: { icon: "typescript" },
   "Tailwind CSS": { icon: "tailwindcss" },
 };

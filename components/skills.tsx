@@ -43,14 +43,17 @@ export function Skills({ skills }: { skills: Skill[] }) {
       <div className="toolkit-rows">
         {copy.categories.map((category, index) => {
           const Icon = categoryIcons[index];
+          const label =
+            copy.categoryLabels[category as keyof typeof copy.categoryLabels] ||
+            category;
           return (
             <Reveal key={category}>
               <div className="toolkit-row">
                 <h3>
                   <span className="toolkit-index">0{index + 1}</span>
-                  {category}
+                  {label}
                 </h3>
-                <ul aria-label={category}>
+                <ul aria-label={label}>
                   {skills
                     .filter((skill) => skill.category === category)
                     .map((skill) => (

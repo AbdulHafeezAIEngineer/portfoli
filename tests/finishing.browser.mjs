@@ -30,7 +30,7 @@ try {
       .querySelector("[data-parallax=hero]")
       ?.style.getPropertyValue("--image-drift"),
   );
-  await page.goto(base + "/ai-websites");
+  await page.goto(base + "/websites");
   await page
     .getByRole("button", { name: /^View screenshots:/ })
     .first()

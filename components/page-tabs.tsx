@@ -12,6 +12,7 @@ const subjectSections = {
   websites: [
     { id: "work", label: "Website concepts" },
     { id: "workflow", label: "How I Build Websites" },
+    { id: "fundamentals", label: "Technical Domains" },
   ],
   bots: [
     { id: "ai-bots", label: "AI Bots" },
@@ -58,7 +59,7 @@ export function PageTabs({ page }: { page: PortfolioPage }) {
       aria-label={
         profile
           ? "About Me pages"
-          : `${page === "bots" ? "AI Bots" : "AI Websites"} sections`
+          : `${page === "bots" ? "AI Bots" : "Websites"} sections`
       }
     >
       <div className="container page-tabs-inner" ref={row}>

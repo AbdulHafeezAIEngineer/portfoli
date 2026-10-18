@@ -1,3 +1,27 @@
+## public/avatars/demo-ethan.svg
+
+``````xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><title>Fictional illustrated profile</title><defs><clipPath id="circle"><circle cx="32" cy="32" r="32"/></clipPath></defs><g clip-path="url(#circle)"><path fill="#E0E4E7" d="M0 0h64v64H0z"/><path d="M8 66Q10 48 26 46H38Q54 48 57 66" fill="#35343D"/><path d="M27 40V49Q32 54 38 49V40" fill="#D7B8A5"/><ellipse cx="32" cy="31" rx="12" ry="16" fill="#D7B8A5"/><path d="M21 30L20 21Q23 12 31 17Q40 12 46 22L44 32L39 25L25 27Z" fill="#302F34"/><circle cx="27" cy="32" r="1" fill="#383137"/><circle cx="37" cy="32" r="1" fill="#383137"/><path d="M29 39Q32 41 35 39" fill="none" stroke="#8D685F" stroke-width="1.3" stroke-linecap="round"/><path d="M25 39Q32 44 40 38" fill="none" stroke="#756458" stroke-width="2"/><path d="M21 48L27 46L32 54L38 46L44 49L39 64H25Z" fill="#F4F1EC"/></g></svg>
+``````
+
+## public/avatars/demo-maya.svg
+
+``````xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><title>Fictional illustrated profile</title><defs><clipPath id="circle"><circle cx="32" cy="32" r="32"/></clipPath></defs><g clip-path="url(#circle)"><path fill="#E8E3DF" d="M0 0h64v64H0z"/><circle cx="45" cy="23" r="11" fill="#353038"/><path d="M8 66Q10 48 26 46H38Q54 48 57 66" fill="#35343D"/><path d="M27 40V49Q32 54 38 49V40" fill="#C6A28C"/><ellipse cx="32" cy="31" rx="12" ry="16" fill="#C6A28C"/><path d="M20 31Q17 10 36 16Q48 17 44 30L39 24Q31 27 22 25Z" fill="#353038"/><circle cx="27" cy="32" r="1" fill="#383137"/><circle cx="37" cy="32" r="1" fill="#383137"/><path d="M29 39Q32 41 35 39" fill="none" stroke="#8D685F" stroke-width="1.3" stroke-linecap="round"/><path d="M21 48L27 46L32 54L38 46L44 49L39 64H25Z" fill="#F4F1EC"/></g></svg>
+``````
+
+## public/avatars/demo-nora.svg
+
+``````xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><title>Fictional illustrated profile</title><defs><clipPath id="circle"><circle cx="32" cy="32" r="32"/></clipPath></defs><g clip-path="url(#circle)"><path fill="#E7E2ED" d="M0 0h64v64H0z"/><path d="M19 36C17 13 49 10 48 35L51 56H16Z" fill="#302C36"/><path d="M8 66Q10 48 26 46H38Q54 48 57 66" fill="#35343D"/><path d="M27 40V49Q32 54 38 49V40" fill="#D7B8A5"/><ellipse cx="32" cy="31" rx="12" ry="16" fill="#D7B8A5"/><path d="M24 23Q33 11 43 24L45 30Q36 29 28 22L22 31Z" fill="#302C36"/><circle cx="27" cy="32" r="1" fill="#383137"/><circle cx="37" cy="32" r="1" fill="#383137"/><path d="M29 39Q32 41 35 39" fill="none" stroke="#8D685F" stroke-width="1.3" stroke-linecap="round"/><path d="M21 48L27 46L32 54L38 46L44 49L39 64H25Z" fill="#F4F1EC"/></g></svg>
+``````
+
+## public/avatars/demo-omar.svg
+
+``````xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><title>Fictional illustrated profile</title><defs><clipPath id="circle"><circle cx="32" cy="32" r="32"/></clipPath></defs><g clip-path="url(#circle)"><path fill="#E1E4DC" d="M0 0h64v64H0z"/><path d="M8 66Q10 48 26 46H38Q54 48 57 66" fill="#35343D"/><path d="M27 40V49Q32 54 38 49V40" fill="#C6A28C"/><ellipse cx="32" cy="31" rx="12" ry="16" fill="#C6A28C"/><path d="M20 30L21 19Q32 11 44 22L44 31L39 24L24 26Z" fill="#2D2C31"/><circle cx="27" cy="32" r="1" fill="#383137"/><circle cx="37" cy="32" r="1" fill="#383137"/><path d="M29 39Q32 41 35 39" fill="none" stroke="#8D685F" stroke-width="1.3" stroke-linecap="round"/><path d="M23 36Q26 44 32 46Q40 43 42 36L39 42L26 42Z" fill="#474047"/><path d="M23 32H30M34 32H42M30 32H34" stroke="#38363C" stroke-width="2"/><rect x="23" y="29" width="8" height="7" rx="2" fill="none" stroke="#38363C"/><rect x="34" y="29" width="8" height="7" rx="2" fill="none" stroke="#38363C"/><path d="M21 48L27 46L32 54L38 46L44 49L39 64H25Z" fill="#F4F1EC"/></g></svg>
+``````
+
 ## public/certificates/coursiv-master-of-chatgpt.webp
 
 Binary asset: 213792 bytes. SHA-256 `ced155f06969f60224707f010d9c191aec9529abbe427889120c74bfbc03626a`. Available in the repository and source ZIP.

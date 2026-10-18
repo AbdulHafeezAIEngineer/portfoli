@@ -9,7 +9,7 @@ const b = await chromium.launch({
 const results = [];
 try {
   for (const width of [1440, 390]) {
-    for (const route of ["/", "/ai-websites", "/bunch-of-work"]) {
+    for (const route of ["/", "/websites", "/bunch-of-work"]) {
       const p = await b.newPage({
         viewport: { width, height: 900 },
         isMobile: width < 768,

@@ -2,7 +2,15 @@
 
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
-## Restored footer, homepage and subject-page processes
+## Current website positioning and floating Testimonials
+
+The website category is now Websites at `/websites`. Its projects, original How I Build Websites process and Technical Domains appear in that order, with local navigation links. The former AI Websites and standalone domain routes redirect to the appropriate destination. About has four profile tabs. Conventional development tools lead Skills & Tools; AI is described as selective assistance. About explains that effective use requires experience, coding foundations, database knowledge and careful review.
+
+Testimonials now has original illustrated fictional profiles, clearly labeled illustrative reviews, subtle floating cards and background particles. The section supports phones, visible-only activity, local pause/resume, desktop hover pause, global Motion Off and static no-JavaScript content. Genuine published and permission-approved records replace the samples; publication filtering is unchanged. The original footer, curved artwork wall, device models, custom demo colors, video behavior, consent, Botpress and private credentials are preserved.
+
+Production build (including lint and TypeScript), ten-subject-page navigation checks, six-width/both-theme motion checks, testimonial replacement/motion checks, logo/reading motion, native looping video and interactive demo-window checks passed. Twenty current WCAG A/AA scans across five affected pages, two themes and two widths found no violations. See [implementation, previews and reproduction commands](docs/WEBSITES_TESTIMONIALS.md). Earlier reports below describe earlier revisions. Live hosting and owner login remain unverified.
+
+## Previous revision: restored footer, homepage and subject-page processes
 
 The original footer component is restored (wordmark, waves, emblem, socials and original layout); its differences from the pre-categorization version are routing fixes and eager logo loading. Website-building remains below the website projects. The AI Bots page includes the bot-building process and all original embedding methods; former process-only URLs redirect to these inline sections. About tabs contain five genuine profile topics. The homepage now has a clear purpose, large visual pathways and a scoped black/white theme that preserves light/dark switching. Other custom page designs, project art, media and consent logic are preserved.
 

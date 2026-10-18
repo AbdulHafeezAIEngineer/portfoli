@@ -44,7 +44,7 @@ export function Experience() {
                 <br />
                 Craft.
               </strong>
-              <span>WEB DEVELOPMENT + APPLIED AI</span>
+              <span>DESIGN + WEB DEVELOPMENT</span>
             </div>
             <figcaption>
               <div>
@@ -86,7 +86,7 @@ export function TechnicalDomains() {
         <p className="eyebrow">{copy.fundamentals.eyebrow}</p>
       </Reveal>
       <TextReveal
-        as="h1"
+        as="h2"
         id="fundamentals-title"
         text={copy.fundamentals.title}
       />

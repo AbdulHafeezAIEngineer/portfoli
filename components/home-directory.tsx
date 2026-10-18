@@ -10,12 +10,10 @@ import { TextReveal } from "./text-reveal";
 export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
   const website = projects[0]?.screenshots[0];
   const collection = [
-    ...projects
-      .slice(0, 3)
-      .map((project) => ({
-        src: project.screenshots[0].src,
-        title: project.title,
-      })),
+    ...projects.slice(0, 3).map((project) => ({
+      src: project.screenshots[0].src,
+      title: project.title,
+    })),
     ...studies
       .slice(0, 3)
       .map((study) => ({ src: study.screenshot, title: study.name })),
@@ -32,18 +30,15 @@ export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
           id="directory-title"
           text={"Human ideas.\nUseful digital experiences."}
         />
-        <ReadingText text="This is a place to explore what I create and how I create it: websites with their own identity, AI assistants that answer real questions, and the thoughtful decisions behind both. See the work in action, follow the process, or start a conversation about your own idea." />
+        <ReadingText text="This is a place to explore what I create and how I create it: websites with their own identity, useful integrations and the thoughtful decisions behind them. AI assistants are an optional part of that work. See the work in action, follow the process, or start a conversation about your own idea." />
       </div>
       <nav
         className="container home-feature-grid"
         aria-label="Explore Elvora's work"
       >
-        <Link
-          className="home-feature home-feature-websites"
-          href="/ai-websites"
-        >
+        <Link className="home-feature home-feature-websites" href="/websites">
           <div className="home-feature-copy">
-            <p className="eyebrow">AI WEBSITES</p>
+            <p className="eyebrow">WEBSITES</p>
             <h3>Made with a point of view.</h3>
             <p>
               Original website concepts, built around an idea. Explore the

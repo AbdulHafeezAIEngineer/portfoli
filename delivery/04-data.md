@@ -1252,12 +1252,12 @@ export const demoUI = {
 ``````ts
 export const experience = {
   eyebrow: "ABOUT ABDUL HAFEEZ",
-  title: "An independent developer.\nA thoughtful approach to AI.",
-  lead: "Independent developer. Thoughtful AI. A human eye for the details.",
+  title: "An independent developer.\nA thoughtful approach to the web.",
+  lead: "Design judgment. Practical engineering. A human eye for the details.",
   paragraphs: [
-    "I'm Abdul Hafeez, the developer behind Elvora. My curiosity about Python and AI grew into a passion for web development. Through hands-on projects, agency work and independent development, I've learned to turn ideas into practical digital experiences. Today, I'm bringing that curiosity into a startup of my own.",
-    "I believe AI is a powerful tool, but access alone doesn't create professional work. The result depends on clear prompts, the right context, design judgment and patient testing. I've invested time in understanding how to guide these tools, check what they produce and refine the details until the work feels considered.",
-    "That means understanding the full stack: the frontend people use, the backend that handles requests, the database that keeps information organized, and the deployment and security that keep it running. My role is to connect those pieces with intention—not simply accept the first AI-generated draft.",
+    "I'm Abdul Hafeez, the developer behind Elvora. My curiosity about Python and how the web works grew into a passion for development. Through hands-on projects, agency work and independent development, I've learned to turn ideas into practical digital experiences. Today, I'm bringing that curiosity into a startup of my own.",
+    "AI is a powerful tool, but having access to it is only the beginning. Using it well takes experience, clear instructions and the judgment to question, test and improve what it produces. A convincing first draft still needs someone who understands how a website actually works.",
+    "I bring an understanding of the frontend, backend, databases and deployment, together with practical coding foundations. That knowledge helps me guide the tools, connect the pieces and refine the details. Combined with my own creativity and careful testing, it lets me turn your idea into a polished, useful website. AI supports selected tasks; the direction, decisions and final review stay with me.",
   ],
   fundamentals: {
     eyebrow: "THE ENGINEERING BEHIND THE INTERFACE",
@@ -1319,7 +1319,7 @@ export const experience = {
       },
       {
         id: "ai",
-        title: "AI & Conversational Experiences",
+        title: "Chatbots & Assistants",
         description:
           "Make business information easier to explore with custom website chatbots, carefully guided prompts and optional voice interaction.",
         tags: ["Botpress", "OpenAI API", "Business FAQs", "Web Speech API"],
@@ -1395,8 +1395,8 @@ export const imagePreviews: Record<string, string> = {
 /** Public page map shared by navigation, the home directory and sitemap. */
 export const portfolioPages = {
   websites: {
-    href: "/ai-websites",
-    label: "AI Websites",
+    href: "/websites",
+    label: "Websites",
     description:
       "Explore original website concepts, responsive previews and the thinking behind each interface.",
   },
@@ -1430,7 +1430,7 @@ export const portfolioPages = {
       "From curiosity about Python and AI to independent web development and building Elvora.",
   },
   domains: {
-    href: "/technical-domains",
+    href: "/websites#fundamentals",
     label: "Technical Domains",
     description:
       "The engineering behind the interface: frontend, APIs, data, deployment and conversational AI.",
@@ -1439,7 +1439,7 @@ export const portfolioPages = {
     href: "/skills",
     label: "Skills & Tools",
     description:
-      "The practical skills, development tools and AI workflows behind Elvora's projects.",
+      "The development tools, engineering practices and selected assistants behind Elvora's projects.",
   },
   certificates: {
     href: "/certificates",
@@ -1448,10 +1448,10 @@ export const portfolioPages = {
       "Explore Abdul Hafeez's learning and certificates, with full-size document previews.",
   },
   process: {
-    href: "/ai-websites#workflow",
+    href: "/websites#workflow",
     label: "How I Build",
     description:
-      "How I build websites with my own creativity, design judgment and carefully guided AI tools.",
+      "How I build websites with design judgment, a practical development stack and selected AI assistance.",
   },
   testimonials: {
     href: "/testimonials",
@@ -1476,7 +1476,6 @@ export type PortfolioPage = keyof typeof portfolioPages;
 export const aboutPages = [
   "about",
   "journey",
-  "domains",
   "skills",
   "certificates",
 ] as const;
@@ -1491,17 +1490,17 @@ export const primaryNavigation = [
 ];
 export const legacySections: Record<string, string> = {
   "#services": "/services",
-  "#work": "/ai-websites",
+  "#work": "/websites",
   "#work-bunch": "/bunch-of-work",
   "#ai-bots": "/ai-bots",
   "#embed-methods": "/ai-bots#embed-methods",
   "#experience": "/about",
   "#journey": "/journey",
-  "#fundamentals": "/technical-domains",
+  "#fundamentals": "/websites#fundamentals",
   "#skills": "/skills",
   "#creative-toolkit": "/skills",
   "#certification": "/certificates",
-  "#workflow": "/ai-websites#workflow",
+  "#workflow": "/websites#workflow",
   "#testimonials": "/testimonials",
   "#faq": "/contact#faq",
   "#contact": "/contact",
@@ -1875,20 +1874,20 @@ export const site = {
   brand: "Elvora",
   logo: { src: "/elvora-logo.svg" },
   name: "Abdul Hafeez",
-  role: "AI Chatbot & Web Developer",
+  role: "Web Developer & Chatbot Builder",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.elvoraai.online",
   email: "abdulhafeez@elvoraai.online",
-  title: "Elvora — Thoughtful websites. Intelligent experiences.",
+  title: "Elvora — Thoughtful websites. Built with intention.",
   description:
-    "Elvora is Abdul Hafeez's portfolio for thoughtful websites, AI chatbot concepts, and voice experiences. Explore the work and start a conversation.",
+    "Elvora is Abdul Hafeez's portfolio for website design, web development and optional chatbot integrations. Explore original work, the tools behind it and the process from idea to launch.",
   nav: primaryNavigation,
   hero: {
     eyebrow: "INDEPENDENT DEVELOPER · BUILT WITH INTENTION",
-    heading: ["Thoughtful websites.", "Useful AI."],
+    heading: ["Thoughtful websites.", "Built with intention."],
     intro:
-      "Elvora is my space for original websites, useful AI assistants and the ideas behind them. Explore the work, see how it is built, and find a direction for your own project.",
+      "Elvora is my space for original websites, thoughtful interfaces and the craft behind them. Explore the work, see the tools and process, and find a direction for your own project.",
     tagline:
-      "I'm Abdul Hafeez. I bring my own creativity and technical judgment to every build, using custom-trained AI for selected tasks.",
+      "I'm Abdul Hafeez. Design, code and careful testing lead every build. I use a practical development stack, with AI assistance for selected tasks.",
     primary: "View Work",
     secondary: "Contact Me",
     note: "A little design. A lot of possibility.",
@@ -2010,15 +2009,20 @@ export const skillContent = {
   eyebrow: "04 / TOOLS & TECHNOLOGIES",
   title: "Skills & tools.",
   description:
-    "The technologies and topics behind web, chatbot, and voice experiences.",
+    "The primary stack is React, Next.js, TypeScript, Tailwind CSS, Git and structured application data. Selected AI and voice tools support the work when useful.",
   note: "Always learning. Always refining. The right tool, chosen for the task.",
+  categoryLabels: {
+    "AI tools": "AI assistance",
+    "Prompt engineering": "Assistant instructions",
+    "Voice AI": "Voice & accessibility",
+  },
   categories: [
-    "AI tools",
-    "Prompt engineering",
     "Web interfaces",
     "APIs & data",
-    "Voice AI",
     "Development tools",
+    "AI tools",
+    "Prompt engineering",
+    "Voice AI",
   ],
 } as const;
 ``````
@@ -2201,9 +2205,9 @@ export const studyContent = {
 export const studio = {
   services: {
     eyebrow: "WHAT I CAN HELP YOU BUILD",
-    title: "Websites + AI.\nBuilt with purpose.",
+    title: "Design + Development.\nBuilt with purpose.",
     intro:
-      "Design, development and useful AI—connected around what your business actually needs.",
+      "Website design, development and practical integrations—shaped around what your business actually needs.",
     action: "Let's discuss your project",
     more: "Let's talk",
     items: [
@@ -2231,14 +2235,14 @@ export const studio = {
       },
       {
         id: "automation",
-        title: "AI Automation & Integrations",
+        title: "Automation & Integrations",
         description:
-          "I connect AI tools to websites and business workflows through APIs and webhooks, helping reduce repetitive tasks with practical, clearly scoped automation.",
+          "I connect websites and business services through APIs and webhooks, helping reduce repetitive tasks with practical, clearly scoped automation.",
         tags: [
           "API connections",
           "Form-to-inbox flows",
           "Lead routing",
-          "AI-assisted replies",
+          "Validated workflows",
         ],
         detail:
           "The right connection, with validation and human review where it matters.",
@@ -2282,14 +2286,14 @@ export const studio = {
       {
         title: "Build & Connect",
         description:
-          "I turn the design into a responsive website and connect the services it needs. For selected tasks, we use our own custom-trained AI assistants grounded in approved project information, with human review. Chatbots, voice and lead capture are added when they serve the project.",
-        note: "Custom AI where it adds value",
+          "I build the interface with React, Next.js, TypeScript and Tailwind CSS, then connect APIs, data and the services the website needs. AI assists with selected tasks and is always reviewed. Chatbots, voice and lead capture are added when they serve the project.",
+        note: "The right tools, carefully applied",
         icon: "build",
       },
       {
         title: "Test & Refine",
         description:
-          "I test the website on mobile and desktop, checking navigation, forms, accessibility and performance. Any custom AI features are reviewed too, and the details are refined before launch.",
+          "I test the website on mobile and desktop, checking navigation, forms, accessibility and performance. Optional assistant features are reviewed too, and the details are refined before launch.",
         note: "Care lives in the details",
         icon: "test",
       },
@@ -2307,7 +2311,7 @@ export const studio = {
     title: "From a Curious Kid\nto an Independent Developer",
     displayTitle: "MY\nJOURNEY.",
     intro:
-      "My journey began with curiosity: exploring different fields, learning the basics of Python, and experimenting with AI tools to understand what technology could make possible. Over time, I found myself drawn to web development—the ability to turn an idea into something people can actually use.",
+      "My journey began with curiosity: exploring different fields, learning the basics of Python, and experimenting with web technologies to understand what technology could make possible. Over time, I found myself drawn to web development—the ability to turn an idea into something people can actually use.",
     note: "Still curious. Always building.",
     chapters: [
       {
@@ -2315,7 +2319,7 @@ export const studio = {
         label: "CURIOSITY → CRAFT",
         phase: "Foundations",
         points: [
-          "Explored Python and AI tools",
+          "Explored Python and web technologies",
           "Learned through building and experimentation",
           "Found a direction in web development",
         ],
@@ -2352,21 +2356,69 @@ export const studio = {
         phase: "In progress",
         points: [
           "Working toward an independent startup",
-          "Bringing web development and AI together",
+          "Bringing creative direction and development together",
           "Continuing to learn, build and improve",
         ],
         description:
-          "Today, I'm working toward building my own independent startup, combining my interest in web development and AI to create useful digital products. What started as curiosity has grown into a journey of learning, building, and creating something of my own.",
+          "Today, I'm working toward building my own independent startup, combining design, web development and useful integrations to create practical digital products. What started as curiosity has grown into a journey of learning, building, and creating something of my own.",
       },
     ],
   },
   tools: {
-    eyebrow: "HUMAN DIRECTION. INTELLIGENT TOOLS.",
+    eyebrow: "DESIGN JUDGMENT. PRACTICAL TOOLS.",
     title: "CREATIVE\nTOOLKIT.",
     intro:
-      "AI can accelerate an idea. Clear prompts, technical understanding, testing and thoughtful refinement turn it into useful work.",
+      "React, Next.js, TypeScript and a practical engineering stack form the foundation. AI assists with selected tasks; design judgment, testing and the final decisions stay human.",
     note: "Tools in the creative and development toolkit; selected to suit each project. Product names belong to their respective owners. No partnership or certification is implied.",
     items: [
+      {
+        name: "React",
+        mark: "R",
+        purpose: "Component-based interfaces",
+        color: "var(--text)",
+      },
+      {
+        name: "Next.js",
+        mark: "N",
+        purpose: "Web application framework",
+        color: "var(--text)",
+      },
+      {
+        name: "TypeScript",
+        mark: "TS",
+        purpose: "Typed application code",
+        color: "var(--text)",
+      },
+      {
+        name: "Tailwind CSS",
+        mark: "TW",
+        purpose: "Responsive interface styling",
+        color: "var(--text)",
+      },
+      {
+        name: "Git",
+        mark: "Git",
+        purpose: "Version control",
+        color: "var(--text)",
+      },
+      {
+        name: "GitHub",
+        mark: "GH",
+        purpose: "Code collaboration",
+        color: "var(--text)",
+      },
+      {
+        name: "Prisma",
+        mark: "P",
+        purpose: "Typed data access",
+        color: "var(--text)",
+      },
+      {
+        name: "PostgreSQL",
+        mark: "PG",
+        purpose: "Structured application data",
+        color: "var(--text)",
+      },
       {
         name: "Claude",
         mark: "✳︎",
@@ -2400,20 +2452,8 @@ export const studio = {
       {
         name: "OpenAI API",
         mark: "API",
-        purpose: "AI inside the product",
+        purpose: "Optional assistant integrations",
         color: "#e4cc88",
-      },
-      {
-        name: "Next.js",
-        mark: "N",
-        purpose: "Web application framework",
-        color: "#f5f5f5",
-      },
-      {
-        name: "GitHub",
-        mark: "GH",
-        purpose: "Code & version control",
-        color: "#f5f5f5",
       },
     ],
   },
@@ -2437,17 +2477,17 @@ export const studio = {
     eyebrow: "YOUR IDEA DESERVES A THOUGHTFUL HOME",
     title: "Let's make\nsomething matter.",
     description:
-      "A website with character. AI with a purpose. An experience worth coming back to.",
+      "A website with character. Engineering with purpose. An experience worth coming back to.",
     action: "Tell me what you have in mind",
     signature:
-      "Thoughtful websites and useful AI experiences, designed around people and the businesses they build.",
+      "Thoughtful websites and useful digital experiences, designed around people and the businesses they build.",
     navigation: "/Quick links",
     navLinks: [
       { label: "Home", href: "/" },
       { label: "Services", href: "/services" },
-      { label: "Work", href: "/ai-websites" },
+      { label: "Work", href: "/websites" },
       { label: "About Me", href: "/about" },
-      { label: "Workflow", href: "/ai-websites#workflow" },
+      { label: "Workflow", href: "/websites#workflow" },
       { label: "Contact", href: "/contact" },
     ],
     connect: "/Contact",
@@ -2473,6 +2513,52 @@ export const studio = {
     },
   ],
 } as const;
+``````
+
+## data/testimonial-samples.ts
+
+``````ts
+import type { Testimonial } from "./agency";
+
+/** Fictional design examples. Their labels must remain visible; these are not endorsements. */
+export const testimonialSamples: Testimonial[] = [
+  {
+    id: "sample-design",
+    name: "Nora Vale",
+    role: "Website design · fictional profile",
+    quote:
+      "The brief was simple: a website that felt like the brand, worked beautifully on a phone, and made the next step clear. The thoughtful layout, small interactions and attention to the content made the whole experience feel considered, from the first screen to the last detail.",
+    portrait: "/avatars/demo-nora.svg",
+    placeholder: true,
+  },
+  {
+    id: "sample-build",
+    name: "Ethan Reed",
+    role: "Development · fictional profile",
+    quote:
+      "What stood out was the care behind the build. The navigation felt clear, the mobile layout had room to breathe, and the details worked together instead of competing for attention.",
+    portrait: "/avatars/demo-ethan.svg",
+    placeholder: true,
+  },
+  {
+    id: "sample-integration",
+    name: "Maya Lane",
+    role: "Website integration · fictional profile",
+    quote:
+      "We wanted a useful website, with the right integrations and a straightforward experience for visitors. The result felt personal, practical and easy to explore.",
+    portrait: "/avatars/demo-maya.svg",
+    placeholder: true,
+  },
+  {
+    id: "sample-process",
+    name: "Omar Vale",
+    role: "Collaboration · fictional profile",
+    quote:
+      "From the first conversation to the final refinements, the process felt organized and collaborative. The ideas were explained clearly, feedback had a place, and the small details received as much care as the bigger picture.",
+    portrait: "/avatars/demo-omar.svg",
+    placeholder: true,
+  },
+];
 ``````
 
 ## data/theme-tokens.json
@@ -2515,10 +2601,7 @@ export const studio = {
 ## data/tool-marks.ts
 
 ``````ts
-export const toolMarks: Record<
-  string,
-  { icon?: string; text?: string }
-> = {
+export const toolMarks: Record<string, { icon?: string; text?: string }> = {
   Claude: { icon: "claude" },
   ChatGPT: { icon: "openai" },
   Gemini: { icon: "googlegemini" },
@@ -2532,6 +2615,8 @@ export const toolMarks: Record<
   CSS: { icon: "css" },
   "Next.js": { icon: "nextdotjs" },
   React: { icon: "react" },
+  Prisma: { text: "Pr" },
+  PostgreSQL: { text: "PG" },
   TypeScript: { icon: "typescript" },
   "Tailwind CSS": { icon: "tailwindcss" },
 };

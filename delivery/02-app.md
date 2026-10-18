@@ -896,23 +896,9 @@ export default async function Page() {
 ## app/ai-websites/page.tsx
 
 ``````tsx
-import { Workflow } from "@/components/studio-sections";
-import { Work } from "@/components/work";
-import { SiteShell } from "@/components/site-shell";
-import { pageMetadata } from "@/lib/page-metadata";
-import { getProjects } from "@/lib/content-loader";
-
-export const dynamic = "force-dynamic";
-export const metadata = pageMetadata("websites");
-
-export default async function Page() {
-  const projects = await getProjects();
-  return (
-    <SiteShell page="websites">
-      <Work projects={projects} />
-      <Workflow />
-    </SiteShell>
-  );
+import { permanentRedirect } from "next/navigation";
+export default function Page() {
+  permanentRedirect("/websites");
 }
 ``````
 
@@ -8141,7 +8127,7 @@ html[data-motion="reduced"] {
 ``````tsx
 import { redirect } from "next/navigation";
 export default function Page() {
-  redirect("/ai-websites#workflow");
+  redirect("/websites#workflow");
 }
 ``````
 
@@ -9161,6 +9147,154 @@ html[data-motion="full"]
   }
   .route-home .hero-actions .button {
     padding-inline: 22px;
+  }
+}
+
+/* Engineering context belongs beneath the website work. */
+.route-websites #fundamentals {
+  border-top: 1px solid var(--line);
+}
+.route-websites #fundamentals-title {
+  font-size: clamp(34px, 4.3vw, 60px);
+  line-height: 1.12;
+  letter-spacing: -0.055em;
+}
+/* Visible-only testimonial motion, enabled for touch screens as well as desktop. */
+.testimonial-scene {
+  position: relative;
+  isolation: isolate;
+  --testimonial-drift: 8px;
+}
+.testimonial-scene > .motion-reveal,
+.testimonial-scene > .testimonials-grid,
+.testimonial-motion-toolbar {
+  position: relative;
+  z-index: 1;
+}
+.testimonial-scene .testimonials-heading {
+  margin-bottom: 24px;
+}
+.testimonial-scene .testimonial-sample-note {
+  max-width: 64ch;
+  margin-inline: auto;
+  font-size: 11px;
+}
+.testimonial-atmosphere {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+.testimonial-star {
+  position: absolute;
+  width: var(--star-size);
+  height: var(--star-size);
+  background: var(--muted);
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: testimonial-star-drift var(--star-duration) ease-in-out infinite
+    alternate;
+  animation-delay: var(--star-delay);
+  animation-play-state: paused;
+}
+.testimonial-motion-toolbar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 60px;
+}
+.testimonial-motion-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 8px 13px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: var(--surface);
+  font-size: 10px;
+}
+.testimonial-motion-toggle:hover:not(:disabled) {
+  color: var(--text);
+  border-color: var(--line-bright);
+}
+.testimonial-motion-toggle:disabled {
+  cursor: default;
+}
+.testimonial-float {
+  height: 100%;
+  animation: testimonial-card-float var(--review-duration) ease-in-out infinite;
+  animation-delay: var(--review-delay);
+  animation-play-state: paused;
+}
+.testimonial-scene .testimonial-card:hover {
+  transform: none;
+}
+html[data-motion="full"]
+  .testimonial-scene[data-testimonials-active="true"]
+  .testimonial-float,
+html[data-motion="full"]
+  .testimonial-scene[data-testimonials-active="true"]
+  .testimonial-star {
+  animation-play-state: running;
+}
+.testimonial-scene .testimonial-avatar {
+  width: 44px;
+  height: 44px;
+}
+.testimonial-scene .testimonial-sample-label {
+  font-size: 9px;
+}
+@keyframes testimonial-card-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(var(--review-angle));
+  }
+  50% {
+    transform: translate3d(0, calc(-1 * var(--testimonial-drift)), 0)
+      rotate(calc(-1 * var(--review-angle)));
+  }
+}
+@keyframes testimonial-star-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.16;
+  }
+  to {
+    transform: translate3d(5px, -25px, 0);
+    opacity: 0.5;
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  html[data-motion="full"]
+    .testimonial-scene[data-testimonials-active="true"]
+    .testimonials-grid:hover
+    .testimonial-float {
+    animation-play-state: paused;
+  }
+}
+html[data-motion="reduced"] .testimonial-float,
+html[data-motion="reduced"] .testimonial-star {
+  animation: none;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion="full"]) .testimonial-float,
+  html:not([data-motion="full"]) .testimonial-star {
+    animation: none;
+    transform: none;
+  }
+}
+@media (max-width: 767px) {
+  .testimonial-scene {
+    --testimonial-drift: 4px;
+  }
+  .testimonial-motion-toolbar {
+    margin-bottom: 38px;
+  }
+  .testimonial-star:nth-child(n + 19) {
+    display: none;
   }
 }
 ``````
@@ -15385,19 +15519,9 @@ html[data-motion="reduced"] .footer-art > span {
 ## app/technical-domains/page.tsx
 
 ``````tsx
-import { TechnicalDomains } from "@/components/experience";
-import { SiteShell } from "@/components/site-shell";
-import { pageMetadata } from "@/lib/page-metadata";
-
-export const dynamic = "force-dynamic";
-export const metadata = pageMetadata("domains");
-
+import { redirect } from "next/navigation";
 export default function Page() {
-  return (
-    <SiteShell page="domains">
-      <TechnicalDomains />
-    </SiteShell>
-  );
+  redirect("/websites#fundamentals");
 }
 ``````
 
@@ -15503,6 +15627,31 @@ export default async function Page() {
 }
 ``````
 
+## app/websites/page.tsx
+
+``````tsx
+import { TechnicalDomains } from "@/components/experience";
+import { Workflow } from "@/components/studio-sections";
+import { Work } from "@/components/work";
+import { SiteShell } from "@/components/site-shell";
+import { pageMetadata } from "@/lib/page-metadata";
+import { getProjects } from "@/lib/content-loader";
+
+export const dynamic = "force-dynamic";
+export const metadata = pageMetadata("websites");
+
+export default async function Page() {
+  const projects = await getProjects();
+  return (
+    <SiteShell page="websites">
+      <Work projects={projects} />
+      <Workflow />
+      <TechnicalDomains />
+    </SiteShell>
+  );
+}
+``````
+
 ## app/work/[slug]/page.tsx
 
 ``````tsx
@@ -15538,7 +15687,7 @@ export default async function Page({ params }: Props) {
     <>
       <Navbar identity={identity} rootLinks />
       <main id="main-content" className="container agency-detail">
-        <Link href="/ai-websites" className="eyebrow">
+        <Link href="/websites" className="eyebrow">
           ELVORA / SELECTED WORK
         </Link>
         <header className="agency-detail-hero">

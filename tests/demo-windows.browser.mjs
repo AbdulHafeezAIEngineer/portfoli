@@ -20,7 +20,7 @@ try {
     page.on("pageerror", (e) => errors.push(e.message));
     await page.goto(base);
     await page.getByRole("button", { name: "Reject All", exact: true }).click();
-    await page.goto(base + "/ai-websites");
+    await page.goto(base + "/websites");
     assert.equal(await page.getByRole("tab").count(), 0);
     assert.equal(
       await page
@@ -134,7 +134,7 @@ try {
       await page
         .getByRole("link", { name: "Back to website", exact: true })
         .click();
-      await page.waitForURL("**/ai-websites");
+      await page.waitForURL("**/websites");
     }
     await page.goto(base + "/studies/noma");
     await page

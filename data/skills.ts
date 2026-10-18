@@ -42,14 +42,19 @@ export const skillContent = {
   eyebrow: "04 / TOOLS & TECHNOLOGIES",
   title: "Skills & tools.",
   description:
-    "The technologies and topics behind web, chatbot, and voice experiences.",
+    "The primary stack is React, Next.js, TypeScript, Tailwind CSS, Git and structured application data. Selected AI and voice tools support the work when useful.",
   note: "Always learning. Always refining. The right tool, chosen for the task.",
+  categoryLabels: {
+    "AI tools": "AI assistance",
+    "Prompt engineering": "Assistant instructions",
+    "Voice AI": "Voice & accessibility",
+  },
   categories: [
-    "AI tools",
-    "Prompt engineering",
     "Web interfaces",
     "APIs & data",
-    "Voice AI",
     "Development tools",
+    "AI tools",
+    "Prompt engineering",
+    "Voice AI",
   ],
 } as const;

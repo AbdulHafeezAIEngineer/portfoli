@@ -6,7 +6,7 @@ export function HeroEmblem() {
     <div
       className="hero-emblem"
       data-parallax="hero"
-      aria-label={`${site.brand}: websites and AI experiences`}
+      aria-label={`${site.brand}: websites and digital experiences`}
       role="img"
     >
       <div className="emblem-grid" aria-hidden="true" />
@@ -29,7 +29,7 @@ export function HeroEmblem() {
         <small>{site.hero.floatingLabel}</small>
       </span>
       <span className="emblem-coordinate" aria-hidden="true">
-        E / AI + WEB
+        E / DESIGN + CODE
       </span>
       <span className="emblem-orbit-dot" aria-hidden="true" />
     </div>

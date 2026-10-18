@@ -580,7 +580,9 @@ Latest playback/navigation update: [wide looping videos, interactive desktop win
 
 ## Categorized public pages
 
-The homepage now introduces Elvora with a monochrome presentation, original logo motion and large visual previews of websites, bots and the collection. Its light/dark switch remains functional. Eleven subject pages organize the content. How I Build Websites appears beneath the website projects; How I Build Bots and all three embedding methods appear beneath the bot demos. About tabs contain only personal/background subjects. Old process URLs redirect to their parent-page sections. The original designed footer, including the large wordmark, waves, emblem and socials, is restored throughout.
+The homepage introduces Elvora with a monochrome presentation, original logo motion and large visual previews of websites, bots and the collection. Its light/dark switch remains functional. Ten subject pages organize the content. Websites, How I Build Websites and Technical Domains share `/websites`; the former `/ai-websites` and `/technical-domains` routes redirect there. How I Build Bots and all three embedding methods remain beneath the bot demos. About tabs contain About Me, My Journey, Skills & Tools and Certificates. The original designed footer, including the large wordmark, waves, emblem and socials, is preserved throughout.
+
+Web development leads the site copy and tool categories; AI supports selected tasks. The About text explains the importance of experience, coding foundations, databases and human review. Testimonials has gently floating cards, local illustrated fictional profiles and background particles on desktop and mobile. Sample reviews are visibly marked as fictional examples; published, permission-approved CMS feedback replaces them. Global Motion Off and a local Pause control stop the effects. See [the current changes and verification](docs/WEBSITES_TESTIMONIALS.md).
 
 Project previews are unboxed, without concept badges, counters, device-format labels or floating controls. Original website art/device models and the 54-tile curved collection are preserved. Visible device previews now float on mobile and use native-scroll 3D movement; desktop pointer tilt and Motion Off remain available.
 
@@ -922,7 +924,15 @@ To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQ
 
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
-## Restored footer, homepage and subject-page processes
+## Current website positioning and floating Testimonials
+
+The website category is now Websites at `/websites`. Its projects, original How I Build Websites process and Technical Domains appear in that order, with local navigation links. The former AI Websites and standalone domain routes redirect to the appropriate destination. About has four profile tabs. Conventional development tools lead Skills & Tools; AI is described as selective assistance. About explains that effective use requires experience, coding foundations, database knowledge and careful review.
+
+Testimonials now has original illustrated fictional profiles, clearly labeled illustrative reviews, subtle floating cards and background particles. The section supports phones, visible-only activity, local pause/resume, desktop hover pause, global Motion Off and static no-JavaScript content. Genuine published and permission-approved records replace the samples; publication filtering is unchanged. The original footer, curved artwork wall, device models, custom demo colors, video behavior, consent, Botpress and private credentials are preserved.
+
+Production build (including lint and TypeScript), ten-subject-page navigation checks, six-width/both-theme motion checks, testimonial replacement/motion checks, logo/reading motion, native looping video and interactive demo-window checks passed. Twenty current WCAG A/AA scans across five affected pages, two themes and two widths found no violations. See [implementation, previews and reproduction commands](docs/WEBSITES_TESTIMONIALS.md). Earlier reports below describe earlier revisions. Live hosting and owner login remain unverified.
+
+## Previous revision: restored footer, homepage and subject-page processes
 
 The original footer component is restored (wordmark, waves, emblem, socials and original layout); its differences from the pre-categorization version are routing fixes and eager logo loading. Website-building remains below the website projects. The AI Bots page includes the bot-building process and all original embedding methods; former process-only URLs redirect to these inline sections. About tabs contain five genuine profile topics. The homepage now has a clear purpose, large visual pathways and a scoped black/white theme that preserves light/dark switching. Other custom page designs, project art, media and consent logic are preserved.
 
@@ -9625,6 +9635,7 @@ export default nextConfig;
     "test:finishing:browser": "node tests/finishing.browser.mjs",
     "test:login-fields:browser": "node tests/login-fields.browser.mjs",
     "test:video-motion:browser": "node tests/video-motion.browser.mjs",
+    "test:testimonials:browser": "node tests/testimonials-floating.browser.mjs",
     "test:reviews:browser": "node tests/review-motion.browser.mjs",
     "test:showcase:browser": "node tests/showcase-videos.browser.mjs",
     "images:previews": "node scripts/generate-image-previews.mjs",

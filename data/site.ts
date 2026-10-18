@@ -3,20 +3,20 @@ export const site = {
   brand: "Elvora",
   logo: { src: "/elvora-logo.svg" },
   name: "Abdul Hafeez",
-  role: "AI Chatbot & Web Developer",
+  role: "Web Developer & Chatbot Builder",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.elvoraai.online",
   email: "abdulhafeez@elvoraai.online",
-  title: "Elvora — Thoughtful websites. Intelligent experiences.",
+  title: "Elvora — Thoughtful websites. Built with intention.",
   description:
-    "Elvora is Abdul Hafeez's portfolio for thoughtful websites, AI chatbot concepts, and voice experiences. Explore the work and start a conversation.",
+    "Elvora is Abdul Hafeez's portfolio for website design, web development and optional chatbot integrations. Explore original work, the tools behind it and the process from idea to launch.",
   nav: primaryNavigation,
   hero: {
     eyebrow: "INDEPENDENT DEVELOPER · BUILT WITH INTENTION",
-    heading: ["Thoughtful websites.", "Useful AI."],
+    heading: ["Thoughtful websites.", "Built with intention."],
     intro:
-      "Elvora is my space for original websites, useful AI assistants and the ideas behind them. Explore the work, see how it is built, and find a direction for your own project.",
+      "Elvora is my space for original websites, thoughtful interfaces and the craft behind them. Explore the work, see the tools and process, and find a direction for your own project.",
     tagline:
-      "I'm Abdul Hafeez. I bring my own creativity and technical judgment to every build, using custom-trained AI for selected tasks.",
+      "I'm Abdul Hafeez. Design, code and careful testing lead every build. I use a practical development stack, with AI assistance for selected tasks.",
     primary: "View Work",
     secondary: "Contact Me",
     note: "A little design. A lot of possibility.",

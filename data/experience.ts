@@ -1,11 +1,11 @@
 export const experience = {
   eyebrow: "ABOUT ABDUL HAFEEZ",
-  title: "An independent developer.\nA thoughtful approach to AI.",
-  lead: "Independent developer. Thoughtful AI. A human eye for the details.",
+  title: "An independent developer.\nA thoughtful approach to the web.",
+  lead: "Design judgment. Practical engineering. A human eye for the details.",
   paragraphs: [
-    "I'm Abdul Hafeez, the developer behind Elvora. My curiosity about Python and AI grew into a passion for web development. Through hands-on projects, agency work and independent development, I've learned to turn ideas into practical digital experiences. Today, I'm bringing that curiosity into a startup of my own.",
-    "I believe AI is a powerful tool, but access alone doesn't create professional work. The result depends on clear prompts, the right context, design judgment and patient testing. I've invested time in understanding how to guide these tools, check what they produce and refine the details until the work feels considered.",
-    "That means understanding the full stack: the frontend people use, the backend that handles requests, the database that keeps information organized, and the deployment and security that keep it running. My role is to connect those pieces with intention—not simply accept the first AI-generated draft.",
+    "I'm Abdul Hafeez, the developer behind Elvora. My curiosity about Python and how the web works grew into a passion for development. Through hands-on projects, agency work and independent development, I've learned to turn ideas into practical digital experiences. Today, I'm bringing that curiosity into a startup of my own.",
+    "AI is a powerful tool, but having access to it is only the beginning. Using it well takes experience, clear instructions and the judgment to question, test and improve what it produces. A convincing first draft still needs someone who understands how a website actually works.",
+    "I bring an understanding of the frontend, backend, databases and deployment, together with practical coding foundations. That knowledge helps me guide the tools, connect the pieces and refine the details. Combined with my own creativity and careful testing, it lets me turn your idea into a polished, useful website. AI supports selected tasks; the direction, decisions and final review stay with me.",
   ],
   fundamentals: {
     eyebrow: "THE ENGINEERING BEHIND THE INTERFACE",
@@ -67,7 +67,7 @@ export const experience = {
       },
       {
         id: "ai",
-        title: "AI & Conversational Experiences",
+        title: "Chatbots & Assistants",
         description:
           "Make business information easier to explore with custom website chatbots, carefully guided prompts and optional voice interaction.",
         tags: ["Botpress", "OpenAI API", "Business FAQs", "Web Speech API"],
