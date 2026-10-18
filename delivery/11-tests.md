@@ -2581,6 +2581,10 @@ try {
         await page.locator("link[rel=canonical]").getAttribute("href"),
         "https://www.elvoraai.online" + path,
       );
+      // URL changes can precede the shared route observer's React effect.
+      await page.waitForFunction(
+        () => !document.querySelector("[data-reveal]:not(.is-revealed)"),
+      );
       assert.equal(
         await page.locator("[data-reveal]:not(.is-revealed)").count(),
         0,
@@ -3596,6 +3600,7 @@ try {
       "ai-bot",
       "home-ai-bot",
       "home-websites",
+      "home-collection",
     ]) {
       await page.goto(
         base +
@@ -3637,8 +3642,13 @@ try {
       const box = await banner.boundingBox();
       if (name.startsWith("home-")) {
         const isWebsite = name === "home-websites";
+        const isCollection = name === "home-collection";
         const preview = page.locator(
-          isWebsite ? ".home-website-preview" : ".home-bot-preview",
+          isWebsite
+            ? ".home-website-preview"
+            : isCollection
+              ? ".home-collection-preview"
+              : ".home-bot-preview",
         );
         const parent = await preview.boundingBox();
         assert.ok(Math.abs(box.width - parent.width) < 1);
@@ -3648,7 +3658,9 @@ try {
             .locator(
               isWebsite
                 ? '.home-feature-websites[href="/websites"]'
-                : '.home-feature-bots[href="/ai-bots"]',
+                : isCollection
+                  ? '.home-feature-collection[href="/bunch-of-work"]'
+                  : '.home-feature-bots[href="/ai-bots"]',
             )
             .count(),
         );
@@ -3680,13 +3692,18 @@ try {
           });
           assert.ok(
             rounded,
-            "All four video corners are rounded and clipped on both homepage videos",
+            "All four corners are rounded and clipped on each homepage video",
           );
           if (isWebsite)
             await banner.screenshot({
               path: `docs/home-websites-loop-${width}.png`,
             });
-          else
+          else if (isCollection) {
+            assert.ok(Math.abs(box.width / box.height - 16 / 9) < 0.01);
+            await banner.screenshot({
+              path: `docs/home-collection-loop-${width}.png`,
+            });
+          } else
             await banner.screenshot({
               path: `docs/home-bot-loop-${width}.png`,
             });
@@ -3731,7 +3748,7 @@ try {
     assert.deepEqual(external, []);
     await page.close();
     console.log(
-      `PASS ${width}px / OS reduced ${osReduced}: all four silent loops, no controls, actual loop wrap, Off/On, offscreen pause and consent intact.`,
+      `PASS ${width}px / OS reduced ${osReduced}: all five silent loops, no controls, actual loop wrap, Off/On, offscreen pause and consent intact.`,
     );
   }
 } finally {

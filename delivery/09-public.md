@@ -517,6 +517,26 @@ Binary asset: 682018 bytes. SHA-256 `303cee0502a00db17dffd89bb26f4b5ca74a6e40739
 
 Binary asset: 472851 bytes. SHA-256 `20ce2229cbfd8ff5eeeca21e0d2cd2064805b62bf3e1148577a9d06dbc993782`. Available in the repository and source ZIP.
 
+## public/videos/home-collection-mobile.mp4
+
+Binary asset: 723544 bytes. SHA-256 `792350dfb6e7092e9bce945d6b4342867b7eaa1a1e934f0a782fe35a6bb351f9`. Available in the repository and source ZIP.
+
+## public/videos/home-collection-mobile.webm
+
+Binary asset: 938651 bytes. SHA-256 `74296bae893764ccb732ae7de173ae88387df5dec206af7bd225109af95dd308`. Available in the repository and source ZIP.
+
+## public/videos/home-collection-poster.webp
+
+Binary asset: 67634 bytes. SHA-256 `88cd763a8b1b6f3efae577eacac3d8c4bd2931f34ff76a7598a78a6aee25da60`. Available in the repository and source ZIP.
+
+## public/videos/home-collection.mp4
+
+Binary asset: 1487062 bytes. SHA-256 `165fdafaecc358a48c7ad3e1c64b659289db7af991beadc83ae5ae8d58f7bf21`. Available in the repository and source ZIP.
+
+## public/videos/home-collection.webm
+
+Binary asset: 1747720 bytes. SHA-256 `718c102592fc998f747e37bb21bfeae40e86f79cedd92d12f5203d6aebbd7f33`. Available in the repository and source ZIP.
+
 ## public/videos/home-websites-mobile.mp4
 
 Binary asset: 493125 bytes. SHA-256 `aa27d2edb2cd149f8b6b0d4636244de8b6f63a6609c725800d13002531048e00`. Available in the repository and source ZIP.

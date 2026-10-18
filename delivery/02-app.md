@@ -8388,7 +8388,7 @@ export default function OpenGraphImage() {
 
 ``````tsx
 import type { Metadata } from "next";
-import { getIdentity, getProjects } from "@/lib/content-loader";
+import { getIdentity } from "@/lib/content-loader";
 import { Hero } from "@/components/hero";
 import { HomeDirectory } from "@/components/home-directory";
 import { LegacySectionRedirect } from "@/components/legacy-section-redirect";
@@ -8425,13 +8425,12 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export const dynamic = "force-dynamic";
-export default async function Home() {
-  const projects = await getProjects();
+export default function Home() {
   return (
     <SiteShell>
       <LegacySectionRedirect />
       <Hero />
-      <HomeDirectory projects={projects} />
+      <HomeDirectory />
     </SiteShell>
   );
 }
@@ -8943,7 +8942,8 @@ html[data-motion="full"]
   margin-bottom: clamp(24px, 3vw, 44px);
   background: var(--neutral-black);
 }
-.home-feature-media.home-bot-preview {
+.home-feature-media.home-bot-preview,
+.home-feature-media.home-collection-preview {
   border-radius: clamp(16px, 2vw, 26px);
   margin-bottom: clamp(24px, 3vw, 40px);
 }
@@ -8956,12 +8956,14 @@ html[data-motion="full"]
   object-fit: cover;
 }
 .home-bot-preview .showcase-video-card,
-.home-website-preview .showcase-video-card {
+.home-website-preview .showcase-video-card,
+.home-collection-preview .showcase-video-card {
   width: 100%;
   margin: 0;
 }
 .home-bot-preview .showcase-video-frame,
-.home-website-preview .showcase-video-frame {
+.home-website-preview .showcase-video-frame,
+.home-collection-preview .showcase-video-frame {
   min-height: 0;
   max-height: none;
   aspect-ratio: 1.5;
@@ -8992,23 +8994,10 @@ html[data-motion="full"]
   );
 }
 .home-collection-preview {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-content: center;
-  gap: 12px;
-  padding: 22px;
-  aspect-ratio: 1.5;
+  aspect-ratio: 16 / 9;
 }
-.home-collection-preview > div {
-  position: relative;
-  aspect-ratio: 1.2;
-  overflow: hidden;
-  border-radius: 7px;
-  transform: rotate(-5deg);
-}
-.home-collection-preview img {
-  object-fit: cover;
-  object-position: top;
+.home-collection-preview .showcase-video-frame {
+  aspect-ratio: 16 / 9;
 }
 .home-feature:hover h3 {
   color: var(--text);

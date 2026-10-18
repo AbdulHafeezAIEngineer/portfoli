@@ -1,24 +1,11 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import type { ProjectView } from "@/data/projects";
-import { studies } from "@/data/studies";
-import { imagePreview } from "@/lib/image-preview";
 import { ReadingText } from "./reading-text";
 import { TextReveal } from "./text-reveal";
 import { VisibilityVideo } from "./VisibilityVideo";
 import { HomeExplore } from "./home-explore";
 
-export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
-  const collection = [
-    ...projects.slice(0, 3).map((project) => ({
-      src: project.screenshots[0].src,
-      title: project.title,
-    })),
-    ...studies
-      .slice(0, 3)
-      .map((study) => ({ src: study.screenshot, title: study.name })),
-  ];
+export function HomeDirectory() {
   return (
     <section
       id="explore"
@@ -95,23 +82,12 @@ export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
               See the collection <ArrowUpRight size={16} aria-hidden="true" />
             </span>
           </div>
-          <div
-            className="home-feature-media home-collection-preview"
-            aria-hidden="true"
-          >
-            {collection.map((shot) => (
-              <div key={shot.src}>
-                <Image
-                  loading="eager"
-                  fetchPriority="low"
-                  src={shot.src}
-                  {...imagePreview(shot.src)}
-                  alt=""
-                  fill
-                  sizes="(max-width: 767px) 30vw, 190px"
-                />
-              </div>
-            ))}
+          <div className="home-feature-media home-collection-preview">
+            <VisibilityVideo
+              name="home-collection"
+              caption="A rotating collection of website designs."
+              presentation="card"
+            />
           </div>
         </Link>
       </nav>

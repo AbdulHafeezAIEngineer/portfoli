@@ -128,6 +128,10 @@ try {
         await page.locator("link[rel=canonical]").getAttribute("href"),
         "https://www.elvoraai.online" + path,
       );
+      // URL changes can precede the shared route observer's React effect.
+      await page.waitForFunction(
+        () => !document.querySelector("[data-reveal]:not(.is-revealed)"),
+      );
       assert.equal(
         await page.locator("[data-reveal]:not(.is-revealed)").count(),
         0,

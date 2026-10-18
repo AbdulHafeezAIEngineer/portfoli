@@ -586,6 +586,8 @@ The homepage Websites and AI Bots previews use the owner's supplied architectura
 
 The website video now spans the page with dark edge blending; both homepage videos retain rounded bottom corners. Keep exploring uses bolder typography, purple highlights and visible-only accent animations on desktop and phones.
 
+The Bunch of Work homepage collage is now the owner's rotating-design video, also looping with rounded corners and Motion Off support. The dedicated collection page retains its original interactive curved wall.
+
 The homepage introduces Elvora with a monochrome presentation, original logo motion and large visual previews of websites, bots and the collection. Its light/dark switch remains functional. Ten subject pages organize the content. Websites, How I Build Websites and Technical Domains share `/websites`; the former `/ai-websites` and `/technical-domains` routes redirect there. How I Build Bots and all three embedding methods remain beneath the bot demos. About tabs contain About Me, My Journey, Skills & Tools and Certificates. The original designed footer, including the large wordmark, waves, emblem and socials, is preserved throughout.
 
 Web development leads the site copy and tool categories; AI supports selected tasks. The About text explains the importance of experience, coding foundations, databases and human review. Testimonials has gently floating cards, local illustrated fictional profiles and background particles on desktop and mobile. Sample reviews are visibly marked as fictional examples; published, permission-approved CMS feedback replaces them. Global Motion Off and a local Pause control stop the effects. See [the current changes and verification](docs/WEBSITES_TESTIMONIALS.md).
@@ -931,6 +933,8 @@ To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQ
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
 ## Current homepage: contrasting sections
+
+The static Bunch of Work homepage collage is replaced by the owner's eight-second rotating-design video. Its local desktop/mobile encodes use a rounded 16:9 frame and the shared motion-controlled player. Production build and native checks for all five showcases passed at 390/1440px, covering actual looping, silent inline playback, no controls, rounded corners, Off/On and offscreen pause. The dedicated collection wall and its destination remain unchanged. See [current video frames](docs/HOMEPAGE_BANDS.md#homepage-collection-video).
 
 Latest refinement: the website video spans more than 90% of the viewport and blends into black with contained, undistorted source framing. Both homepage videos have rounded bottom corners. Keep exploring gains bold type, purple emphasis, visible-only accent motion and clear hover/focus states. Production build, six-width/both-theme checks, all four native loops and desktop/mobile motion checks passed; six WCAG A/AA scans including desktop hover found zero violations. See [current details and previews](docs/HOMEPAGE_BANDS.md#video-edges-and-highlighted-navigation).
 

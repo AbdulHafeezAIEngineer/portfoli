@@ -236,6 +236,8 @@ docs/home-bands-light-390.png
 docs/home-bands-overview-desktop.png
 docs/home-bot-loop-1440.png
 docs/home-bot-loop-390.png
+docs/home-collection-loop-1440.png
+docs/home-collection-loop-390.png
 docs/home-explore-highlight-1440.png
 docs/home-explore-highlight-390.png
 docs/home-websites-loop-1440.png
@@ -462,6 +464,11 @@ public/videos/home-ai-bot-mobile.webm
 public/videos/home-ai-bot-poster.webp
 public/videos/home-ai-bot.mp4
 public/videos/home-ai-bot.webm
+public/videos/home-collection-mobile.mp4
+public/videos/home-collection-mobile.webm
+public/videos/home-collection-poster.webp
+public/videos/home-collection.mp4
+public/videos/home-collection.webm
 public/videos/home-websites-mobile.mp4
 public/videos/home-websites-mobile.webm
 public/videos/home-websites-poster.webp

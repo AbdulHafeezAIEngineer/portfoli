@@ -16,6 +16,8 @@ The homepage Websites and AI Bots previews use the owner's supplied architectura
 
 The website video now spans the page with dark edge blending; both homepage videos retain rounded bottom corners. Keep exploring uses bolder typography, purple highlights and visible-only accent animations on desktop and phones.
 
+The Bunch of Work homepage collage is now the owner's rotating-design video, also looping with rounded corners and Motion Off support. The dedicated collection page retains its original interactive curved wall.
+
 The homepage introduces Elvora with a monochrome presentation, original logo motion and large visual previews of websites, bots and the collection. Its light/dark switch remains functional. Ten subject pages organize the content. Websites, How I Build Websites and Technical Domains share `/websites`; the former `/ai-websites` and `/technical-domains` routes redirect there. How I Build Bots and all three embedding methods remain beneath the bot demos. About tabs contain About Me, My Journey, Skills & Tools and Certificates. The original designed footer, including the large wordmark, waves, emblem and socials, is preserved throughout.
 
 Web development leads the site copy and tool categories; AI supports selected tasks. The About text explains the importance of experience, coding foundations, databases and human review. Testimonials has gently floating cards, local illustrated fictional profiles and background particles on desktop and mobile. Sample reviews are visibly marked as fictional examples; published, permission-approved CMS feedback replaces them. Global Motion Off and a local Pause control stop the effects. See [the current changes and verification](docs/WEBSITES_TESTIMONIALS.md).

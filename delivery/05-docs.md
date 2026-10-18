@@ -260,6 +260,16 @@ Keep exploring has a stronger headline, purple emphasis on “The next idea,” 
 
 Production build, six-width/both-theme layout and all four native video checks passed. Actual underline transforms, global Off, offscreen pause, bold typography and all three destinations were checked at 390/1440px. [Six current WCAG A/AA scans](horizon-explore-accessibility.json) cover both themes and desktop hover states. [Desktop navigation preview](home-explore-highlight-1440.png) · [Phone preview](home-explore-highlight-390.png).
 
+## Homepage collection video
+
+The static Bunch of Work collage is replaced by the owner's supplied eight-second rotating website-design video. It uses a natural 16:9 frame, rounded clipping on all four corners, silent inline looping and the same visibility/Motion Off controls as the other previews. Local WebM/MP4 encodes at 1280px and 854px, plus a matching poster, are stored as `public/videos/home-collection*`.
+
+The purple section, heading and `/bunch-of-work` destination remain. The original interactive curved wall on that dedicated page is untouched. Removing the unused collage also removes its project/study imports and the homepage's unnecessary project query; subject pages continue loading their own content.
+
+Updated files are `components/home-directory.tsx`, `components/VisibilityVideo.tsx`, `app/pages.css`, `app/page.tsx`, the new video assets and native browser checks. Production build and all five native showcase checks passed on desktop/mobile, including actual looping, muted inline playback, no controls, correct source resolution, rounded corners, global Off/On and offscreen pause.
+
+[Desktop collection video](home-collection-loop-1440.png) · [Phone collection video](home-collection-loop-390.png)
+
 ## Files
 
 - `components/home-directory.tsx`: full-width section classes and contained secondary navigation.
@@ -1258,6 +1268,14 @@ Binary asset: 145643 bytes. SHA-256 `857729ce42b87a9ebc3798a3fa311039276b8000245
 ## docs/home-bot-loop-390.png
 
 Binary asset: 59570 bytes. SHA-256 `f7b1a2714e77768ce3672edc85a05c431e29e9415d7b5013761f01e3d68bffa5`. Available in the repository and source ZIP.
+
+## docs/home-collection-loop-1440.png
+
+Binary asset: 231038 bytes. SHA-256 `09fbc84b92f253376f777944b30784094fae5b8a34950f27ac3f9fb02c7e103f`. Available in the repository and source ZIP.
+
+## docs/home-collection-loop-390.png
+
+Binary asset: 82870 bytes. SHA-256 `eebc76b335b1d0a18c36987d70f090f595fecc0806eb6a0bca6946dd49c4b7de`. Available in the repository and source ZIP.
 
 ## docs/home-explore-highlight-1440.png
 
