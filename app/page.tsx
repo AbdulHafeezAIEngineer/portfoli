@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getIdentity } from "@/lib/content-loader";
+import { getIdentity, getProjects } from "@/lib/content-loader";
 import { Hero } from "@/components/hero";
 import { HomeDirectory } from "@/components/home-directory";
 import { LegacySectionRedirect } from "@/components/legacy-section-redirect";
@@ -36,12 +36,13 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export const dynamic = "force-dynamic";
-export default function Home() {
+export default async function Home() {
+  const projects = await getProjects();
   return (
     <SiteShell>
       <LegacySectionRedirect />
       <Hero />
-      <HomeDirectory />
+      <HomeDirectory projects={projects} />
     </SiteShell>
   );
 }

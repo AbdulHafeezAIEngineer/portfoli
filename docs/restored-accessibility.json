@@ -1,0 +1,74 @@
+[
+  {
+    "width": 390,
+    "path": "/",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "path": "/",
+    "theme": "light",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "path": "/ai-websites",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "path": "/ai-websites",
+    "theme": "light",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "path": "/ai-bots",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "path": "/ai-bots",
+    "theme": "light",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/",
+    "theme": "light",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/ai-websites",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/ai-websites",
+    "theme": "light",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/ai-bots",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/ai-bots",
+    "theme": "light",
+    "violations": []
+  }
+]

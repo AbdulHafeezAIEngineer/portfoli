@@ -2,6 +2,12 @@
 
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
+## Restored footer, homepage and subject-page processes
+
+The original footer component is restored (wordmark, waves, emblem, socials and original layout); its differences from the pre-categorization version are routing fixes and eager logo loading. Website-building remains below the website projects. The AI Bots page includes the bot-building process and all original embedding methods; former process-only URLs redirect to these inline sections. About tabs contain five genuine profile topics. The homepage now has a clear purpose, large visual pathways and a scoped black/white theme that preserves light/dark switching. Other custom page designs, project art, media and consent logic are preserved.
+
+The production build, lint/types, subject-page/navigation suite, six-width/both-theme suite, native showcase playback, gallery/certificate/FAQ checks and logo/reading checks pass. The route suite checks eleven subject pages, footer restoration, inline process order, local anchors, aliases, canonical URLs, sitemap, no-JavaScript content and mobile 3D. See [latest evidence](docs/RESTORED_HOMEPAGE.md). Older single-page and compact-footer reports below describe earlier revisions. Live Vercel deployment remains unverified here.
+
 ## Current categorized pages and clean project previews
 
 The public homepage now contains only the hero and a page directory. Thirteen separate content routes, including the AI Bots embedding sub-page, share route-aware desktop/mobile navigation. Profile tabs follow About → Journey → Technical Domains → Skills & Tools → Certificates → How I Build. The original curved wall has a larger dedicated page; Testimonials has its own editorial card layout. Project cards retain the original device models/artwork while removing white panels, counters and metadata clutter. Mobile device previews gain visible-only floating and scroll-linked 3D transforms without replacing native touch scrolling.

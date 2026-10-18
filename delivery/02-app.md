@@ -863,28 +863,17 @@ html[data-motion="reduced"] [data-reveal] .motion-word {
 ## app/ai-bots/how-i-embed-bots/page.tsx
 
 ``````tsx
-import { BotEmbedding } from "@/components/bot-services";
-import { SiteShell } from "@/components/site-shell";
-import { pageMetadata } from "@/lib/page-metadata";
-import { getBots } from "@/lib/content-loader";
-
-export const dynamic = "force-dynamic";
-export const metadata = pageMetadata("embedding");
-
-export default async function Page() {
-  const bots = await getBots();
-  return (
-    <SiteShell page="embedding">
-      <BotEmbedding bots={bots} />
-    </SiteShell>
-  );
+import { redirect } from "next/navigation";
+export default function Page() {
+  redirect("/ai-bots#embed-methods");
 }
 ``````
 
 ## app/ai-bots/page.tsx
 
 ``````tsx
-import { BotServices } from "@/components/bot-services";
+import { BotBuildProcess } from "@/components/bot-build-process";
+import { BotServices, BotEmbedding } from "@/components/bot-services";
 import { SiteShell } from "@/components/site-shell";
 import { pageMetadata } from "@/lib/page-metadata";
 import { getBots } from "@/lib/content-loader";
@@ -897,6 +886,8 @@ export default async function Page() {
   return (
     <SiteShell page="bots">
       <BotServices bots={bots} />
+      <BotBuildProcess />
+      <BotEmbedding bots={bots} />
     </SiteShell>
   );
 }
@@ -905,6 +896,7 @@ export default async function Page() {
 ## app/ai-websites/page.tsx
 
 ``````tsx
+import { Workflow } from "@/components/studio-sections";
 import { Work } from "@/components/work";
 import { SiteShell } from "@/components/site-shell";
 import { pageMetadata } from "@/lib/page-metadata";
@@ -918,6 +910,7 @@ export default async function Page() {
   return (
     <SiteShell page="websites">
       <Work projects={projects} />
+      <Workflow />
     </SiteShell>
   );
 }
@@ -8146,19 +8139,9 @@ html[data-motion="reduced"] {
 ## app/how-i-build/page.tsx
 
 ``````tsx
-import { Workflow } from "@/components/studio-sections";
-import { SiteShell } from "@/components/site-shell";
-import { pageMetadata } from "@/lib/page-metadata";
-
-export const dynamic = "force-dynamic";
-export const metadata = pageMetadata("process");
-
+import { redirect } from "next/navigation";
 export default function Page() {
-  return (
-    <SiteShell page="process">
-      <Workflow />
-    </SiteShell>
-  );
+  redirect("/ai-websites#workflow");
 }
 ``````
 
@@ -8419,7 +8402,7 @@ export default function OpenGraphImage() {
 
 ``````tsx
 import type { Metadata } from "next";
-import { getIdentity } from "@/lib/content-loader";
+import { getIdentity, getProjects } from "@/lib/content-loader";
 import { Hero } from "@/components/hero";
 import { HomeDirectory } from "@/components/home-directory";
 import { LegacySectionRedirect } from "@/components/legacy-section-redirect";
@@ -8456,12 +8439,13 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export const dynamic = "force-dynamic";
-export default function Home() {
+export default async function Home() {
+  const projects = await getProjects();
   return (
     <SiteShell>
       <LegacySectionRedirect />
       <Hero />
-      <HomeDirectory />
+      <HomeDirectory projects={projects} />
     </SiteShell>
   );
 }
@@ -8554,10 +8538,12 @@ export default function Home() {
   font-size: 12px;
   color: var(--muted);
 }
-.page-tabs a[aria-current="page"] {
+.page-tabs a[aria-current="page"],
+.page-tabs a[aria-current="location"] {
   color: var(--text);
 }
-.page-tabs a[aria-current="page"]::after {
+.page-tabs a[aria-current="page"]::after,
+.page-tabs a[aria-current="location"]::after {
   content: "";
   position: absolute;
   height: 2px;
@@ -8627,153 +8613,6 @@ export default function Home() {
 }
 .route-page .work-collection-label {
   margin-top: 58px;
-}
-.home-directory {
-  padding-block: clamp(64px, 8vw, 120px);
-}
-.directory-heading {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 40px;
-  margin-bottom: 40px;
-}
-.directory-heading h2 {
-  font-size: clamp(30px, 3.4vw, 48px);
-  margin-top: 16px;
-  letter-spacing: -0.05em;
-}
-.directory-heading > p {
-  max-width: 34ch;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.8;
-}
-.directory-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  border-top: 1px solid var(--line);
-}
-.directory-card {
-  position: relative;
-  padding: 34px 28px 40px 0;
-  border-bottom: 1px solid var(--line);
-}
-.directory-card:nth-child(3n + 2),
-.directory-card:nth-child(3n) {
-  padding-left: 28px;
-  border-left: 1px solid var(--line);
-}
-.directory-number {
-  color: var(--accent-text);
-  font-size: 10px;
-  letter-spacing: 0.13em;
-}
-.directory-card h3 {
-  font-size: clamp(22px, 2.2vw, 31px);
-  font-weight: 550;
-  margin: 30px 0 12px;
-  letter-spacing: -0.04em;
-}
-.directory-card p {
-  max-width: 27ch;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.8;
-}
-.directory-card > svg {
-  position: absolute;
-  right: 24px;
-  top: 30px;
-  color: var(--muted);
-  transition: transform 0.25s;
-}
-.directory-card:hover h3,
-.directory-card:hover > svg {
-  color: var(--accent-text);
-}
-[data-motion="full"] .directory-card:hover > svg {
-  transform: translate(3px, -3px);
-}
-.directory-end {
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  padding-top: 28px;
-}
-.directory-end a {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 12px;
-  color: var(--muted);
-}
-.directory-end a:hover {
-  color: var(--accent-text);
-}
-.compact-footer {
-  border-top: 1px solid var(--line);
-  padding-block: 38px 24px;
-  background: var(--bg);
-}
-.compact-footer-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-}
-.compact-footer-brand {
-  font-size: 28px;
-  font-weight: 650;
-  letter-spacing: -0.06em;
-}
-.compact-footer-brand span {
-  color: var(--accent-text);
-  margin-left: 3px;
-}
-.compact-footer-top > a:last-child {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  font-size: 13px;
-}
-.compact-footer-pages {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 24px;
-  padding-block: 28px;
-}
-.compact-footer-pages a {
-  font-size: 11px;
-  color: var(--muted);
-  padding-block: 6px;
-}
-.compact-footer a:hover {
-  color: var(--accent-text);
-}
-.compact-footer-bottom {
-  border-top: 1px solid var(--line);
-  padding-top: 22px;
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  color: var(--muted);
-  font-size: 10px;
-}
-.compact-footer-bottom nav {
-  margin-left: auto;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 18px;
-  align-items: center;
-}
-.compact-footer-bottom button {
-  font-size: inherit;
-  color: inherit;
-  padding-block: 6px;
-}
-.compact-footer-bottom > a {
-  font-size: 20px;
 }
 /* An entire page for the original curved collection, with a larger visible canvas. */
 .collection-page .dome-heading {
@@ -8906,57 +8745,6 @@ export default function Home() {
     font-size: 11px;
     padding-block: 17px;
   }
-  .directory-heading {
-    display: block;
-  }
-  .directory-heading > p {
-    margin-top: 20px;
-    max-width: 42ch;
-  }
-  .directory-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .directory-card {
-    padding: 28px 20px 30px 0;
-  }
-  .directory-card:nth-child(n) {
-    border-left: 0;
-  }
-  .directory-card:nth-child(even) {
-    border-left: 1px solid var(--line);
-    padding-left: 20px;
-  }
-  .directory-card:nth-child(odd) {
-    padding-left: 0;
-  }
-  .directory-card h3 {
-    font-size: 23px;
-  }
-  .directory-card > svg {
-    right: 12px;
-    top: 25px;
-    width: 18px;
-  }
-  .directory-end {
-    flex-direction: column;
-  }
-  .compact-footer-top {
-    align-items: start;
-    flex-direction: column;
-    gap: 14px;
-  }
-  .compact-footer-bottom {
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-  .compact-footer-bottom nav {
-    order: 3;
-    width: 100%;
-    margin-left: 0;
-  }
-  .compact-footer-bottom > a {
-    margin-left: auto;
-  }
   .testimonials-page .testimonials-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
@@ -8978,9 +8766,6 @@ export default function Home() {
   .testimonials-page .testimonial-card {
     min-height: 0;
     padding: 28px;
-  }
-  .directory-card h3 {
-    font-size: 21px;
   }
 }
 
@@ -9062,6 +8847,320 @@ html[data-motion="full"]
   }
   .route-websites .project-title-row {
     padding-top: 16px;
+  }
+}
+
+/* Subject-specific processes stay directly below their work and demos. */
+.route-websites #workflow,
+.route-bots #bot-build,
+.route-bots #embed-methods {
+  border-top: 1px solid var(--line);
+}
+.route-bots #embed-title {
+  font-size: clamp(34px, 4.3vw, 60px);
+  letter-spacing: -0.055em;
+  line-height: 1.12;
+  margin-top: 16px;
+}
+.route-bots .embed-card h3 {
+  font-size: 22px;
+  margin: 18px 0 12px;
+}
+.route-bots .embed-card h4 {
+  font-size: 12px;
+  margin: 22px 0 10px;
+}
+/* A purpose-led introduction and large visual pathways, using original project art. */
+.home-overview {
+  padding-block: clamp(72px, 9vw, 135px);
+}
+.home-purpose {
+  max-width: 820px;
+  text-align: center;
+  margin-bottom: clamp(54px, 7vw, 100px);
+}
+.home-purpose h2 {
+  font-size: clamp(36px, 5vw, 68px);
+  line-height: 1.12;
+  font-weight: 550;
+  letter-spacing: -0.055em;
+  margin: 20px 0 26px;
+}
+.home-purpose > p:last-child {
+  max-width: 66ch;
+  margin-inline: auto;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.9;
+}
+.home-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 64px 40px;
+}
+.home-feature {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  text-align: center;
+  border-top: 1px solid var(--line);
+  padding-top: 40px;
+}
+.home-feature-websites {
+  grid-column: 1 / -1;
+}
+.home-feature-copy {
+  max-width: 650px;
+  margin: 0 auto 30px;
+  padding-inline: 18px;
+}
+.home-feature h3 {
+  font-size: clamp(27px, 3.4vw, 46px);
+  line-height: 1.14;
+  letter-spacing: -0.05em;
+  margin: 15px 0;
+}
+.home-feature-copy > p:not(.eyebrow) {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+  max-width: 50ch;
+  margin-inline: auto;
+}
+.home-feature-copy > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--accent-text);
+  font-size: 12px;
+  margin-top: 22px;
+}
+.home-feature-media {
+  position: relative;
+  overflow: hidden;
+  margin-top: auto;
+  background: var(--surface);
+  border-radius: 16px;
+}
+.home-website-preview {
+  padding: clamp(20px, 4vw, 58px) clamp(20px, 5vw, 80px) 0;
+  aspect-ratio: 2.05;
+}
+.home-website-preview img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 15px 40px
+    color-mix(in srgb, var(--neutral-black) 12%, transparent);
+}
+.home-bot-preview {
+  aspect-ratio: 1.5;
+}
+.home-bot-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.home-collection-preview {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-content: center;
+  gap: 12px;
+  padding: 22px;
+  aspect-ratio: 1.5;
+}
+.home-collection-preview > div {
+  position: relative;
+  aspect-ratio: 1.2;
+  overflow: hidden;
+  border-radius: 7px;
+  transform: rotate(-5deg);
+}
+.home-collection-preview img {
+  object-fit: cover;
+  object-position: top;
+}
+.home-feature:hover h3 {
+  color: var(--text);
+}
+.home-feature:hover .home-feature-copy > span {
+  color: var(--accent-hover);
+}
+.home-more {
+  margin-top: clamp(64px, 8vw, 110px);
+  padding-top: 48px;
+  border-top: 1px solid var(--line);
+}
+.home-more h2 {
+  font-size: clamp(26px, 3vw, 40px);
+  letter-spacing: -0.045em;
+  line-height: 1.2;
+  margin-top: 18px;
+}
+.home-more nav {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 40px;
+  margin-top: 40px;
+}
+.home-more nav a {
+  padding-top: 25px;
+  border-top: 1px solid var(--line);
+}
+.home-more nav h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 21px;
+  letter-spacing: -0.03em;
+}
+.home-more nav svg {
+  color: var(--accent-text);
+}
+.home-more nav p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+  margin-top: 14px;
+  max-width: 34ch;
+}
+@media (max-width: 767px) {
+  .home-feature-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 44px;
+  }
+  .home-feature {
+    padding-top: 28px;
+  }
+  .home-feature-websites {
+    grid-column: auto;
+  }
+  .home-purpose > p:last-child {
+    font-size: 13px;
+  }
+  .home-website-preview {
+    aspect-ratio: 1.45;
+    padding: 20px 18px 0;
+  }
+  .home-feature-media {
+    border-radius: 12px;
+  }
+  .home-more nav {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+  .home-more nav p {
+    max-width: 46ch;
+  }
+}
+/* Homepage only: a restrained monochrome presentation, with both theme choices intact. */
+.route-home {
+  --bg: var(--neutral-black);
+  --surface: var(--neutral-ink);
+  --raised: var(--neutral-charcoal);
+  --text: var(--neutral-paper);
+  --muted: var(--neutral-silver);
+  --accent: var(--text);
+  --accent-hover: var(--text);
+  --accent-text: var(--text);
+  --accent-soft: color-mix(in srgb, var(--text) 7%, transparent);
+  --on-accent: var(--bg);
+  --gold: var(--text);
+  --line: color-mix(in srgb, var(--text) 14%, transparent);
+  --line-bright: color-mix(in srgb, var(--text) 28%, transparent);
+  --glass: color-mix(in srgb, var(--bg) 92%, transparent);
+  --ref-card: var(--surface);
+  --ref-soft: var(--raised);
+  background: var(--bg);
+  color: var(--text);
+}
+[data-theme="light"] .route-home {
+  --bg: var(--neutral-white);
+  --surface: var(--neutral-paper);
+  --raised: color-mix(in srgb, var(--neutral-black) 4%, var(--neutral-white));
+  --text: var(--neutral-ink);
+  --muted: var(--neutral-slate);
+}
+.route-home .hero {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  padding-top: clamp(54px, 6vw, 86px);
+  text-align: center;
+}
+.route-home .hero-copy {
+  max-width: 1000px;
+  margin-inline: auto;
+}
+.route-home .hero-copy .eyebrow {
+  justify-content: center;
+  color: var(--muted);
+}
+.route-home .hero-copy .tiny-line {
+  display: none;
+}
+.route-home .hero h1 {
+  font-size: clamp(46px, 6.4vw, 88px);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.065em;
+  margin-top: 24px;
+}
+.route-home .hero-intro {
+  max-width: 66ch;
+  margin: 28px auto 0;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.85;
+}
+.route-home .hero-tagline {
+  max-width: 65ch;
+  margin: 16px auto 0;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.route-home .hero-actions {
+  justify-content: center;
+  margin-top: 27px;
+}
+.route-home .hero-actions .button {
+  border-radius: 999px;
+  padding-inline: 26px;
+}
+.route-home .hero-note {
+  margin-top: 20px;
+  color: var(--muted);
+}
+.route-home .hero-visual {
+  width: min(100%, 510px);
+  padding: 0;
+  margin: 20px auto 0;
+}
+.route-home .hero-bottom {
+  margin-top: 22px;
+  padding-block: 24px;
+}
+.route-home .hero-title-reveal .text-reveal-line:nth-child(2) {
+  color: var(--muted);
+}
+@media (max-width: 767px) {
+  .route-home .hero h1 {
+    font-size: clamp(43px, 10vw, 62px);
+  }
+  .route-home .hero-intro {
+    font-size: 13px;
+  }
+  .route-home .hero-tagline {
+    max-width: 38ch;
+  }
+  .route-home .hero-visual {
+    width: min(100%, 390px);
+    margin-top: 12px;
+  }
+  .route-home .hero-actions .button {
+    padding-inline: 22px;
   }
 }
 ``````
@@ -12468,11 +12567,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getProjects(),
   ]);
   return [
-    ...Object.values(portfolioPages).map((page) => ({
-      url: `${site.url}${page.href}`,
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    })),
+    ...Object.values(portfolioPages)
+      .filter((page) => !page.href.includes("#"))
+      .map((page) => ({
+        url: `${site.url}${page.href}`,
+        changeFrequency: "monthly" as const,
+        priority: 0.8,
+      })),
     ...services.map((service) => ({
       url: `${site.url}/services/${service.id}`,
       priority: 0.7,

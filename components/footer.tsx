@@ -6,66 +6,16 @@ import { site } from "@/data/site";
 import { studio } from "@/data/studio";
 import { SocialLinks } from "./social-links";
 import { CookieSettingsButton } from "./consent-provider";
-import { aboutPages, portfolioPages } from "@/data/navigation";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
 
 export function Footer({
   brand,
   email = site.email,
-  compact = false,
 }: {
   brand: string;
   email?: string;
-  compact?: boolean;
 }) {
-  if (compact)
-    return (
-      <footer className="compact-footer">
-        <div className="container">
-          <div className="compact-footer-top">
-            <Link href="/" className="compact-footer-brand">
-              {brand}
-              <span>.</span>
-            </Link>
-            <a href={`mailto:${email}`}>
-              {email}
-              <ArrowUpRight size={15} aria-hidden="true" />
-            </a>
-          </div>
-          <nav className="compact-footer-pages" aria-label="Footer navigation">
-            {[
-              ...site.nav,
-              ...aboutPages
-                .filter((id) => id !== "about")
-                .map((id) => portfolioPages[id]),
-              portfolioPages.services,
-            ].map((item) => (
-              <Link key={item.href} href={item.href}>
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-          <div className="compact-footer-bottom">
-            <p>
-              © {new Date().getFullYear()} {brand}. {studio.ending.copyright}
-            </p>
-            <nav aria-label="Legal information">
-              {studio.ending.legalLinks.map((item) => (
-                <Link key={item.href} href={item.href}>
-                  {item.label}
-                </Link>
-              ))}
-              <CookieSettingsButton />
-            </nav>
-            <a href="#top" aria-label={site.ui.back}>
-              ↑
-            </a>
-          </div>
-        </div>
-        <BackToTop />
-      </footer>
-    );
   return (
     <footer className="editorial-footer">
       <div className="container footer-top-grid">
@@ -125,6 +75,8 @@ export function Footer({
             >
               <span>
                 <Image
+                  loading="eager"
+                  fetchPriority="low"
                   src={site.logo.src}
                   alt=""
                   width={64}
@@ -157,7 +109,7 @@ export function Footer({
             </nav>
             <Link
               className="footer-top-link"
-              href="/#top"
+              href="#top"
               aria-label={site.ui.back}
             >
               ↑

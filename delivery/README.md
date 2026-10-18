@@ -91,6 +91,7 @@ components/VisibilityVideo.tsx
 components/WorkShowcaseVideo.tsx
 components/admin-app.tsx
 components/back-to-top.tsx
+components/bot-build-process.tsx
 components/bot-chat-panel.tsx
 components/bot-embed.tsx
 components/bot-services.tsx
@@ -168,6 +169,7 @@ docs/EDITORIAL_UPGRADE.md
 docs/PRESENTATION_UPDATE.md
 docs/PURPLE_VIDEO_UPDATE.md
 docs/READY_PLAYBACK_UPDATE.md
+docs/RESTORED_HOMEPAGE.md
 docs/SHOWCASE_UPDATE.md
 docs/VIDEO_MOTION_UPDATE.md
 docs/about-preview.png
@@ -273,6 +275,14 @@ docs/reference-tools-preview.png
 docs/reference-wall-of-love-preview.png
 docs/reference-work-bunch-preview.png
 docs/reference-workflow-preview.png
+docs/restored-accessibility.json
+docs/restored-footer-1440.png
+docs/restored-footer-390.png
+docs/restored-home-dark-1440.png
+docs/restored-home-dark-390.png
+docs/restored-home-light-1440.png
+docs/restored-home-light-390.png
+docs/restored-scroll-readiness.json
 docs/reviews-empty-desktop-dark.png
 docs/reviews-empty-desktop-light.png
 docs/reviews-empty-mobile-dark.png

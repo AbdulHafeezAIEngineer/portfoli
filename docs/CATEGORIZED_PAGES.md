@@ -1,25 +1,23 @@
 # Categorized Elvora portfolio
 
-The homepage is a concise introduction and six-entry directory. Each subject now has a permanent URL, rather than sharing one long scroll. Header navigation is consistent, route-aware and keyboard accessible, with a grouped About menu and a scrollable secondary tab row. Mobile navigation contains every category and closes after navigation or Escape.
+The homepage now has a purpose-led, monochrome introduction and large visual previews. Eleven subject pages organize the site. Website and bot processes live with their respective projects and demos. See the [latest correction and previews](RESTORED_HOMEPAGE.md). Header navigation is consistent, route-aware and keyboard accessible, with a grouped About menu and a scrollable secondary tab row. Mobile navigation contains every category and closes after navigation or Escape.
 
 | Page | Route | Content |
 | --- | --- | --- |
-| Home | `/` | Original hero/logo motion and a short page directory |
-| AI Websites | `/ai-websites` | Wide looping showcase, four original concepts, interactive demos and screenshot galleries |
-| AI Bots | `/ai-bots` | Wide looping bot video and all bot demos; optional providers still require consent |
-| How I Embed Bots | `/ai-bots/how-i-embed-bots` | Existing iframe, script and API integration methods, under AI Bots |
+| Home | `/` | Purpose-led introduction, original logo motion and visual subject previews |
+| AI Websites | `/ai-websites` | Wide looping showcase, four concepts, interactive demos, screenshot galleries and How I Build Websites |
+| AI Bots | `/ai-bots` | Looping bot video, bot demos, How I Build Bots and all embedding methods; provider consent retained |
 | Bunch of Work | `/bunch-of-work` | Larger original 54-tile curved wall and accessible project index |
 | About Me | `/about` | Original Elvora artwork and personal introduction |
 | My Journey | `/journey` | Existing chapters, in their original order |
 | Technical Domains | `/technical-domains` | Frontend, APIs, data, deployment and AI domains |
 | Skills & Tools | `/skills` | Existing categorized toolkit and tools marquee |
 | Certificates | `/certificates` | Original documents and functional zoom viewer |
-| How I Build | `/how-i-build` | Human-led creative workflow and selected custom-trained AI tasks |
 | Testimonials | `/testimonials` | Dedicated editorial card layout; published, permission-approved reviews only |
 | Services | `/services` | Existing service scopes and detail links |
 | Contact | `/contact` | Existing inquiry form, direct contact and native/enhanced FAQs |
 
-The About tab sequence is About Me → My Journey → Technical Domains → Skills & Tools → Certificates → How I Build. AI Bots has Demos and How I Embed Bots routes. Footer links expose every principal page; old `/#work`, `/#embed-methods` and other former section links redirect to their new destinations. Canonical metadata and sitemap include the new pages. Existing service, project-note, interactive demo, design-study, legal and private admin URLs remain available.
+The About tab sequence is About Me → My Journey → Technical Domains → Skills & Tools → Certificates. AI Websites and AI Bots have local section links to their processes. The original full footer design is restored; old `/#work`, `/#embed-methods` and other former section links redirect to their new destinations. The former `/how-i-build` and `/ai-bots/how-i-embed-bots` routes redirect to the appropriate parent-page section. Canonical metadata and sitemap list actual subject pages. Existing service, project-note, interactive demo, design-study, legal and private admin URLs remain available.
 
 ## Clean previews and mobile motion
 
@@ -34,14 +32,14 @@ No real testimonials were supplied to file mode. Layout samples are visibly labe
 ## Verification
 
 - `npm run build` (includes lint and TypeScript), `npm run lint`, `npm run typecheck`: passed.
-- `test:pages:browser`: all thirteen content routes at 390/1440px, isolated content, real route links, canonical URLs, ordered tabs, keyboard menus, saved Motion Off, mobile 3D, legacy redirects, server-rendered content and sitemap.
+- `test:pages:browser`: all eleven subject routes at 390/1440px, isolated content, real route links, canonical URLs, inline processes, restored footer, ordered tabs, keyboard menus, saved Motion Off, mobile 3D, legacy redirects, server-rendered content and sitemap.
 - `test:motion:browser`: 360, 390, 768, 1024, 1440, 1920px; both themes, native touch, default On, saved Off and contact validation.
 - `test:showcase:browser`: native playback and actual looping for both videos, desktop/mobile sources, muted/inline/no controls, global Off/On, offscreen pause and consent.
 - `test:windows:browser`: all four interactive concepts, mobile/desktop frames, maximize/Escape/back, nested scrolling, forms/reset and retained study routes.
 - `test:finishing:browser`, `test:video-motion:browser`, `test:reviews:browser`: screenshot/certificate dialogs, FAQ keyboard/reversal/no-JS behavior, logo flip/shine, reversible word emphasis, stable text geometry, genuine-review replacement and labeled previews.
 - Consent, contact, chat and security: 46 tests passed; no optional provider traffic during public browser checks.
-- [24 WCAG A/AA scans](pages-accessibility.json): home, website, bot, embedding, About and Testimonials pages; both themes at 390/1440px, zero violations.
-- [Scroll/loading observations](pages-scroll-readiness.json): home, website and collection pages at 390/1440px. Each page's images are loaded before scrolling; no image/component-script requests start during the measured scroll. Frame observations are from headless Chromium, not a physical-device FPS guarantee.
+- [12 current WCAG A/AA scans](restored-accessibility.json): home, website and bot pages including the restored footer and inline processes; both themes at 390/1440px, zero violations.
+- [Current scroll/loading observations](restored-scroll-readiness.json): home, website and collection pages at 390/1440px. Each page's images are loaded before scrolling; no image/component-script requests start during the measured scroll. Frame observations are from headless Chromium, not a physical-device FPS guarantee.
 
 Local validation does not establish live Vercel deployment, real owner login or provider delivery. No credentials or hosting settings were modified.
 

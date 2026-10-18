@@ -80,7 +80,7 @@ export function Workflow() {
         <Reveal>
           <p className="eyebrow">{studio.workflow.eyebrow}</p>
         </Reveal>
-        <TextReveal as="h1" id="workflow-title" text={studio.workflow.title} />
+        <TextReveal as="h2" id="workflow-title" text={studio.workflow.title} />
         <Reveal>
           <ReadingText text={studio.workflow.intro} />
         </Reveal>

@@ -90,7 +90,7 @@ try {
           !document.querySelector(`[data-showcase-video="${n}"] video`).paused,
         name,
       );
-      await page.locator(".compact-footer").scrollIntoViewIfNeeded();
+      await page.locator(".editorial-footer").scrollIntoViewIfNeeded();
       await page.waitForFunction(
         (n) =>
           document.querySelector(`[data-showcase-video="${n}"] video`).paused,

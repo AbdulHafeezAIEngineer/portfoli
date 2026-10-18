@@ -6,14 +6,12 @@ if (!/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(base))
 const routes = [
   ["/ai-websites", "#work", ".project-card", 4],
   ["/ai-bots", "#ai-bots", ".bot-card", 4],
-  ["/ai-bots/how-i-embed-bots", "#embed-methods", ".embed-card", 3],
   ["/bunch-of-work", "#work-bunch", ".dome-tile", 54],
   ["/about", "#experience"],
   ["/journey", "#journey"],
   ["/technical-domains", "#fundamentals", ".domain-card", 5],
   ["/skills", "#skills"],
   ["/certificates", "#certification"],
-  ["/how-i-build", "#workflow"],
   ["/testimonials", "#testimonials", ".testimonial-card", 4],
   ["/services", "#services"],
   ["/contact", "#contact"],
@@ -48,17 +46,68 @@ try {
         .count(),
       0,
     );
-    assert.equal(await page.locator(".directory-card").count(), 6);
+    assert.equal(await page.locator(".home-feature").count(), 3);
+    assert.equal(
+      await page
+        .getByRole("navigation", { name: "More about Elvora", exact: true })
+        .getByRole("link")
+        .count(),
+      3,
+    );
+    assert.ok(await page.locator(".home-purpose").isVisible());
+    assert.match(
+      await page.locator(".hero-intro").innerText(),
+      /Elvora is my space/,
+    );
+    assert.ok(
+      await page
+        .locator(".home-purpose")
+        .evaluate((el) =>
+          Boolean(
+            el.compareDocumentPosition(
+              document.querySelector(".home-feature-grid"),
+            ) & Node.DOCUMENT_POSITION_FOLLOWING,
+          ),
+        ),
+    );
+    assert.equal(
+      await page.locator(".editorial-footer .footer-wordmark-window").count(),
+      1,
+    );
+    assert.equal(
+      await page.locator(".editorial-footer .footer-waves path").count(),
+      3,
+    );
+    assert.equal(await page.locator(".compact-footer").count(), 0);
     for (const [path, id, selector, count] of routes) {
       // Navigate through an actual link so route effects and persisted preferences are exercised.
-      const link = page.locator(`.compact-footer a[href="${path}"]`).first();
-      if (await link.count()) await link.click();
+      // Exercise the actual header for principal pages and ordered About tabs for profile pages.
+      const principal = [
+        "/ai-websites",
+        "/ai-bots",
+        "/bunch-of-work",
+        "/about",
+        "/testimonials",
+        "/contact",
+      ].includes(path);
+      if (principal) {
+        if (width < 1200) {
+          await page
+            .getByRole("button", { name: "Open navigation", exact: true })
+            .click();
+          await page.locator(`#mobile-navigation a[href="${path}"]`).click();
+        } else
+          await page.locator(`.desktop-nav a[href="${path}"]`).first().click();
+      } else if (path === "/services")
+        await page.locator('.footer-quick-links a[href="/services"]').click();
       else {
-        await page.goto(base + "/ai-bots");
-        await page
-          .getByRole("navigation", { name: "AI Bots pages" })
-          .getByRole("link", { name: "How I Embed Bots", exact: true })
-          .click();
+        if (
+          !(await page
+            .getByRole("navigation", { name: "About Me pages" })
+            .count())
+        )
+          await page.goto(base + "/about");
+        await page.locator(`.page-tabs a[href="${path}"]`).click();
       }
       await page.waitForURL(base + path);
       assert.ok(await page.locator(id).isVisible(), path);
@@ -90,7 +139,32 @@ try {
           path + " / " + theme,
         );
       }
+      assert.equal(
+        await page.locator(".editorial-footer .footer-wordmark-window").count(),
+        1,
+      );
+      assert.equal(
+        await page.locator(".editorial-footer .footer-emblem").count(),
+        1,
+      );
       if (path === "/ai-websites") {
+        assert.ok(await page.locator("#workflow").isVisible());
+        assert.equal(await page.locator("#workflow .workflow-step").count(), 5);
+        assert.ok(
+          await page
+            .locator("#work")
+            .evaluate((el) =>
+              Boolean(
+                el.compareDocumentPosition(
+                  document.querySelector("#workflow"),
+                ) & Node.DOCUMENT_POSITION_FOLLOWING,
+              ),
+            ),
+        );
+        assert.equal(
+          await page.locator("#workflow-title").evaluate((el) => el.tagName),
+          "H2",
+        );
         assert.equal(
           await page
             .locator(
@@ -123,16 +197,44 @@ try {
             "Technical Domains",
             "Skills & Tools",
             "Certificates",
-            "How I Build",
           ],
         );
       }
-      if (path === "/ai-bots")
+      if (path === "/ai-bots") {
         assert.equal(
-          await page.locator(".embed-card").count(),
-          0,
-          "Embedding belongs to its sub-tab",
+          await page.locator("#bot-build .workflow-step").count(),
+          5,
         );
+        assert.equal(
+          await page.locator("#embed-methods .embed-card").count(),
+          3,
+        );
+        assert.equal(
+          await page.locator("#embed-title").evaluate((el) => el.tagName),
+          "H2",
+        );
+        assert.ok(
+          await page
+            .locator("#bot-build")
+            .evaluate((el) =>
+              Boolean(
+                el.compareDocumentPosition(
+                  document.querySelector("#embed-methods"),
+                ) & Node.DOCUMENT_POSITION_FOLLOWING,
+              ),
+            ),
+        );
+        await page
+          .getByRole("navigation", { name: "AI Bots sections" })
+          .getByRole("link", { name: "How I Embed Bots", exact: true })
+          .click();
+        await page.waitForURL("**/ai-bots#embed-methods");
+        await page.waitForFunction(
+          () =>
+            document.querySelector("#embed-methods").getBoundingClientRect()
+              .top < innerHeight,
+        );
+      }
       if (path === "/testimonials") {
         assert.equal(await page.locator('[data-sample="true"]').count(), 4);
         await page.screenshot({
@@ -149,7 +251,7 @@ try {
       });
       await menu.click();
       const mobile = page.locator("#mobile-navigation");
-      assert.equal(await mobile.getByRole("link").count(), 13);
+      assert.equal(await mobile.getByRole("link").count(), 12);
       await page.keyboard.press("Escape");
       assert.equal(await menu.getAttribute("aria-expanded"), "false");
       assert.ok(await menu.evaluate((el) => el === document.activeElement));
@@ -165,7 +267,7 @@ try {
         exact: true,
       });
       await button.click();
-      assert.equal(await page.locator("#about-navigation a").count(), 6);
+      assert.equal(await page.locator("#about-navigation a").count(), 5);
       await page.keyboard.press("Escape");
       assert.equal(await button.getAttribute("aria-expanded"), "false");
       await button.click();
@@ -177,7 +279,7 @@ try {
     }
     await page.getByLabel("Animation preference").selectOption("reduced");
     await page
-      .locator('.compact-footer a[href="/ai-websites"]')
+      .locator('.footer-quick-links a[href="/ai-websites"]')
       .first()
       .click();
     await page.waitForURL("**/ai-websites");
@@ -226,12 +328,16 @@ try {
     await page.goto(base + "/#work");
     await page.waitForURL("**/ai-websites");
     await page.goto(base + "/#embed-methods");
-    await page.waitForURL("**/ai-bots/how-i-embed-bots");
+    await page.waitForURL("**/ai-bots#embed-methods");
+    await page.goto(base + "/how-i-build");
+    await page.waitForURL("**/ai-websites#workflow");
+    await page.goto(base + "/ai-bots/how-i-embed-bots");
+    await page.waitForURL("**/ai-bots#embed-methods");
     assert.deepEqual(errors, []);
     assert.deepEqual(external, []);
     await page.close();
     console.log(
-      `PASS ${width}px: 13 dedicated routes, real navigation, isolated content, canonical URLs, clean previews, theme layout, keyboard menus, saved Motion Off, mobile 3D and legacy links.`,
+      `PASS ${width}px: 11 subject pages, real navigation, isolated content, canonical URLs, clean previews, theme layout, keyboard menus, saved Motion Off, mobile 3D and legacy links.`,
     );
   }
   const page = await b.newPage({ javaScriptEnabled: false });
@@ -248,7 +354,7 @@ try {
     );
   await page.close();
   console.log(
-    "PASS all routes render without JavaScript and appear in the sitemap.",
+    "PASS all subject pages render without JavaScript and appear in the sitemap.",
   );
 } finally {
   await b.close();

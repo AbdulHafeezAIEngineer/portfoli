@@ -1,66 +1,162 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { portfolioPages } from "@/data/navigation";
+import type { ProjectView } from "@/data/projects";
+import { studies } from "@/data/studies";
+import { imagePreview } from "@/lib/image-preview";
+import { ReadingText } from "./reading-text";
+import { TextReveal } from "./text-reveal";
 
-const chapters = [
-  { id: "websites", note: "Original concepts. Real interfaces.", number: "01" },
-  { id: "bots", note: "Conversations, made useful.", number: "02" },
-  {
-    id: "collection",
-    note: "Different worlds. One point of view.",
-    number: "03",
-  },
-  { id: "about", note: "The person behind the pixels.", number: "04" },
-  {
-    id: "process",
-    note: "From a first idea to the final detail.",
-    number: "05",
-  },
-  {
-    id: "testimonials",
-    note: "Perspectives on working together.",
-    number: "06",
-  },
-] as const;
-
-export function HomeDirectory() {
+export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
+  const website = projects[0]?.screenshots[0];
+  const collection = [
+    ...projects
+      .slice(0, 3)
+      .map((project) => ({
+        src: project.screenshots[0].src,
+        title: project.title,
+      })),
+    ...studies
+      .slice(0, 3)
+      .map((study) => ({ src: study.screenshot, title: study.name })),
+  ];
   return (
     <section
-      className="container home-directory"
+      id="explore"
+      className="home-directory home-overview"
       aria-labelledby="directory-title"
     >
-      <div className="directory-heading">
-        <div>
-          <p className="eyebrow">EXPLORE ELVORA</p>
-          <h2 id="directory-title">A little more direction.</h2>
-        </div>
-        <p>
-          The work, the process and the person behind it. Each with a space of
-          its own.
-        </p>
+      <div className="container home-purpose">
+        <p className="eyebrow">THE PURPOSE BEHIND ELVORA</p>
+        <TextReveal
+          id="directory-title"
+          text={"Human ideas.\nUseful digital experiences."}
+        />
+        <ReadingText text="This is a place to explore what I create and how I create it: websites with their own identity, AI assistants that answer real questions, and the thoughtful decisions behind both. See the work in action, follow the process, or start a conversation about your own idea." />
       </div>
-      <div className="directory-grid">
-        {chapters.map(({ id, note, number }) => (
-          <Link
-            className="directory-card"
-            key={id}
-            href={portfolioPages[id].href}
+      <nav
+        className="container home-feature-grid"
+        aria-label="Explore Elvora's work"
+      >
+        <Link
+          className="home-feature home-feature-websites"
+          href="/ai-websites"
+        >
+          <div className="home-feature-copy">
+            <p className="eyebrow">AI WEBSITES</p>
+            <h3>Made with a point of view.</h3>
+            <p>
+              Original website concepts, built around an idea. Explore the
+              interfaces and the creative process behind them.
+            </p>
+            <span>
+              Explore websites <ArrowUpRight size={16} aria-hidden="true" />
+            </span>
+          </div>
+          <div className="home-feature-media home-website-preview">
+            <Image
+              loading="eager"
+              fetchPriority="low"
+              src={website?.src || "/videos/work-showcase-poster.webp"}
+              {...imagePreview(website?.src || "")}
+              alt={website?.alt || "A preview of Elvora's website concepts"}
+              width={1600}
+              height={1000}
+              sizes="(max-width: 767px) 90vw, 1000px"
+            />
+          </div>
+        </Link>
+        <Link className="home-feature home-feature-bots" href="/ai-bots">
+          <div className="home-feature-copy">
+            <p className="eyebrow">AI BOTS</p>
+            <h3>A question. A useful answer.</h3>
+            <p>
+              Meet the assistants, try the demos, and see how I build, ground
+              and embed a bot into a website.
+            </p>
+            <span>
+              Explore AI bots <ArrowUpRight size={16} aria-hidden="true" />
+            </span>
+          </div>
+          <div className="home-feature-media home-bot-preview">
+            <Image
+              loading="eager"
+              fetchPriority="low"
+              src="/videos/ai-bot-poster.webp"
+              alt="A preview of a customer conversation with an AI assistant"
+              width={1600}
+              height={900}
+              sizes="(max-width: 767px) 90vw, 580px"
+            />
+          </div>
+        </Link>
+        <Link
+          className="home-feature home-feature-collection"
+          href="/bunch-of-work"
+        >
+          <div className="home-feature-copy">
+            <p className="eyebrow">BUNCH OF WORK</p>
+            <h3>Different worlds. One eye for detail.</h3>
+            <p>
+              A closer look at websites, dashboards and interface experiments.
+              Discover the full visual collection.
+            </p>
+            <span>
+              See the collection <ArrowUpRight size={16} aria-hidden="true" />
+            </span>
+          </div>
+          <div
+            className="home-feature-media home-collection-preview"
+            aria-hidden="true"
           >
-            <span className="directory-number">{number} /</span>
-            <h3>{portfolioPages[id].label}</h3>
-            <p>{note}</p>
-            <ArrowUpRight size={22} strokeWidth={1.5} aria-hidden="true" />
-          </Link>
-        ))}
-      </div>
-      <div className="directory-end">
-        <Link href="/services">
-          Explore services <ArrowUpRight size={15} aria-hidden="true" />
+            {collection.map((shot) => (
+              <div key={shot.src}>
+                <Image
+                  loading="eager"
+                  fetchPriority="low"
+                  src={shot.src}
+                  {...imagePreview(shot.src)}
+                  alt=""
+                  fill
+                  sizes="(max-width: 767px) 30vw, 190px"
+                />
+              </div>
+            ))}
+          </div>
         </Link>
-        <Link href="/contact">
-          Have a project in mind? Let’s talk.{" "}
-          <ArrowUpRight size={15} aria-hidden="true" />
-        </Link>
+      </nav>
+      <div className="container home-more">
+        <div>
+          <p className="eyebrow">KEEP EXPLORING</p>
+          <h2>The person. The perspective. The next idea.</h2>
+        </div>
+        <nav aria-label="More about Elvora">
+          {[
+            {
+              href: "/about",
+              title: "About Me",
+              text: "My journey, technical foundations and the tools I work with.",
+            },
+            {
+              href: "/testimonials",
+              title: "Testimonials",
+              text: "Perspectives on working together, all in one place.",
+            },
+            {
+              href: "/contact",
+              title: "Let’s talk",
+              text: "Tell me what you have in mind. Let’s find a thoughtful way forward.",
+            },
+          ].map((item) => (
+            <Link key={item.href} href={item.href}>
+              <h3>
+                {item.title}
+                <ArrowUpRight size={18} aria-hidden="true" />
+              </h3>
+              <p>{item.text}</p>
+            </Link>
+          ))}
+        </nav>
       </div>
     </section>
   );

@@ -12,11 +12,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getProjects(),
   ]);
   return [
-    ...Object.values(portfolioPages).map((page) => ({
-      url: `${site.url}${page.href}`,
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    })),
+    ...Object.values(portfolioPages)
+      .filter((page) => !page.href.includes("#"))
+      .map((page) => ({
+        url: `${site.url}${page.href}`,
+        changeFrequency: "monthly" as const,
+        priority: 0.8,
+      })),
     ...services.map((service) => ({
       url: `${site.url}/services/${service.id}`,
       priority: 0.7,

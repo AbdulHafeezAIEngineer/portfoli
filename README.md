@@ -10,11 +10,11 @@ Latest playback/navigation update: [wide looping videos, interactive desktop win
 
 ## Categorized public pages
 
-The homepage is now a short introduction and directory. AI Websites, AI Bots, Bunch of Work, About Me, Journey, Technical Domains, Skills & Tools, Certificates, How I Build, Testimonials, Services and Contact each have a dedicated route. How I Embed Bots lives under AI Bots. About pages have ordered secondary tabs; saved links to former homepage sections redirect to the appropriate page.
+The homepage now introduces Elvora with a monochrome presentation, original logo motion and large visual previews of websites, bots and the collection. Its light/dark switch remains functional. Eleven subject pages organize the content. How I Build Websites appears beneath the website projects; How I Build Bots and all three embedding methods appear beneath the bot demos. About tabs contain only personal/background subjects. Old process URLs redirect to their parent-page sections. The original designed footer, including the large wordmark, waves, emblem and socials, is restored throughout.
 
 Project previews are unboxed, without concept badges, counters, device-format labels or floating controls. Original website art/device models and the 54-tile curved collection are preserved. Visible device previews now float on mobile and use native-scroll 3D movement; desktop pointer tilt and Motion Off remain available.
 
-See [the current page map, screenshots and verification](docs/CATEGORIZED_PAGES.md). Earlier single-page reports below describe previous revisions.
+See [the restored homepage and content grouping](docs/RESTORED_HOMEPAGE.md) and [the current page map](docs/CATEGORIZED_PAGES.md). Earlier single-page reports below describe previous revisions.
 
 ## Agency features
 

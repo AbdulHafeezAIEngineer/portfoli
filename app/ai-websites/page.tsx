@@ -1,3 +1,4 @@
+import { Workflow } from "@/components/studio-sections";
 import { Work } from "@/components/work";
 import { SiteShell } from "@/components/site-shell";
 import { pageMetadata } from "@/lib/page-metadata";
@@ -11,6 +12,7 @@ export default async function Page() {
   return (
     <SiteShell page="websites">
       <Work projects={projects} />
+      <Workflow />
     </SiteShell>
   );
 }

@@ -12,11 +12,11 @@ export const site = {
   nav: primaryNavigation,
   hero: {
     eyebrow: "INDEPENDENT DEVELOPER · BUILT WITH INTENTION",
-    heading: ["Thoughtful websites.", "Intelligent", "experiences."],
+    heading: ["Thoughtful websites.", "Useful AI."],
     intro:
-      "I'm Abdul Hafeez — an AI chatbot and web developer turning business ideas into considered digital experiences.",
+      "Elvora is my space for original websites, useful AI assistants and the ideas behind them. Explore the work, see how it is built, and find a direction for your own project.",
     tagline:
-      "I can train an AI chatbot on your custom data, add voice functionality, and embed it directly on your website.",
+      "I'm Abdul Hafeez. I bring my own creativity and technical judgment to every build, using custom-trained AI for selected tasks.",
     primary: "View Work",
     secondary: "Contact Me",
     note: "A little design. A lot of possibility.",

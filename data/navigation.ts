@@ -13,7 +13,7 @@ export const portfolioPages = {
       "Explore website chatbots, conversational demos and optional voice experiences.",
   },
   embedding: {
-    href: "/ai-bots/how-i-embed-bots",
+    href: "/ai-bots#embed-methods",
     label: "How I Embed Bots",
     description:
       "How chatbots connect to websites, from embedded widgets to custom API integrations.",
@@ -54,7 +54,7 @@ export const portfolioPages = {
       "Explore Abdul Hafeez's learning and certificates, with full-size document previews.",
   },
   process: {
-    href: "/how-i-build",
+    href: "/ai-websites#workflow",
     label: "How I Build",
     description:
       "How I build websites with my own creativity, design judgment and carefully guided AI tools.",
@@ -85,7 +85,6 @@ export const aboutPages = [
   "domains",
   "skills",
   "certificates",
-  "process",
 ] as const;
 export const primaryNavigation = [
   { href: "/", label: "Home" },
@@ -101,14 +100,14 @@ export const legacySections: Record<string, string> = {
   "#work": "/ai-websites",
   "#work-bunch": "/bunch-of-work",
   "#ai-bots": "/ai-bots",
-  "#embed-methods": "/ai-bots/how-i-embed-bots",
+  "#embed-methods": "/ai-bots#embed-methods",
   "#experience": "/about",
   "#journey": "/journey",
   "#fundamentals": "/technical-domains",
   "#skills": "/skills",
   "#creative-toolkit": "/skills",
   "#certification": "/certificates",
-  "#workflow": "/how-i-build",
+  "#workflow": "/ai-websites#workflow",
   "#testimonials": "/testimonials",
   "#faq": "/contact#faq",
   "#contact": "/contact",

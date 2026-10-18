@@ -171,25 +171,25 @@ export function BotEmbedding({ bots }: { bots: Bot[] }) {
     >
       <Reveal>
         <p className="eyebrow">{copy.integrationEyebrow}</p>
-        <h1 id="embed-title">{copy.embedTitle}</h1>
+        <h2 id="embed-title">{copy.embedTitle}</h2>
         <p className="embed-intro">{copy.embedDescription}</p>
       </Reveal>
       <div className="embed-grid">
         {embedMethods.map((method, index) => (
           <article className="embed-card glass" key={method.id}>
             <span className="embed-number">0{index + 1}</span>
-            <h2>{method.title}</h2>
+            <h3>{method.title}</h3>
             <p>{method.description}</p>
             <pre aria-label={`${method.title}: ${copy.example}`} tabIndex={0}>
               <code>{method.code}</code>
             </pre>
-            <h3>{copy.pros}</h3>
+            <h4>{copy.pros}</h4>
             <ul>
               {method.pros.map((pro) => (
                 <li key={pro}>{pro}</li>
               ))}
             </ul>
-            <h3>{copy.cons}</h3>
+            <h4>{copy.cons}</h4>
             <ul>
               {method.cons.map((con) => (
                 <li key={con}>{con}</li>

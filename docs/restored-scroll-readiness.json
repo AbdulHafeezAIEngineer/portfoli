@@ -1,0 +1,80 @@
+[
+  {
+    "width": 1440,
+    "route": "/",
+    "imagesBefore": 12,
+    "totalImages": 12,
+    "scrollResourceRequests": 2,
+    "scrollImageRequests": 0,
+    "scrollScriptRequests": 0,
+    "framesOver50ms": 0,
+    "worstFrameMs": 27,
+    "longTasks": 0,
+    "longTaskMs": 0
+  },
+  {
+    "width": 1440,
+    "route": "/ai-websites",
+    "imagesBefore": 10,
+    "totalImages": 10,
+    "scrollResourceRequests": 2,
+    "scrollImageRequests": 0,
+    "scrollScriptRequests": 0,
+    "framesOver50ms": 0,
+    "worstFrameMs": 33,
+    "longTasks": 0,
+    "longTaskMs": 0
+  },
+  {
+    "width": 1440,
+    "route": "/bunch-of-work",
+    "imagesBefore": 56,
+    "totalImages": 56,
+    "scrollResourceRequests": 2,
+    "scrollImageRequests": 0,
+    "scrollScriptRequests": 0,
+    "framesOver50ms": 0,
+    "worstFrameMs": 20,
+    "longTasks": 0,
+    "longTaskMs": 0
+  },
+  {
+    "width": 390,
+    "route": "/",
+    "imagesBefore": 12,
+    "totalImages": 12,
+    "scrollResourceRequests": 8,
+    "scrollImageRequests": 0,
+    "scrollScriptRequests": 0,
+    "framesOver50ms": 0,
+    "worstFrameMs": 19,
+    "longTasks": 0,
+    "longTaskMs": 0
+  },
+  {
+    "width": 390,
+    "route": "/ai-websites",
+    "imagesBefore": 10,
+    "totalImages": 10,
+    "scrollResourceRequests": 3,
+    "scrollImageRequests": 0,
+    "scrollScriptRequests": 0,
+    "framesOver50ms": 0,
+    "worstFrameMs": 18,
+    "longTasks": 0,
+    "longTaskMs": 0
+  },
+  {
+    "width": 390,
+    "route": "/bunch-of-work",
+    "imagesBefore": 56,
+    "totalImages": 56,
+    "scrollResourceRequests": 3,
+    "scrollImageRequests": 0,
+    "scrollScriptRequests": 0,
+    "framesOver50ms": 0,
+    "worstFrameMs": 18,
+    "longTasks": 0,
+    "longTaskMs": 0
+  }
+]

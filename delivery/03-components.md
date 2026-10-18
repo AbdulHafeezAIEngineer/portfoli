@@ -1216,6 +1216,96 @@ export function BackToTop() {
 }
 ``````
 
+## components/bot-build-process.tsx
+
+``````tsx
+import {
+  BookOpen,
+  CheckCheck,
+  Code2,
+  MessagesSquare,
+  Search,
+} from "lucide-react";
+import { Reveal } from "./reveal";
+import { ReadingText } from "./reading-text";
+import { TextReveal } from "./text-reveal";
+
+const steps = [
+  {
+    title: "Understand the job",
+    description:
+      "Start with the questions your visitors ask, the actions the assistant should support, and where a person needs to take over.",
+    note: "A clear purpose comes first",
+    icon: Search,
+  },
+  {
+    title: "Prepare the knowledge",
+    description:
+      "Organize your approved FAQs, services and business information. Give the assistant clear context and keep private information outside its knowledge base.",
+    note: "Your information, carefully grounded",
+    icon: BookOpen,
+  },
+  {
+    title: "Build the conversation",
+    description:
+      "Shape the tone, instructions and conversation flow. Connect useful actions when needed, and give uncertain answers a clear fallback.",
+    note: "Useful answers, with boundaries",
+    icon: MessagesSquare,
+  },
+  {
+    title: "Connect it to your website",
+    description:
+      "Choose a hosted embed, a floating widget or a custom chat interface. Connect the provider securely and make the experience work on mobile and desktop.",
+    note: "The integration methods are below",
+    icon: Code2,
+  },
+  {
+    title: "Test, launch and improve",
+    description:
+      "Review real questions, incorrect answers and failure cases. Check consent, usage limits and handover before launch, then refine the assistant as your business changes.",
+    note: "Review continues after launch",
+    icon: CheckCheck,
+  },
+];
+
+export function BotBuildProcess() {
+  return (
+    <section
+      id="bot-build"
+      className="container studio-section reference-workflow bot-build-process"
+      aria-labelledby="bot-build-title"
+    >
+      <div className="reference-heading">
+        <Reveal>
+          <p className="eyebrow">FROM YOUR KNOWLEDGE TO A USEFUL ASSISTANT</p>
+        </Reveal>
+        <TextReveal id="bot-build-title" text="How I Build Bots." />
+        <Reveal>
+          <ReadingText text="A useful assistant starts with your business, your information and a clear job to do. I shape the knowledge, conversation and integration, then test the details before it reaches your visitors." />
+        </Reveal>
+      </div>
+      <div className="workflow-cards">
+        {steps.map(({ title, description, note, icon: Icon }, index) => (
+          <Reveal key={title} delay={index * 0.04}>
+            <article className="workflow-step">
+              <span className="workflow-number">{index + 1}</span>
+              <Icon
+                size={18}
+                className="workflow-card-icon"
+                aria-hidden="true"
+              />
+              <h3>{title}</h3>
+              <p>{description}</p>
+              <small>{note}</small>
+            </article>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+``````
+
 ## components/bot-chat-panel.tsx
 
 ``````tsx
@@ -1856,25 +1946,25 @@ export function BotEmbedding({ bots }: { bots: Bot[] }) {
     >
       <Reveal>
         <p className="eyebrow">{copy.integrationEyebrow}</p>
-        <h1 id="embed-title">{copy.embedTitle}</h1>
+        <h2 id="embed-title">{copy.embedTitle}</h2>
         <p className="embed-intro">{copy.embedDescription}</p>
       </Reveal>
       <div className="embed-grid">
         {embedMethods.map((method, index) => (
           <article className="embed-card glass" key={method.id}>
             <span className="embed-number">0{index + 1}</span>
-            <h2>{method.title}</h2>
+            <h3>{method.title}</h3>
             <p>{method.description}</p>
             <pre aria-label={`${method.title}: ${copy.example}`} tabIndex={0}>
               <code>{method.code}</code>
             </pre>
-            <h3>{copy.pros}</h3>
+            <h4>{copy.pros}</h4>
             <ul>
               {method.pros.map((pro) => (
                 <li key={pro}>{pro}</li>
               ))}
             </ul>
-            <h3>{copy.cons}</h3>
+            <h4>{copy.cons}</h4>
             <ul>
               {method.cons.map((con) => (
                 <li key={con}>{con}</li>
@@ -4111,66 +4201,16 @@ import { site } from "@/data/site";
 import { studio } from "@/data/studio";
 import { SocialLinks } from "./social-links";
 import { CookieSettingsButton } from "./consent-provider";
-import { aboutPages, portfolioPages } from "@/data/navigation";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
 
 export function Footer({
   brand,
   email = site.email,
-  compact = false,
 }: {
   brand: string;
   email?: string;
-  compact?: boolean;
 }) {
-  if (compact)
-    return (
-      <footer className="compact-footer">
-        <div className="container">
-          <div className="compact-footer-top">
-            <Link href="/" className="compact-footer-brand">
-              {brand}
-              <span>.</span>
-            </Link>
-            <a href={`mailto:${email}`}>
-              {email}
-              <ArrowUpRight size={15} aria-hidden="true" />
-            </a>
-          </div>
-          <nav className="compact-footer-pages" aria-label="Footer navigation">
-            {[
-              ...site.nav,
-              ...aboutPages
-                .filter((id) => id !== "about")
-                .map((id) => portfolioPages[id]),
-              portfolioPages.services,
-            ].map((item) => (
-              <Link key={item.href} href={item.href}>
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-          <div className="compact-footer-bottom">
-            <p>
-              © {new Date().getFullYear()} {brand}. {studio.ending.copyright}
-            </p>
-            <nav aria-label="Legal information">
-              {studio.ending.legalLinks.map((item) => (
-                <Link key={item.href} href={item.href}>
-                  {item.label}
-                </Link>
-              ))}
-              <CookieSettingsButton />
-            </nav>
-            <a href="#top" aria-label={site.ui.back}>
-              ↑
-            </a>
-          </div>
-        </div>
-        <BackToTop />
-      </footer>
-    );
   return (
     <footer className="editorial-footer">
       <div className="container footer-top-grid">
@@ -4230,6 +4270,8 @@ export function Footer({
             >
               <span>
                 <Image
+                  loading="eager"
+                  fetchPriority="low"
                   src={site.logo.src}
                   alt=""
                   width={64}
@@ -4262,7 +4304,7 @@ export function Footer({
             </nav>
             <Link
               className="footer-top-link"
-              href="/#top"
+              href="#top"
               aria-label={site.ui.back}
             >
               ↑
@@ -4417,69 +4459,165 @@ export function Hero() {
 ## components/home-directory.tsx
 
 ``````tsx
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { portfolioPages } from "@/data/navigation";
+import type { ProjectView } from "@/data/projects";
+import { studies } from "@/data/studies";
+import { imagePreview } from "@/lib/image-preview";
+import { ReadingText } from "./reading-text";
+import { TextReveal } from "./text-reveal";
 
-const chapters = [
-  { id: "websites", note: "Original concepts. Real interfaces.", number: "01" },
-  { id: "bots", note: "Conversations, made useful.", number: "02" },
-  {
-    id: "collection",
-    note: "Different worlds. One point of view.",
-    number: "03",
-  },
-  { id: "about", note: "The person behind the pixels.", number: "04" },
-  {
-    id: "process",
-    note: "From a first idea to the final detail.",
-    number: "05",
-  },
-  {
-    id: "testimonials",
-    note: "Perspectives on working together.",
-    number: "06",
-  },
-] as const;
-
-export function HomeDirectory() {
+export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
+  const website = projects[0]?.screenshots[0];
+  const collection = [
+    ...projects
+      .slice(0, 3)
+      .map((project) => ({
+        src: project.screenshots[0].src,
+        title: project.title,
+      })),
+    ...studies
+      .slice(0, 3)
+      .map((study) => ({ src: study.screenshot, title: study.name })),
+  ];
   return (
     <section
-      className="container home-directory"
+      id="explore"
+      className="home-directory home-overview"
       aria-labelledby="directory-title"
     >
-      <div className="directory-heading">
-        <div>
-          <p className="eyebrow">EXPLORE ELVORA</p>
-          <h2 id="directory-title">A little more direction.</h2>
-        </div>
-        <p>
-          The work, the process and the person behind it. Each with a space of
-          its own.
-        </p>
+      <div className="container home-purpose">
+        <p className="eyebrow">THE PURPOSE BEHIND ELVORA</p>
+        <TextReveal
+          id="directory-title"
+          text={"Human ideas.\nUseful digital experiences."}
+        />
+        <ReadingText text="This is a place to explore what I create and how I create it: websites with their own identity, AI assistants that answer real questions, and the thoughtful decisions behind both. See the work in action, follow the process, or start a conversation about your own idea." />
       </div>
-      <div className="directory-grid">
-        {chapters.map(({ id, note, number }) => (
-          <Link
-            className="directory-card"
-            key={id}
-            href={portfolioPages[id].href}
+      <nav
+        className="container home-feature-grid"
+        aria-label="Explore Elvora's work"
+      >
+        <Link
+          className="home-feature home-feature-websites"
+          href="/ai-websites"
+        >
+          <div className="home-feature-copy">
+            <p className="eyebrow">AI WEBSITES</p>
+            <h3>Made with a point of view.</h3>
+            <p>
+              Original website concepts, built around an idea. Explore the
+              interfaces and the creative process behind them.
+            </p>
+            <span>
+              Explore websites <ArrowUpRight size={16} aria-hidden="true" />
+            </span>
+          </div>
+          <div className="home-feature-media home-website-preview">
+            <Image
+              loading="eager"
+              fetchPriority="low"
+              src={website?.src || "/videos/work-showcase-poster.webp"}
+              {...imagePreview(website?.src || "")}
+              alt={website?.alt || "A preview of Elvora's website concepts"}
+              width={1600}
+              height={1000}
+              sizes="(max-width: 767px) 90vw, 1000px"
+            />
+          </div>
+        </Link>
+        <Link className="home-feature home-feature-bots" href="/ai-bots">
+          <div className="home-feature-copy">
+            <p className="eyebrow">AI BOTS</p>
+            <h3>A question. A useful answer.</h3>
+            <p>
+              Meet the assistants, try the demos, and see how I build, ground
+              and embed a bot into a website.
+            </p>
+            <span>
+              Explore AI bots <ArrowUpRight size={16} aria-hidden="true" />
+            </span>
+          </div>
+          <div className="home-feature-media home-bot-preview">
+            <Image
+              loading="eager"
+              fetchPriority="low"
+              src="/videos/ai-bot-poster.webp"
+              alt="A preview of a customer conversation with an AI assistant"
+              width={1600}
+              height={900}
+              sizes="(max-width: 767px) 90vw, 580px"
+            />
+          </div>
+        </Link>
+        <Link
+          className="home-feature home-feature-collection"
+          href="/bunch-of-work"
+        >
+          <div className="home-feature-copy">
+            <p className="eyebrow">BUNCH OF WORK</p>
+            <h3>Different worlds. One eye for detail.</h3>
+            <p>
+              A closer look at websites, dashboards and interface experiments.
+              Discover the full visual collection.
+            </p>
+            <span>
+              See the collection <ArrowUpRight size={16} aria-hidden="true" />
+            </span>
+          </div>
+          <div
+            className="home-feature-media home-collection-preview"
+            aria-hidden="true"
           >
-            <span className="directory-number">{number} /</span>
-            <h3>{portfolioPages[id].label}</h3>
-            <p>{note}</p>
-            <ArrowUpRight size={22} strokeWidth={1.5} aria-hidden="true" />
-          </Link>
-        ))}
-      </div>
-      <div className="directory-end">
-        <Link href="/services">
-          Explore services <ArrowUpRight size={15} aria-hidden="true" />
+            {collection.map((shot) => (
+              <div key={shot.src}>
+                <Image
+                  loading="eager"
+                  fetchPriority="low"
+                  src={shot.src}
+                  {...imagePreview(shot.src)}
+                  alt=""
+                  fill
+                  sizes="(max-width: 767px) 30vw, 190px"
+                />
+              </div>
+            ))}
+          </div>
         </Link>
-        <Link href="/contact">
-          Have a project in mind? Let’s talk.{" "}
-          <ArrowUpRight size={15} aria-hidden="true" />
-        </Link>
+      </nav>
+      <div className="container home-more">
+        <div>
+          <p className="eyebrow">KEEP EXPLORING</p>
+          <h2>The person. The perspective. The next idea.</h2>
+        </div>
+        <nav aria-label="More about Elvora">
+          {[
+            {
+              href: "/about",
+              title: "About Me",
+              text: "My journey, technical foundations and the tools I work with.",
+            },
+            {
+              href: "/testimonials",
+              title: "Testimonials",
+              text: "Perspectives on working together, all in one place.",
+            },
+            {
+              href: "/contact",
+              title: "Let’s talk",
+              text: "Tell me what you have in mind. Let’s find a thoughtful way forward.",
+            },
+          ].map((item) => (
+            <Link key={item.href} href={item.href}>
+              <h3>
+                {item.title}
+                <ArrowUpRight size={18} aria-hidden="true" />
+              </h3>
+              <p>{item.text}</p>
+            </Link>
+          ))}
+        </nav>
       </div>
     </section>
   );
@@ -4957,7 +5095,7 @@ export function Navbar({
 ``````tsx
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   aboutPages,
@@ -4965,41 +5103,79 @@ import {
   type PortfolioPage,
 } from "@/data/navigation";
 
+const subjectSections = {
+  websites: [
+    { id: "work", label: "Website concepts" },
+    { id: "workflow", label: "How I Build Websites" },
+  ],
+  bots: [
+    { id: "ai-bots", label: "AI Bots" },
+    { id: "bot-build", label: "How I Build Bots" },
+    { id: "embed-methods", label: "How I Embed Bots" },
+  ],
+};
 export function PageTabs({ page }: { page: PortfolioPage }) {
   const row = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const active = row.current?.querySelector<HTMLElement>(
-      '[aria-current="page"]',
-    );
-    if (active && row.current)
-      row.current.scrollLeft =
-        active.offsetLeft -
-        row.current.offsetLeft -
-        (row.current.clientWidth - active.offsetWidth) / 2;
-  }, [page]);
+  const [active, setActive] = useState("");
+  const sections =
+    page === "websites" || page === "bots" ? subjectSections[page] : null;
   const profile = aboutPages.some((id) => id === page);
-  const bots = page === "bots" || page === "embedding";
-  const pages = profile
-    ? aboutPages
-    : bots
-      ? (["bots", "embedding"] as const)
-      : null;
-  if (!pages) return null;
+  useEffect(() => {
+    if (!sections) {
+      const selected = row.current?.querySelector<HTMLElement>(
+        '[aria-current="page"]',
+      );
+      if (selected && row.current)
+        row.current.scrollLeft =
+          selected.offsetLeft -
+          row.current.offsetLeft -
+          (row.current.clientWidth - selected.offsetWidth) / 2;
+      return;
+    }
+    setActive(sections[0].id);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries)
+          if (entry.isIntersecting) setActive(entry.target.id);
+      },
+      { rootMargin: "-10% 0px -55% 0px" },
+    );
+    for (const section of sections) {
+      const element = document.getElementById(section.id);
+      if (element) observer.observe(element);
+    }
+    return () => observer.disconnect();
+  }, [page, sections]);
+  if (!sections && !profile) return null;
   return (
     <nav
       className="page-tabs"
-      aria-label={profile ? "About Me pages" : "AI Bots pages"}
+      aria-label={
+        profile
+          ? "About Me pages"
+          : `${page === "bots" ? "AI Bots" : "AI Websites"} sections`
+      }
     >
       <div className="container page-tabs-inner" ref={row}>
-        {pages.map((id) => (
-          <Link
-            key={id}
-            href={portfolioPages[id].href}
-            aria-current={id === page ? "page" : undefined}
-          >
-            {portfolioPages[id].label}
-          </Link>
-        ))}
+        {sections
+          ? sections.map((section) => (
+              <a
+                key={section.id}
+                href={`#${section.id}`}
+                aria-current={active === section.id ? "location" : undefined}
+              >
+                {section.label}
+              </a>
+            ))
+          : aboutPages.map((id) => (
+              <Link
+                key={id}
+                href={portfolioPages[id].href}
+                aria-current={id === page ? "page" : undefined}
+              >
+                {portfolioPages[id].label}
+              </Link>
+            ))}
       </div>
     </nav>
   );
@@ -5797,7 +5973,7 @@ export async function SiteShell({
       <Navbar identity={identity} />
       {page && <PageTabs page={page} />}
       <main id="main-content">{children}</main>
-      <Footer brand={identity.brand} email={identity.email} compact />
+      <Footer brand={identity.brand} email={identity.email} />
     </div>
   );
 }
@@ -6042,7 +6218,7 @@ export function Workflow() {
         <Reveal>
           <p className="eyebrow">{studio.workflow.eyebrow}</p>
         </Reveal>
-        <TextReveal as="h1" id="workflow-title" text={studio.workflow.title} />
+        <TextReveal as="h2" id="workflow-title" text={studio.workflow.title} />
         <Reveal>
           <ReadingText text={studio.workflow.intro} />
         </Reveal>

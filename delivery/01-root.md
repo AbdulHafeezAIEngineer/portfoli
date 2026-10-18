@@ -580,11 +580,11 @@ Latest playback/navigation update: [wide looping videos, interactive desktop win
 
 ## Categorized public pages
 
-The homepage is now a short introduction and directory. AI Websites, AI Bots, Bunch of Work, About Me, Journey, Technical Domains, Skills & Tools, Certificates, How I Build, Testimonials, Services and Contact each have a dedicated route. How I Embed Bots lives under AI Bots. About pages have ordered secondary tabs; saved links to former homepage sections redirect to the appropriate page.
+The homepage now introduces Elvora with a monochrome presentation, original logo motion and large visual previews of websites, bots and the collection. Its light/dark switch remains functional. Eleven subject pages organize the content. How I Build Websites appears beneath the website projects; How I Build Bots and all three embedding methods appear beneath the bot demos. About tabs contain only personal/background subjects. Old process URLs redirect to their parent-page sections. The original designed footer, including the large wordmark, waves, emblem and socials, is restored throughout.
 
 Project previews are unboxed, without concept badges, counters, device-format labels or floating controls. Original website art/device models and the 54-tile curved collection are preserved. Visible device previews now float on mobile and use native-scroll 3D movement; desktop pointer tilt and Motion Off remain available.
 
-See [the current page map, screenshots and verification](docs/CATEGORIZED_PAGES.md). Earlier single-page reports below describe previous revisions.
+See [the restored homepage and content grouping](docs/RESTORED_HOMEPAGE.md) and [the current page map](docs/CATEGORIZED_PAGES.md). Earlier single-page reports below describe previous revisions.
 
 ## Agency features
 
@@ -921,6 +921,12 @@ To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQ
 # Verification — 17 October 2026
 
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
+
+## Restored footer, homepage and subject-page processes
+
+The original footer component is restored (wordmark, waves, emblem, socials and original layout); its differences from the pre-categorization version are routing fixes and eager logo loading. Website-building remains below the website projects. The AI Bots page includes the bot-building process and all original embedding methods; former process-only URLs redirect to these inline sections. About tabs contain five genuine profile topics. The homepage now has a clear purpose, large visual pathways and a scoped black/white theme that preserves light/dark switching. Other custom page designs, project art, media and consent logic are preserved.
+
+The production build, lint/types, subject-page/navigation suite, six-width/both-theme suite, native showcase playback, gallery/certificate/FAQ checks and logo/reading checks pass. The route suite checks eleven subject pages, footer restoration, inline process order, local anchors, aliases, canonical URLs, sitemap, no-JavaScript content and mobile 3D. See [latest evidence](docs/RESTORED_HOMEPAGE.md). Older single-page and compact-footer reports below describe earlier revisions. Live Vercel deployment remains unverified here.
 
 ## Current categorized pages and clean project previews
 

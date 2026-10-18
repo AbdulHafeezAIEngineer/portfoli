@@ -247,7 +247,7 @@ export const studio = {
       { label: "Services", href: "/services" },
       { label: "Work", href: "/ai-websites" },
       { label: "About Me", href: "/about" },
-      { label: "Workflow", href: "/how-i-build" },
+      { label: "Workflow", href: "/ai-websites#workflow" },
       { label: "Contact", href: "/contact" },
     ],
     connect: "/Contact",

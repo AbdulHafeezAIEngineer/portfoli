@@ -29,7 +29,7 @@ export async function SiteShell({
       <Navbar identity={identity} />
       {page && <PageTabs page={page} />}
       <main id="main-content">{children}</main>
-      <Footer brand={identity.brand} email={identity.email} compact />
+      <Footer brand={identity.brand} email={identity.email} />
     </div>
   );
 }

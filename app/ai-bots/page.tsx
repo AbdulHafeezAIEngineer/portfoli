@@ -1,4 +1,5 @@
-import { BotServices } from "@/components/bot-services";
+import { BotBuildProcess } from "@/components/bot-build-process";
+import { BotServices, BotEmbedding } from "@/components/bot-services";
 import { SiteShell } from "@/components/site-shell";
 import { pageMetadata } from "@/lib/page-metadata";
 import { getBots } from "@/lib/content-loader";
@@ -11,6 +12,8 @@ export default async function Page() {
   return (
     <SiteShell page="bots">
       <BotServices bots={bots} />
+      <BotBuildProcess />
+      <BotEmbedding bots={bots} />
     </SiteShell>
   );
 }

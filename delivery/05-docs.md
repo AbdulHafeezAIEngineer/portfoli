@@ -92,26 +92,24 @@ For smoothness review, open Chrome Performance on a production build, use mobile
 ``````md
 # Categorized Elvora portfolio
 
-The homepage is a concise introduction and six-entry directory. Each subject now has a permanent URL, rather than sharing one long scroll. Header navigation is consistent, route-aware and keyboard accessible, with a grouped About menu and a scrollable secondary tab row. Mobile navigation contains every category and closes after navigation or Escape.
+The homepage now has a purpose-led, monochrome introduction and large visual previews. Eleven subject pages organize the site. Website and bot processes live with their respective projects and demos. See the [latest correction and previews](RESTORED_HOMEPAGE.md). Header navigation is consistent, route-aware and keyboard accessible, with a grouped About menu and a scrollable secondary tab row. Mobile navigation contains every category and closes after navigation or Escape.
 
 | Page | Route | Content |
 | --- | --- | --- |
-| Home | `/` | Original hero/logo motion and a short page directory |
-| AI Websites | `/ai-websites` | Wide looping showcase, four original concepts, interactive demos and screenshot galleries |
-| AI Bots | `/ai-bots` | Wide looping bot video and all bot demos; optional providers still require consent |
-| How I Embed Bots | `/ai-bots/how-i-embed-bots` | Existing iframe, script and API integration methods, under AI Bots |
+| Home | `/` | Purpose-led introduction, original logo motion and visual subject previews |
+| AI Websites | `/ai-websites` | Wide looping showcase, four concepts, interactive demos, screenshot galleries and How I Build Websites |
+| AI Bots | `/ai-bots` | Looping bot video, bot demos, How I Build Bots and all embedding methods; provider consent retained |
 | Bunch of Work | `/bunch-of-work` | Larger original 54-tile curved wall and accessible project index |
 | About Me | `/about` | Original Elvora artwork and personal introduction |
 | My Journey | `/journey` | Existing chapters, in their original order |
 | Technical Domains | `/technical-domains` | Frontend, APIs, data, deployment and AI domains |
 | Skills & Tools | `/skills` | Existing categorized toolkit and tools marquee |
 | Certificates | `/certificates` | Original documents and functional zoom viewer |
-| How I Build | `/how-i-build` | Human-led creative workflow and selected custom-trained AI tasks |
 | Testimonials | `/testimonials` | Dedicated editorial card layout; published, permission-approved reviews only |
 | Services | `/services` | Existing service scopes and detail links |
 | Contact | `/contact` | Existing inquiry form, direct contact and native/enhanced FAQs |
 
-The About tab sequence is About Me → My Journey → Technical Domains → Skills & Tools → Certificates → How I Build. AI Bots has Demos and How I Embed Bots routes. Footer links expose every principal page; old `/#work`, `/#embed-methods` and other former section links redirect to their new destinations. Canonical metadata and sitemap include the new pages. Existing service, project-note, interactive demo, design-study, legal and private admin URLs remain available.
+The About tab sequence is About Me → My Journey → Technical Domains → Skills & Tools → Certificates. AI Websites and AI Bots have local section links to their processes. The original full footer design is restored; old `/#work`, `/#embed-methods` and other former section links redirect to their new destinations. The former `/how-i-build` and `/ai-bots/how-i-embed-bots` routes redirect to the appropriate parent-page section. Canonical metadata and sitemap list actual subject pages. Existing service, project-note, interactive demo, design-study, legal and private admin URLs remain available.
 
 ## Clean previews and mobile motion
 
@@ -126,14 +124,14 @@ No real testimonials were supplied to file mode. Layout samples are visibly labe
 ## Verification
 
 - `npm run build` (includes lint and TypeScript), `npm run lint`, `npm run typecheck`: passed.
-- `test:pages:browser`: all thirteen content routes at 390/1440px, isolated content, real route links, canonical URLs, ordered tabs, keyboard menus, saved Motion Off, mobile 3D, legacy redirects, server-rendered content and sitemap.
+- `test:pages:browser`: all eleven subject routes at 390/1440px, isolated content, real route links, canonical URLs, inline processes, restored footer, ordered tabs, keyboard menus, saved Motion Off, mobile 3D, legacy redirects, server-rendered content and sitemap.
 - `test:motion:browser`: 360, 390, 768, 1024, 1440, 1920px; both themes, native touch, default On, saved Off and contact validation.
 - `test:showcase:browser`: native playback and actual looping for both videos, desktop/mobile sources, muted/inline/no controls, global Off/On, offscreen pause and consent.
 - `test:windows:browser`: all four interactive concepts, mobile/desktop frames, maximize/Escape/back, nested scrolling, forms/reset and retained study routes.
 - `test:finishing:browser`, `test:video-motion:browser`, `test:reviews:browser`: screenshot/certificate dialogs, FAQ keyboard/reversal/no-JS behavior, logo flip/shine, reversible word emphasis, stable text geometry, genuine-review replacement and labeled previews.
 - Consent, contact, chat and security: 46 tests passed; no optional provider traffic during public browser checks.
-- [24 WCAG A/AA scans](pages-accessibility.json): home, website, bot, embedding, About and Testimonials pages; both themes at 390/1440px, zero violations.
-- [Scroll/loading observations](pages-scroll-readiness.json): home, website and collection pages at 390/1440px. Each page's images are loaded before scrolling; no image/component-script requests start during the measured scroll. Frame observations are from headless Chromium, not a physical-device FPS guarantee.
+- [12 current WCAG A/AA scans](restored-accessibility.json): home, website and bot pages including the restored footer and inline processes; both themes at 390/1440px, zero violations.
+- [Current scroll/loading observations](restored-scroll-readiness.json): home, website and collection pages at 390/1440px. Each page's images are loaded before scrolling; no image/component-script requests start during the measured scroll. Frame observations are from headless Chromium, not a physical-device FPS guarantee.
 
 Local validation does not establish live Vercel deployment, real owner login or provider delivery. No credentials or hosting settings were modified.
 
@@ -449,6 +447,50 @@ Authentication, credentials, CMS records, cookie logic and Botpress settings wer
 - `public/videos/*-mobile.mp4` and `*-mobile.webm`: four phone-optimized exports.
 - `tests/showcase-videos.browser.mjs`, `demo-windows.browser.mjs`, `scroll-readiness.browser.mjs`, `editorial-motion.browser.mjs`, `finishing.browser.mjs` and `package.json`: updated behavior checks and reproducible commands.
 - This report, screenshots/JSON, README, verification notes and the refreshed `delivery/` source snapshot document the completed change.
+``````
+
+## docs/RESTORED_HOMEPAGE.md
+
+``````md
+# Restored footer and subject-page context
+
+## Restored design
+
+The original footer is restored on all public subject pages: invitation, quick links, direct contact, oversized Elvora wordmark, waves, animated emblem, social links and legal controls. Its markup matches the pre-categorization design; only links were adapted to actual routes and its logo loads eagerly. The compact replacement is removed.
+
+Existing project artwork, device models, photo-wall order/geometry, looping videos, screenshot galleries, contact form, consent and Botpress behavior remain.
+
+## Content belongs with its subject
+
+- `/ai-websites`: website concepts and their galleries, followed by the original **How I Build Websites** workflow, including the custom-trained AI explanation.
+- `/ai-bots`: bot demos, **How I Build Bots** (purpose, knowledge, conversation, integration, testing), then the original **How I Embed Bots** methods with their example code, trade-offs and usage notes.
+- Website and bot section navigation uses local anchors. Process content does not sit behind a separate page or a profile/skills tab.
+- About tabs retain About Me, My Journey, Technical Domains, Skills & Tools and Certificates.
+- `/how-i-build` redirects to `/ai-websites#workflow`; `/ai-bots/how-i-embed-bots` redirects to `/ai-bots#embed-methods`. Old homepage hashes remain useful. The sitemap includes the eleven actual subject pages.
+
+## Homepage presentation
+
+The homepage has a clearer explanation of Elvora's purpose and the human direction behind the work. A centered introduction and original flipping logo lead into a purpose statement, then large visual previews for websites, bots and the collection. A smaller row links to About, Testimonials and Contact.
+
+Its monochrome palette is scoped to `.route-home` and uses the existing neutral tokens: black/graphite in dark mode and white/gray in light mode. It retains the theme toggle and the original colored logo/project artwork. Inner pages keep their existing custom theme and layouts.
+
+## Verification
+
+- Production build, ESLint and TypeScript pass.
+- Subject-page browser checks: eleven routes, restored full footer, processes beneath their parent content, same-page anchors, old URL redirects, canonical metadata, sitemap, keyboard menus, saved Motion Off, native mobile 3D and server-rendered/no-JavaScript content.
+- Six widths from 360 to 1920px, both themes: no horizontal overflow; theme and motion controls remain functional.
+- Both native video loops, desktop/mobile source selection, Off/On and offscreen pause pass, including when the OS requests reduced motion and the website is explicitly On.
+- Project/certificate dialogs, FAQ keyboard/reversal/no-JavaScript behavior, original logo flip/shine and reversible reading emphasis pass.
+- [Accessibility scans](restored-accessibility.json) cover home, websites and bots, in both themes at 390/1440px. These include the restored footer and process content.
+- [Loading observations](restored-scroll-readiness.json) cover home, websites and the collection, with images ready before scrolling. Headless observations do not guarantee physical-device FPS.
+
+No credentials or hosting settings were changed. A Git push is distinct from a confirmed Vercel deployment; live deployment status remains unverified here.
+
+## Previews
+
+- [Light desktop homepage](restored-home-light-1440.png) · [Dark desktop homepage](restored-home-dark-1440.png)
+- [Light mobile homepage](restored-home-light-390.png) · [Dark mobile homepage](restored-home-dark-390.png)
+- [Restored desktop footer](restored-footer-1440.png) · [Restored mobile footer](restored-footer-390.png)
 ``````
 
 ## docs/SHOWCASE_UPDATE.md
@@ -1272,11 +1314,11 @@ Binary asset: 144687 bytes. SHA-256 `90be81278a61a70304378a8f887155051f4879c6275
 
 ## docs/pages-testimonials-1440.png
 
-Binary asset: 138177 bytes. SHA-256 `5ebe6463965e8b2799897c97a9fb6b1d7a4cfdad259dcfe1b6d7fd326e88e979`. Available in the repository and source ZIP.
+Binary asset: 886772 bytes. SHA-256 `6080ae6d4999717495541b234ca458aeba679f32eaebf058bc78ef0bb3baa218`. Available in the repository and source ZIP.
 
 ## docs/pages-testimonials-390.png
 
-Binary asset: 114493 bytes. SHA-256 `78d91841560c85e42ceae210ad03a8acada724766d4049700311110ebe9e4e81`. Available in the repository and source ZIP.
+Binary asset: 438384 bytes. SHA-256 `294221d80e511e3e0fd72e77b3837f8a43f53fa3ac5d551afc46c0f2baf58592`. Available in the repository and source ZIP.
 
 ## docs/preview.png
 
@@ -1574,6 +1616,194 @@ Binary asset: 723689 bytes. SHA-256 `fe6849f1a3dc2c78769060ced64cc02a4bd4b0e2014
 ## docs/reference-workflow-preview.png
 
 Binary asset: 202277 bytes. SHA-256 `d0ce6a82ce67c89d56d9afa19fd5fc489c7480909978944267637f8fec950a4f`. Available in the repository and source ZIP.
+
+## docs/restored-accessibility.json
+
+``````json
+[
+  {
+    "width": 390,
+    "path": "/",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "path": "/",
+    "theme": "light",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "path": "/ai-websites",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "path": "/ai-websites",
+    "theme": "light",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "path": "/ai-bots",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 390,
+    "path": "/ai-bots",
+    "theme": "light",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/",
+    "theme": "light",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/ai-websites",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/ai-websites",
+    "theme": "light",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/ai-bots",
+    "theme": "dark",
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "path": "/ai-bots",
+    "theme": "light",
+    "violations": []
+  }
+]
+``````
+
+## docs/restored-footer-1440.png
+
+Binary asset: 639530 bytes. SHA-256 `f976626ab9053bc3b34fc98599f61cea8c7043d912536386defabfd10e8282ca`. Available in the repository and source ZIP.
+
+## docs/restored-footer-390.png
+
+Binary asset: 249629 bytes. SHA-256 `9292898aef5b50bc8138678a91c97162ac72ba745fcd7a11fb3b2a9b66d61ae5`. Available in the repository and source ZIP.
+
+## docs/restored-home-dark-1440.png
+
+Binary asset: 1736331 bytes. SHA-256 `7605b6683cd133ebe9a3b03f86072c8717613d11eae3c51048c449096c589dab`. Available in the repository and source ZIP.
+
+## docs/restored-home-dark-390.png
+
+Binary asset: 678155 bytes. SHA-256 `361eb8d7c30f6d49ef21b06754153f40a9276136ea1088047c2c3952076796c0`. Available in the repository and source ZIP.
+
+## docs/restored-home-light-1440.png
+
+Binary asset: 1798644 bytes. SHA-256 `4b4eac8c025f4ce7c59ab788d2ff54219e1d370c6c4ad6fc8b90fcb7f135cf27`. Available in the repository and source ZIP.
+
+## docs/restored-home-light-390.png
+
+Binary asset: 668199 bytes. SHA-256 `2d1cfe0c771f8101b44d9b756c654688251ecdef905a26f4f77a9222d07f9cb7`. Available in the repository and source ZIP.
+
+## docs/restored-scroll-readiness.json
+
+``````json
+[
+  {
+    "width": 1440,
+    "route": "/",
+    "imagesBefore": 12,
+    "totalImages": 12,
+    "scrollResourceRequests": 2,
+    "scrollImageRequests": 0,
+    "scrollScriptRequests": 0,
+    "framesOver50ms": 0,
+    "worstFrameMs": 27,
+    "longTasks": 0,
+    "longTaskMs": 0
+  },
+  {
+    "width": 1440,
+    "route": "/ai-websites",
+    "imagesBefore": 10,
+    "totalImages": 10,
+    "scrollResourceRequests": 2,
+    "scrollImageRequests": 0,
+    "scrollScriptRequests": 0,
+    "framesOver50ms": 0,
+    "worstFrameMs": 33,
+    "longTasks": 0,
+    "longTaskMs": 0
+  },
+  {
+    "width": 1440,
+    "route": "/bunch-of-work",
+    "imagesBefore": 56,
+    "totalImages": 56,
+    "scrollResourceRequests": 2,
+    "scrollImageRequests": 0,
+    "scrollScriptRequests": 0,
+    "framesOver50ms": 0,
+    "worstFrameMs": 20,
+    "longTasks": 0,
+    "longTaskMs": 0
+  },
+  {
+    "width": 390,
+    "route": "/",
+    "imagesBefore": 12,
+    "totalImages": 12,
+    "scrollResourceRequests": 8,
+    "scrollImageRequests": 0,
+    "scrollScriptRequests": 0,
+    "framesOver50ms": 0,
+    "worstFrameMs": 19,
+    "longTasks": 0,
+    "longTaskMs": 0
+  },
+  {
+    "width": 390,
+    "route": "/ai-websites",
+    "imagesBefore": 10,
+    "totalImages": 10,
+    "scrollResourceRequests": 3,
+    "scrollImageRequests": 0,
+    "scrollScriptRequests": 0,
+    "framesOver50ms": 0,
+    "worstFrameMs": 18,
+    "longTasks": 0,
+    "longTaskMs": 0
+  },
+  {
+    "width": 390,
+    "route": "/bunch-of-work",
+    "imagesBefore": 56,
+    "totalImages": 56,
+    "scrollResourceRequests": 3,
+    "scrollImageRequests": 0,
+    "scrollScriptRequests": 0,
+    "framesOver50ms": 0,
+    "worstFrameMs": 18,
+    "longTasks": 0,
+    "longTaskMs": 0
+  }
+]
+``````
 
 ## docs/reviews-empty-desktop-dark.png
 
