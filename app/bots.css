@@ -486,7 +486,8 @@
   max-height: 120px;
 }
 .chat-input-row textarea:focus-visible {
-  outline: none;
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
 }
 .chat-input-row textarea::placeholder {
   color: var(--muted);
@@ -581,6 +582,20 @@
 .mic-button.listening {
   background: color-mix(in srgb, var(--accent-text) 12.55%, transparent);
   color: var(--text);
+}
+@media (pointer: coarse) {
+  .chat-send,
+  .mic-button,
+  .voice-playback .icon-button {
+    width: 44px;
+    height: 44px;
+  }
+}
+@media (prefers-contrast: more) {
+  .chat-panel,
+  .chat-input-row {
+    border-color: var(--muted);
+  }
 }
 .chat-unconfigured {
   display: flex;

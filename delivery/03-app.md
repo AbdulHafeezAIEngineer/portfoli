@@ -2541,7 +2541,8 @@ export async function POST(request: Request) {
   max-height: 120px;
 }
 .chat-input-row textarea:focus-visible {
-  outline: none;
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
 }
 .chat-input-row textarea::placeholder {
   color: var(--muted);
@@ -2636,6 +2637,20 @@ export async function POST(request: Request) {
 .mic-button.listening {
   background: color-mix(in srgb, var(--accent-text) 12.55%, transparent);
   color: var(--text);
+}
+@media (pointer: coarse) {
+  .chat-send,
+  .mic-button,
+  .voice-playback .icon-button {
+    width: 44px;
+    height: 44px;
+  }
+}
+@media (prefers-contrast: more) {
+  .chat-panel,
+  .chat-input-row {
+    border-color: var(--muted);
+  }
 }
 .chat-unconfigured {
   display: flex;
@@ -7018,6 +7033,20 @@ html[data-motion="full"]
   border-bottom: 1px solid var(--line);
   background: var(--glass);
   backdrop-filter: blur(22px);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .site-header.portfolio-header,
+  .site-header {
+    background: var(--bg);
+    backdrop-filter: none;
+  }
+}
+@media (prefers-contrast: more) {
+  .glass,
+  .site-header {
+    border-color: var(--muted);
+  }
 }
 .nav-row {
   position: relative;

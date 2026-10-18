@@ -226,6 +226,20 @@ html[data-motion="full"]
   background: var(--glass);
   backdrop-filter: blur(22px);
 }
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .site-header.portfolio-header,
+  .site-header {
+    background: var(--bg);
+    backdrop-filter: none;
+  }
+}
+@media (prefers-contrast: more) {
+  .glass,
+  .site-header {
+    border-color: var(--muted);
+  }
+}
 .nav-row {
   position: relative;
   height: 82px;
