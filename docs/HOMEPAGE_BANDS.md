@@ -4,7 +4,7 @@ The owner's reference uses separate light and dark product sections. Elvora's ho
 
 1. The header and hero follow the saved light/dark preference, with purple primary actions and active states.
 2. The purpose introduction uses a full-width light neutral background and dark text.
-3. The website showcase uses a full-width black background and a large, centered original website preview.
+3. The website showcase uses a full-width black background and a large, centered looping website video with rounded corners.
 4. AI Bots and Bunch of Work appear side by side in white and deep purple; phones stack them into separate sections.
 5. The secondary About, Testimonials and Contact navigation returns to a light background before the original full footer.
 
@@ -19,6 +19,14 @@ The AI Bots preview image is now replaced by the owner's supplied eight-second d
 The shared player gains a compact card presentation; the homepage, scoped card CSS and native showcase browser checks are updated. New media is stored as `public/videos/home-ai-bot*`. Production build and native playback checks cover all three showcases, including actual loop wrap, offscreen pause and Off/On behavior.
 
 [Desktop video frame](home-bot-loop-1440.png) · [Phone video frame](home-bot-loop-390.png)
+
+## Homepage Websites video
+
+The website screenshot is replaced by the owner's supplied ten-second architectural website video. Its natural 16:9 frame fills the preview without the former screenshot inset and has rounded clipping on all four corners, including phones. Local silent WebM/MP4 encodes at 1280px and 854px and a matching poster are stored as `public/videos/home-websites*`.
+
+The existing player loops inline without controls, pauses offscreen and follows Motion Off/On. The Websites link and surrounding content remain the same. Native browser checks cover all four showcases, actual loop wrap, mobile/desktop sources, rounded corners, card geometry, offscreen pause and the global motion control.
+
+[Desktop video frame](home-websites-loop-1440.png) · [Phone video frame](home-websites-loop-390.png)
 
 ## Files
 

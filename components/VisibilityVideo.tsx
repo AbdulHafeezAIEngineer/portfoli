@@ -10,7 +10,7 @@ export function VisibilityVideo({
   caption,
   presentation = "banner",
 }: {
-  name: "work-showcase" | "ai-bot" | "home-ai-bot";
+  name: "work-showcase" | "ai-bot" | "home-ai-bot" | "home-websites";
   caption: string;
   presentation?: "banner" | "card";
 }) {

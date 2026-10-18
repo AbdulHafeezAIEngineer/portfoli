@@ -4,6 +4,8 @@ This records the current **local production build**. It does not establish that 
 
 ## Current homepage: contrasting sections
 
+The homepage Websites screenshot is replaced with the owner's ten-second architectural video, in a natural 16:9 frame with four rounded corners. Local silent desktop/mobile WebM/MP4 files and a matching poster use the shared motion-controlled player. Production build and native browser checks cover all four showcases, looping, inline/no-controls playback, responsive sources, rounded clipping, Off/On and offscreen pause. See [current frames](docs/HOMEPAGE_BANDS.md#homepage-websites-video).
+
 The homepage AI Bots image is replaced with the owner's eight-second delivery-chat video, using local silent desktop/mobile WebM and MP4 files. Production build passed. Native browser checks verified all three showcases at 390/1440px, actual looping, muted inline playback, no controls, global Off/On and offscreen pause; the homepage card retains its size and destination. See [desktop and phone frames](docs/HOMEPAGE_BANDS.md#homepage-ai-bots-video).
 
 The homepage now uses a light purpose section, a full-width black website showcase, a white/deep-purple split for AI Bots and Bunch of Work, and light secondary navigation. The header and hero still follow the saved light/dark theme. Purple links and primary actions use the existing palette. Scoped section variables come from the shared token source; other pages and custom artwork are preserved.

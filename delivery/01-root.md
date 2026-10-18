@@ -582,7 +582,7 @@ Latest playback/navigation update: [wide looping videos, interactive desktop win
 
 Latest homepage presentation: full-width light and black sections, with a white/deep-purple split for AI Bots and Bunch of Work. Theme switching, original artwork and motion remain functional. See [current desktop/mobile previews and checks](docs/HOMEPAGE_BANDS.md).
 
-The homepage AI Bots preview now uses the owner's supplied delivery-chat video as a silent loop on desktop and phones. Motion Off shows its matching poster; the separate AI Bots page keeps its own showcase.
+The homepage Websites and AI Bots previews use the owner's supplied architectural and delivery-chat videos as silent loops on desktop and phones. The website video has rounded corners on all four sides. Motion Off shows matching posters; the subject pages keep their own showcases.
 
 The homepage introduces Elvora with a monochrome presentation, original logo motion and large visual previews of websites, bots and the collection. Its light/dark switch remains functional. Ten subject pages organize the content. Websites, How I Build Websites and Technical Domains share `/websites`; the former `/ai-websites` and `/technical-domains` routes redirect there. How I Build Bots and all three embedding methods remain beneath the bot demos. About tabs contain About Me, My Journey, Skills & Tools and Certificates. The original designed footer, including the large wordmark, waves, emblem and socials, is preserved throughout.
 
@@ -929,6 +929,8 @@ To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQ
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
 ## Current homepage: contrasting sections
+
+The homepage Websites screenshot is replaced with the owner's ten-second architectural video, in a natural 16:9 frame with four rounded corners. Local silent desktop/mobile WebM/MP4 files and a matching poster use the shared motion-controlled player. Production build and native browser checks cover all four showcases, looping, inline/no-controls playback, responsive sources, rounded clipping, Off/On and offscreen pause. See [current frames](docs/HOMEPAGE_BANDS.md#homepage-websites-video).
 
 The homepage AI Bots image is replaced with the owner's eight-second delivery-chat video, using local silent desktop/mobile WebM and MP4 files. Production build passed. Native browser checks verified all three showcases at 390/1440px, actual looping, muted inline playback, no controls, global Off/On and offscreen pause; the homepage card retains its size and destination. See [desktop and phone frames](docs/HOMEPAGE_BANDS.md#homepage-ai-bots-video).
 

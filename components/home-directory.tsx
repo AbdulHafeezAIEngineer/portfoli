@@ -9,7 +9,6 @@ import { TextReveal } from "./text-reveal";
 import { VisibilityVideo } from "./VisibilityVideo";
 
 export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
-  const website = projects[0]?.screenshots[0];
   const collection = [
     ...projects.slice(0, 3).map((project) => ({
       src: project.screenshots[0].src,
@@ -50,15 +49,10 @@ export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
             </span>
           </div>
           <div className="home-feature-media home-website-preview">
-            <Image
-              loading="eager"
-              fetchPriority="low"
-              src={website?.src || "/videos/work-showcase-poster.webp"}
-              {...imagePreview(website?.src || "")}
-              alt={website?.alt || "A preview of Elvora's website concepts"}
-              width={1600}
-              height={1000}
-              sizes="(max-width: 767px) 90vw, 1000px"
+            <VisibilityVideo
+              name="home-websites"
+              caption="An architectural website explored in motion."
+              presentation="card"
             />
           </div>
         </Link>

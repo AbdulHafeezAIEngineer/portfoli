@@ -12,7 +12,7 @@ Latest playback/navigation update: [wide looping videos, interactive desktop win
 
 Latest homepage presentation: full-width light and black sections, with a white/deep-purple split for AI Bots and Bunch of Work. Theme switching, original artwork and motion remain functional. See [current desktop/mobile previews and checks](docs/HOMEPAGE_BANDS.md).
 
-The homepage AI Bots preview now uses the owner's supplied delivery-chat video as a silent loop on desktop and phones. Motion Off shows its matching poster; the separate AI Bots page keeps its own showcase.
+The homepage Websites and AI Bots previews use the owner's supplied architectural and delivery-chat videos as silent loops on desktop and phones. The website video has rounded corners on all four sides. Motion Off shows matching posters; the subject pages keep their own showcases.
 
 The homepage introduces Elvora with a monochrome presentation, original logo motion and large visual previews of websites, bots and the collection. Its light/dark switch remains functional. Ten subject pages organize the content. Websites, How I Build Websites and Technical Domains share `/websites`; the former `/ai-websites` and `/technical-domains` routes redirect there. How I Build Bots and all three embedding methods remain beneath the bot demos. About tabs contain About Me, My Journey, Skills & Tools and Certificates. The original designed footer, including the large wordmark, waves, emblem and socials, is preserved throughout.
 

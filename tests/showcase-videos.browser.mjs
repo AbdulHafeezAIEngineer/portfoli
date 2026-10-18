@@ -33,7 +33,12 @@ try {
       await page.getByLabel("Animation preference").inputValue(),
       "full",
     );
-    for (const name of ["work-showcase", "ai-bot", "home-ai-bot"]) {
+    for (const name of [
+      "work-showcase",
+      "ai-bot",
+      "home-ai-bot",
+      "home-websites",
+    ]) {
       await page.goto(
         base +
           (name === "work-showcase"
@@ -72,14 +77,41 @@ try {
       );
       assert.equal(await banner.getByRole("button").count(), 0);
       const box = await banner.boundingBox();
-      if (name === "home-ai-bot") {
-        const parent = await page.locator(".home-bot-preview").boundingBox();
+      if (name.startsWith("home-")) {
+        const isWebsite = name === "home-websites";
+        const preview = page.locator(
+          isWebsite ? ".home-website-preview" : ".home-bot-preview",
+        );
+        const parent = await preview.boundingBox();
         assert.ok(Math.abs(box.width - parent.width) < 1);
         assert.ok(Math.abs(box.x - parent.x) < 1);
         assert.ok(
-          await page.locator('.home-feature-bots[href="/ai-bots"]').count(),
+          await page
+            .locator(
+              isWebsite
+                ? '.home-feature-websites[href="/websites"]'
+                : '.home-feature-bots[href="/ai-bots"]',
+            )
+            .count(),
         );
-        await banner.screenshot({ path: `docs/home-bot-loop-${width}.png` });
+        if (isWebsite) {
+          assert.ok(Math.abs(box.width / box.height - 16 / 9) < 0.01);
+          const rounded = await preview.evaluate((el) => {
+            const s = getComputedStyle(el);
+            return (
+              [
+                s.borderTopLeftRadius,
+                s.borderTopRightRadius,
+                s.borderBottomLeftRadius,
+                s.borderBottomRightRadius,
+              ].every((r) => parseFloat(r) >= 16) && s.overflow === "hidden"
+            );
+          });
+          assert.ok(rounded, "All four video corners are rounded and clipped");
+          await banner.screenshot({
+            path: `docs/home-websites-loop-${width}.png`,
+          });
+        }
       } else
         assert.ok(
           box.width > width * 0.9 && box.x >= 0 && box.x < 45,
@@ -120,7 +152,7 @@ try {
     assert.deepEqual(external, []);
     await page.close();
     console.log(
-      `PASS ${width}px / OS reduced ${osReduced}: all three silent loops, no controls, actual loop wrap, Off/On, offscreen pause and consent intact.`,
+      `PASS ${width}px / OS reduced ${osReduced}: all four silent loops, no controls, actual loop wrap, Off/On, offscreen pause and consent intact.`,
     );
   }
 } finally {
