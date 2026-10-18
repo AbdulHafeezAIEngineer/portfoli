@@ -5159,7 +5159,12 @@ html[data-motion="reduced"] .gallery-media {
   background-position:
     17px 29px,
     100px 61px;
-  mask-image: linear-gradient(transparent, var(--neutral-black) 15%, var(--neutral-black) 85%, transparent);
+  mask-image: linear-gradient(
+    transparent,
+    var(--neutral-black) 15%,
+    var(--neutral-black) 85%,
+    transparent
+  );
 }
 .toolkit-heading {
   display: grid;
@@ -5530,8 +5535,6 @@ html[data-motion="reduced"] .gallery-media {
   padding-top: 22px;
 }
 
-
-
 /* Theme-aware invitation, with the existing functional contact form. */
 .editorial-contact {
   padding-top: 60px;
@@ -5541,14 +5544,20 @@ html[data-motion="reduced"] .gallery-media {
   color-scheme: dark;
   color: var(--text);
   background:
-    radial-gradient(ellipse at 0% 0%, color-mix(in srgb, var(--muted) 7.45%, transparent), transparent 55%), var(--bg);
+    radial-gradient(
+      ellipse at 0% 0%,
+      color-mix(in srgb, var(--muted) 7.45%, transparent),
+      transparent 55%
+    ),
+    var(--bg);
   border: 1px solid var(--line);
   border-radius: 26px;
   padding: clamp(28px, 4.7vw, 68px);
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
   gap: 60px;
-  box-shadow: 0 30px 90px color-mix(in srgb, var(--neutral-black) 7.06%, transparent);
+  box-shadow: 0 30px 90px
+    color-mix(in srgb, var(--neutral-black) 7.06%, transparent);
   position: relative;
   isolation: isolate;
 }
@@ -5617,12 +5626,14 @@ html[data-motion="reduced"] .gallery-media {
   border: 1px solid var(--line);
   border-radius: 10px;
   background: var(--raised);
-  transition: transform 0.25s;
+  transition: transform 160ms var(--ease-editorial);
 }
-.social-icons a:hover {
-  transform: translateY(-3px);
-  color: var(--text);
-  background: var(--surface);
+@media (hover: hover) and (pointer: fine) {
+  .social-icons a:hover {
+    transform: translateY(-3px);
+    color: var(--text);
+    background: var(--surface);
+  }
 }
 .contact-paper .social-icons a {
   background: var(--raised);
@@ -5856,7 +5867,11 @@ html[data-motion="reduced"] .gallery-media {
   height: 94px;
   border-radius: 50%;
   position: relative;
-  background: radial-gradient(ellipse, color-mix(in srgb, var(--muted) 12.55%, transparent), transparent 70%);
+  background: radial-gradient(
+    ellipse,
+    color-mix(in srgb, var(--muted) 12.55%, transparent),
+    transparent 70%
+  );
 }
 .footer-emblem > span::before {
   content: "";
@@ -6882,11 +6897,13 @@ h3,
   border-radius: 50%;
   background: transparent;
   color: var(--muted);
-  transition: none;
+  transition: transform 160ms var(--ease-editorial);
 }
-.icon-button:hover {
-  background: var(--raised);
-  color: var(--text);
+@media (hover: hover) and (pointer: fine) {
+  .icon-button:hover {
+    background: var(--raised);
+    color: var(--text);
+  }
 }
 .button {
   display: inline-flex;
@@ -6898,28 +6915,52 @@ h3,
   border-radius: 7px;
   font-size: 12px;
   font-weight: 600;
-  transition: transform 0.25s;
+  transition: transform 160ms var(--ease-editorial);
 }
-.button:hover {
-  transform: translateY(-3px);
+@media (hover: hover) and (pointer: fine) {
+  .button:hover {
+    transform: translateY(-3px);
+  }
 }
 .button-gold {
   background: var(--accent);
   color: var(--text);
   border: 1px solid var(--accent-text);
-  box-shadow: 0 4px 24px color-mix(in srgb, var(--neutral-black) 6.27%, transparent);
+  box-shadow: 0 4px 24px
+    color-mix(in srgb, var(--neutral-black) 6.27%, transparent);
 }
-.button-gold:hover {
-  background: var(--accent);
-  box-shadow: 0 8px 28px color-mix(in srgb, var(--neutral-black) 13.73%, transparent);
+@media (hover: hover) and (pointer: fine) {
+  .button-gold:hover {
+    background: var(--accent);
+    box-shadow: 0 8px 28px
+      color-mix(in srgb, var(--neutral-black) 13.73%, transparent);
+  }
 }
 .button-outline {
   border: 1px solid var(--line);
   background: var(--soft);
   color: var(--text);
 }
-.button-outline:hover {
-  background: var(--raised);
+@media (hover: hover) and (pointer: fine) {
+  .button-outline:hover {
+    background: var(--raised);
+  }
+}
+button,
+a,
+[role="button"] {
+  touch-action: manipulation;
+}
+button,
+[role="button"],
+.button,
+.icon-button {
+  -webkit-user-select: none;
+  user-select: none;
+}
+html[data-motion="full"]
+  :is(.button, .icon-button):active:not(:focus-visible):not(:disabled) {
+  transform: scale(0.97);
 }
 .skip-link {
   position: fixed;
@@ -6946,7 +6987,11 @@ h3,
   width: 700px;
   height: 700px;
   border-radius: 50%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--muted) 4.31%, transparent), transparent 68%);
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--muted) 4.31%, transparent),
+    transparent 68%
+  );
   top: -100px;
   right: -250px;
   animation: drift 20s ease-in-out infinite alternate;
@@ -6954,7 +6999,11 @@ h3,
 .ambient-background span:last-child {
   top: 650px;
   left: -450px;
-  background: radial-gradient(circle, color-mix(in srgb, var(--muted) 3.14%, transparent), transparent 68%);
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--muted) 3.14%, transparent),
+    transparent 68%
+  );
   animation-delay: -10s;
 }
 @keyframes drift {
@@ -7039,7 +7088,8 @@ h3,
   padding: 14px 20px 22px;
   background: var(--surface);
   border-bottom: 1px solid var(--line);
-  box-shadow: 0 22px 30px color-mix(in srgb, var(--neutral-black) 18.82%, transparent);
+  box-shadow: 0 22px 30px
+    color-mix(in srgb, var(--neutral-black) 18.82%, transparent);
 }
 .mobile-nav a {
   display: block;
@@ -7114,7 +7164,8 @@ h1 {
   background: linear-gradient(145deg, var(--raised), var(--surface));
   border: 1px solid var(--line);
   border-radius: 16px;
-  box-shadow: 0 30px 70px color-mix(in srgb, var(--neutral-black) 14.51%, transparent);
+  box-shadow: 0 30px 70px
+    color-mix(in srgb, var(--neutral-black) 14.51%, transparent);
   transform: rotate(3deg);
 }
 .portrait-topline {
@@ -7146,7 +7197,10 @@ h1 {
   content: "";
   position: absolute;
   inset: 50% 0 0;
-  background: linear-gradient(transparent, color-mix(in srgb, var(--neutral-black) 37.65%, transparent));
+  background: linear-gradient(
+    transparent,
+    color-mix(in srgb, var(--neutral-black) 37.65%, transparent)
+  );
   pointer-events: none;
 }
 .portrait-placeholder {
@@ -7204,7 +7258,8 @@ h1 {
   display: flex;
   align-items: center;
   gap: 12px;
-  box-shadow: 0 10px 35px color-mix(in srgb, var(--neutral-black) 14.51%, transparent);
+  box-shadow: 0 10px 35px
+    color-mix(in srgb, var(--neutral-black) 14.51%, transparent);
 }
 .floating-note svg {
   color: var(--gold);
@@ -7363,7 +7418,8 @@ h2 {
 .project-card:hover {
   border-color: color-mix(in srgb, var(--accent-text) 37.65%, transparent);
   transform: translateY(-4px);
-  box-shadow: 0 15px 45px color-mix(in srgb, var(--neutral-black) 9.41%, transparent);
+  box-shadow: 0 15px 45px
+    color-mix(in srgb, var(--neutral-black) 9.41%, transparent);
 }
 .browser-frame {
   border: 1px solid var(--line);
@@ -7616,7 +7672,8 @@ h2 {
   z-index: 25;
   background: var(--surface);
   border: 1px solid var(--line);
-  box-shadow: 0 6px 24px color-mix(in srgb, var(--neutral-black) 12.55%, transparent);
+  box-shadow: 0 6px 24px
+    color-mix(in srgb, var(--neutral-black) 12.55%, transparent);
   color: var(--gold);
 }
 .gallery {
@@ -8169,6 +8226,7 @@ import localFont from "next/font/local";
 import { site } from "@/data/site";
 import palette from "@/data/theme-tokens.json";
 import { MotionProvider } from "@/components/motion-provider";
+import { ThemeColorSync } from "@/components/theme-color-sync";
 import "./globals.css";
 import "./bots.css";
 import "./profile.css";
@@ -8239,13 +8297,12 @@ export function generateMetadata(): Metadata {
   };
 }
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: palette.dark.background },
-    { media: "(prefers-color-scheme: light)", color: palette.light.background },
-  ],
+  // The site defaults to dark independently of the OS; saved/manual choices
+  // are applied by the inline initializer and ThemeColorSync.
+  themeColor: palette.dark.background,
 };
 
-const themeScript = `(function(){var t='dark',m='full';try{var s=localStorage.getItem('portfolio-theme');if(s==='light'||s==='dark')t=s;var p=localStorage.getItem('elvora-motion');if(p==='full'||p==='reduced')m=p;}catch(e){}document.documentElement.dataset.theme=t;document.documentElement.dataset.motion=m;if(window.IntersectionObserver&&m==='full')document.documentElement.dataset.motionReveals='enabled';})();`;
+const themeScript = `(function(){var t='dark',m='full';try{var s=localStorage.getItem('portfolio-theme');if(s==='light'||s==='dark')t=s;var p=localStorage.getItem('elvora-motion');if(p==='full'||p==='reduced')m=p;}catch(e){}document.documentElement.dataset.theme=t;document.documentElement.dataset.motion=m;if(window.IntersectionObserver&&m==='full')document.documentElement.dataset.motionReveals='enabled';var colors=${JSON.stringify({ dark: palette.dark.background, light: palette.light.background })};function sync(){var selected=document.documentElement.dataset.theme==='light'?'light':'dark';document.querySelectorAll('meta[name="theme-color"]').forEach(function(meta){meta.content=colors[selected];});}sync();if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync,{once:true});})();`;
 
 export default async function RootLayout({
   children,
@@ -8291,6 +8348,7 @@ export default async function RootLayout({
         <noscript>
           <style>{`.consent-banner{display:none!important}.motion-reveal,.motion-word{opacity:1!important;transform:none!important;filter:none!important}`}</style>
         </noscript>
+        <ThemeColorSync />
         <MotionProvider>
           <ConsentProvider>{children}</ConsentProvider>
         </MotionProvider>
@@ -9103,10 +9161,15 @@ html[data-motion="full"]
 .home-more nav a:nth-child(3) {
   --explore-delay: -3.2s;
 }
-.home-more nav a:hover,
 .home-more nav a:focus-visible {
   border-color: var(--accent-text);
   background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+}
+@media (hover: hover) and (pointer: fine) {
+  .home-more nav a:hover {
+    border-color: var(--accent-text);
+    background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+  }
 }
 .home-more nav h3 {
   display: flex;
@@ -9120,11 +9183,12 @@ html[data-motion="full"]
 .home-more nav svg {
   color: var(--accent-text);
   flex-shrink: 0;
-  transition: transform 0.25s;
+  transition: transform 160ms var(--ease-editorial);
 }
-html[data-motion="full"] .home-more nav a:hover svg,
-html[data-motion="full"] .home-more nav a:focus-visible svg {
-  transform: translate(3px, -3px);
+@media (hover: hover) and (pointer: fine) {
+  html[data-motion="full"] .home-more nav a:hover svg {
+    transform: translate(3px, -3px);
+  }
 }
 html[data-motion="full"]
   .home-more[data-explore-active="true"]
@@ -10984,13 +11048,17 @@ html[data-motion="reduced"] .certificate-preview img {
 .contact-address svg {
   transition: transform 0.35s var(--ease-editorial);
 }
-[data-motion-reveals="enabled"] .studio-service:hover .reference-service-icon {
-  transform: translateY(-3px) rotate(-6deg);
-}
-[data-motion-reveals="enabled"] .service-learn:hover svg,
-[data-motion-reveals="enabled"] .domain-demo-link:hover svg,
-[data-motion-reveals="enabled"] .contact-address:hover svg {
-  transform: translate(3px, -3px);
+@media (hover: hover) and (pointer: fine) {
+  [data-motion-reveals="enabled"]
+    .studio-service:hover
+    .reference-service-icon {
+    transform: translateY(-3px) rotate(-6deg);
+  }
+  [data-motion-reveals="enabled"] .service-learn:hover svg,
+  [data-motion-reveals="enabled"] .domain-demo-link:hover svg,
+  [data-motion-reveals="enabled"] .contact-address:hover svg {
+    transform: translate(3px, -3px);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   html:not([data-motion="full"]) .emblem-object[data-logo-flip] {
@@ -11842,6 +11910,32 @@ html[data-motion="reduced"] .motion-word {
   --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
   --section-space: clamp(72px, 9vw, 144px);
   --radius-editorial: 18px;
+}
+/* Keep touch controls legible without changing desktop typography or zoom. */
+@media (pointer: coarse) {
+  html .motion-control select,
+  html .form-field select {
+    font-size: 16px;
+  }
+  html .motion-control select {
+    max-width: 66px;
+  }
+  .footer-editorial-colophon nav a,
+  .footer-editorial-colophon nav button,
+  .footer-brief-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .footer-top-link {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+.editorial-footer[data-footer-active="false"] .footer-wordmark-window > span,
+.editorial-footer[data-footer-active="false"] .footer-waves path,
+.editorial-footer[data-footer-active="false"] .footer-emblem > span::after {
+  animation-play-state: paused;
 }
 .studio-section,
 .work-section,

@@ -10,9 +10,11 @@ import {
 
 export function MotionProvider({ children }: { children: React.ReactNode }) {
   const [preference, setPreference] = useState<MotionPreference>("full");
+  const [ready, setReady] = useState(false);
   useEffect(() => {
     const saved = document.documentElement.dataset.motion;
     if (saved === "full" || saved === "reduced") setPreference(saved);
+    setReady(true);
   }, []);
   const reduced = preference === "reduced";
   function updatePreference(value: MotionPreference) {
@@ -26,7 +28,7 @@ export function MotionProvider({ children }: { children: React.ReactNode }) {
   }
   return (
     <MotionPreferenceContext.Provider
-      value={{ preference, reduced, setPreference: updatePreference }}
+      value={{ preference, reduced, ready, setPreference: updatePreference }}
     >
       <LazyMotion features={domAnimation} strict>
         <MotionConfig reducedMotion={reduced ? "always" : "never"}>

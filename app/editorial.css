@@ -52,7 +52,12 @@
   background-position:
     17px 29px,
     100px 61px;
-  mask-image: linear-gradient(transparent, var(--neutral-black) 15%, var(--neutral-black) 85%, transparent);
+  mask-image: linear-gradient(
+    transparent,
+    var(--neutral-black) 15%,
+    var(--neutral-black) 85%,
+    transparent
+  );
 }
 .toolkit-heading {
   display: grid;
@@ -423,8 +428,6 @@
   padding-top: 22px;
 }
 
-
-
 /* Theme-aware invitation, with the existing functional contact form. */
 .editorial-contact {
   padding-top: 60px;
@@ -434,14 +437,20 @@
   color-scheme: dark;
   color: var(--text);
   background:
-    radial-gradient(ellipse at 0% 0%, color-mix(in srgb, var(--muted) 7.45%, transparent), transparent 55%), var(--bg);
+    radial-gradient(
+      ellipse at 0% 0%,
+      color-mix(in srgb, var(--muted) 7.45%, transparent),
+      transparent 55%
+    ),
+    var(--bg);
   border: 1px solid var(--line);
   border-radius: 26px;
   padding: clamp(28px, 4.7vw, 68px);
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
   gap: 60px;
-  box-shadow: 0 30px 90px color-mix(in srgb, var(--neutral-black) 7.06%, transparent);
+  box-shadow: 0 30px 90px
+    color-mix(in srgb, var(--neutral-black) 7.06%, transparent);
   position: relative;
   isolation: isolate;
 }
@@ -510,12 +519,14 @@
   border: 1px solid var(--line);
   border-radius: 10px;
   background: var(--raised);
-  transition: transform 0.25s;
+  transition: transform 160ms var(--ease-editorial);
 }
-.social-icons a:hover {
-  transform: translateY(-3px);
-  color: var(--text);
-  background: var(--surface);
+@media (hover: hover) and (pointer: fine) {
+  .social-icons a:hover {
+    transform: translateY(-3px);
+    color: var(--text);
+    background: var(--surface);
+  }
 }
 .contact-paper .social-icons a {
   background: var(--raised);
@@ -749,7 +760,11 @@
   height: 94px;
   border-radius: 50%;
   position: relative;
-  background: radial-gradient(ellipse, color-mix(in srgb, var(--muted) 12.55%, transparent), transparent 70%);
+  background: radial-gradient(
+    ellipse,
+    color-mix(in srgb, var(--muted) 12.55%, transparent),
+    transparent 70%
+  );
 }
 .footer-emblem > span::before {
   content: "";

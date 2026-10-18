@@ -6,8 +6,14 @@ export type MotionPreference = "full" | "reduced";
 export const MotionPreferenceContext = createContext<{
   preference: MotionPreference;
   reduced: boolean;
+  ready: boolean;
   setPreference: (value: MotionPreference) => void;
-}>({ preference: "full", reduced: false, setPreference: () => {} });
+}>({
+  preference: "full",
+  reduced: false,
+  ready: false,
+  setPreference: () => {},
+});
 
 export const useMotionPreference = () => useContext(MotionPreferenceContext);
 

@@ -19,7 +19,7 @@ export function VisibilityVideo({
   caption: string;
   presentation?: "banner" | "card";
 }) {
-  const { reduced } = useMotionPreference();
+  const { reduced, ready } = useMotionPreference();
   const frame = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const [opaqueFallback, setOpaqueFallback] = useState(false);
@@ -31,11 +31,14 @@ export function VisibilityVideo({
   useEffect(() => {
     const media = video.current;
     const container = frame.current;
-    if (reduced || !media || !container) return;
+    if (!ready || reduced || !media || !container) return;
     let visible = false;
     // Set both properties before play(): some mobile browsers check defaultMuted.
     media.muted = true;
     media.defaultMuted = true;
+    // Sources are inert until the saved preference is known. Dynamically added
+    // <source> elements need load() before normal visibility-controlled playback.
+    media.load();
     let alphaChecked = name !== "home-collection" || mp4Only;
     const checkTransparency = () => {
       if (alphaChecked || media.readyState < 2) return true;
@@ -96,7 +99,7 @@ export function VisibilityVideo({
       document.removeEventListener("pointerdown", resume);
       document.removeEventListener("keydown", resume);
     };
-  }, [reduced, name, mp4Only]);
+  }, [reduced, name, mp4Only, ready]);
 
   return (
     <figure
@@ -126,27 +129,31 @@ export function VisibilityVideo({
             muted
             loop
             playsInline
-            preload="auto"
+            preload={ready ? "auto" : "none"}
             poster={poster}
             aria-label={caption}
             disablePictureInPicture
           >
-            {!mp4Only && (
-              <source
-                src={`/videos/${mediaName}-mobile.webm`}
-                type="video/webm"
-                media="(max-width: 767px)"
-              />
+            {ready && (
+              <>
+                {!mp4Only && (
+                  <source
+                    src={`/videos/${mediaName}-mobile.webm`}
+                    type="video/webm"
+                    media="(max-width: 767px)"
+                  />
+                )}
+                <source
+                  src={`/videos/${mediaName}-mobile.mp4`}
+                  type="video/mp4"
+                  media="(max-width: 767px)"
+                />
+                {!mp4Only && (
+                  <source src={`/videos/${mediaName}.webm`} type="video/webm" />
+                )}
+                <source src={`/videos/${mediaName}.mp4`} type="video/mp4" />
+              </>
             )}
-            <source
-              src={`/videos/${mediaName}-mobile.mp4`}
-              type="video/mp4"
-              media="(max-width: 767px)"
-            />
-            {!mp4Only && (
-              <source src={`/videos/${mediaName}.webm`} type="video/webm" />
-            )}
-            <source src={`/videos/${mediaName}.mp4`} type="video/mp4" />
           </video>
         )}
       </div>

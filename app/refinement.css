@@ -4,6 +4,32 @@
   --section-space: clamp(72px, 9vw, 144px);
   --radius-editorial: 18px;
 }
+/* Keep touch controls legible without changing desktop typography or zoom. */
+@media (pointer: coarse) {
+  html .motion-control select,
+  html .form-field select {
+    font-size: 16px;
+  }
+  html .motion-control select {
+    max-width: 66px;
+  }
+  .footer-editorial-colophon nav a,
+  .footer-editorial-colophon nav button,
+  .footer-brief-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .footer-top-link {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+.editorial-footer[data-footer-active="false"] .footer-wordmark-window > span,
+.editorial-footer[data-footer-active="false"] .footer-waves path,
+.editorial-footer[data-footer-active="false"] .footer-emblem > span::after {
+  animation-play-state: paused;
+}
 .studio-section,
 .work-section,
 .experience-section,

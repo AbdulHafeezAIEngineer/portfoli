@@ -38,7 +38,7 @@ export function VisibilityVideo({
   caption: string;
   presentation?: "banner" | "card";
 }) {
-  const { reduced } = useMotionPreference();
+  const { reduced, ready } = useMotionPreference();
   const frame = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const [opaqueFallback, setOpaqueFallback] = useState(false);
@@ -50,11 +50,14 @@ export function VisibilityVideo({
   useEffect(() => {
     const media = video.current;
     const container = frame.current;
-    if (reduced || !media || !container) return;
+    if (!ready || reduced || !media || !container) return;
     let visible = false;
     // Set both properties before play(): some mobile browsers check defaultMuted.
     media.muted = true;
     media.defaultMuted = true;
+    // Sources are inert until the saved preference is known. Dynamically added
+    // <source> elements need load() before normal visibility-controlled playback.
+    media.load();
     let alphaChecked = name !== "home-collection" || mp4Only;
     const checkTransparency = () => {
       if (alphaChecked || media.readyState < 2) return true;
@@ -115,7 +118,7 @@ export function VisibilityVideo({
       document.removeEventListener("pointerdown", resume);
       document.removeEventListener("keydown", resume);
     };
-  }, [reduced, name, mp4Only]);
+  }, [reduced, name, mp4Only, ready]);
 
   return (
     <figure
@@ -145,27 +148,31 @@ export function VisibilityVideo({
             muted
             loop
             playsInline
-            preload="auto"
+            preload={ready ? "auto" : "none"}
             poster={poster}
             aria-label={caption}
             disablePictureInPicture
           >
-            {!mp4Only && (
-              <source
-                src={`/videos/${mediaName}-mobile.webm`}
-                type="video/webm"
-                media="(max-width: 767px)"
-              />
+            {ready && (
+              <>
+                {!mp4Only && (
+                  <source
+                    src={`/videos/${mediaName}-mobile.webm`}
+                    type="video/webm"
+                    media="(max-width: 767px)"
+                  />
+                )}
+                <source
+                  src={`/videos/${mediaName}-mobile.mp4`}
+                  type="video/mp4"
+                  media="(max-width: 767px)"
+                />
+                {!mp4Only && (
+                  <source src={`/videos/${mediaName}.webm`} type="video/webm" />
+                )}
+                <source src={`/videos/${mediaName}.mp4`} type="video/mp4" />
+              </>
             )}
-            <source
-              src={`/videos/${mediaName}-mobile.mp4`}
-              type="video/mp4"
-              media="(max-width: 767px)"
-            />
-            {!mp4Only && (
-              <source src={`/videos/${mediaName}.webm`} type="video/webm" />
-            )}
-            <source src={`/videos/${mediaName}.mp4`} type="video/mp4" />
           </video>
         )}
       </div>
@@ -4240,6 +4247,48 @@ export function FaqSection({ faqs }: { faqs: Faq[] }) {
 }
 ``````
 
+## components/footer-motion.tsx
+
+``````tsx
+"use client";
+
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useMotionPreference } from "./motion-preference";
+
+/** Pause the original decorative loops without changing or restarting them. */
+export function FooterMotion({ children }: { children: ReactNode }) {
+  const footer = useRef<HTMLElement>(null);
+  const { reduced } = useMotionPreference();
+  const [visible, setVisible] = useState(false);
+  const [foreground, setForeground] = useState(true);
+  useEffect(() => {
+    const element = footer.current;
+    if (!element) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { rootMargin: "80px" },
+    );
+    observer.observe(element);
+    const changed = () => setForeground(!document.hidden);
+    changed();
+    document.addEventListener("visibilitychange", changed);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", changed);
+    };
+  }, []);
+  return (
+    <footer
+      ref={footer}
+      className="editorial-footer"
+      data-footer-active={visible && foreground && !reduced}
+    >
+      {children}
+    </footer>
+  );
+}
+``````
+
 ## components/footer.tsx
 
 ``````tsx
@@ -4253,6 +4302,7 @@ import { SocialLinks } from "./social-links";
 import { CookieSettingsButton } from "./consent-provider";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
+import { FooterMotion } from "./footer-motion";
 
 export function Footer({
   brand,
@@ -4262,7 +4312,7 @@ export function Footer({
   email?: string;
 }) {
   return (
-    <footer className="editorial-footer">
+    <FooterMotion>
       <div className="container footer-top-grid">
         <div className="footer-editorial-invitation">
           <Reveal>
@@ -4364,7 +4414,7 @@ export function Footer({
         </div>
       </div>
       <BackToTop />
-    </footer>
+    </FooterMotion>
   );
 }
 ``````
@@ -4833,8 +4883,14 @@ export type MotionPreference = "full" | "reduced";
 export const MotionPreferenceContext = createContext<{
   preference: MotionPreference;
   reduced: boolean;
+  ready: boolean;
   setPreference: (value: MotionPreference) => void;
-}>({ preference: "full", reduced: false, setPreference: () => {} });
+}>({
+  preference: "full",
+  reduced: false,
+  ready: false,
+  setPreference: () => {},
+});
 
 export const useMotionPreference = () => useContext(MotionPreferenceContext);
 
@@ -4873,9 +4929,11 @@ import {
 
 export function MotionProvider({ children }: { children: React.ReactNode }) {
   const [preference, setPreference] = useState<MotionPreference>("full");
+  const [ready, setReady] = useState(false);
   useEffect(() => {
     const saved = document.documentElement.dataset.motion;
     if (saved === "full" || saved === "reduced") setPreference(saved);
+    setReady(true);
   }, []);
   const reduced = preference === "reduced";
   function updatePreference(value: MotionPreference) {
@@ -4889,7 +4947,7 @@ export function MotionProvider({ children }: { children: React.ReactNode }) {
   }
   return (
     <MotionPreferenceContext.Provider
-      value={{ preference, reduced, setPreference: updatePreference }}
+      value={{ preference, reduced, ready, setPreference: updatePreference }}
     >
       <LazyMotion features={domAnimation} strict>
         <MotionConfig reducedMotion={reduced ? "always" : "never"}>
@@ -6687,6 +6745,39 @@ export function TextReveal({
       ))}
     </Heading>
   );
+}
+``````
+
+## components/theme-color-sync.tsx
+
+``````tsx
+"use client";
+
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import palette from "@/data/theme-tokens.json";
+
+/** Browser chrome follows the selected site theme, including client navigation. */
+export function ThemeColorSync() {
+  const pathname = usePathname();
+  useEffect(() => {
+    const root = document.documentElement;
+    const sync = () => {
+      const theme = root.dataset.theme === "light" ? "light" : "dark";
+      for (const meta of document.querySelectorAll<HTMLMetaElement>(
+        'meta[name="theme-color"]',
+      ))
+        meta.content = palette[theme].background;
+    };
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(root, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+    return () => observer.disconnect();
+  }, [pathname]);
+  return null;
 }
 ``````
 

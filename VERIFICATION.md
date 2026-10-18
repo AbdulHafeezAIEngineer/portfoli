@@ -4,6 +4,8 @@ This records the current **local production build**. It does not establish that 
 
 ## Current homepage: contrasting sections
 
+Emil skills audit: all 15 supplied skills are installed as development-only Markdown, with original license/provenance. Saved Motion Off now starts zero video requests (previously three); On retains one responsive source per clip and eager readiness. Shared touch controls, native theme-color synchronization and offscreen footer pausing are verified. Lint, production build, 320/390/768/1440px quality checks, all five showcase loops/fallbacks and categorized-page checks passed. No physical-phone, FPS, PageSpeed or live-deployment claim is made. See [audit and execution record](docs/EMIL_SKILLS_AUDIT.md).
+
 Legal metadata follow-up: Cookie, Privacy and Terms pages now define their own descriptions and social metadata instead of inheriting homepage marketing copy. Lint, production build and HTTP 200 HTML checks for all three legal routes plus the homepage passed, including descriptions, canonicals and indexability. Policy text and consent behavior are unchanged. Live deployment remains unverified.
 
 Latest copy/SEO update: the homepage explains custom websites and business-data chatbots for international clients in plain English. Homepage, Websites and AI Bots titles/descriptions are distinct and verified in server HTML, including social tags and canonicals. Lint, production build and desktop/mobile page checks passed. Original visuals and behavior remain unchanged. The owner's supplied PageSpeed report is reviewed with prioritized recommendations; no performance changes or fresh score are claimed. See [the copy and audit record](docs/SEO_COPY_AND_PAGESPEED_REVIEW.md).

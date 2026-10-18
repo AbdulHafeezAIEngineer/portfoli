@@ -664,10 +664,15 @@ html[data-motion="full"]
 .home-more nav a:nth-child(3) {
   --explore-delay: -3.2s;
 }
-.home-more nav a:hover,
 .home-more nav a:focus-visible {
   border-color: var(--accent-text);
   background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+}
+@media (hover: hover) and (pointer: fine) {
+  .home-more nav a:hover {
+    border-color: var(--accent-text);
+    background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+  }
 }
 .home-more nav h3 {
   display: flex;
@@ -681,11 +686,12 @@ html[data-motion="full"]
 .home-more nav svg {
   color: var(--accent-text);
   flex-shrink: 0;
-  transition: transform 0.25s;
+  transition: transform 160ms var(--ease-editorial);
 }
-html[data-motion="full"] .home-more nav a:hover svg,
-html[data-motion="full"] .home-more nav a:focus-visible svg {
-  transform: translate(3px, -3px);
+@media (hover: hover) and (pointer: fine) {
+  html[data-motion="full"] .home-more nav a:hover svg {
+    transform: translate(3px, -3px);
+  }
 }
 html[data-motion="full"]
   .home-more[data-explore-active="true"]

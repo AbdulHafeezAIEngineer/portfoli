@@ -8,6 +8,7 @@ import { SocialLinks } from "./social-links";
 import { CookieSettingsButton } from "./consent-provider";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
+import { FooterMotion } from "./footer-motion";
 
 export function Footer({
   brand,
@@ -17,7 +18,7 @@ export function Footer({
   email?: string;
 }) {
   return (
-    <footer className="editorial-footer">
+    <FooterMotion>
       <div className="container footer-top-grid">
         <div className="footer-editorial-invitation">
           <Reveal>
@@ -119,6 +120,6 @@ export function Footer({
         </div>
       </div>
       <BackToTop />
-    </footer>
+    </FooterMotion>
   );
 }

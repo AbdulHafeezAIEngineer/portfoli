@@ -9,6 +9,33 @@ See [verification](../VERIFICATION.md), [deployment](../DEPLOYMENT.md), [securit
 ## Folder structure
 
 ```text
+.agents/skills/LICENSE.emilkowalski
+.agents/skills/SOURCE.md
+.agents/skills/UPSTREAM-README.md
+.agents/skills/animate/RECIPES.md
+.agents/skills/animate/SKILL.md
+.agents/skills/animate-expo/RECIPES.md
+.agents/skills/animate-expo/SKILL.md
+.agents/skills/animation-performance/SKILL.md
+.agents/skills/animation-vocabulary/SKILL.md
+.agents/skills/apple-design/SKILL.md
+.agents/skills/ask-sonner/API.md
+.agents/skills/ask-sonner/SKILL.md
+.agents/skills/break-ui/CATALOG.md
+.agents/skills/break-ui/SKILL.md
+.agents/skills/emil-design-eng/SKILL.md
+.agents/skills/find-animation-opportunities/SKILL.md
+.agents/skills/improve-animations/AUDIT.md
+.agents/skills/improve-animations/PLAN-TEMPLATE.md
+.agents/skills/improve-animations/SKILL.md
+.agents/skills/mobile-native/SKILL.md
+.agents/skills/performance-cheatsheet.md
+.agents/skills/pick-ui-library/SKILL.md
+.agents/skills/prototype/PICKER.md
+.agents/skills/prototype/SKILL.md
+.agents/skills/review-animations/SKILL.md
+.agents/skills/review-animations/STANDARDS.md
+.agents/skills/write-swift/SKILL.md
 .env.example
 .eslintrc.json
 .gitignore
@@ -110,6 +137,7 @@ components/editorial-effects.tsx
 components/experience.tsx
 components/faq-enhancement.tsx
 components/faq-section.tsx
+components/footer-motion.tsx
 components/footer.tsx
 components/forte-preview.tsx
 components/hero-emblem.tsx
@@ -138,6 +166,7 @@ components/studio-sections.tsx
 components/testimonial-scene.tsx
 components/testimonials.tsx
 components/text-reveal.tsx
+components/theme-color-sync.tsx
 components/tool-mark.tsx
 components/turnstile.tsx
 components/work-bunch.tsx
@@ -170,6 +199,7 @@ data/tool-marks.ts
 docs/BRIEF_COMPLETION.md
 docs/CATEGORIZED_PAGES.md
 docs/EDITORIAL_UPGRADE.md
+docs/EMIL_SKILLS_AUDIT.md
 docs/HOMEPAGE_BANDS.md
 docs/PORTRAIT_TRANSPARENT_COLLECTION.md
 docs/PRESENTATION_UPDATE.md
@@ -229,6 +259,9 @@ docs/editorial-skills-mobile.png
 docs/editorial-tools-desktop.png
 docs/editorial-tools-mobile.png
 docs/elvora-project-preview.png
+docs/emil-browser-results.json
+docs/emil-mobile-contact.png
+docs/emil-mobile-footer.png
 docs/forte-bot-card.png
 docs/home-bands-accessibility.json
 docs/home-bands-dark-1440.png
@@ -382,6 +415,11 @@ netlify.toml
 next.config.mjs
 package-lock.json
 package.json
+plans/001-initialize-media-preference.md
+plans/002-touch-controls.md
+plans/003-selected-theme-color.md
+plans/004-footer-visibility.md
+plans/README.md
 postcss.config.mjs
 prisma/migrations/202610150001_initial/migration.sql
 prisma/migrations/202610170001_agency_content_and_leads/migration.sql
@@ -510,6 +548,7 @@ tests/consent.test.ts
 tests/contact.test.mjs
 tests/demo-windows.browser.mjs
 tests/editorial-motion.browser.mjs
+tests/emil-quality.browser.mjs
 tests/finishing.browser.mjs
 tests/helpers/https-proxy.mjs
 tests/login-fields.browser.mjs
@@ -694,14 +733,16 @@ model Testimonial {
 ## Source by folder
 
 - [root](01-root.md)
-- [app](02-app.md)
-- [components](03-components.md)
-- [data](04-data.md)
-- [docs](05-docs.md)
-- [hooks](06-hooks.md)
-- [lib](07-lib.md)
-- [prisma](08-prisma.md)
-- [public](09-public.md)
-- [scripts](10-scripts.md)
-- [tests](11-tests.md)
-- [types](12-types.md)
+- [.agents](02-.agents.md)
+- [app](03-app.md)
+- [components](04-components.md)
+- [data](05-data.md)
+- [docs](06-docs.md)
+- [hooks](07-hooks.md)
+- [lib](08-lib.md)
+- [plans](09-plans.md)
+- [prisma](10-prisma.md)
+- [public](11-public.md)
+- [scripts](12-scripts.md)
+- [tests](13-tests.md)
+- [types](14-types.md)

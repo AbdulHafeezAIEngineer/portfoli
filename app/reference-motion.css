@@ -90,13 +90,17 @@
 .contact-address svg {
   transition: transform 0.35s var(--ease-editorial);
 }
-[data-motion-reveals="enabled"] .studio-service:hover .reference-service-icon {
-  transform: translateY(-3px) rotate(-6deg);
-}
-[data-motion-reveals="enabled"] .service-learn:hover svg,
-[data-motion-reveals="enabled"] .domain-demo-link:hover svg,
-[data-motion-reveals="enabled"] .contact-address:hover svg {
-  transform: translate(3px, -3px);
+@media (hover: hover) and (pointer: fine) {
+  [data-motion-reveals="enabled"]
+    .studio-service:hover
+    .reference-service-icon {
+    transform: translateY(-3px) rotate(-6deg);
+  }
+  [data-motion-reveals="enabled"] .service-learn:hover svg,
+  [data-motion-reveals="enabled"] .domain-demo-link:hover svg,
+  [data-motion-reveals="enabled"] .contact-address:hover svg {
+    transform: translate(3px, -3px);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   html:not([data-motion="full"]) .emblem-object[data-logo-flip] {

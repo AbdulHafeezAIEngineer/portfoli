@@ -10,6 +10,8 @@ Latest playback/navigation update: [wide looping videos, interactive desktop win
 
 ## Categorized public pages
 
+Emil Kowalski's supplied skills are now installed as project development guidance. A skill-based audit fixed saved Motion Off video downloads, touch controls, selected-theme browser color and offscreen footer work while preserving the custom design. See [audit, evidence and limits](docs/EMIL_SKILLS_AUDIT.md) and [skill provenance](.agents/skills/SOURCE.md).
+
 Latest copy/SEO update: clear website-development and custom-data chatbot services for international clients, with distinct homepage/service search titles and plain-English homepage wording. The supplied PageSpeed report is reviewed separately; performance behavior is unchanged. See [copy, metadata, audit priorities and validation](docs/SEO_COPY_AND_PAGESPEED_REVIEW.md).
 
 Latest media update: the owner's original PDF portrait is fitted into the About frame, and the rotating collection video uses real transparency with a matching purple MP4 fallback. See [implementation, validation and previews](docs/PORTRAIT_TRANSPARENT_COLLECTION.md).

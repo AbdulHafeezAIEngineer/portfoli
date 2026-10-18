@@ -580,6 +580,8 @@ Latest playback/navigation update: [wide looping videos, interactive desktop win
 
 ## Categorized public pages
 
+Emil Kowalski's supplied skills are now installed as project development guidance. A skill-based audit fixed saved Motion Off video downloads, touch controls, selected-theme browser color and offscreen footer work while preserving the custom design. See [audit, evidence and limits](docs/EMIL_SKILLS_AUDIT.md) and [skill provenance](.agents/skills/SOURCE.md).
+
 Latest copy/SEO update: clear website-development and custom-data chatbot services for international clients, with distinct homepage/service search titles and plain-English homepage wording. The supplied PageSpeed report is reviewed separately; performance behavior is unchanged. See [copy, metadata, audit priorities and validation](docs/SEO_COPY_AND_PAGESPEED_REVIEW.md).
 
 Latest media update: the owner's original PDF portrait is fitted into the About frame, and the rotating collection video uses real transparency with a matching purple MP4 fallback. See [implementation, validation and previews](docs/PORTRAIT_TRANSPARENT_COLLECTION.md).
@@ -937,6 +939,8 @@ To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQ
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
 ## Current homepage: contrasting sections
+
+Emil skills audit: all 15 supplied skills are installed as development-only Markdown, with original license/provenance. Saved Motion Off now starts zero video requests (previously three); On retains one responsive source per clip and eager readiness. Shared touch controls, native theme-color synchronization and offscreen footer pausing are verified. Lint, production build, 320/390/768/1440px quality checks, all five showcase loops/fallbacks and categorized-page checks passed. No physical-phone, FPS, PageSpeed or live-deployment claim is made. See [audit and execution record](docs/EMIL_SKILLS_AUDIT.md).
 
 Legal metadata follow-up: Cookie, Privacy and Terms pages now define their own descriptions and social metadata instead of inheriting homepage marketing copy. Lint, production build and HTTP 200 HTML checks for all three legal routes plus the homepage passed, including descriptions, canonicals and indexability. Policy text and consent behavior are unchanged. Live deployment remains unverified.
 
@@ -9673,7 +9677,8 @@ export default nextConfig;
     "images:previews": "node scripts/generate-image-previews.mjs",
     "test:windows:browser": "node --import tsx tests/demo-windows.browser.mjs",
     "test:pages:browser": "node tests/pages.browser.mjs",
-    "test:scroll:browser": "node tests/scroll-readiness.browser.mjs"
+    "test:scroll:browser": "node tests/scroll-readiness.browser.mjs",
+    "test:emil:browser": "node tests/emil-quality.browser.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "5.3.0",
@@ -9740,6 +9745,7 @@ import type { Config } from "tailwindcss";
 export default {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   darkMode: ["class", '[data-theme="dark"]'],
+  future: { hoverOnlyWhenSupported: true },
   theme: {
     extend: {
       colors: {

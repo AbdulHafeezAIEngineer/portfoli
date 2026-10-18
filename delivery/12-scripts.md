@@ -521,6 +521,13 @@ for number, (name, paths) in enumerate(groups, 1):
     (delivery / destination).write_text("\n".join(chunks))
     links.append(f"- [{name}]({destination})")
 
+# Folder additions can renumber every section. Remove only stale generated
+# section files; otherwise old, unlinked snapshots survive beside the new ones.
+expected_sections = {f"{number:02d}-{name}.md" for number, (name, _) in enumerate(groups, 1)}
+for previous in delivery.glob("[0-9][0-9]-*.md"):
+    if previous.name not in expected_sections:
+        previous.unlink()
+
 structure = "\n".join(path.relative_to(ROOT).as_posix() for path in files)
 intro = f"""# Elvora — complete source review
 

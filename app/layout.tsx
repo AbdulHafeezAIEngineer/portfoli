@@ -5,6 +5,7 @@ import localFont from "next/font/local";
 import { site } from "@/data/site";
 import palette from "@/data/theme-tokens.json";
 import { MotionProvider } from "@/components/motion-provider";
+import { ThemeColorSync } from "@/components/theme-color-sync";
 import "./globals.css";
 import "./bots.css";
 import "./profile.css";
@@ -75,13 +76,12 @@ export function generateMetadata(): Metadata {
   };
 }
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: palette.dark.background },
-    { media: "(prefers-color-scheme: light)", color: palette.light.background },
-  ],
+  // The site defaults to dark independently of the OS; saved/manual choices
+  // are applied by the inline initializer and ThemeColorSync.
+  themeColor: palette.dark.background,
 };
 
-const themeScript = `(function(){var t='dark',m='full';try{var s=localStorage.getItem('portfolio-theme');if(s==='light'||s==='dark')t=s;var p=localStorage.getItem('elvora-motion');if(p==='full'||p==='reduced')m=p;}catch(e){}document.documentElement.dataset.theme=t;document.documentElement.dataset.motion=m;if(window.IntersectionObserver&&m==='full')document.documentElement.dataset.motionReveals='enabled';})();`;
+const themeScript = `(function(){var t='dark',m='full';try{var s=localStorage.getItem('portfolio-theme');if(s==='light'||s==='dark')t=s;var p=localStorage.getItem('elvora-motion');if(p==='full'||p==='reduced')m=p;}catch(e){}document.documentElement.dataset.theme=t;document.documentElement.dataset.motion=m;if(window.IntersectionObserver&&m==='full')document.documentElement.dataset.motionReveals='enabled';var colors=${JSON.stringify({ dark: palette.dark.background, light: palette.light.background })};function sync(){var selected=document.documentElement.dataset.theme==='light'?'light':'dark';document.querySelectorAll('meta[name="theme-color"]').forEach(function(meta){meta.content=colors[selected];});}sync();if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync,{once:true});})();`;
 
 export default async function RootLayout({
   children,
@@ -127,6 +127,7 @@ export default async function RootLayout({
         <noscript>
           <style>{`.consent-banner{display:none!important}.motion-reveal,.motion-word{opacity:1!important;transform:none!important;filter:none!important}`}</style>
         </noscript>
+        <ThemeColorSync />
         <MotionProvider>
           <ConsentProvider>{children}</ConsentProvider>
         </MotionProvider>
