@@ -8273,6 +8273,7 @@ import "./theme-tokens.css";
 import "./project-art-tokens.css";
 import "./atelier.css";
 import "./pages.css";
+import "./liquid-glass.css";
 import { ConsentProvider } from "@/components/consent-provider";
 
 const inter = localFont({
@@ -8384,6 +8385,124 @@ export default async function RootLayout({
       </body>
     </html>
   );
+}
+``````
+
+## app/liquid-glass.css
+
+``````css
+/* Solid/CSS fallback plus one small WebGL control backdrop. Page content and
+   existing custom artwork are never captured by the shader. */
+.portfolio-header {
+  --nav-glass-header: color-mix(in srgb, var(--bg) 96%, transparent);
+  --nav-glass-rim: color-mix(in srgb, var(--text) 12%, transparent);
+  --nav-glass-shadow: color-mix(in srgb, var(--neutral-black) 10%, transparent);
+  background: var(--bg);
+  box-shadow: inset 0 -1px 0 var(--nav-glass-rim);
+}
+.portfolio-header .about-navigation,
+.portfolio-header .mobile-nav {
+  background: var(--surface);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-color: var(--line-bright);
+  box-shadow:
+    inset 0 1px 0 var(--nav-glass-rim),
+    0 16px 40px var(--nav-glass-shadow);
+}
+.portfolio-header .nav-actions .icon-button {
+  background: var(--surface);
+  box-shadow: inset 0 1px 0 var(--nav-glass-rim);
+}
+.portfolio-header .nav-actions {
+  position: relative;
+  isolation: isolate;
+}
+.nav-glass-layer {
+  position: absolute;
+  inset: -4px -6px;
+  border-radius: 22px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0;
+}
+.nav-glass-layer[data-state="ready"] {
+  opacity: 1;
+}
+.nav-glass-texture {
+  position: absolute;
+  left: -24px;
+  top: -24px;
+  width: calc(100% + 48px);
+  height: calc(100% + 48px);
+}
+.nav-glass-lens {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  border-radius: inherit;
+}
+.nav-glass-layer[data-state="ready"] .nav-glass-texture {
+  visibility: hidden;
+}
+.portfolio-header .nav-actions[data-glass-ready] .icon-button {
+  background: transparent;
+}
+@supports (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  .portfolio-header {
+    background: var(--nav-glass-header);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .portfolio-header .nav-actions .icon-button:hover {
+    background: var(--raised);
+  }
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .nav-glass-layer {
+    opacity: 0;
+  }
+  .site-header.portfolio-header {
+    background: var(--bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .portfolio-header .about-navigation,
+  .portfolio-header .mobile-nav {
+    background: var(--surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+@media (prefers-contrast: more) {
+  .portfolio-header,
+  .portfolio-header .about-navigation,
+  .portfolio-header .mobile-nav,
+  .portfolio-header .nav-actions .icon-button {
+    border-color: var(--muted);
+    box-shadow: none;
+  }
+}
+@media (forced-colors: active) {
+  .nav-glass-layer {
+    opacity: 0;
+  }
+  .site-header.portfolio-header,
+  .portfolio-header .about-navigation,
+  .portfolio-header .mobile-nav,
+  .portfolio-header .nav-actions .icon-button {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 }
 ``````
 

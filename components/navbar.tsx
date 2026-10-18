@@ -8,6 +8,7 @@ import { site } from "@/data/site";
 import { aboutPages, portfolioPages } from "@/data/navigation";
 import { BrandMark } from "./brand-mark";
 import { MotionControl } from "./motion-preference";
+import { NavigationGlass } from "./navigation-glass";
 
 export function Navbar({
   identity,
@@ -163,6 +164,7 @@ export function Navbar({
           )}
         </div>
         <div className="nav-actions">
+          <NavigationGlass />
           <MotionControl />
           <button
             className="icon-button theme-toggle"

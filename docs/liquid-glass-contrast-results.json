@@ -1,0 +1,26 @@
+[
+  {
+    "theme": "dark",
+    "headerWorstBackdropRGB": [
+      19.8,
+      19.8,
+      24.6
+    ],
+    "headerMutedContrast": 6.93,
+    "headerAccentContrast": 6.76,
+    "menuTextContrast": 16.7,
+    "menuActiveContrast": 5.96
+  },
+  {
+    "theme": "light",
+    "headerWorstBackdropRGB": [
+      240.0,
+      240.0,
+      241.92
+    ],
+    "headerMutedContrast": 4.71,
+    "headerAccentContrast": 5.01,
+    "menuTextContrast": 19.75,
+    "menuActiveContrast": 5.07
+  }
+]

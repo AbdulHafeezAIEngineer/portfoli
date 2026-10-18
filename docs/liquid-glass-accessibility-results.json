@@ -1,0 +1,180 @@
+[
+  {
+    "width": 390,
+    "theme": "dark",
+    "axeVersion": "4.11.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            ".wordmark"
+          ],
+          [
+            "#mobile-navigation > a[href=\"/\"]"
+          ],
+          [
+            "#mobile-navigation > a[href$=\"websites\"]"
+          ],
+          [
+            "#mobile-navigation > a[href$=\"ai-bots\"]"
+          ],
+          [
+            "#mobile-navigation > a[href$=\"bunch-of-work\"]"
+          ],
+          [
+            "#mobile-navigation > a[href$=\"about\"]"
+          ],
+          [
+            "#mobile-navigation > a[aria-current=\"page\"][href$=\"journey\"]"
+          ],
+          [
+            "#mobile-navigation > a[href$=\"skills\"]"
+          ],
+          [
+            "#mobile-navigation > a[href$=\"certificates\"]"
+          ],
+          [
+            "#mobile-navigation > a[href$=\"testimonials\"]"
+          ],
+          [
+            "#mobile-navigation > a[href$=\"services\"]"
+          ],
+          [
+            "#mobile-navigation > a[href$=\"contact\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "theme": "light",
+    "axeVersion": "4.11.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            ".wordmark"
+          ],
+          [
+            "#mobile-navigation > a[href=\"/\"]"
+          ],
+          [
+            "#mobile-navigation > a[href$=\"websites\"]"
+          ],
+          [
+            "#mobile-navigation > a[href$=\"ai-bots\"]"
+          ],
+          [
+            "#mobile-navigation > a[href$=\"bunch-of-work\"]"
+          ],
+          [
+            "#mobile-navigation > a[href$=\"about\"]"
+          ],
+          [
+            "#mobile-navigation > a[aria-current=\"page\"][href$=\"journey\"]"
+          ],
+          [
+            "#mobile-navigation > a[href$=\"skills\"]"
+          ],
+          [
+            "#mobile-navigation > a[href$=\"certificates\"]"
+          ],
+          [
+            "#mobile-navigation > a[href$=\"testimonials\"]"
+          ],
+          [
+            "#mobile-navigation > a[href$=\"services\"]"
+          ],
+          [
+            "#mobile-navigation > a[href$=\"contact\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "theme": "dark",
+    "axeVersion": "4.11.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            ".wordmark"
+          ],
+          [
+            ".desktop-nav > a[href=\"/\"]"
+          ],
+          [
+            ".desktop-nav > a[href$=\"websites\"]"
+          ],
+          [
+            ".desktop-nav > a[href$=\"ai-bots\"]"
+          ],
+          [
+            ".desktop-nav > a[href$=\"bunch-of-work\"]"
+          ],
+          [
+            "a[data-active=\"true\"]"
+          ],
+          [
+            ".desktop-nav > a[href$=\"testimonials\"]"
+          ],
+          [
+            ".desktop-nav > a[href$=\"contact\"]"
+          ],
+          [
+            "label > span"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "theme": "light",
+    "axeVersion": "4.11.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            ".wordmark"
+          ],
+          [
+            ".desktop-nav > a[href=\"/\"]"
+          ],
+          [
+            ".desktop-nav > a[href$=\"websites\"]"
+          ],
+          [
+            ".desktop-nav > a[href$=\"ai-bots\"]"
+          ],
+          [
+            ".desktop-nav > a[href$=\"bunch-of-work\"]"
+          ],
+          [
+            "a[data-active=\"true\"]"
+          ],
+          [
+            ".desktop-nav > a[href$=\"testimonials\"]"
+          ],
+          [
+            ".desktop-nav > a[href$=\"contact\"]"
+          ],
+          [
+            "label > span"
+          ]
+        ]
+      }
+    ]
+  }
+]

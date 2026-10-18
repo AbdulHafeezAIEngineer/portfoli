@@ -163,6 +163,13 @@ See [verification](../VERIFICATION.md), [deployment](../DEPLOYMENT.md), [securit
 .agents/skills/improve-animations/AUDIT.md
 .agents/skills/improve-animations/PLAN-TEMPLATE.md
 .agents/skills/improve-animations/SKILL.md
+.agents/skills/liquidglass/INTEGRATION.md
+.agents/skills/liquidglass/README.md
+.agents/skills/liquidglass/SKILL.md
+.agents/skills/liquidglass/UPSTREAM-SHA256.json
+.agents/skills/liquidglass/examples/react.tsx
+.agents/skills/liquidglass/examples/vanilla.html
+.agents/skills/liquidglass/references/config-options.md
 .agents/skills/mobile-native/SKILL.md
 .agents/skills/performance-cheatsheet.md
 .agents/skills/pick-ui-library/SKILL.md
@@ -223,6 +230,7 @@ app/how-i-build/page.tsx
 app/icon.svg
 app/journey/page.tsx
 app/layout.tsx
+app/liquid-glass.css
 app/not-found.tsx
 app/opengraph-image.tsx
 app/page.tsx
@@ -285,6 +293,7 @@ components/logo-motion.tsx
 components/motion-preference.tsx
 components/motion-provider.tsx
 components/navbar.tsx
+components/navigation-glass.tsx
 components/page-tabs.tsx
 components/project-card.tsx
 components/project-gallery.tsx
@@ -344,6 +353,7 @@ docs/READY_PLAYBACK_UPDATE.md
 docs/RESTORED_HOMEPAGE.md
 docs/SEO_COPY_AND_PAGESPEED_REVIEW.md
 docs/SHOWCASE_UPDATE.md
+docs/THREE_SKILLS_FINAL_REVIEW.md
 docs/VIDEO_MOTION_UPDATE.md
 docs/WEBSITES_TESTIMONIALS.md
 docs/about-preview.png
@@ -418,6 +428,13 @@ docs/home-websites-loop-390.png
 docs/horizon-explore-accessibility.json
 docs/image-optimization.json
 docs/lighthouse-summary.json
+docs/liquid-glass-1440-dark.png
+docs/liquid-glass-1440-light.png
+docs/liquid-glass-390-dark.png
+docs/liquid-glass-390-light.png
+docs/liquid-glass-accessibility-results.json
+docs/liquid-glass-browser-results.json
+docs/liquid-glass-contrast-results.json
 docs/login-fields-mobile.png
 docs/logo-flipped.png
 docs/logo-front.png
@@ -690,6 +707,7 @@ tests/editorial-motion.browser.mjs
 tests/emil-quality.browser.mjs
 tests/finishing.browser.mjs
 tests/helpers/https-proxy.mjs
+tests/liquid-glass.browser.mjs
 tests/login-fields.browser.mjs
 tests/owner-setup.integration.mjs
 tests/pages.browser.mjs
@@ -702,6 +720,9 @@ tests/video-motion.browser.mjs
 tsconfig.json
 types/gmail-smtp.d.ts
 types/next-auth.d.ts
+vendor/README.md
+vendor/liquidglass-1.0.3.tgz
+vendor/liquidglass-upstream-sha256.json
 ```
 
 ## Database schema
@@ -885,3 +906,4 @@ model Testimonial {
 - [scripts](12-scripts.md)
 - [tests](13-tests.md)
 - [types](14-types.md)
+- [vendor](15-vendor.md)

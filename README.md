@@ -10,6 +10,8 @@ Latest playback/navigation update: [wide looping videos, interactive desktop win
 
 ## Categorized public pages
 
+All three requested design sources—Emil, Apple HIG and Liquid Glass—are integrated. The latest addition uses actual WebGL refraction behind native navigation controls, with opaque menus and accessible fallbacks. See the [combined final review, exact changes and verification](docs/THREE_SKILLS_FINAL_REVIEW.md). The shader runtime is pinned locally; no CDN is required.
+
 Apple HIG guidance is also installed as `$apple-hig-design`, alongside the existing Emil Apple skill. Its focused web review improves chat touch targets, keyboard focus and optional contrast/transparency preferences while preserving the custom design. See [integration, source and measured checks](docs/APPLE_HIG_INTEGRATION.md).
 
 Emil Kowalski's supplied skills are now installed as project development guidance. A skill-based audit fixed saved Motion Off video downloads, touch controls, selected-theme browser color and offscreen footer work while preserving the custom design. See [audit, evidence and limits](docs/EMIL_SKILLS_AUDIT.md) and [skill provenance](.agents/skills/SOURCE.md).

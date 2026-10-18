@@ -580,6 +580,8 @@ Latest playback/navigation update: [wide looping videos, interactive desktop win
 
 ## Categorized public pages
 
+All three requested design sources—Emil, Apple HIG and Liquid Glass—are integrated. The latest addition uses actual WebGL refraction behind native navigation controls, with opaque menus and accessible fallbacks. See the [combined final review, exact changes and verification](docs/THREE_SKILLS_FINAL_REVIEW.md). The shader runtime is pinned locally; no CDN is required.
+
 Apple HIG guidance is also installed as `$apple-hig-design`, alongside the existing Emil Apple skill. Its focused web review improves chat touch targets, keyboard focus and optional contrast/transparency preferences while preserving the custom design. See [integration, source and measured checks](docs/APPLE_HIG_INTEGRATION.md).
 
 Emil Kowalski's supplied skills are now installed as project development guidance. A skill-based audit fixed saved Motion Off video downloads, touch controls, selected-theme browser color and offscreen footer work while preserving the custom design. See [audit, evidence and limits](docs/EMIL_SKILLS_AUDIT.md) and [skill provenance](.agents/skills/SOURCE.md).
@@ -942,6 +944,8 @@ This records the current **local production build**. It does not establish that 
 
 ## Current homepage: contrasting sections
 
+Final three-skill review: Emil, Apple HIG and Liquid Glass coexist as 17 uniquely named development skills. The owner selected a new runtime for actual WebGL refraction behind native navigation controls. Scoped CSS/solid fallbacks, a pinned local package with the upstream broken install hook removed, and clean install/ci verification are included. Lint, production build, nine WebGL cases, eight Apple control cases, Emil regressions and all five video-loop/fallback checks passed. Four focused axe scans reported no detected violations, with contrast checks explicitly marked incomplete and supplemented by measured token bounds. Physical-device performance and live deployment remain unverified. See [all three integrations, exact changes, previews, evidence and costs](docs/THREE_SKILLS_FINAL_REVIEW.md).
+
 Apple HIG integration: the pinned upstream skill and references are installed as `apple-hig-design`, preserving Emil’s separate `apple-design` skill. All 133 imported file hashes and sixteen unique skill names are verified. Lint, production build and eight browser cases (320/390/768/1440px, both themes) passed: chat fixture reply, modal Tab/Escape/focus restoration, touch sizing, keyboard ring, contrast/transparency preferences and no overflow. These checks use local Chromium; actual AI replies, physical phones and live deployment are not established. See [the focused review and exact changes](docs/APPLE_HIG_INTEGRATION.md).
 
 Emil skills audit: all 15 supplied skills are installed as development-only Markdown, with original license/provenance. Saved Motion Off now starts zero video requests (previously three); On retains one responsive source per clip and eager readiness. Shared touch controls, native theme-color synchronization and offscreen footer pausing are verified. Lint, production build, 320/390/768/1440px quality checks, all five showcase loops/fallbacks and categorized-page checks passed. No physical-phone, FPS, PageSpeed or live-deployment claim is made. See [audit and execution record](docs/EMIL_SKILLS_AUDIT.md).
@@ -1256,6 +1260,7 @@ export default nextConfig;
         "@prisma/adapter-pg": "6.19.3",
         "@prisma/client": "6.19.3",
         "@vercel/blob": "2.8.2",
+        "@ybouane/liquidglass": "file:vendor/liquidglass-1.0.3.tgz",
         "bcryptjs": "3.0.2",
         "framer-motion": "11.18.2",
         "gmail-smtp": "npm:nodemailer@10.1.1",
@@ -3687,6 +3692,12 @@ export default nextConfig;
       "funding": {
         "url": "https://github.com/sponsors/panva"
       }
+    },
+    "node_modules/@ybouane/liquidglass": {
+      "version": "1.0.3",
+      "resolved": "file:vendor/liquidglass-1.0.3.tgz",
+      "integrity": "sha512-6Il6mXBe1UCoZZIFHqxYxzf6atZkQWfwzJdN/lB7bRdNHcAiy8e6FZ+cF+8gyRva5hqFIXEqbW+NwZGeiXszXQ==",
+      "license": "MIT"
     },
     "node_modules/acorn": {
       "version": "8.19.0",
@@ -9683,7 +9694,8 @@ export default nextConfig;
     "test:pages:browser": "node tests/pages.browser.mjs",
     "test:scroll:browser": "node tests/scroll-readiness.browser.mjs",
     "test:emil:browser": "node tests/emil-quality.browser.mjs",
-    "test:apple:browser": "node tests/apple-hig.browser.mjs"
+    "test:apple:browser": "node tests/apple-hig.browser.mjs",
+    "test:glass:browser": "node tests/liquid-glass.browser.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "5.3.0",
@@ -9691,6 +9703,7 @@ export default nextConfig;
     "@prisma/adapter-pg": "6.19.3",
     "@prisma/client": "6.19.3",
     "@vercel/blob": "2.8.2",
+    "@ybouane/liquidglass": "file:vendor/liquidglass-1.0.3.tgz",
     "bcryptjs": "3.0.2",
     "framer-motion": "11.18.2",
     "gmail-smtp": "npm:nodemailer@10.1.1",
