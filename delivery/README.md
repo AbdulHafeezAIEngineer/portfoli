@@ -233,6 +233,8 @@ docs/home-bands-dark-390.png
 docs/home-bands-light-1440.png
 docs/home-bands-light-390.png
 docs/home-bands-overview-desktop.png
+docs/home-bot-loop-1440.png
+docs/home-bot-loop-390.png
 docs/image-optimization.json
 docs/lighthouse-summary.json
 docs/login-fields-mobile.png
@@ -449,6 +451,11 @@ public/videos/ai-bot-mobile.webm
 public/videos/ai-bot-poster.webp
 public/videos/ai-bot.mp4
 public/videos/ai-bot.webm
+public/videos/home-ai-bot-mobile.mp4
+public/videos/home-ai-bot-mobile.webm
+public/videos/home-ai-bot-poster.webp
+public/videos/home-ai-bot.mp4
+public/videos/home-ai-bot.webm
 public/videos/work-showcase-mobile.mp4
 public/videos/work-showcase-mobile.webm
 public/videos/work-showcase-poster.webp

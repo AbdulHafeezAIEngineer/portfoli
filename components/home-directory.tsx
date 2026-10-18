@@ -6,6 +6,7 @@ import { studies } from "@/data/studies";
 import { imagePreview } from "@/lib/image-preview";
 import { ReadingText } from "./reading-text";
 import { TextReveal } from "./text-reveal";
+import { VisibilityVideo } from "./VisibilityVideo";
 
 export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
   const website = projects[0]?.screenshots[0];
@@ -77,14 +78,10 @@ export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
             </span>
           </div>
           <div className="home-feature-media home-bot-preview">
-            <Image
-              loading="eager"
-              fetchPriority="low"
-              src="/videos/ai-bot-poster.webp"
-              alt="A preview of a customer conversation with an AI assistant"
-              width={1600}
-              height={900}
-              sizes="(max-width: 767px) 90vw, 580px"
+            <VisibilityVideo
+              name="home-ai-bot"
+              caption="A delivery question answered by a website assistant."
+              presentation="card"
             />
           </div>
         </Link>

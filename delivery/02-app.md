@@ -8953,6 +8953,17 @@ html[data-motion="full"]
   height: 100%;
   object-fit: cover;
 }
+.home-bot-preview .showcase-video-card {
+  width: 100%;
+  margin: 0;
+}
+.home-bot-preview .showcase-video-frame {
+  min-height: 0;
+  max-height: none;
+  aspect-ratio: 1.5;
+  border: 0;
+  border-radius: 0;
+}
 .home-collection-preview {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

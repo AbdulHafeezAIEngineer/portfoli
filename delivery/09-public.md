@@ -497,6 +497,26 @@ Binary asset: 1237430 bytes. SHA-256 `97e1247f2b46348149c698ca04a00f97305ec5d89c
 
 Binary asset: 1001450 bytes. SHA-256 `f2e9b05930b3c53cf702a57b921d0a0cda96b43356f7e924ed41d9f89792602c`. Available in the repository and source ZIP.
 
+## public/videos/home-ai-bot-mobile.mp4
+
+Binary asset: 348555 bytes. SHA-256 `877e9da6e0303d76109339b13f80373670dd0ad9423e1e1d841588a9c6307dc9`. Available in the repository and source ZIP.
+
+## public/videos/home-ai-bot-mobile.webm
+
+Binary asset: 300655 bytes. SHA-256 `db8963997295873a54f227f3d61ceaa67c6dbde4f82e1cfe145e8ea7e97dbf1e`. Available in the repository and source ZIP.
+
+## public/videos/home-ai-bot-poster.webp
+
+Binary asset: 25694 bytes. SHA-256 `c7107ea1a7d06d27f11db0153c8bad91cb002eecdb0ffb56ab728a54876fd821`. Available in the repository and source ZIP.
+
+## public/videos/home-ai-bot.mp4
+
+Binary asset: 682018 bytes. SHA-256 `303cee0502a00db17dffd89bb26f4b5ca74a6e40739c83ec3aecbf8b773cea67`. Available in the repository and source ZIP.
+
+## public/videos/home-ai-bot.webm
+
+Binary asset: 472851 bytes. SHA-256 `20ce2229cbfd8ff5eeeca21e0d2cd2064805b62bf3e1148577a9d06dbc993782`. Available in the repository and source ZIP.
+
 ## public/videos/work-showcase-mobile.mp4
 
 Binary asset: 288387 bytes. SHA-256 `dc36afe5f4104069ca3508ce1cce3bfeec13b9f40a034db85bcf6046a083d80e`. Available in the repository and source ZIP.

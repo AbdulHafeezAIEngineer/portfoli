@@ -33,9 +33,14 @@ try {
       await page.getByLabel("Animation preference").inputValue(),
       "full",
     );
-    for (const name of ["work-showcase", "ai-bot"]) {
+    for (const name of ["work-showcase", "ai-bot", "home-ai-bot"]) {
       await page.goto(
-        base + (name === "work-showcase" ? "/websites" : "/ai-bots"),
+        base +
+          (name === "work-showcase"
+            ? "/websites"
+            : name === "ai-bot"
+              ? "/ai-bots"
+              : "/"),
       );
       const banner = page.locator(`[data-showcase-video="${name}"]`);
       await banner.scrollIntoViewIfNeeded();
@@ -67,10 +72,19 @@ try {
       );
       assert.equal(await banner.getByRole("button").count(), 0);
       const box = await banner.boundingBox();
-      assert.ok(
-        box.width > width * 0.9 && box.x >= 0 && box.x < 45,
-        "Wide edge-to-edge frame",
-      );
+      if (name === "home-ai-bot") {
+        const parent = await page.locator(".home-bot-preview").boundingBox();
+        assert.ok(Math.abs(box.width - parent.width) < 1);
+        assert.ok(Math.abs(box.x - parent.x) < 1);
+        assert.ok(
+          await page.locator('.home-feature-bots[href="/ai-bots"]').count(),
+        );
+        await banner.screenshot({ path: `docs/home-bot-loop-${width}.png` });
+      } else
+        assert.ok(
+          box.width > width * 0.9 && box.x >= 0 && box.x < 45,
+          "Wide edge-to-edge frame",
+        );
       await banner
         .locator("video")
         .evaluate((v) => (v.currentTime = v.duration - 0.12));
@@ -106,7 +120,7 @@ try {
     assert.deepEqual(external, []);
     await page.close();
     console.log(
-      `PASS ${width}px / OS reduced ${osReduced}: both wide silent loops, no controls, actual loop wrap, Off/On, offscreen pause and consent intact.`,
+      `PASS ${width}px / OS reduced ${osReduced}: all three silent loops, no controls, actual loop wrap, Off/On, offscreen pause and consent intact.`,
     );
   }
 } finally {

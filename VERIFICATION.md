@@ -4,6 +4,8 @@ This records the current **local production build**. It does not establish that 
 
 ## Current homepage: contrasting sections
 
+The homepage AI Bots image is replaced with the owner's eight-second delivery-chat video, using local silent desktop/mobile WebM and MP4 files. Production build passed. Native browser checks verified all three showcases at 390/1440px, actual looping, muted inline playback, no controls, global Off/On and offscreen pause; the homepage card retains its size and destination. See [desktop and phone frames](docs/HOMEPAGE_BANDS.md#homepage-ai-bots-video).
+
 The homepage now uses a light purpose section, a full-width black website showcase, a white/deep-purple split for AI Bots and Bunch of Work, and light secondary navigation. The header and hero still follow the saved light/dark theme. Purple links and primary actions use the existing palette. Scoped section variables come from the shared token source; other pages and custom artwork are preserved.
 
 Production build, ten-subject-page navigation, six-width/both-theme layouts (now explicitly including the homepage), saved Motion Off and desktop/mobile logo/reading checks passed. Four current WCAG A/AA scans cover the complete homepage in both themes at 390/1440px with zero violations. See [current previews and verification](docs/HOMEPAGE_BANDS.md). Live hosting remains unverified here.

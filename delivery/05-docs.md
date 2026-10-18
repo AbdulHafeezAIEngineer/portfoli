@@ -234,6 +234,14 @@ Narrow neutral gutters separate the panels. The deep-purple background is a soli
 
 Original project images, custom mockups, curved collection, footer artwork, page content, logo/reading motion, cookie choices, Botpress and authentication are preserved. Only the homepage composition and its shared palette exports change. No application dependencies or credentials were added or changed.
 
+## Homepage AI Bots video
+
+The AI Bots preview image is now replaced by the owner's supplied eight-second delivery-chat video. Local silent WebM/MP4 encodes are available at 1280px and 854px, with a matching poster. The existing visibility-controlled player handles looping inline playback on desktop and phones, without controls; global Motion Off shows the poster. The card keeps its existing size, layout and AI Bots destination. The separate AI Bots page retains its original showcase.
+
+The shared player gains a compact card presentation; the homepage, scoped card CSS and native showcase browser checks are updated. New media is stored as `public/videos/home-ai-bot*`. Production build and native playback checks cover all three showcases, including actual loop wrap, offscreen pause and Off/On behavior.
+
+[Desktop video frame](home-bot-loop-1440.png) · [Phone video frame](home-bot-loop-390.png)
+
 ## Files
 
 - `components/home-directory.tsx`: full-width section classes and contained secondary navigation.
@@ -1224,6 +1232,14 @@ Binary asset: 677836 bytes. SHA-256 `e5ce0e49953a6f336fd2db3b2606f7e09a15893516c
 ## docs/home-bands-overview-desktop.png
 
 Binary asset: 849389 bytes. SHA-256 `df1c786972bf96fb215d23e97881d4e2fc2162d6f9f65d96486b77f833f19a57`. Available in the repository and source ZIP.
+
+## docs/home-bot-loop-1440.png
+
+Binary asset: 141265 bytes. SHA-256 `6863c9d0044d61119836a7581e6143221270652c7b3a648d528c1e01c8d6fefc`. Available in the repository and source ZIP.
+
+## docs/home-bot-loop-390.png
+
+Binary asset: 58238 bytes. SHA-256 `83caa199ab91b8a0c7bcbc82110a85cd3aa430019673ec1d24932cdf932c082f`. Available in the repository and source ZIP.
 
 ## docs/image-optimization.json
 

@@ -27,9 +27,11 @@ import { useMotionPreference } from "./motion-preference";
 export function VisibilityVideo({
   name,
   caption,
+  presentation = "banner",
 }: {
-  name: "work-showcase" | "ai-bot";
+  name: "work-showcase" | "ai-bot" | "home-ai-bot";
   caption: string;
+  presentation?: "banner" | "card";
 }) {
   const { reduced } = useMotionPreference();
   const frame = useRef<HTMLDivElement>(null);
@@ -83,7 +85,10 @@ export function VisibilityVideo({
   }, [reduced]);
 
   return (
-    <figure className="showcase-video" data-showcase-video={name}>
+    <figure
+      className={`showcase-video${presentation === "card" ? " showcase-video-card" : ""}`}
+      data-showcase-video={name}
+    >
       <div ref={frame} className="showcase-video-frame">
         {reduced ? (
           <Image
@@ -119,7 +124,9 @@ export function VisibilityVideo({
           </video>
         )}
       </div>
-      <figcaption>{caption}</figcaption>
+      <figcaption className={presentation === "card" ? "sr-only" : undefined}>
+        {caption}
+      </figcaption>
     </figure>
   );
 }
@@ -4467,6 +4474,7 @@ import { studies } from "@/data/studies";
 import { imagePreview } from "@/lib/image-preview";
 import { ReadingText } from "./reading-text";
 import { TextReveal } from "./text-reveal";
+import { VisibilityVideo } from "./VisibilityVideo";
 
 export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
   const website = projects[0]?.screenshots[0];
@@ -4538,14 +4546,10 @@ export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
             </span>
           </div>
           <div className="home-feature-media home-bot-preview">
-            <Image
-              loading="eager"
-              fetchPriority="low"
-              src="/videos/ai-bot-poster.webp"
-              alt="A preview of a customer conversation with an AI assistant"
-              width={1600}
-              height={900}
-              sizes="(max-width: 767px) 90vw, 580px"
+            <VisibilityVideo
+              name="home-ai-bot"
+              caption="A delivery question answered by a website assistant."
+              presentation="card"
             />
           </div>
         </Link>

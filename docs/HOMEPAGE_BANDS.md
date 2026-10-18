@@ -12,6 +12,14 @@ Narrow neutral gutters separate the panels. The deep-purple background is a soli
 
 Original project images, custom mockups, curved collection, footer artwork, page content, logo/reading motion, cookie choices, Botpress and authentication are preserved. Only the homepage composition and its shared palette exports change. No application dependencies or credentials were added or changed.
 
+## Homepage AI Bots video
+
+The AI Bots preview image is now replaced by the owner's supplied eight-second delivery-chat video. Local silent WebM/MP4 encodes are available at 1280px and 854px, with a matching poster. The existing visibility-controlled player handles looping inline playback on desktop and phones, without controls; global Motion Off shows the poster. The card keeps its existing size, layout and AI Bots destination. The separate AI Bots page retains its original showcase.
+
+The shared player gains a compact card presentation; the homepage, scoped card CSS and native showcase browser checks are updated. New media is stored as `public/videos/home-ai-bot*`. Production build and native playback checks cover all three showcases, including actual loop wrap, offscreen pause and Off/On behavior.
+
+[Desktop video frame](home-bot-loop-1440.png) · [Phone video frame](home-bot-loop-390.png)
+
 ## Files
 
 - `components/home-directory.tsx`: full-width section classes and contained secondary navigation.
