@@ -1879,13 +1879,13 @@ export const site = {
   email: "abdulhafeez@elvoraai.online",
   title: "Web Design & Development by Abdul Hafeez | Elvora",
   description:
-    "Custom websites and AI chatbots by Abdul Hafeez, for businesses worldwide. Help visitors find answers, understand your services and contact you.",
+    "We build custom websites and AI assistant bots for your business. Our bots answer customer questions using your own business information.",
   nav: primaryNavigation,
   hero: {
     eyebrow: "WEB DESIGN, DEVELOPMENT & AI CHATBOTS",
     heading: ["Custom websites.", "Helpful AI chatbots."],
     intro:
-      "I'm Abdul Hafeez. I build websites and AI chatbots for businesses around the world.",
+      "We build custom websites and AI assistant bots for businesses worldwide.",
     tagline:
       "Make your services clear, help visitors get answers and give them an easy way to contact you. Your chatbot answers questions using the business information you provide.",
     primary: "View Work",

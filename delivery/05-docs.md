@@ -639,7 +639,7 @@ No CSS, layouts, artwork, media assets, animations, navigation paths, cookie/con
 
 | Page        | Title                                                | Description                                                                                                                                                |
 | ----------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/`         | Web Design & Development by Abdul Hafeez \| Elvora   | Custom websites and AI chatbots by Abdul Hafeez, for businesses worldwide. Help visitors find answers, understand your services and contact you.           |
+| `/`         | Web Design & Development by Abdul Hafeez \| Elvora   | We build custom websites and AI assistant bots for your business. Our bots answer customer questions using your own business information.                  |
 | `/websites` | Web Design & Development Services \| Elvora          | Custom website design and development for businesses worldwide. Clear service pages, mobile-friendly layouts and simple ways for customers to contact you. |
 | `/ai-bots`  | Custom AI Chatbot Integration for Websites \| Elvora | AI chatbot integration for your website, using your business information. Help customers find answers about your products, services and policies.          |
 
@@ -647,7 +647,7 @@ The service pages retain their short navigation labels, routes, canonical URLs a
 
 ## Visible homepage copy
 
-The main heading is now **Custom websites. Helpful AI chatbots.** The introduction identifies Abdul Hafeez and explains that services are available to businesses around the world. The supporting text explains the intended customer journey: understand the service, find answers and contact the business.
+The main heading is now **Custom websites. Helpful AI chatbots.** The introduction states directly: **We build custom websites and AI assistant bots for businesses worldwide.** The supporting text explains the intended customer journey: understand the service, find answers and contact the business. The homepage description uses the same direct service language in place of portfolio/concept positioning.
 
 The purpose section explains enquiries in ordinary terms: asking a question, requesting a quote or contacting the business. The Websites and AI Bots cards state the services directly. The chatbot card explains that the assistant is added to a website and uses the business's own information, replacing the unexplained terms “ground” and “embed.” The work remains accurately described as concept websites.
 
@@ -2429,11 +2429,11 @@ Binary asset: 64169 bytes. SHA-256 `8cd511560b11f6a9ce7be527bf624d48de1ffd8df052
 
 ## docs/seo-home-1440.png
 
-Binary asset: 1751203 bytes. SHA-256 `3dc961d87bd0247b4807885f177c7764144e22d65197c3a2bd8f31ff1263d94e`. Available in the repository and source ZIP.
+Binary asset: 1751358 bytes. SHA-256 `4b2ceb7a9717ab6df4d2537e388772fdd4b3d74a4ee148d2a01d07d547a1ab4e`. Available in the repository and source ZIP.
 
 ## docs/seo-home-390.png
 
-Binary asset: 748198 bytes. SHA-256 `580e6b591b4da55cdf28330f95d81a1a893c8684ba21f40e06a3c836e69686e7`. Available in the repository and source ZIP.
+Binary asset: 747996 bytes. SHA-256 `359bf30d0b58f31ee95890c44549f58d74d959a5107b3cefbf6d5b926e3c9297`. Available in the repository and source ZIP.
 
 ## docs/showcase-1440-dark.png
 

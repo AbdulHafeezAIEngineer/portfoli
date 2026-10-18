@@ -10,7 +10,7 @@ No CSS, layouts, artwork, media assets, animations, navigation paths, cookie/con
 
 | Page        | Title                                                | Description                                                                                                                                                |
 | ----------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/`         | Web Design & Development by Abdul Hafeez \| Elvora   | Custom websites and AI chatbots by Abdul Hafeez, for businesses worldwide. Help visitors find answers, understand your services and contact you.           |
+| `/`         | Web Design & Development by Abdul Hafeez \| Elvora   | We build custom websites and AI assistant bots for your business. Our bots answer customer questions using your own business information.                  |
 | `/websites` | Web Design & Development Services \| Elvora          | Custom website design and development for businesses worldwide. Clear service pages, mobile-friendly layouts and simple ways for customers to contact you. |
 | `/ai-bots`  | Custom AI Chatbot Integration for Websites \| Elvora | AI chatbot integration for your website, using your business information. Help customers find answers about your products, services and policies.          |
 
@@ -18,7 +18,7 @@ The service pages retain their short navigation labels, routes, canonical URLs a
 
 ## Visible homepage copy
 
-The main heading is now **Custom websites. Helpful AI chatbots.** The introduction identifies Abdul Hafeez and explains that services are available to businesses around the world. The supporting text explains the intended customer journey: understand the service, find answers and contact the business.
+The main heading is now **Custom websites. Helpful AI chatbots.** The introduction states directly: **We build custom websites and AI assistant bots for businesses worldwide.** The supporting text explains the intended customer journey: understand the service, find answers and contact the business. The homepage description uses the same direct service language in place of portfolio/concept positioning.
 
 The purpose section explains enquiries in ordinary terms: asking a question, requesting a quote or contacting the business. The Websites and AI Bots cards state the services directly. The chatbot card explains that the assistant is added to a website and uses the business's own information, replacing the unexplained terms “ground” and “embed.” The work remains accurately described as concept websites.
 

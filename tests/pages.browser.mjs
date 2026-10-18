@@ -56,7 +56,7 @@ try {
     assert.ok(await page.locator(".home-purpose").isVisible());
     assert.match(
       await page.locator(".hero-intro").innerText(),
-      /I build websites and AI chatbots for businesses around the world/,
+      /We build custom websites and AI assistant bots for businesses worldwide/,
     );
     assert.ok(
       await page
