@@ -1,9 +1,7 @@
-import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal-page";
-export const metadata: Metadata = {
-  title: "Cookie Policy — Elvora",
-  alternates: { canonical: "/cookies" },
-};
+import { legalPageMetadata } from "@/lib/legal-metadata";
+
+export const metadata = legalPageMetadata("cookies");
 export default function Page() {
   return <LegalPage page="cookies" />;
 }

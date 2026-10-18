@@ -373,6 +373,7 @@ lib/content.ts
 lib/db.ts
 lib/faq-animation.ts
 lib/image-preview.ts
+lib/legal-metadata.ts
 lib/page-metadata.ts
 lib/records.ts
 lib/scroll.ts

@@ -4,6 +4,8 @@ This records the current **local production build**. It does not establish that 
 
 ## Current homepage: contrasting sections
 
+Legal metadata follow-up: Cookie, Privacy and Terms pages now define their own descriptions and social metadata instead of inheriting homepage marketing copy. Lint, production build and HTTP 200 HTML checks for all three legal routes plus the homepage passed, including descriptions, canonicals and indexability. Policy text and consent behavior are unchanged. Live deployment remains unverified.
+
 Latest copy/SEO update: the homepage explains custom websites and business-data chatbots for international clients in plain English. Homepage, Websites and AI Bots titles/descriptions are distinct and verified in server HTML, including social tags and canonicals. Lint, production build and desktop/mobile page checks passed. Original visuals and behavior remain unchanged. The owner's supplied PageSpeed report is reviewed with prioritized recommendations; no performance changes or fresh score are claimed. See [the copy and audit record](docs/SEO_COPY_AND_PAGESPEED_REVIEW.md).
 
 Latest update: the exact portrait extracted from the owner's PDF replaces the About poster text inside its original frame. The rotating collection video has a transparent outer background and a purple MP4 fallback for browsers without alpha support. Native decoded pixels, forced fallback, transparent Motion Off poster, portrait framing and both themes were verified; four About WCAG A/AA scans found zero violations. See [current details and previews](docs/PORTRAIT_TRANSPARENT_COLLECTION.md). Local production build passed; live deployment remains unverified.

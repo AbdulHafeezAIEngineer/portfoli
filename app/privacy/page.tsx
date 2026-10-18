@@ -1,9 +1,7 @@
-import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal-page";
-export const metadata: Metadata = {
-  title: "Privacy Policy — Elvora",
-  alternates: { canonical: "/privacy" },
-};
+import { legalPageMetadata } from "@/lib/legal-metadata";
+
+export const metadata = legalPageMetadata("privacy");
 export default function Page() {
   return <LegalPage page="privacy" />;
 }

@@ -63,3 +63,13 @@ Documentation and the existing source review package are refreshed with this cha
 - Full-page screenshots were inspected: [mobile](seo-home-390.png), [desktop](seo-home-1440.png).
 
 No new Lighthouse score is claimed. Live Vercel deployment and Google's recrawl remain outside these local checks.
+
+## Follow-up: legal pages inheriting the homepage description
+
+The owner supplied a Google result where Cookie Policy displayed the previous homepage portfolio description. The current local production HTML confirmed that `/cookies` inherited the homepage meta/Open Graph description because it defined only a title and canonical. Privacy and Terms had the same omission.
+
+`lib/legal-metadata.ts` now supplies a separate description, social title/description, page URL and canonical for each legal page. `app/cookies/page.tsx`, `app/privacy/page.tsx` and `app/terms/page.tsx` use this helper. The Cookie Policy description is: **How Elvora uses cookies and browser storage, which features are optional, and how to manage your cookie settings.** Policy text, cookie choices, consent behavior and page design are unchanged.
+
+The screenshot alone cannot establish whether the newest source has reached Production. Public-domain and GitHub status requests from this environment are blocked by its outbound proxy before reaching those services. A current successful Production deployment must be confirmed before treating the remaining old Google text as solely a recrawl delay. Google may choose snippets from visible text even after the metadata is corrected.
+
+Follow-up validation passed: lint and a production build, followed by HTTP 200 HTML checks for homepage and all three legal routes. Each has its intended meta/Open Graph/Twitter description, its own canonical and no indexing block; each legal page also has its own Open Graph URL.

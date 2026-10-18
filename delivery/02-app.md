@@ -3080,12 +3080,10 @@ export default async function Page() {
 ## app/cookies/page.tsx
 
 ``````tsx
-import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal-page";
-export const metadata: Metadata = {
-  title: "Cookie Policy — Elvora",
-  alternates: { canonical: "/cookies" },
-};
+import { legalPageMetadata } from "@/lib/legal-metadata";
+
+export const metadata = legalPageMetadata("cookies");
 export default function Page() {
   return <LegalPage page="cookies" />;
 }
@@ -10104,12 +10102,10 @@ html[data-motion="reduced"] .artwork-composition {
 ## app/privacy/page.tsx
 
 ``````tsx
-import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal-page";
-export const metadata: Metadata = {
-  title: "Privacy Policy — Elvora",
-  alternates: { canonical: "/privacy" },
-};
+import { legalPageMetadata } from "@/lib/legal-metadata";
+
+export const metadata = legalPageMetadata("privacy");
 export default function Page() {
   return <LegalPage page="privacy" />;
 }
@@ -15717,12 +15713,10 @@ export default function Page() {
 ## app/terms/page.tsx
 
 ``````tsx
-import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal-page";
-export const metadata: Metadata = {
-  title: "Terms of Service — Elvora",
-  alternates: { canonical: "/terms" },
-};
+import { legalPageMetadata } from "@/lib/legal-metadata";
+
+export const metadata = legalPageMetadata("terms");
 export default function Page() {
   return <LegalPage page="terms" />;
 }
