@@ -1,6 +1,6 @@
 # Categorized Elvora portfolio
 
-The homepage has a purpose-led, monochrome introduction and large visual previews. Ten subject pages organize the site. Website and bot processes live with their respective projects and demos. Technical Domains belongs below website content. See the [latest changes and previews](WEBSITES_TESTIMONIALS.md). Header navigation is route-aware and keyboard accessible, with a grouped About menu and a scrollable secondary tab row. Mobile navigation contains every page category and closes after navigation or Escape.
+The homepage has a purpose-led introduction and large visual previews in alternating light, black and deep-purple sections. See [the current homepage presentation](HOMEPAGE_BANDS.md). Ten subject pages organize the site. Website and bot processes live with their respective projects and demos. Technical Domains belongs below website content. See the [website positioning and testimonials update](WEBSITES_TESTIMONIALS.md). Header navigation is route-aware and keyboard accessible, with a grouped About menu and a scrollable secondary tab row. Mobile navigation contains every page category and closes after navigation or Escape.
 
 | Page           | Route            | Content                                                                                                                   |
 | -------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------- |

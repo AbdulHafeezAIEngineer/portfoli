@@ -319,6 +319,12 @@ try {
       .first()
       .click();
     await page.waitForURL("**/websites");
+    // A footer anchor reloads the page; wait for saved preference hydration.
+    await page.waitForFunction(
+      () =>
+        document.querySelector('[aria-label="Animation preference"]').value ===
+        "reduced",
+    );
     assert.equal(
       await page.getByLabel("Animation preference").inputValue(),
       "reduced",

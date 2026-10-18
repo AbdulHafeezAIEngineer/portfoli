@@ -33,6 +33,7 @@ try {
       2,
     );
     for (const path of [
+      "/",
       "/websites",
       "/ai-bots",
       "/about",

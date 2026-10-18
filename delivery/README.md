@@ -169,6 +169,7 @@ data/tool-marks.ts
 docs/BRIEF_COMPLETION.md
 docs/CATEGORIZED_PAGES.md
 docs/EDITORIAL_UPGRADE.md
+docs/HOMEPAGE_BANDS.md
 docs/PRESENTATION_UPDATE.md
 docs/PURPLE_VIDEO_UPDATE.md
 docs/READY_PLAYBACK_UPDATE.md
@@ -226,6 +227,12 @@ docs/editorial-tools-desktop.png
 docs/editorial-tools-mobile.png
 docs/elvora-project-preview.png
 docs/forte-bot-card.png
+docs/home-bands-accessibility.json
+docs/home-bands-dark-1440.png
+docs/home-bands-dark-390.png
+docs/home-bands-light-1440.png
+docs/home-bands-light-390.png
+docs/home-bands-overview-desktop.png
 docs/image-optimization.json
 docs/lighthouse-summary.json
 docs/login-fields-mobile.png

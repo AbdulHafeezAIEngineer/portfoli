@@ -41,6 +41,13 @@ const shared = declarations({
   "inverse-muted": palette.dark.muted,
   "inverse-border": palette.dark.border,
   "inverse-accent": palette.dark.accentHover,
+  "light-background": palette.light.background,
+  "light-surface": palette.light.surface,
+  "light-text": palette.light.text,
+  "light-muted": palette.light.muted,
+  "light-border": palette.light.border,
+  "light-accent": palette.light.accent,
+  "light-accent-hover": palette.light.accentHover,
 });
 fs.writeFileSync(
   "app/theme-tokens.css",

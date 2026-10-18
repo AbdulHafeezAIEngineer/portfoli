@@ -580,6 +580,8 @@ Latest playback/navigation update: [wide looping videos, interactive desktop win
 
 ## Categorized public pages
 
+Latest homepage presentation: full-width light and black sections, with a white/deep-purple split for AI Bots and Bunch of Work. Theme switching, original artwork and motion remain functional. See [current desktop/mobile previews and checks](docs/HOMEPAGE_BANDS.md).
+
 The homepage introduces Elvora with a monochrome presentation, original logo motion and large visual previews of websites, bots and the collection. Its light/dark switch remains functional. Ten subject pages organize the content. Websites, How I Build Websites and Technical Domains share `/websites`; the former `/ai-websites` and `/technical-domains` routes redirect there. How I Build Bots and all three embedding methods remain beneath the bot demos. About tabs contain About Me, My Journey, Skills & Tools and Certificates. The original designed footer, including the large wordmark, waves, emblem and socials, is preserved throughout.
 
 Web development leads the site copy and tool categories; AI supports selected tasks. The About text explains the importance of experience, coding foundations, databases and human review. Testimonials has gently floating cards, local illustrated fictional profiles and background particles on desktop and mobile. Sample reviews are visibly marked as fictional examples; published, permission-approved CMS feedback replaces them. Global Motion Off and a local Pause control stop the effects. See [the current changes and verification](docs/WEBSITES_TESTIMONIALS.md).
@@ -924,7 +926,13 @@ To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQ
 
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
-## Current website positioning and floating Testimonials
+## Current homepage: contrasting sections
+
+The homepage now uses a light purpose section, a full-width black website showcase, a white/deep-purple split for AI Bots and Bunch of Work, and light secondary navigation. The header and hero still follow the saved light/dark theme. Purple links and primary actions use the existing palette. Scoped section variables come from the shared token source; other pages and custom artwork are preserved.
+
+Production build, ten-subject-page navigation, six-width/both-theme layouts (now explicitly including the homepage), saved Motion Off and desktop/mobile logo/reading checks passed. Four current WCAG A/AA scans cover the complete homepage in both themes at 390/1440px with zero violations. See [current previews and verification](docs/HOMEPAGE_BANDS.md). Live hosting remains unverified here.
+
+## Previous revision: website positioning and floating Testimonials
 
 The website category is now Websites at `/websites`. Its projects, original How I Build Websites process and Technical Domains appear in that order, with local navigation links. The former AI Websites and standalone domain routes redirect to the appropriate destination. About has four profile tabs. Conventional development tools lead Skills & Tools; AI is described as selective assistance. About explains that effective use requires experience, coding foundations, database knowledge and careful review.
 

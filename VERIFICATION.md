@@ -2,7 +2,13 @@
 
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
-## Current website positioning and floating Testimonials
+## Current homepage: contrasting sections
+
+The homepage now uses a light purpose section, a full-width black website showcase, a white/deep-purple split for AI Bots and Bunch of Work, and light secondary navigation. The header and hero still follow the saved light/dark theme. Purple links and primary actions use the existing palette. Scoped section variables come from the shared token source; other pages and custom artwork are preserved.
+
+Production build, ten-subject-page navigation, six-width/both-theme layouts (now explicitly including the homepage), saved Motion Off and desktop/mobile logo/reading checks passed. Four current WCAG A/AA scans cover the complete homepage in both themes at 390/1440px with zero violations. See [current previews and verification](docs/HOMEPAGE_BANDS.md). Live hosting remains unverified here.
+
+## Previous revision: website positioning and floating Testimonials
 
 The website category is now Websites at `/websites`. Its projects, original How I Build Websites process and Technical Domains appear in that order, with local navigation links. The former AI Websites and standalone domain routes redirect to the appropriate destination. About has four profile tabs. Conventional development tools lead Skills & Tools; AI is described as selective assistance. About explains that effective use requires experience, coding foundations, database knowledge and careful review.
 

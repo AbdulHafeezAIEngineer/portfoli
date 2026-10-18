@@ -4485,7 +4485,7 @@ export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
       className="home-directory home-overview"
       aria-labelledby="directory-title"
     >
-      <div className="container home-purpose">
+      <div className="home-purpose home-band-light">
         <p className="eyebrow">THE PURPOSE BEHIND ELVORA</p>
         <TextReveal
           id="directory-title"
@@ -4493,11 +4493,11 @@ export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
         />
         <ReadingText text="This is a place to explore what I create and how I create it: websites with their own identity, useful integrations and the thoughtful decisions behind them. AI assistants are an optional part of that work. See the work in action, follow the process, or start a conversation about your own idea." />
       </div>
-      <nav
-        className="container home-feature-grid"
-        aria-label="Explore Elvora's work"
-      >
-        <Link className="home-feature home-feature-websites" href="/websites">
+      <nav className="home-feature-grid" aria-label="Explore Elvora's work">
+        <Link
+          className="home-feature home-feature-websites home-band-dark"
+          href="/websites"
+        >
           <div className="home-feature-copy">
             <p className="eyebrow">WEBSITES</p>
             <h3>Made with a point of view.</h3>
@@ -4522,7 +4522,10 @@ export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
             />
           </div>
         </Link>
-        <Link className="home-feature home-feature-bots" href="/ai-bots">
+        <Link
+          className="home-feature home-feature-bots home-band-light"
+          href="/ai-bots"
+        >
           <div className="home-feature-copy">
             <p className="eyebrow">AI BOTS</p>
             <h3>A question. A useful answer.</h3>
@@ -4547,7 +4550,7 @@ export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
           </div>
         </Link>
         <Link
-          className="home-feature home-feature-collection"
+          className="home-feature home-feature-collection home-band-purple"
           href="/bunch-of-work"
         >
           <div className="home-feature-copy">
@@ -4581,38 +4584,40 @@ export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
           </div>
         </Link>
       </nav>
-      <div className="container home-more">
-        <div>
-          <p className="eyebrow">KEEP EXPLORING</p>
-          <h2>The person. The perspective. The next idea.</h2>
+      <div className="home-more home-band-light">
+        <div className="container">
+          <div>
+            <p className="eyebrow">KEEP EXPLORING</p>
+            <h2>The person. The perspective. The next idea.</h2>
+          </div>
+          <nav aria-label="More about Elvora">
+            {[
+              {
+                href: "/about",
+                title: "About Me",
+                text: "My journey, technical foundations and the tools I work with.",
+              },
+              {
+                href: "/testimonials",
+                title: "Testimonials",
+                text: "Perspectives on working together, all in one place.",
+              },
+              {
+                href: "/contact",
+                title: "Let’s talk",
+                text: "Tell me what you have in mind. Let’s find a thoughtful way forward.",
+              },
+            ].map((item) => (
+              <Link key={item.href} href={item.href}>
+                <h3>
+                  {item.title}
+                  <ArrowUpRight size={18} aria-hidden="true" />
+                </h3>
+                <p>{item.text}</p>
+              </Link>
+            ))}
+          </nav>
         </div>
-        <nav aria-label="More about Elvora">
-          {[
-            {
-              href: "/about",
-              title: "About Me",
-              text: "My journey, technical foundations and the tools I work with.",
-            },
-            {
-              href: "/testimonials",
-              title: "Testimonials",
-              text: "Perspectives on working together, all in one place.",
-            },
-            {
-              href: "/contact",
-              title: "Let’s talk",
-              text: "Tell me what you have in mind. Let’s find a thoughtful way forward.",
-            },
-          ].map((item) => (
-            <Link key={item.href} href={item.href}>
-              <h3>
-                {item.title}
-                <ArrowUpRight size={18} aria-hidden="true" />
-              </h3>
-              <p>{item.text}</p>
-            </Link>
-          ))}
-        </nav>
       </div>
     </section>
   );
