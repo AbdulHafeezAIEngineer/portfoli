@@ -22,11 +22,21 @@ The shared player gains a compact card presentation; the homepage, scoped card C
 
 ## Homepage Websites video
 
-The website screenshot is replaced by the owner's supplied ten-second architectural website video. Its natural 16:9 frame fills the preview without the former screenshot inset and has rounded clipping on all four corners, including phones. Local silent WebM/MP4 encodes at 1280px and 854px and a matching poster are stored as `public/videos/home-websites*`.
+The website screenshot is replaced by the owner's supplied ten-second architectural website video. The stage spans more than 90% of the viewport, with a 2:1 desktop frame and natural 16:9 framing on phones. The source is contained without distortion, with soft side masks blending its edges into the same black background. Rounded clipping remains on all four corners. Local silent WebM/MP4 encodes at 1280px and 854px and a matching poster are stored as `public/videos/home-websites*`.
 
 The existing player loops inline without controls, pauses offscreen and follows Motion Off/On. The Websites link and surrounding content remain the same. Native browser checks cover all four showcases, actual loop wrap, mobile/desktop sources, rounded corners, card geometry, offscreen pause and the global motion control.
 
 [Desktop video frame](home-websites-loop-1440.png) · [Phone video frame](home-websites-loop-390.png)
+
+## Video edges and highlighted navigation
+
+Both homepage videos now have four rounded corners, including their bottom edges on phones. The AI Bots preview has bottom spacing so those corners remain visible against its light section. The website video loses the former 1100px width cap; black side blending works for its moving video and Motion Off poster alike.
+
+Keep exploring has a stronger headline, purple emphasis on “The next idea,” and bold navigation titles. A subtle underline and staggered top accents animate only while the section is near the viewport and the document is visible. Touch screens use the same effects. Hover and keyboard focus highlight each destination; Motion Off removes the animations and transitions. Text and links stay visible without JavaScript and are never gated by viewport entry.
+
+`components/home-explore.tsx` handles the section's visibility and foreground state; `components/home-directory.tsx` retains the same destinations and copy. Scoped styling is in `app/pages.css`. No media sources, subject-page design, original custom artwork, consent/provider logic or credentials change.
+
+Production build, six-width/both-theme layout and all four native video checks passed. Actual underline transforms, global Off, offscreen pause, bold typography and all three destinations were checked at 390/1440px. [Six current WCAG A/AA scans](horizon-explore-accessibility.json) cover both themes and desktop hover states. [Desktop navigation preview](home-explore-highlight-1440.png) · [Phone preview](home-explore-highlight-390.png).
 
 ## Files
 

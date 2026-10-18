@@ -584,6 +584,8 @@ Latest homepage presentation: full-width light and black sections, with a white/
 
 The homepage Websites and AI Bots previews use the owner's supplied architectural and delivery-chat videos as silent loops on desktop and phones. The website video has rounded corners on all four sides. Motion Off shows matching posters; the subject pages keep their own showcases.
 
+The website video now spans the page with dark edge blending; both homepage videos retain rounded bottom corners. Keep exploring uses bolder typography, purple highlights and visible-only accent animations on desktop and phones.
+
 The homepage introduces Elvora with a monochrome presentation, original logo motion and large visual previews of websites, bots and the collection. Its light/dark switch remains functional. Ten subject pages organize the content. Websites, How I Build Websites and Technical Domains share `/websites`; the former `/ai-websites` and `/technical-domains` routes redirect there. How I Build Bots and all three embedding methods remain beneath the bot demos. About tabs contain About Me, My Journey, Skills & Tools and Certificates. The original designed footer, including the large wordmark, waves, emblem and socials, is preserved throughout.
 
 Web development leads the site copy and tool categories; AI supports selected tasks. The About text explains the importance of experience, coding foundations, databases and human review. Testimonials has gently floating cards, local illustrated fictional profiles and background particles on desktop and mobile. Sample reviews are visibly marked as fictional examples; published, permission-approved CMS feedback replaces them. Global Motion Off and a local Pause control stop the effects. See [the current changes and verification](docs/WEBSITES_TESTIMONIALS.md).
@@ -929,6 +931,8 @@ To regress the CMS-metadata outage bug, stop only the disposable local PostgreSQ
 This records the current **local production build**. It does not establish that the external hosting deployment, real provider credentials or live inbox delivery work. The approved Next.js 15.5.28 migration resolves the earlier Next.js 14 production audit blocker. Remaining development-tool findings are documented separately.
 
 ## Current homepage: contrasting sections
+
+Latest refinement: the website video spans more than 90% of the viewport and blends into black with contained, undistorted source framing. Both homepage videos have rounded bottom corners. Keep exploring gains bold type, purple emphasis, visible-only accent motion and clear hover/focus states. Production build, six-width/both-theme checks, all four native loops and desktop/mobile motion checks passed; six WCAG A/AA scans including desktop hover found zero violations. See [current details and previews](docs/HOMEPAGE_BANDS.md#video-edges-and-highlighted-navigation).
 
 The homepage Websites screenshot is replaced with the owner's ten-second architectural video, in a natural 16:9 frame with four rounded corners. Local silent desktop/mobile WebM/MP4 files and a matching poster use the shared motion-controlled player. Production build and native browser checks cover all four showcases, looping, inline/no-controls playback, responsive sources, rounded clipping, Off/On and offscreen pause. See [current frames](docs/HOMEPAGE_BANDS.md#homepage-websites-video).
 

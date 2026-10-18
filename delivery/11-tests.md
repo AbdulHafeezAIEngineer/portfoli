@@ -3627,7 +3627,7 @@ try {
         controls: false,
         preload: "auto",
         types: ["video/webm", "video/mp4", "video/webm", "video/mp4"],
-        cover: "cover",
+        cover: name === "home-websites" ? "contain" : "cover",
       });
       assert.equal(
         await banner.locator("video").evaluate((v) => v.videoWidth),
@@ -3653,7 +3653,20 @@ try {
             .count(),
         );
         if (isWebsite) {
-          assert.ok(Math.abs(box.width / box.height - 16 / 9) < 0.01);
+          const ratio = width < 768 ? 16 / 9 : 2;
+          assert.ok(Math.abs(box.width / box.height - ratio) < 0.01);
+          assert.ok(
+            box.width > width * 0.9,
+            "Website preview spans the horizon",
+          );
+          assert.notEqual(
+            await banner
+              .locator("video")
+              .evaluate((v) => getComputedStyle(v).maskImage),
+            "none",
+          );
+        }
+        {
           const rounded = await preview.evaluate((el) => {
             const s = getComputedStyle(el);
             return (
@@ -3665,10 +3678,18 @@ try {
               ].every((r) => parseFloat(r) >= 16) && s.overflow === "hidden"
             );
           });
-          assert.ok(rounded, "All four video corners are rounded and clipped");
-          await banner.screenshot({
-            path: `docs/home-websites-loop-${width}.png`,
-          });
+          assert.ok(
+            rounded,
+            "All four video corners are rounded and clipped on both homepage videos",
+          );
+          if (isWebsite)
+            await banner.screenshot({
+              path: `docs/home-websites-loop-${width}.png`,
+            });
+          else
+            await banner.screenshot({
+              path: `docs/home-bot-loop-${width}.png`,
+            });
         }
       } else
         assert.ok(

@@ -4,6 +4,8 @@ This records the current **local production build**. It does not establish that 
 
 ## Current homepage: contrasting sections
 
+Latest refinement: the website video spans more than 90% of the viewport and blends into black with contained, undistorted source framing. Both homepage videos have rounded bottom corners. Keep exploring gains bold type, purple emphasis, visible-only accent motion and clear hover/focus states. Production build, six-width/both-theme checks, all four native loops and desktop/mobile motion checks passed; six WCAG A/AA scans including desktop hover found zero violations. See [current details and previews](docs/HOMEPAGE_BANDS.md#video-edges-and-highlighted-navigation).
+
 The homepage Websites screenshot is replaced with the owner's ten-second architectural video, in a natural 16:9 frame with four rounded corners. Local silent desktop/mobile WebM/MP4 files and a matching poster use the shared motion-controlled player. Production build and native browser checks cover all four showcases, looping, inline/no-controls playback, responsive sources, rounded clipping, Off/On and offscreen pause. See [current frames](docs/HOMEPAGE_BANDS.md#homepage-websites-video).
 
 The homepage AI Bots image is replaced with the owner's eight-second delivery-chat video, using local silent desktop/mobile WebM and MP4 files. Production build passed. Native browser checks verified all three showcases at 390/1440px, actual looping, muted inline playback, no controls, global Off/On and offscreen pause; the homepage card retains its size and destination. See [desktop and phone frames](docs/HOMEPAGE_BANDS.md#homepage-ai-bots-video).

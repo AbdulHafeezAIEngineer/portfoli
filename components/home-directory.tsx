@@ -7,6 +7,7 @@ import { imagePreview } from "@/lib/image-preview";
 import { ReadingText } from "./reading-text";
 import { TextReveal } from "./text-reveal";
 import { VisibilityVideo } from "./VisibilityVideo";
+import { HomeExplore } from "./home-explore";
 
 export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
   const collection = [
@@ -114,11 +115,14 @@ export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
           </div>
         </Link>
       </nav>
-      <div className="home-more home-band-light">
+      <HomeExplore>
         <div className="container">
           <div>
             <p className="eyebrow">KEEP EXPLORING</p>
-            <h2>The person. The perspective. The next idea.</h2>
+            <h2>
+              The person. The perspective.{" "}
+              <span className="home-more-highlight">The next idea.</span>
+            </h2>
           </div>
           <nav aria-label="More about Elvora">
             {[
@@ -148,7 +152,7 @@ export function HomeDirectory({ projects }: { projects: ProjectView[] }) {
             ))}
           </nav>
         </div>
-      </div>
+      </HomeExplore>
     </section>
   );
 }

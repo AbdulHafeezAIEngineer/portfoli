@@ -1,0 +1,38 @@
+[
+  {
+    "width": 390,
+    "theme": "dark",
+    "hover": false,
+    "violations": []
+  },
+  {
+    "width": 390,
+    "theme": "light",
+    "hover": false,
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "theme": "dark",
+    "hover": false,
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "theme": "dark",
+    "hover": true,
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "theme": "light",
+    "hover": false,
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "theme": "light",
+    "hover": true,
+    "violations": []
+  }
+]

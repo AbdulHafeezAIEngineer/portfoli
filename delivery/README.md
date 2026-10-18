@@ -115,6 +115,7 @@ components/forte-preview.tsx
 components/hero-emblem.tsx
 components/hero.tsx
 components/home-directory.tsx
+components/home-explore.tsx
 components/legacy-section-redirect.tsx
 components/legal-page.tsx
 components/logo-motion.tsx
@@ -235,8 +236,11 @@ docs/home-bands-light-390.png
 docs/home-bands-overview-desktop.png
 docs/home-bot-loop-1440.png
 docs/home-bot-loop-390.png
+docs/home-explore-highlight-1440.png
+docs/home-explore-highlight-390.png
 docs/home-websites-loop-1440.png
 docs/home-websites-loop-390.png
+docs/horizon-explore-accessibility.json
 docs/image-optimization.json
 docs/lighthouse-summary.json
 docs/login-fields-mobile.png

@@ -244,11 +244,21 @@ The shared player gains a compact card presentation; the homepage, scoped card C
 
 ## Homepage Websites video
 
-The website screenshot is replaced by the owner's supplied ten-second architectural website video. Its natural 16:9 frame fills the preview without the former screenshot inset and has rounded clipping on all four corners, including phones. Local silent WebM/MP4 encodes at 1280px and 854px and a matching poster are stored as `public/videos/home-websites*`.
+The website screenshot is replaced by the owner's supplied ten-second architectural website video. The stage spans more than 90% of the viewport, with a 2:1 desktop frame and natural 16:9 framing on phones. The source is contained without distortion, with soft side masks blending its edges into the same black background. Rounded clipping remains on all four corners. Local silent WebM/MP4 encodes at 1280px and 854px and a matching poster are stored as `public/videos/home-websites*`.
 
 The existing player loops inline without controls, pauses offscreen and follows Motion Off/On. The Websites link and surrounding content remain the same. Native browser checks cover all four showcases, actual loop wrap, mobile/desktop sources, rounded corners, card geometry, offscreen pause and the global motion control.
 
 [Desktop video frame](home-websites-loop-1440.png) · [Phone video frame](home-websites-loop-390.png)
+
+## Video edges and highlighted navigation
+
+Both homepage videos now have four rounded corners, including their bottom edges on phones. The AI Bots preview has bottom spacing so those corners remain visible against its light section. The website video loses the former 1100px width cap; black side blending works for its moving video and Motion Off poster alike.
+
+Keep exploring has a stronger headline, purple emphasis on “The next idea,” and bold navigation titles. A subtle underline and staggered top accents animate only while the section is near the viewport and the document is visible. Touch screens use the same effects. Hover and keyboard focus highlight each destination; Motion Off removes the animations and transitions. Text and links stay visible without JavaScript and are never gated by viewport entry.
+
+`components/home-explore.tsx` handles the section's visibility and foreground state; `components/home-directory.tsx` retains the same destinations and copy. Scoped styling is in `app/pages.css`. No media sources, subject-page design, original custom artwork, consent/provider logic or credentials change.
+
+Production build, six-width/both-theme layout and all four native video checks passed. Actual underline transforms, global Off, offscreen pause, bold typography and all three destinations were checked at 390/1440px. [Six current WCAG A/AA scans](horizon-explore-accessibility.json) cover both themes and desktop hover states. [Desktop navigation preview](home-explore-highlight-1440.png) · [Phone preview](home-explore-highlight-390.png).
 
 ## Files
 
@@ -1243,19 +1253,70 @@ Binary asset: 849389 bytes. SHA-256 `df1c786972bf96fb215d23e97881d4e2fc2162d6f9f
 
 ## docs/home-bot-loop-1440.png
 
-Binary asset: 141265 bytes. SHA-256 `6863c9d0044d61119836a7581e6143221270652c7b3a648d528c1e01c8d6fefc`. Available in the repository and source ZIP.
+Binary asset: 145643 bytes. SHA-256 `857729ce42b87a9ebc3798a3fa311039276b8000245b24a59b0715bb63c0d7f2`. Available in the repository and source ZIP.
 
 ## docs/home-bot-loop-390.png
 
-Binary asset: 58238 bytes. SHA-256 `83caa199ab91b8a0c7bcbc82110a85cd3aa430019673ec1d24932cdf932c082f`. Available in the repository and source ZIP.
+Binary asset: 59570 bytes. SHA-256 `f7b1a2714e77768ce3672edc85a05c431e29e9415d7b5013761f01e3d68bffa5`. Available in the repository and source ZIP.
+
+## docs/home-explore-highlight-1440.png
+
+Binary asset: 41476 bytes. SHA-256 `3d914f96f0a3e79e0a3cfc204aa04c0d982bc77708f5bb76e89a13b56bb38ce8`. Available in the repository and source ZIP.
+
+## docs/home-explore-highlight-390.png
+
+Binary asset: 33965 bytes. SHA-256 `b05f6bbe92e75686eb4e700e3b70acea77b96536d0619b89742998ad2f8b14ed`. Available in the repository and source ZIP.
 
 ## docs/home-websites-loop-1440.png
 
-Binary asset: 238642 bytes. SHA-256 `b2a781390d38dc7bcf21d8af5ffefa175436615f6eca7a5725383c501a4f37af`. Available in the repository and source ZIP.
+Binary asset: 288298 bytes. SHA-256 `2778adfe0e8a0ff7981c67904a2a0cf7768422a1e6bfb2b8f5f503461761ce10`. Available in the repository and source ZIP.
 
 ## docs/home-websites-loop-390.png
 
-Binary asset: 41852 bytes. SHA-256 `99be736796d782aa735d696e3e6091589275156892ea9121e7e8a37a09fdf085`. Available in the repository and source ZIP.
+Binary asset: 46082 bytes. SHA-256 `c707816a02d7bc591de6a6f88559f0bd868a721c44bc3f9111f0b1060f25c9be`. Available in the repository and source ZIP.
+
+## docs/horizon-explore-accessibility.json
+
+``````json
+[
+  {
+    "width": 390,
+    "theme": "dark",
+    "hover": false,
+    "violations": []
+  },
+  {
+    "width": 390,
+    "theme": "light",
+    "hover": false,
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "theme": "dark",
+    "hover": false,
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "theme": "dark",
+    "hover": true,
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "theme": "light",
+    "hover": false,
+    "violations": []
+  },
+  {
+    "width": 1440,
+    "theme": "light",
+    "hover": true,
+    "violations": []
+  }
+]
+``````
 
 ## docs/image-optimization.json
 
