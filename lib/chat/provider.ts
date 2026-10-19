@@ -64,6 +64,8 @@ export async function callBot(
   let body: unknown;
   let responsePath = "choices.0.message.content";
   let gemini = false;
+  let activeModel = "";
+  let stage = "generate";
   const runtime = await botRuntime(botId);
   if (!runtime) throw new ChatError(400, "This bot is unavailable.");
   const realBotConfig = runtime?.config;
@@ -92,6 +94,7 @@ export async function callBot(
       const model = process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
       if (!/^gemini-[a-z0-9.-]{1,100}$/.test(model))
         throw new ChatError(503, "The AI model configuration needs updating.");
+      activeModel = model;
       url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
       headers["x-goog-api-key"] = chatApiKey();
       body = {
@@ -144,6 +147,7 @@ export async function callBot(
     });
     if (!listing.ok) {
       response = listing;
+      stage = "list-models";
     } else {
       const available = readPath(await readUpstreamJson(listing), "models");
       const candidates = ["gemini-2.5-flash-lite", "gemini-2.5-flash"];
@@ -155,6 +159,7 @@ export async function callBot(
         throw new ChatError(502, `Google could not find the requested model (${requested}). The site owner needs to check this deployment's Gemini model access. (AI model)`);
       }
       console.warn("chat_model_retry", { requested, selected });
+      activeModel = selected;
       response = await send(`https://generativelanguage.googleapis.com/v1beta/models/${selected}:generateContent`, body);
     }
   }
@@ -164,6 +169,8 @@ export async function callBot(
     console.warn("chat_provider_failure", {
       provider: realBotConfig ? "custom" : gemini ? "gemini" : "openai",
       status: response.status,
+      stage,
+      ...(gemini ? { model: activeModel } : {}),
     });
     if (response.status === 429)
       throw new ChatError(
@@ -173,7 +180,9 @@ export async function callBot(
     if (response.status === 401 || response.status === 403)
       throw new ChatError(502, "The AI provider rejected this site's access. The site owner needs to check the API key and its permissions. (AI access)");
     if (!realBotConfig && response.status === 404)
-      throw new ChatError(502, "The configured AI model is unavailable. The site owner needs to select a model available to this API project. (AI model)");
+      throw new ChatError(502, gemini
+        ? `Google returned 404 during ${stage} for ${activeModel}. The site owner needs to check this API project's model access. (AI model · G404)`
+        : "The configured AI model is unavailable. The site owner needs to select a model available to this API project. (AI model)");
     if (!realBotConfig && response.status === 400)
       throw new ChatError(502, "The AI provider rejected the request configuration. The site owner needs to check the API key, model and project settings. (AI configuration)");
     throw new ChatError(

@@ -91,7 +91,7 @@ try {
         await trigger.click();
         const dialog = page.locator('.chat-dialog[open]');
         await dialog.waitFor();
-        assert.equal(await dialog.locator('.chat-header img[alt="Elvora"]').count(), 1);
+        assert.equal(await dialog.locator('.chat-header .business-bot-avatar-' + id + ' img').count(), 1);
         assert.equal(await dialog.locator('iframe').count(), 0);
         const input = page.getByLabel('Your message', { exact: true });
         await dialog.locator('.chat-starters button').first().click();

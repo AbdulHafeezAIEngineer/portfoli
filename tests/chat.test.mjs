@@ -255,6 +255,10 @@ test("provider failures distinguish access, model and request configuration with
     assert.equal(response.status, 502);
     const text = await response.text();
     assert.ok(text.includes(label));
+    if (status === 404) {
+      assert.ok(text.includes("list-models"));
+      assert.ok(text.includes("gemini-2.5-flash"));
+    }
     assert.ok(!text.includes("sensitive provider details"));
     assert.ok(!text.includes("private-fixture-key"));
   }

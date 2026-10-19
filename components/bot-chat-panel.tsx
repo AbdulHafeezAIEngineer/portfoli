@@ -30,7 +30,7 @@ import { chatBranding } from "@/data/chat-branding";
 
 function AssistantIdentity({ bot, branded }: { bot: Bot; branded: boolean }) {
   return <span className="message-author">
-    {branded && <span className="message-mini-mark" aria-hidden="true">{isBusinessAssistant(bot.id) ? <BotAvatar id={bot.id} /> : <AudioLines size={14} />}</span>}
+    {branded && <span className="message-mini-mark" aria-hidden="true"><BotAvatar id={bot.id} /></span>}
     {bot.name}
   </span>;
 }
@@ -173,7 +173,7 @@ export default function BotChatPanel({
     >
       <section className="chat-panel">
         <header className="chat-header">
-          {brand ? <span className="chat-elvora-mark"><Image src="/elvora-logo.svg" width={48} height={48} alt="Elvora" priority /></span> : isBusinessAssistant(bot.id) ? <BotAvatar id={bot.id} /> : <span className="chat-avatar" aria-hidden="true">
+          {brand || isBusinessAssistant(bot.id) ? <BotAvatar id={bot.id} /> : <span className="chat-avatar" aria-hidden="true">
             {bot.id === "voice" ? (
               <AudioLines size={24} />
             ) : (
