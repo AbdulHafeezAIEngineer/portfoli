@@ -23,6 +23,8 @@ import {
 import { buildContext } from "@/lib/chat/protocol";
 import { useModal } from "@/hooks/use-modal";
 import { useVoice } from "@/hooks/use-voice";
+import { BotAvatar } from "./bot-avatar";
+import { isBusinessAssistant } from "@/data/business-assistants";
 
 export default function BotChatPanel({
   bot,
@@ -77,7 +79,7 @@ export default function BotChatPanel({
   async function send(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const content = draft.trim();
-    if (!content || controller.current || content.length > chatPolicy.maxInput)
+    if (!content || bot.aiReady === false || controller.current || content.length > chatPolicy.maxInput)
       return;
     voice.stop();
     voice.stopSpeaking();
@@ -156,13 +158,13 @@ export default function BotChatPanel({
     >
       <section className="chat-panel">
         <header className="chat-header">
-          <span className="chat-avatar" aria-hidden="true">
+          {isBusinessAssistant(bot.id) ? <BotAvatar id={bot.id} /> : <span className="chat-avatar" aria-hidden="true">
             {bot.id === "voice" ? (
               <AudioLines size={24} />
             ) : (
               <BotIcon size={24} />
             )}
-          </span>
+          </span>}
           <div>
             <p className="eyebrow">{botContent.methods[bot.method]}</p>
             <h2 id="chat-title">{bot.name}</h2>
@@ -195,6 +197,11 @@ export default function BotChatPanel({
         </header>
         <p id="chat-note" className="chat-note">
           {bot.note}
+          {isBusinessAssistant(bot.id) && (
+            <a href={`/api/bot-knowledge?botId=${bot.id}`} target="_blank" rel="noopener noreferrer" className="chat-knowledge-link">
+              {botContent.knowledge}
+            </a>
+          )}
         </p>
         {!bot.configured ? (
           <div className="chat-unconfigured">
@@ -247,6 +254,7 @@ export default function BotChatPanel({
               <div ref={end} />
             </div>
             <div className="chat-compose">
+              {bot.aiReady === false && <p className="chat-setup-notice" role="status">{botContent.setupNotice}</p>}
               {bot.id === "voice" && (
                 <div className="voice-controls">
                   {voice.supported === false && (
@@ -334,7 +342,7 @@ export default function BotChatPanel({
                     value={draft}
                     maxLength={chatPolicy.maxInput}
                     rows={2}
-                    disabled={Boolean(pending)}
+                    disabled={Boolean(pending) || bot.aiReady === false}
                     onChange={(event) => setDraft(event.target.value)}
                     aria-describedby="chat-input-count"
                     onKeyDown={(event) => {
@@ -369,7 +377,7 @@ export default function BotChatPanel({
                   <button
                     className="chat-send"
                     type="submit"
-                    disabled={!draft.trim() || Boolean(pending)}
+                    disabled={!draft.trim() || Boolean(pending) || bot.aiReady === false}
                     aria-label={copy.send}
                   >
                     {pending ? (

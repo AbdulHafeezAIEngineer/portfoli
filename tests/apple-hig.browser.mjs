@@ -42,7 +42,7 @@ try {
       await page.route("**/api/chat", async (route) => {
         calls++;
         const payload = route.request().postDataJSON();
-        assert.equal(payload.botId, "support");
+        assert.equal(payload.botId, "veldt");
         assert.equal(payload.messages.at(-1).content, "Do you build websites?");
         await route.fulfill({
           json: {
@@ -56,7 +56,7 @@ try {
         .click();
       await page.evaluate(() => document.fonts.ready);
       const trigger = page.getByRole("button", {
-        name: "Try Live Demo: Cedar Support",
+        name: "Try Live Demo: Veldt Support",
         exact: true,
       });
       await trigger.click();

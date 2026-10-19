@@ -1,5 +1,7 @@
 import "server-only";
 import { getFileProjects } from "@/data/projects";
+import { isBusinessAssistant } from "@/data/business-assistants";
+import { chatIsConnected } from "./chat/config";
 import { getFileBots } from "@/data/bots";
 import { skills } from "@/data/skills";
 import { certificates } from "@/data/certificates";
@@ -43,9 +45,13 @@ export async function getProjects() {
     : getFileProjects();
 }
 export async function getBots() {
-  return database()
-    ? (await import("./content")).databaseBots()
-    : getFileBots();
+  if (database()) return (await import("./content")).databaseBots();
+  const bots = getFileBots();
+  return bots.map((bot) =>
+    isBusinessAssistant(bot.id)
+      ? { ...bot, aiReady: chatIsConnected() }
+      : bot,
+  );
 }
 export async function getSkills() {
   return database() ? (await import("./content")).databaseSkills() : skills;

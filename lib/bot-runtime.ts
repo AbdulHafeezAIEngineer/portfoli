@@ -1,4 +1,5 @@
 import "server-only";
+import { isBusinessAssistant } from "@/data/business-assistants";
 import { realBotConfig, additionalBots, type RealBotConfig } from "@/data/bots";
 export async function botRuntime(
   id: string,
@@ -10,7 +11,7 @@ export async function botRuntime(
   if (id === "real") return { config: realBotConfig, prompt: null };
   const additional = additionalBots.find((bot) => bot.card.id === id);
   if (additional) return { config: additional.connection, prompt: null };
-  return ["support", "booking", "voice"].includes(id)
+  return (isBusinessAssistant(id) || ["support", "booking", "voice"].includes(id))
     ? { config: null, prompt: null }
     : null;
 }

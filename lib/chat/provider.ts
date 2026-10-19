@@ -4,6 +4,8 @@ import { supportPrompt } from "@/data/prompts/support";
 import { bookingPrompt } from "@/data/prompts/booking";
 import { voicePrompt } from "@/data/prompts/voice";
 import { botRuntime } from "@/lib/bot-runtime";
+import { getBusinessPrompt } from "./business-knowledge";
+import { chatApiKey } from "./config";
 import { systemBoundary } from "./guard";
 import { ChatError, publicHttpsUrl, readUpstreamJson } from "./http";
 
@@ -26,7 +28,7 @@ export async function ensureConfigured(botId: string): Promise<void> {
     if (runtime.config.method !== "api" || !runtime.config.endpoint)
       throw new ChatError(503, "This bot connection is not configured yet.");
     publicHttpsUrl(runtime.config.endpoint);
-  } else if (!process.env.OPENAI_API_KEY?.trim())
+  } else if (!chatApiKey())
     throw new ChatError(
       503,
       "The AI demos are not connected yet. Please try again later.",
@@ -80,7 +82,7 @@ export async function callBot(
     responsePath = realBotConfig.responsePath;
   } else {
     url = "https://api.openai.com/v1/chat/completions";
-    headers.Authorization = `Bearer ${process.env.OPENAI_API_KEY}`;
+    headers.Authorization = `Bearer ${chatApiKey()}`;
     const date = new Intl.DateTimeFormat("en-GB", {
       dateStyle: "full",
       timeZone: "Asia/Karachi",
@@ -90,7 +92,7 @@ export async function callBot(
       messages: [
         {
           role: "system",
-          content: `${systemBoundary}\n\n${runtime?.prompt || prompts[botId as DemoBotId] || "Help visitors understand this portfolio. Do not invent business facts."}\n\nCurrent date: ${date}. Timezone: Asia/Karachi.`,
+          content: `${systemBoundary}\n\n${runtime?.prompt || getBusinessPrompt(botId) || prompts[botId as DemoBotId] || "Help visitors understand this portfolio. Do not invent business facts."}\n\nCurrent date: ${date}. Timezone: Asia/Karachi.`,
         },
         ...messages,
       ],

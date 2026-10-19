@@ -1,3 +1,4 @@
+import { businessAssistants } from "./business-assistants";
 export type EmbedMethod = "iframe" | "script" | "api";
 export type DemoBotId = "support" | "booking" | "voice";
 export type BotId = string;
@@ -48,6 +49,7 @@ export type Bot = {
   starters: string[];
   note: string;
   provider?: "botpress";
+  aiReady?: boolean;
 };
 export const chatPolicy = {
   maxInput: 1000,
@@ -80,42 +82,7 @@ export function getFileBots(): Bot[] {
       starters: [],
       note: "The provider manages this bot's conversation and data handling.",
     },
-    {
-      id: "support",
-      name: "Cedar Support",
-      description:
-        "A helpful first point of contact for Cedar & Co., a fictional homewares company. Ask about delivery, returns, or products.",
-      tags: ["Customer support", "Company knowledge", "AI demo"],
-      method: "api",
-      kind: "demo",
-      configured: true,
-      welcome:
-        "Hi, I'm Cedar's demo support assistant. Ask me about our fictional homewares store, shipping, or returns. Please don't share personal or order details.",
-      starters: [
-        "What is your return policy?",
-        "How long does delivery take?",
-        "How do I care for ceramics?",
-      ],
-      note: "Fictional company. No real orders, account access, or human handoff.",
-    },
-    {
-      id: "booking",
-      name: "Meetly Booking",
-      description:
-        "Explore a friendly appointment flow: choose a sample service, discuss a time, and review a simulated booking summary.",
-      tags: ["Appointment flow", "Sample availability", "AI demo"],
-      method: "api",
-      kind: "demo",
-      configured: true,
-      welcome:
-        "Let's try a demo appointment for Meetly Studio. Would you like a 30-minute website consultation or an AI chatbot discovery call? This is a simulation and won't reserve a real appointment.",
-      starters: [
-        "I'd like a website consultation.",
-        "What sample times can I choose?",
-        "How does the demo booking work?",
-      ],
-      note: "Simulation only. No calendar integration, real reservation, or confirmation email.",
-    },
+    ...businessAssistants,
     {
       id: "voice",
       name: "Aura Voice",
@@ -165,8 +132,11 @@ export const botContent = {
   eyebrow: "02 / AI CHATBOT SERVICES",
   title: "Better conversations. Built right in.",
   description:
-    "Try three focused AI demos, and explore how a custom assistant can become part of your own website.",
+    "Try three business assistants with their own knowledge, plus a voice demo. See how a custom AI chatbot could help your customers.",
   try: "Try Live Demo",
+  previewDemo: "Preview assistant",
+  knowledge: "View demo knowledge",
+  setupNotice: "This assistant’s knowledge and chat are ready. Live AI replies are waiting for the website owner to connect the AI service.",
   real: "REAL BOT",
   demo: "INTERACTIVE DEMO",
   pending: "Connection pending",
@@ -178,7 +148,7 @@ export const botContent = {
   privacy:
     "Demo messages are sent to the AI provider. Avoid confidential information. Chat history resets on reload. If conversation logging is enabled, messages are also retained securely for review; avoid personal or confidential information.",
   budget:
-    "Demos have usage limits. Appointment bookings are simulated. External embeds follow their provider's policies.",
+    "Demos have usage limits. Orders, enquiries and reservations are demonstrations only. External embeds follow their provider's policies.",
   embedTitle: "How I Embed Bots",
   embedDescription:
     "Three ways to meet your visitors where they already are. The right approach depends on the control and integration your business needs.",
@@ -199,7 +169,7 @@ export const botContent = {
     transcript: "Conversation",
     emptyRealTitle: "This connection is being prepared.",
     emptyReal:
-      "My real chatbot will appear here once its connection is ready. In the meantime, try Cedar Support, Meetly Booking, or Aura Voice.",
+      "My real chatbot will appear here once its connection is ready. In the meantime, try Veldt Support, Northline Assistant, Solenne Concierge, or Aura Voice.",
     embedLoading: "Loading the bot provider…",
     embedOpening: "Opening the assistant…",
     embedUnavailable:
@@ -283,7 +253,7 @@ export const embedMethods: {
     title: "Custom chat UI via API",
     description:
       "Design the full conversation experience while your Next.js API route calls the AI provider securely.",
-    code: 'const response = await fetch("/api/chat", {\n  method: "POST",\n  headers: { "Content-Type": "application/json" },\n  body: JSON.stringify({\n    botId: "support",\n    messages: [{ role: "user", content: "Hello" }],\n  }),\n});\nconst { reply } = await response.json();\n// Provider API keys stay on the server.',
+    code: 'const response = await fetch("/api/chat", {\n  method: "POST",\n  headers: { "Content-Type": "application/json" },\n  body: JSON.stringify({\n    botId: "veldt",\n    messages: [{ role: "user", content: "Hello" }],\n  }),\n});\nconst { reply } = await response.json();\n// Provider API keys stay on the server.',
     pros: [
       "Complete control over design, voice, and accessibility",
       "Server-side prompts, limits, and secret handling",

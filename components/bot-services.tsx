@@ -22,6 +22,8 @@ import { FortePreview } from "./forte-preview";
 import { AiBotVideo } from "./AiBotVideo";
 
 import ChatPanel from "./bot-chat-panel";
+import { BotAvatar } from "./bot-avatar";
+import { isBusinessAssistant } from "@/data/business-assistants";
 const icons = {
   real: Sparkles,
   support: Headphones,
@@ -91,7 +93,7 @@ export function BotServices({ bots }: { bots: Bot[] }) {
                   ) : (
                     <div className="bot-art" aria-hidden="true">
                       <span />
-                      <Icon size={42} strokeWidth={1.2} />
+                      {isBusinessAssistant(bot.id) ? <BotAvatar id={bot.id} /> : <Icon size={42} strokeWidth={1.2} />}
                       <i />
                       <i />
                       <i />
@@ -123,14 +125,14 @@ export function BotServices({ bots }: { bots: Bot[] }) {
                       <button
                         className="button button-outline"
                         aria-haspopup="dialog"
-                        aria-label={`${copy.try}: ${bot.name}`}
+                        aria-label={`${bot.aiReady === false ? copy.previewDemo : copy.try}: ${bot.name}`}
                         onClick={() => setActive(bot)}
                       >
-                        {copy.try}
+                        {bot.aiReady === false ? copy.previewDemo : copy.try}
                         <ArrowUpRight size={16} aria-hidden="true" />
                       </button>
                     )}
-                    {!bot.configured && (
+                    {(!bot.configured || bot.aiReady === false) && (
                       <span className="connection-pending">{copy.pending}</span>
                     )}
                   </div>

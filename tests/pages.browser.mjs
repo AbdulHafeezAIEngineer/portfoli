@@ -5,7 +5,7 @@ if (!/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(base))
   throw Error("Local app required");
 const routes = [
   ["/websites", "#work", ".project-card", 4],
-  ["/ai-bots", "#ai-bots", ".bot-card", 4],
+  ["/ai-bots", "#ai-bots", ".bot-card", 5],
   ["/bunch-of-work", "#work-bunch", ".dome-tile", 54],
   ["/about", "#experience"],
   ["/journey", "#journey"],

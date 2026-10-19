@@ -5,6 +5,8 @@ import type { Skill } from "@/data/skills";
 import type { Certificate } from "@/data/certificates";
 import type { Bot, RealBotConfig } from "@/data/bots";
 import { connectionSchema } from "./admin/schemas";
+import { isBusinessAssistant } from "@/data/business-assistants";
+import { chatIsConnected } from "./chat/config";
 export async function databaseProjects(): Promise<ProjectView[]> {
   const rows = await db.project.findMany({
     where: { published: true },
@@ -89,6 +91,9 @@ export async function databaseBots(): Promise<Bot[]> {
       method: row.method as Bot["method"],
       kind: row.kind as Bot["kind"],
       configured,
+      ...(!config && isBusinessAssistant(row.id)
+        ? { aiReady: chatIsConnected() }
+        : {}),
       ...(config?.method === "script" && config.botpress
         ? { provider: "botpress" as const }
         : {}),

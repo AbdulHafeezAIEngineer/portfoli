@@ -63,6 +63,63 @@
 .bot-art > svg {
   position: relative;
 }
+.business-bot-avatar {
+  --avatar-background: #183d32;
+  --avatar-foreground: #f0f7ee;
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 13px;
+  background: var(--avatar-background);
+  color: var(--avatar-foreground);
+  border: 1px solid color-mix(in srgb, var(--avatar-foreground) 24%, transparent);
+  font-family: var(--font-space), sans-serif;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1;
+}
+.business-bot-avatar-northline {
+  --avatar-background: #51319a;
+  --avatar-foreground: #f5f0ff;
+}
+.business-bot-avatar-solenne {
+  --avatar-background: #eee7d6;
+  --avatar-foreground: #254437;
+  font-family: Georgia, serif;
+  font-style: italic;
+}
+.bot-art > .business-bot-avatar {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  border-radius: 22px;
+  transform: none;
+  font-size: 46px;
+}
+.bot-art > .business-bot-avatar svg {
+  width: 38px;
+  height: 38px;
+}
+.chat-knowledge-link {
+  display: block;
+  width: fit-content;
+  margin-top: 5px;
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.chat-setup-notice {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--raised);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
 .bot-art::before,
 .bot-art::after {
   content: "";
