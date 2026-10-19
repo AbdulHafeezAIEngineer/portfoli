@@ -1,144 +1,148 @@
 export const demos = {
-  restaurant: {
-    name: "Savor & Sage",
-    kicker: "SEASONAL KITCHEN · A FICTIONAL RESTAURANT",
-    headline: "A slower kind of extraordinary.",
-    intro:
-      "An intimate table. Ingredients at their best. A menu that follows the rhythm of the season.",
-    action: "Explore the menu",
-    secondary: "Our philosophy",
-    inner: "A season, on a plate.",
-    description:
-      "A considered menu built around the market, the grower, and the pleasure of sharing something good.",
-    items: [
+  "restaurant": {
+    "name": "Savor & Sage",
+    "kicker": "SEASONAL KITCHEN · A FICTIONAL RESTAURANT",
+    "headline": "A seasonal restaurant menu.",
+    "intro": "Browse the fictional dishes and prices, then explore the illustrated ingredients.",
+    "action": "Explore the menu",
+    "secondary": "Our philosophy",
+    "inner": "Example dishes and prices.",
+    "description": "A seasonal menu with dish descriptions and illustrative prices. No table reservation or food order is processed.",
+    "items": [
       {
-        name: "Garden, in green",
-        detail: "Pea velouté · whipped ricotta · herb oil",
-        price: "18",
+        "name": "Garden, in green",
+        "detail": "Pea velouté · whipped ricotta · herb oil",
+        "price": "18"
       },
       {
-        name: "From the coast",
-        detail: "Roasted sea bass · fennel · lemon beurre blanc",
-        price: "34",
+        "name": "From the coast",
+        "detail": "Roasted sea bass · fennel · lemon beurre blanc",
+        "price": "34"
       },
       {
-        name: "A sweet ending",
-        detail: "Poached pear · vanilla cream · almond crumble",
-        price: "14",
-      },
+        "name": "A sweet ending",
+        "detail": "Poached pear · vanilla cream · almond crumble",
+        "price": "14"
+      }
     ],
-    feature: "Good food begins long before the kitchen.",
-    featureText:
-      "We follow the seasons and let simple ingredients lead. This fictional restaurant concept explores the craft of a welcoming digital dining experience.",
-    nav: ["The menu", "Our story", "Visit us"],
-    note: "FICTIONAL RESTAURANT · DESIGN CONCEPT · RESERVATIONS ARE NOT PROCESSED",
-    category: "RESTAURANT",
+    "feature": "Good food begins long before the kitchen.",
+    "featureText": "We follow the seasons and let simple ingredients lead. This fictional restaurant concept explores the craft of a welcoming digital dining experience.",
+    "nav": [
+      "The menu",
+      "Our story",
+      "Visit us"
+    ],
+    "note": "FICTIONAL RESTAURANT · DESIGN CONCEPT · RESERVATIONS ARE NOT PROCESSED",
+    "category": "RESTAURANT"
   },
   "real-estate": {
-    name: "Forma Living",
-    kicker: "DISTINCTIVE SPACES. CONSIDERED LIVING.",
-    headline: "Find a place that feels like you.",
-    intro:
-      "An edited collection of exceptional homes, shaped by architecture, light, and the way you want to live.",
-    action: "Explore the collection",
-    secondary: "Our approach",
-    inner: "Spaces worth coming home to.",
-    description:
-      "From quiet courtyards to open horizons. Discover a different perspective on home.",
-    items: [
+    "name": "Forma Living",
+    "kicker": "FICTIONAL PROPERTY LISTINGS",
+    "headline": "Homes in Palm Springs, Joshua Tree and Malibu.",
+    "intro": "Compare three illustrative listings by location. All properties and asking prices are fictional.",
+    "action": "Explore the collection",
+    "secondary": "Our approach",
+    "inner": "Browse the sample listings.",
+    "description": "A property listing interface with location filters and an illustrated floorplan.",
+    "items": [
       {
-        name: "The Courtyard House",
-        detail: "Palm Springs · 4 beds · 3 baths",
-        price: "$2,450,000",
+        "name": "The Courtyard House",
+        "detail": "Palm Springs · 4 beds · 3 baths",
+        "price": "$2,450,000"
       },
       {
-        name: "Horizon Residence",
-        detail: "Joshua Tree · 3 beds · 2 baths",
-        price: "$1,850,000",
+        "name": "Horizon Residence",
+        "detail": "Joshua Tree · 3 beds · 2 baths",
+        "price": "$1,850,000"
       },
       {
-        name: "The Glass Pavilion",
-        detail: "Malibu · 5 beds · 4 baths",
-        price: "$4,200,000",
-      },
+        "name": "The Glass Pavilion",
+        "detail": "Malibu · 5 beds · 4 baths",
+        "price": "$4,200,000"
+      }
     ],
-    feature: "Architecture you can feel.",
-    featureText:
-      "Warm materials. Open sightlines. A slower pace. Explore the Courtyard House, a fictional architectural listing designed around a seamless connection to the outdoors.",
-    nav: ["Properties", "Our perspective", "Enquire"],
-    note: "FICTIONAL LISTINGS · CONCEPT PRICES · NO PROPERTY SALES OR ENQUIRIES ARE PROCESSED",
-    category: "REAL ESTATE",
-  },
-  saas: {
-    name: "Orbit",
-    kicker: "LESS BUSYWORK. MORE MOMENTUM.",
-    headline: "Your team's next great idea starts here.",
-    intro:
-      "Bring projects, decisions, and the people behind them into one beautifully focused workspace.",
-    action: "Explore the workspace",
-    secondary: "See the details",
-    inner: "Clarity, built into every day.",
-    description:
-      "Everything your team needs to move from an idea to a finished project. Together, in one place.",
-    items: [
-      {
-        name: "One shared view",
-        detail: "Plan priorities with a calm, flexible project board.",
-        price: "01",
-      },
-      {
-        name: "Decisions, in context",
-        detail: "Keep notes and next steps beside the work.",
-        price: "02",
-      },
-      {
-        name: "Progress you can see",
-        detail: "Turn milestones into a clear picture of momentum.",
-        price: "03",
-      },
+    "feature": "The Courtyard House floorplan.",
+    "featureText": "Explore the Courtyard House, a fictional architectural listing with a floorplan and a sample project enquiry.",
+    "nav": [
+      "Properties",
+      "Our perspective",
+      "Enquire"
     ],
-    feature: "A little less noise. A lot more focus.",
-    featureText:
-      "Simple plans for teams with thoughtful ambitions. This is a fictional software concept; no account creation, payment, or subscription is processed.",
-    nav: ["Product", "How it works", "Plans"],
-    note: "FICTIONAL SOFTWARE · SAMPLE WORKSPACE · NO SIGNUP OR BILLING",
-    category: "SOFTWARE",
+    "note": "FICTIONAL LISTINGS · CONCEPT PRICES · NO PROPERTY SALES OR ENQUIRIES ARE PROCESSED",
+    "category": "REAL ESTATE"
   },
-  store: {
-    name: "ATELIER / 01",
-    kicker: "THE EVERYDAY, RECONSIDERED.",
-    headline: "Fewer pieces. More possibility.",
-    intro:
-      "Modern essentials with a quiet point of view. An edited wardrobe for the life between occasions.",
-    action: "Discover the collection",
-    secondary: "Our perspective",
-    inner: "The new essentials.",
-    description:
-      "Beautifully simple silhouettes. Thoughtful proportions. Pieces that work harder, so you don't have to.",
-    items: [
+  "saas": {
+    "name": "Orbit",
+    "kicker": "PROJECT WORKSPACE / INTERFACE CONCEPT",
+    "headline": "Project tasks and team activity.",
+    "intro": "A fictional workspace with a task board, sample activity and example plan cards.",
+    "action": "Explore the workspace",
+    "secondary": "See the details",
+    "inner": "The example project board.",
+    "description": "An interface study for planning tasks and reviewing their status. It does not create accounts or subscriptions.",
+    "items": [
       {
-        name: "The Sculpted Coat",
-        detail: "Soft wool blend · warm camel",
-        price: "$280",
+        "name": "One shared view",
+        "detail": "Plan priorities with a calm, flexible project board.",
+        "price": "01"
       },
       {
-        name: "The Everyday Shirt",
-        detail: "Organic cotton · chalk",
-        price: "$95",
+        "name": "Decisions, in context",
+        "detail": "Keep notes and next steps beside the work.",
+        "price": "02"
       },
       {
-        name: "The Wide Trouser",
-        detail: "Structured twill · deep charcoal",
-        price: "$140",
-      },
+        "name": "Progress you can see",
+        "detail": "Turn milestones into a clear picture of momentum.",
+        "price": "03"
+      }
     ],
-    feature: "The shape of things to come.",
-    featureText:
-      "A sculpted shoulder, a generous silhouette, a thoughtful finish. A fictional fashion collection exploring the balance between form and everyday function.",
-    nav: ["Collection", "The edit", "Our story"],
-    note: "FICTIONAL FASHION STORE · DEMO BAG ONLY · NO CHECKOUT OR PAYMENTS",
-    category: "FASHION",
+    "feature": "A little less noise. A lot more focus.",
+    "featureText": "Compare the example plans and inspect the task board. This is a fictional software interface; it does not create accounts, accept payments or start subscriptions.",
+    "nav": [
+      "Product",
+      "How it works",
+      "Plans"
+    ],
+    "note": "FICTIONAL SOFTWARE · SAMPLE WORKSPACE · NO SIGNUP OR BILLING",
+    "category": "SOFTWARE"
   },
+  "store": {
+    "name": "ATELIER / 01",
+    "kicker": "THE EVERYDAY, RECONSIDERED.",
+    "headline": "Coats, shirts and trousers.",
+    "intro": "Browse the fictional clothing collection and its material details.",
+    "action": "Discover the collection",
+    "secondary": "Our perspective",
+    "inner": "The sample collection.",
+    "description": "An illustrated fashion storefront. All products and prices are demo data.",
+    "items": [
+      {
+        "name": "The Sculpted Coat",
+        "detail": "Soft wool blend · warm camel",
+        "price": "$280"
+      },
+      {
+        "name": "The Everyday Shirt",
+        "detail": "Organic cotton · chalk",
+        "price": "$95"
+      },
+      {
+        "name": "The Wide Trouser",
+        "detail": "Structured twill · deep charcoal",
+        "price": "$140"
+      }
+    ],
+    "feature": "The shape of things to come.",
+    "featureText": "Explore the illustrated coat, shirt and trousers. Material and care details are sample content; no purchase is processed.",
+    "nav": [
+      "Collection",
+      "The edit",
+      "Our story"
+    ],
+    "note": "FICTIONAL FASHION STORE · DEMO BAG ONLY · NO CHECKOUT OR PAYMENTS",
+    "category": "FASHION"
+  }
 } as const;
 export type DemoSlug = keyof typeof demos;
 export const demoUI = {
@@ -169,12 +173,12 @@ export const demoUI = {
     {
       name: "Studio",
       price: "19",
-      description: "A considered space for small teams.",
+      description: "Sample plan for a small team.",
     },
     {
       name: "Collective",
       price: "39",
-      description: "Room for your next chapter.",
+      description: "Sample plan for a larger team.",
     },
   ],
   planAction: "Explore this demo plan",
@@ -182,7 +186,7 @@ export const demoUI = {
   locations: ["All homes", "Palm Springs", "Joshua Tree", "Malibu"],
   footnote:
     "An independent concept by Elvora. All brands, listings, products and business information on this page are fictional.",
-  smallTitle: "DESIGNED FOR A MORE CONSIDERED EVERYDAY",
+  smallTitle: "FICTIONAL PRODUCT INTERFACE",
   currency: "per member / month",
   sample: "SAMPLE WORKSPACE",
   project: "Website launch",
@@ -190,17 +194,17 @@ export const demoUI = {
   tasks: [
     "Refine the direction",
     "Design the experience",
-    "Build with intention",
+    "Test the enquiry form",
   ],
   board: ["IN PROGRESS", "IN REVIEW", "COMPLETE"],
   activity: "Everything, in good order.",
   dimensions: "4 bedrooms / 3 bathrooms / 3,200 sq ft",
-  material: "DESIGNED WITH INTENTION",
+  material: "MATERIAL DETAILS / SAMPLE CONTENT",
   itemDetails: "Material & care",
   itemCare: "Illustrative collection details. No physical products are sold.",
   restaurantCaption: "An illustrated study of seasonal ingredients",
   restaurantLabel: "THE SPRING TABLE",
   realEstateCaption: "Architectural study / The Courtyard House",
   storeCaption: "VOLUME 01 / MODERN ESSENTIALS",
-  planLabel: "SIMPLE, THOUGHTFUL PLANS",
+  planLabel: "EXAMPLE PLANS",
 } as const;

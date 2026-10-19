@@ -12,7 +12,7 @@ export function FaqSection({ faqs }: { faqs: Faq[] }) {
       <FaqEnhancement />
       <div>
         <p className="eyebrow">BEFORE WE BUILD</p>
-        <TextReveal id="faq-title" text={"Good questions.\nClear answers."} />
+        <TextReveal id="faq-title" text="Before you commission a build." />
         <p className="section-intro">
           A few things to know before starting a project together.
         </p>

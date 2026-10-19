@@ -1,5 +1,5 @@
-import { BotBuildProcess } from "@/components/bot-build-process";
-import { BotServices, BotEmbedding } from "@/components/bot-services";
+import Link from "next/link";
+import { BotServices } from "@/components/bot-services";
 import { SiteShell } from "@/components/site-shell";
 import { pageMetadata } from "@/lib/page-metadata";
 import { getBots } from "@/lib/content-loader";
@@ -12,8 +12,12 @@ export default async function Page() {
   return (
     <SiteShell page="bots">
       <BotServices bots={bots} />
-      <BotBuildProcess />
-      <BotEmbedding bots={bots} />
+      <div className="container field-integration-link">
+        <Link href="/services/chat">What a chatbot build includes ↗</Link>
+        <Link href="/ai-bots/how-i-embed-bots">
+          Technical notes: website integration ↗
+        </Link>
+      </div>
     </SiteShell>
   );
 }

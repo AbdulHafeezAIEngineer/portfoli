@@ -1,8 +1,8 @@
 export const contactContent = {
-  eyebrow: "06 / START A CONVERSATION",
-  title: "Let's talk.",
+  eyebrow: "PROJECT ENQUIRIES",
+  title: "Tell me what needs building.",
   description:
-    "Have a project in mind? Tell me a little about it, and let's find a thoughtful way forward.",
+    "Send your website link and describe what needs changing. For a new build, tell me what your business does. For a chatbot, try Veldt’s delivery demo first, then include two questions yours should answer.",
   emailLabel: "EMAIL ELVORA",
   emailCta: "Open Gmail or your email app",
   emailNote: "Prefer email? Reach out directly using the address below.",
@@ -13,7 +13,7 @@ export const contactContent = {
   namePlaceholder: "How should I address you?",
   emailPlaceholder: "you@example.com",
   messagePlaceholder:
-    "What are you looking to build, and what matters most to you?",
+    "Website URL (if you have one), what you need built, and any deadline or budget you already know.",
   messageHint:
     "20–3,000 characters. Please avoid passwords or sensitive information.",
   honeypot: "Leave this field empty",

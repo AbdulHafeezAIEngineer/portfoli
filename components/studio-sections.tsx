@@ -7,7 +7,7 @@ import {
   CheckCheck,
   Layers3,
   Search,
-  Sparkles,
+  Upload,
   Workflow as WorkflowIcon,
 } from "lucide-react";
 import { studio } from "@/data/studio";
@@ -69,7 +69,7 @@ export function Services({ services }: { services: Service[] }) {
   );
 }
 export function Workflow() {
-  const icons = [Search, Layers3, Braces, CheckCheck, Sparkles];
+  const icons = [Search, Layers3, Braces, CheckCheck, Upload];
   return (
     <section
       id="workflow"
@@ -200,9 +200,7 @@ export function ToolOrbit() {
           <p className="premium-tool-intro">
             {studio.tools.intro}
             <span>
-              The tools are powerful.
-              <br />
-              The decisions are human.
+              See the Kovo and Solenne concepts for the interface work.
             </span>
           </p>
         </Reveal>

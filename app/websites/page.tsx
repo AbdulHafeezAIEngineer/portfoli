@@ -1,4 +1,3 @@
-import { TechnicalDomains } from "@/components/experience";
 import { Workflow } from "@/components/studio-sections";
 import { Work } from "@/components/work";
 import { SiteShell } from "@/components/site-shell";
@@ -14,7 +13,6 @@ export default async function Page() {
     <SiteShell page="websites">
       <Work projects={projects} />
       <Workflow />
-      <TechnicalDomains />
     </SiteShell>
   );
 }

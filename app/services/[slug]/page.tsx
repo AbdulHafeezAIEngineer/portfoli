@@ -37,7 +37,7 @@ export default async function Page({ params }: Props) {
           ELVORA / SERVICES
         </Link>
         <header className="agency-detail-hero">
-          <p className="eyebrow">A PRACTICAL SCOPE. BUILT AROUND YOU.</p>
+          <p className="eyebrow">SCOPE / BEFORE DEVELOPMENT STARTS</p>
           <h1>{service.title}</h1>
           <p>{service.description}</p>
           <Link href="/contact" className="button button-gold">
@@ -47,7 +47,7 @@ export default async function Page({ params }: Props) {
         <div className="agency-detail-grid">
           <section>
             <p className="eyebrow">01 / DELIVERABLES</p>
-            <h2>What we can build.</h2>
+            <h2>What is included.</h2>
             <ul>
               {service.scope.map((item) => (
                 <li key={item}>{item}</li>
@@ -64,12 +64,13 @@ export default async function Page({ params }: Props) {
             </ul>
           </section>
         </div>
+        <p className="agency-detail-note">See the <Link href={slug === "chat" ? "/ai-bots" : "/websites"}>{slug === "chat" ? "Veldt and Northline chat demos" : "Kovo and Solenne website concepts"}</Link> for working examples.</p>
         <p className="agency-detail-note">
           {service.detail} Features, timing and provider costs are agreed before
           work begins.
         </p>
         <section className="agency-related">
-          <h2>Other ways I can help.</h2>
+          <h2>Other services.</h2>
           {services
             .filter((item) => item.id !== slug)
             .map((item) => (

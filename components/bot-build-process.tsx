@@ -58,9 +58,9 @@ export function BotBuildProcess() {
         <Reveal>
           <p className="eyebrow">FROM YOUR KNOWLEDGE TO A USEFUL ASSISTANT</p>
         </Reveal>
-        <TextReveal id="bot-build-title" text="How I Build Bots." />
+        <TextReveal id="bot-build-title" text="From your documents to a tested answer." />
         <Reveal>
-          <ReadingText text="A useful assistant starts with your business, your information and a clear job to do. I shape the knowledge, conversation and integration, then test the details before it reaches your visitors." />
+          <ReadingText text="For Veldt, I supplied the product guide and delivery policy, kept them separate from the other demos and tested questions against those sources. A client bot starts with your approved documents." />
         </Reveal>
       </div>
       <div className="workflow-cards">

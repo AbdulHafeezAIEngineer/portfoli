@@ -8,18 +8,18 @@ export const site = {
   email: "abdulhafeez@elvoraai.online",
   title: "Web Design & Development by Abdul Hafeez | Elvora",
   description:
-    "We build custom websites and AI assistant bots for your business. Our bots answer customer questions using your own business information.",
+    "Abdul Hafeez builds websites and chatbots that answer from your business documents. Explore the Kovo and Solenne concepts or try Veldt’s store assistant.",
   nav: primaryNavigation,
   hero: {
     eyebrow: "WEB DESIGN, DEVELOPMENT & AI CHATBOTS",
-    heading: ["Custom websites.", "Helpful AI chatbots."],
+    heading: ["I build websites.", "And chatbots that answer from your documents."],
     intro:
       "We build custom websites and AI assistant bots for businesses worldwide.",
     tagline:
       "Make your services clear, help visitors get answers and give them an easy way to contact you. Your chatbot answers questions using the business information you provide.",
     primary: "View Work",
     secondary: "Contact Me",
-    note: "Built for your business. Ready for your customers.",
+    note: "Try the Kovo website concept or ask Veldt a delivery question.",
     portrait: "/portrait-placeholder.svg",
     portraitAlt:
       "Abstract portrait placeholder for Abdul Hafeez; personal photo coming soon",
@@ -31,9 +31,9 @@ export const site = {
   expertise: ["Web development", "AI chatbots", "Voice experiences"],
   work: {
     eyebrow: "01 / SELECTED EXPLORATIONS",
-    title: "Ideas, brought to the browser.",
+    title: "Four website concepts. Try the working pages.",
     description:
-      "Four original concepts. Four distinct worlds. Bespoke websites for hospitality, electric mobility, private care and architecture—built to explore, not just look at.",
+      "Kovo has an architecture enquiry form. Solenne has a sample stay planner. Open each concept to test its layout and interactions. All four brands are fictional.",
     tabs: [
       {
         id: "web",
@@ -55,17 +55,17 @@ export const site = {
       "Independent concept projects with fictional brands, original illustrations and generated imagery. No client commissions or real bookings, sales or clinical services are implied.",
   },
   errors: {
-    notFound: "This page took a different path.",
+    notFound: "Page not found.",
     missing: "The page you requested could not be found.",
     home: "Return to Elvora",
-    title: "Something interrupted the experience.",
+    title: "The page could not load.",
     description: "Please try again in a moment.",
     retry: "Try again",
   },
-  footer: "Designed with care. Built with intention.",
+  footer: "Independent web development by Abdul Hafeez.",
   ui: {
     skip: "Skip to content",
-    home: "Elvora — Home",
+    home: "Elvora ;  Home",
     menuOpen: "Open navigation",
     menuClose: "Close navigation",
     light: "Switch to light theme",

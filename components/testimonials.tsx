@@ -1,94 +1,54 @@
 import Image from "next/image";
-import { UserRound } from "lucide-react";
-import type { CSSProperties } from "react";
+import Link from "next/link";
 import type { Testimonial } from "@/data/agency";
-import { testimonialSamples } from "@/data/testimonial-samples";
-import { Reveal } from "./reveal";
-import { TextReveal } from "./text-reveal";
-import { TestimonialScene } from "./testimonial-scene";
-
 export function Testimonials({
   testimonials,
 }: {
   testimonials: Testimonial[];
 }) {
-  const preview = testimonials.length === 0;
-  const reviews = preview ? testimonialSamples : testimonials;
+  const reviews = testimonials.filter((review) => !review.placeholder);
   return (
-    <TestimonialScene
-      heading={
-        <Reveal>
-          <div className="testimonials-heading">
-            <p className="eyebrow">PEOPLE / PROJECTS / PERSPECTIVE</p>
-            <TextReveal as="h1" id="testimonials-title" text="Testimonials." />
-            <p className="testimonials-subtitle">
-              What people say about working with me.
-            </p>
-            {preview && (
-              <p className="testimonial-sample-note">
-                Design preview: fictional profiles and illustrative reviews, not
-                client endorsements.
-              </p>
-            )}
-          </div>
-        </Reveal>
-      }
+    <section
+      className="container field-reviews"
+      aria-labelledby="testimonials-title"
     >
-      <div className="testimonials-grid">
-        {reviews.map((review, index) => (
-          <Reveal key={review.id} delay={(index % 4) * 0.07}>
-            <div
-              className="testimonial-float"
-              style={
-                {
-                  "--review-duration": `${19 + (index % 4) * 3}s`,
-                  "--review-delay": `${-index * 4.7}s`,
-                  "--review-angle": `${index % 2 ? 0.65 : -0.65}deg`,
-                } as CSSProperties
-              }
-            >
-              <figure
-                className="testimonial-card"
-                data-sample={review.placeholder ? "true" : undefined}
-              >
-                <span className="testimonial-quote-mark" aria-hidden="true">
-                  “
-                </span>
-                {review.placeholder && (
-                  <span className="testimonial-sample-label">
-                    FICTIONAL EXAMPLE
-                  </span>
+      <p className="eyebrow">CLIENT FEEDBACK</p>
+      <h1 id="testimonials-title">
+        {reviews.length
+          ? "Published reviews."
+          : "No client reviews published yet."}
+      </h1>
+      {!reviews.length ? (
+        <div className="field-review-empty">
+          <p>
+            The work shown here is concept work. I have no permission-approved
+            client reviews to publish.
+          </p>
+          <p>
+            You can test Kovo’s enquiry form, compare Solenne’s sample stays or
+            ask Veldt a delivery question.
+          </p>
+          <Link href="/websites">Inspect the website concepts ↗</Link>
+          <Link href="/ai-bots">Try the assistants ↗</Link>
+        </div>
+      ) : (
+        <div className="field-review-list">
+          {reviews.map((review) => (
+            <figure key={review.id}>
+              <blockquote>{review.quote}</blockquote>
+              <figcaption>
+                {review.portrait && (
+                  <Image src={review.portrait} width={44} height={44} alt="" />
                 )}
-                <blockquote>{review.quote}</blockquote>
-                <figcaption>
-                  <span className="testimonial-avatar">
-                    {review.portrait ? (
-                      <Image
-                        loading="eager"
-                        fetchPriority="low"
-                        src={review.portrait}
-                        alt=""
-                        width={44}
-                        height={44}
-                      />
-                    ) : (
-                      <UserRound
-                        size={20}
-                        strokeWidth={1.5}
-                        aria-hidden="true"
-                      />
-                    )}
-                  </span>
-                  <span>
-                    <strong>{review.name}</strong>
-                    <small>{review.role}</small>
-                  </span>
-                </figcaption>
-              </figure>
-            </div>
-          </Reveal>
-        ))}
-      </div>
-    </TestimonialScene>
+                <span>
+                  <strong>{review.name}</strong>
+                  <small>{review.role}</small>
+                </span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
+    </section>
   );
 }

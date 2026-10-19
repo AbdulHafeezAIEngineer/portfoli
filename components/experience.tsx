@@ -39,9 +39,9 @@ export function Experience() {
                 priority
                 sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1100px) 42vw, 480px"
               />
-              <span className="about-photo-label">INDEPENDENT BY DESIGN</span>
+              <span className="about-photo-label">ABDUL HAFEEZ / ELVORA</span>
               <span className="about-photo-caption">
-                DESIGN + WEB DEVELOPMENT
+                WEBSITES & BUSINESS CHATBOTS
               </span>
             </div>
             <figcaption>
@@ -65,6 +65,7 @@ export function Experience() {
             {copy.paragraphs.map((paragraph) => (
               <ReadingText key={paragraph} text={paragraph} />
             ))}
+            <p><a href="https://www.youtube.com/watch?v=9z4UEWrFAYs" target="_blank" rel="noopener noreferrer">The Unreal Engine tutorial I started following Nafay from <ArrowUpRight size={14} aria-hidden="true" /></a></p>
             <SocialLinks />
           </Reveal>
         </div>

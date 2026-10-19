@@ -8,7 +8,6 @@ import { site } from "@/data/site";
 import { aboutPages, portfolioPages } from "@/data/navigation";
 import { BrandMark } from "./brand-mark";
 import { MotionControl } from "./motion-preference";
-import { NavigationGlass } from "./navigation-glass";
 
 export function Navbar({
   identity,
@@ -133,7 +132,7 @@ export function Navbar({
                   className="about-navigation"
                   hidden={!aboutOpen}
                 >
-                  <p>THE PERSON & THE PROCESS</p>
+                  <p>ABOUT THE DEVELOPER</p>
                   {aboutPages.map((id) => (
                     <Link
                       key={id}
@@ -164,7 +163,6 @@ export function Navbar({
           )}
         </div>
         <div className="nav-actions">
-          <NavigationGlass />
           <MotionControl />
           <button
             className="icon-button theme-toggle"
@@ -228,7 +226,7 @@ export function Navbar({
             </Link>
           ))}
           <p className="mobile-nav-label">LET’S CONNECT</p>
-          {["testimonials", "services", "contact"].map((id) => {
+          {["services", "contact"].map((id) => {
             const item =
               portfolioPages[id as "testimonials" | "services" | "contact"];
             return (

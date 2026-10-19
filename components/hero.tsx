@@ -1,73 +1,71 @@
-import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { site } from "@/data/site";
-import { TextReveal } from "./text-reveal";
-import { HeroEmblem } from "./hero-emblem";
-import { ReadingText } from "./reading-text";
 
 export function Hero() {
   return (
-    <section className="container hero" aria-labelledby="hero-title">
-      <div className="hero-copy">
-        <div>
-          <p className="eyebrow">
-            <span className="tiny-line" />
-            {site.hero.eyebrow}
-          </p>
-          <TextReveal
-            as="h1"
-            id="hero-title"
-            className="hero-title-reveal"
-            text={site.hero.heading.join("\n")}
-          />
-        </div>
-        <div>
-          <ReadingText className="hero-intro" text={site.hero.intro} />
-          <p className="hero-tagline">{site.hero.tagline}</p>
-          <div className="hero-actions">
-            <a href="/websites" className="button button-gold">
-              {site.hero.primary}
-              <ArrowDownRight size={18} aria-hidden="true" />
-            </a>
-            <a href="/contact" className="button button-outline">
-              {site.hero.secondary}
-              <ArrowUpRight size={18} aria-hidden="true" />
-            </a>
-          </div>
-          <p className="hero-note">{site.hero.note}</p>
-        </div>
+    <section className="container field-hero" aria-labelledby="hero-title">
+      <div className="field-hero-heading">
+        <p className="eyebrow">ABDUL HAFEEZ / INDEPENDENT DEVELOPER</p>
+        <h1 id="hero-title">
+          I build websites.
+          <br />
+          <em>And chatbots that answer from your documents.</em>
+        </h1>
       </div>
-      <div className="hero-visual">
-        <HeroEmblem />
-      </div>
-      <div className="hero-bottom">
-        <div
-          className="expertise-marquee"
-          role="group"
-          aria-label={site.expertise.join(", ")}
-        >
-          <div
-            className="expertise-marquee-track"
-            data-velocity-marquee
-            aria-hidden="true"
-          >
-            {[0, 1].map((copy) => (
-              <div className="expertise-list" key={copy}>
-                {site.expertise.map((item) => (
-                  <span key={item}>{item}</span>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-        <a
-          href="/websites"
-          className="scroll-link"
-          aria-label={site.hero.primary}
-        >
-          <span aria-hidden="true">EXPLORE THE WEBSITES</span>
-          <ArrowDownRight size={18} />
+      <div className="field-hero-brief">
+        <p>
+          I design and build websites, then connect the forms, data and services
+          behind them. For website chatbots, I use your product documents and
+          policies as the source material.
+        </p>
+        <Link className="button button-gold" href="/contact">
+          Tell me what you need <ArrowUpRight size={17} aria-hidden="true" />
+        </Link>
+        <a className="field-text-link" href="#selected-work">
+          See the builds below ↓
         </a>
       </div>
+      <figure className="field-hero-proof">
+        <Link
+          href="/demo/kovo"
+          aria-label="Open Kovo architecture website concept"
+        >
+          <Image
+            src="/projects/kovo-1.webp"
+            alt="Browser capture of Kovo, my architecture website concept"
+            width={1440}
+            height={1000}
+            sizes="(max-width: 760px) 100vw, 68vw"
+            priority
+          />
+        </Link>
+        <figcaption>
+          <span>KOVO / ARCHITECTURE CONCEPT</span>
+          <span>Open the site. Draft a sample project brief.</span>
+        </figcaption>
+      </figure>
+      <aside className="field-margin-note">
+        <span className="eyebrow">A SMALL TEST</span>
+        <p>
+          Ask Veldt:
+          <br />
+          <q>Is shipping free on a $70 order?</q>
+        </p>
+        <p className="field-note-answer">
+          Its sample policy says free shipping starts at $75. The bot should
+          explain the difference.
+        </p>
+        <Link href="/ai-bots#meet-assistants">
+          Try that question <ArrowUpRight size={16} aria-hidden="true" />
+        </Link>
+        <small>Fictional store. Real AI response.</small>
+      </aside>
+      <p className="field-byline">
+        {site.name} builds the work shown here. Concept brands are labelled;
+        they are not client commissions.
+      </p>
     </section>
   );
 }

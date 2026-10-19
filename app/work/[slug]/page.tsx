@@ -65,7 +65,7 @@ export default async function Page({ params }: Props) {
           </section>
           <section>
             <p className="eyebrow">THE IMPLEMENTATION</p>
-            <h2>From design to interface.</h2>
+            <h2>Try the implemented interface.</h2>
             <p>
               Explore the implemented page, its responsive layouts and
               interaction details. Screenshots below are captures of the actual
@@ -101,7 +101,7 @@ export default async function Page({ params }: Props) {
           ))}
         </div>
         <section className="agency-related">
-          <h2>Keep exploring.</h2>
+          <h2>Other concept builds.</h2>
           {projects
             .filter((item) => item.id !== slug)
             .map((item) => (
