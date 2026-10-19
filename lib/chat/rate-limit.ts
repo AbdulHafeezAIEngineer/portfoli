@@ -1,6 +1,7 @@
 import "server-only";
 import { createHash } from "node:crypto";
 import { ChatError, publicHttpsUrl } from "./http";
+import { chatRedisConfiguration } from "./redis-configuration";
 
 type Counter = { count: number; until: number };
 const runtime = globalThis as typeof globalThis & {
@@ -55,8 +56,7 @@ export async function reserveRequest(request: Request): Promise<void> {
   ];
   const limits = [perMinute, perDay, cap];
   const ttls = [minuteTtl, dayTtl, dayTtl];
-  const redisUrl = process.env.CHAT_REDIS_REST_URL;
-  const redisToken = process.env.CHAT_REDIS_REST_TOKEN;
+  const { url: redisUrl, token: redisToken } = chatRedisConfiguration();
   if (redisUrl && redisToken) {
     try {
       const response = await fetch(publicHttpsUrl(redisUrl), {

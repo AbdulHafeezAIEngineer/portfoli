@@ -8,15 +8,15 @@
       "height": 44,
       "outline": "3px",
       "outlineStyle": "none",
-      "outlineColor": "rgb(10, 10, 15)",
+      "outlineColor": "rgb(255, 255, 255)",
       "fontSize": "14px"
     },
     "field": {
       "width": 221,
-      "height": 61.1875,
+      "height": 71.1875,
       "outline": "2px",
       "outlineStyle": "solid",
-      "outlineColor": "rgb(167, 139, 250)",
+      "outlineColor": "rgb(49, 103, 72)",
       "fontSize": "16px"
     },
     "appearance": {
@@ -46,10 +46,10 @@
     },
     "field": {
       "width": 221,
-      "height": 61.1875,
+      "height": 71.1875,
       "outline": "2px",
       "outlineStyle": "solid",
-      "outlineColor": "rgb(124, 58, 237)",
+      "outlineColor": "rgb(49, 103, 72)",
       "fontSize": "16px"
     },
     "appearance": {
@@ -74,15 +74,15 @@
       "height": 44,
       "outline": "3px",
       "outlineStyle": "none",
-      "outlineColor": "rgb(10, 10, 15)",
+      "outlineColor": "rgb(255, 255, 255)",
       "fontSize": "14px"
     },
     "field": {
       "width": 291,
-      "height": 61.1875,
+      "height": 71.1875,
       "outline": "2px",
       "outlineStyle": "solid",
-      "outlineColor": "rgb(167, 139, 250)",
+      "outlineColor": "rgb(49, 103, 72)",
       "fontSize": "16px"
     },
     "appearance": {
@@ -112,10 +112,10 @@
     },
     "field": {
       "width": 291,
-      "height": 61.1875,
+      "height": 71.1875,
       "outline": "2px",
       "outlineStyle": "solid",
-      "outlineColor": "rgb(124, 58, 237)",
+      "outlineColor": "rgb(49, 103, 72)",
       "fontSize": "16px"
     },
     "appearance": {
@@ -140,15 +140,15 @@
       "height": 44,
       "outline": "3px",
       "outlineStyle": "none",
-      "outlineColor": "rgb(10, 10, 15)",
+      "outlineColor": "rgb(255, 255, 255)",
       "fontSize": "14px"
     },
     "field": {
-      "width": 457,
-      "height": 54.78125,
+      "width": 379,
+      "height": 64.78125,
       "outline": "2px",
       "outlineStyle": "solid",
-      "outlineColor": "rgb(167, 139, 250)",
+      "outlineColor": "rgb(49, 103, 72)",
       "fontSize": "14px"
     },
     "appearance": {
@@ -177,11 +177,11 @@
       "fontSize": "14px"
     },
     "field": {
-      "width": 457,
-      "height": 54.78125,
+      "width": 379,
+      "height": 64.78125,
       "outline": "2px",
       "outlineStyle": "solid",
-      "outlineColor": "rgb(124, 58, 237)",
+      "outlineColor": "rgb(49, 103, 72)",
       "fontSize": "14px"
     },
     "appearance": {
@@ -202,19 +202,19 @@
     "theme": "dark",
     "touch": false,
     "send": {
-      "width": 39,
-      "height": 39,
+      "width": 40,
+      "height": 40,
       "outline": "3px",
       "outlineStyle": "none",
-      "outlineColor": "rgb(10, 10, 15)",
+      "outlineColor": "rgb(255, 255, 255)",
       "fontSize": "14px"
     },
     "field": {
-      "width": 462,
-      "height": 54.78125,
+      "width": 383,
+      "height": 64.78125,
       "outline": "2px",
       "outlineStyle": "solid",
-      "outlineColor": "rgb(167, 139, 250)",
+      "outlineColor": "rgb(49, 103, 72)",
       "fontSize": "14px"
     },
     "appearance": {
@@ -235,19 +235,19 @@
     "theme": "light",
     "touch": false,
     "send": {
-      "width": 39,
-      "height": 39,
+      "width": 40,
+      "height": 40,
       "outline": "3px",
       "outlineStyle": "none",
       "outlineColor": "rgb(255, 255, 255)",
       "fontSize": "14px"
     },
     "field": {
-      "width": 462,
-      "height": 54.78125,
+      "width": 383,
+      "height": 64.78125,
       "outline": "2px",
       "outlineStyle": "solid",
-      "outlineColor": "rgb(124, 58, 237)",
+      "outlineColor": "rgb(49, 103, 72)",
       "fontSize": "14px"
     },
     "appearance": {

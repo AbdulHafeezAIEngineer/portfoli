@@ -14,7 +14,7 @@ export function useModal(ref: RefObject<HTMLDialogElement>) {
 
   return (event: KeyboardEvent<HTMLDialogElement>) => {
     if (event.key !== "Tab") return;
-    const targets = Array.from(ref.current?.querySelectorAll<HTMLElement>('button:not([disabled]),textarea:not([disabled]),input:not([disabled]),a[href],iframe,[tabindex="0"]') || []).filter((element) => element.getClientRects().length > 0);
+    const targets = Array.from(ref.current?.querySelectorAll<HTMLElement>('button:not([disabled]),textarea:not([disabled]),input:not([disabled]),a[href],iframe,summary,[tabindex="0"]') || []).filter((element) => element.getClientRects().length > 0);
     const first = targets[0];
     const last = targets[targets.length - 1];
     if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }

@@ -44,9 +44,15 @@ try {
   await page.getByRole('button', { name: 'Reject All', exact: true }).click();
   for (const [id, name, title] of bots) {
     await page.getByRole('button', { name: 'Open chat preview: ' + name, exact: true }).click();
-    await page.getByText('This assistant’s knowledge and chat are ready.', { exact: false }).waitFor();
-    assert.equal(await page.getByLabel('Your message', { exact: true }).isDisabled(), true);
-    assert.equal(await page.getByRole('button', { name: 'Send message', exact: true }).isDisabled(), true);
+    await page.getByText("Live replies aren't connected yet.", { exact: false }).waitFor();
+    const field = page.getByLabel('Your message', { exact: true });
+    assert.equal(await field.isEditable(), true);
+    await field.fill('Can you help me?');
+    assert.equal(await page.getByRole('button', { name: 'Send message', exact: true }).isEnabled(), true);
+    await page.getByRole('button', { name: 'Send message', exact: true }).click();
+    await page.locator('.chat-error').waitFor();
+    assert.equal(await field.inputValue(), 'Can you help me?');
+    assert.equal(await field.isEditable(), true);
     const source = await page.request.get(base + '/api/bot-knowledge?botId=' + id);
     assert.equal(source.status(), 200);
     assert.ok((await source.text()).includes(title));
@@ -56,7 +62,7 @@ try {
   }
   await page.close();
   await stop();
-  console.log('PASS missing-key state: 3 assistants, visible setup notice, disabled send, real API 503, public knowledge available.');
+  console.log('PASS missing-key state: 3 assistants, editable typing, real send/retry with preserved draft, real API 503, public knowledge available.');
   await start(true);
   let scenarios = 0;
   for (const width of [360, 390, 768, 1440]) {
@@ -85,7 +91,7 @@ try {
         await trigger.click();
         const dialog = page.locator('.chat-dialog[open]');
         await dialog.waitFor();
-        assert.equal(await dialog.locator('.business-bot-avatar-' + id).count(), 1);
+        assert.equal(await dialog.locator('.chat-header .business-bot-avatar-' + id).count(), 1);
         assert.equal(await dialog.locator('iframe').count(), 0);
         const input = page.getByLabel('Your message', { exact: true });
         await dialog.locator('.chat-starters button').first().click();

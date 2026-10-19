@@ -169,6 +169,39 @@ test("assistant preview readiness requires production usage protection and respe
   }
 });
 
+test("Vercel KV and Upstash pairs enable shared chat quotas without mixing credentials", async () => {
+  for (const [urlName, tokenName] of [
+    ["KV_REST_API_URL", "KV_REST_API_TOKEN"],
+    ["UPSTASH_REDIS_REST_URL", "UPSTASH_REDIS_REST_TOKEN"],
+  ]) {
+    const f = fixture({
+      env: { NODE_ENV: "production", [urlName]: "https://chat-store.example", [tokenName]: "store-fixture" },
+      fetch: url => String(url).includes("chat-store.example")
+        ? Response.json({ result: [1, 0] })
+        : Response.json({ choices: [{ message: { content: "Connected fixture reply." } }] }),
+    });
+    assert.equal(f.load("lib/chat/config.ts").chatSetup(), "ready");
+    assert.equal((await f.post({ botId: "veldt", messages: [{ role: "user", content: "Hello" }] })).status, 200);
+    assert.equal(f.calls[0].init.headers.Authorization, "Bearer store-fixture");
+  }
+  const partial = fixture({ env: {
+    NODE_ENV: "production", CHAT_REDIS_REST_URL: "https://explicit-store.example",
+    KV_REST_API_URL: "https://other-store.example", KV_REST_API_TOKEN: "other-token",
+  } });
+  assert.equal(partial.load("lib/chat/config.ts").chatSetup(), "quota");
+  assert.equal((await partial.post()).status, 503);
+  assert.equal(partial.calls.length, 0);
+});
+
+test("setup state distinguishes missing key, shared quota, pause and invalid provider", () => {
+  for (const [env, state] of [
+    [{ OPENAI_API_KEY: "" }, "key"],
+    [{ NODE_ENV: "production" }, "quota"],
+    [{ CHAT_ENABLED: "false" }, "paused"],
+    [{ CHAT_PROVIDER: "unknown" }, "provider"],
+  ]) assert.equal(fixture({ env }).load("lib/chat/config.ts").chatSetup(), state);
+});
+
 test("Gemini uses its fixed endpoint, private header, isolated knowledge and model/user history", async () => {
   const f = fixture({
     env: { OPENAI_API_KEY: "", GEMINI_API_KEY: "gemini-key-fixture" },

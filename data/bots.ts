@@ -3,6 +3,7 @@ export type EmbedMethod = "iframe" | "script" | "api";
 export type DemoBotId = "support" | "booking" | "voice";
 export type BotId = string;
 export type ChatMessage = { role: "user" | "assistant"; content: string };
+export type ChatSetup = "ready" | "key" | "quota" | "paused" | "provider";
 export type RealBotConfig =
   | { method: "iframe"; url: string }
   | {
@@ -50,6 +51,7 @@ export type Bot = {
   note: string;
   provider?: "botpress";
   aiReady?: boolean;
+  aiSetup?: ChatSetup;
 };
 export const chatPolicy = {
   maxInput: 1000,
@@ -137,6 +139,12 @@ export const botContent = {
   previewDemo: "Preview assistant",
   knowledge: "View demo knowledge",
   setupNotice: "This assistant’s knowledge and chat are ready. Live AI replies are waiting for the website owner to connect the AI service.",
+  setupNotices: {
+    key: "Live replies aren't connected yet. You can write a question and try sending it; your draft stays here if the service is unavailable.",
+    quota: "Live replies are waiting for the site's usage limits to be connected. You can still write your question and retry after setup.",
+    paused: "Live replies are paused. You can write a question here and retry later.",
+    provider: "The chat service needs a configuration update. You can write a question here and retry later.",
+  },
   real: "REAL BOT",
   demo: "INTERACTIVE DEMO",
   pending: "Connection pending",

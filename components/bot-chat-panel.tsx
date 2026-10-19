@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { BotEmbed } from "./bot-embed";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
@@ -25,6 +26,14 @@ import { useModal } from "@/hooks/use-modal";
 import { useVoice } from "@/hooks/use-voice";
 import { BotAvatar } from "./bot-avatar";
 import { isBusinessAssistant } from "@/data/business-assistants";
+import { chatBranding } from "@/data/chat-branding";
+
+function AssistantIdentity({ bot, branded }: { bot: Bot; branded: boolean }) {
+  return <span className="message-author">
+    {branded && <span className="message-mini-mark" aria-hidden="true">{isBusinessAssistant(bot.id) ? <BotAvatar id={bot.id} /> : <AudioLines size={14} />}</span>}
+    {bot.name}
+  </span>;
+}
 
 export default function BotChatPanel({
   bot,
@@ -57,6 +66,11 @@ export default function BotChatPanel({
     input.current?.focus();
   });
   const external = bot.method !== "api";
+  const brandId = !external && Object.hasOwn(chatBranding, bot.id) ? bot.id as keyof typeof chatBranding : null;
+  const brand = brandId ? chatBranding[brandId] : null;
+  const setupNotice = bot.aiSetup && bot.aiSetup !== "ready"
+    ? botContent.setupNotices[bot.aiSetup]
+    : botContent.setupNotice;
   const lastReply = [...messages]
     .reverse()
     .find((message) => message.role === "assistant")?.content;
@@ -79,7 +93,7 @@ export default function BotChatPanel({
   async function send(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const content = draft.trim();
-    if (!content || bot.aiReady === false || controller.current || content.length > chatPolicy.maxInput)
+    if (!content || controller.current || content.length > chatPolicy.maxInput)
       return;
     voice.stop();
     voice.stopSpeaking();
@@ -144,7 +158,8 @@ export default function BotChatPanel({
   return (
     <dialog
       ref={dialog}
-      className="chat-dialog"
+      className={`chat-dialog${brandId ? ` branded-chat branded-chat-${brandId}` : ""}`}
+      data-chat-brand={brandId || undefined}
       aria-labelledby="chat-title"
       aria-describedby="chat-note"
       onKeyDown={trapFocus}
@@ -166,8 +181,9 @@ export default function BotChatPanel({
             )}
           </span>}
           <div>
-            <p className="eyebrow">{botContent.methods[bot.method]}</p>
+            {brand ? <p className="chat-brand-wordmark">{brand.wordmark}</p> : <p className="eyebrow">{botContent.methods[bot.method]}</p>}
             <h2 id="chat-title">{bot.name}</h2>
+            {brand && <span className="chat-brand-role">{brand.label}</span>}
           </div>
           <div className="chat-header-actions">
             {!external && bot.configured && (
@@ -196,7 +212,7 @@ export default function BotChatPanel({
           </div>
         </header>
         <p id="chat-note" className="chat-note">
-          {bot.note}
+          {brand ? brandId === "voice" ? "A voice-first demo. Text chat is always available." : "Demo business · Sample knowledge" : bot.note}
           {isBusinessAssistant(bot.id) && (
             <a href={`/api/bot-knowledge?botId=${bot.id}`} target="_blank" rel="noopener noreferrer" className="chat-knowledge-link">
               {botContent.knowledge}
@@ -221,7 +237,7 @@ export default function BotChatPanel({
             >
               {bot.welcome && (
                 <div className="message message-assistant">
-                  <span className="message-author">{bot.name}</span>
+                  <AssistantIdentity bot={bot} branded={Boolean(brand)} />
                   <p>{bot.welcome}</p>
                 </div>
               )}
@@ -230,9 +246,7 @@ export default function BotChatPanel({
                   className={`message message-${message.role}`}
                   key={`${index}-${message.role}`}
                 >
-                  <span className="message-author">
-                    {message.role === "user" ? copy.you : bot.name}
-                  </span>
+                  {message.role === "user" ? <span className="message-author">{copy.you}</span> : <AssistantIdentity bot={bot} branded={Boolean(brand)} />}
                   <p>{message.content}</p>
                 </div>
               ))}
@@ -254,7 +268,7 @@ export default function BotChatPanel({
               <div ref={end} />
             </div>
             <div className="chat-compose">
-              {bot.aiReady === false && <p className="chat-setup-notice" role="status">{botContent.setupNotice}</p>}
+              {bot.aiReady === false && !error && <p className="chat-setup-notice" role="status">{setupNotice}</p>}
               {bot.id === "voice" && (
                 <div className="voice-controls">
                   {voice.supported === false && (
@@ -310,7 +324,7 @@ export default function BotChatPanel({
                   )}
                 </div>
               )}
-              {!messages.length && !pending && (
+              {!messages.length && !pending && !error && (
                 <div className="chat-starters">
                   {bot.starters.map((starter) => (
                     <button
@@ -338,11 +352,11 @@ export default function BotChatPanel({
                   <textarea
                     id="chat-message"
                     ref={input}
-                    placeholder={copy.placeholder}
+                    placeholder={brand?.prompt || copy.placeholder}
                     value={draft}
                     maxLength={chatPolicy.maxInput}
                     rows={2}
-                    disabled={Boolean(pending) || bot.aiReady === false}
+                    disabled={Boolean(pending)}
                     onChange={(event) => setDraft(event.target.value)}
                     aria-describedby="chat-input-count"
                     onKeyDown={(event) => {
@@ -377,7 +391,7 @@ export default function BotChatPanel({
                   <button
                     className="chat-send"
                     type="submit"
-                    disabled={!draft.trim() || Boolean(pending) || bot.aiReady === false}
+                    disabled={!draft.trim() || Boolean(pending)}
                     aria-label={copy.send}
                   >
                     {pending ? (
@@ -391,9 +405,7 @@ export default function BotChatPanel({
                   {draft.length} / {chatPolicy.maxInput} {copy.limit}
                 </p>
               </form>
-              <p className="chat-privacy">
-                {bot.id === "voice" ? copy.voice.privacy : botContent.privacy}
-              </p>
+              {brand ? <div className="chat-brand-footer"><details className="chat-privacy-details"><summary>About this chat</summary><p>{bot.note}</p><p>{bot.id === "voice" ? copy.voice.privacy : botContent.privacy}</p></details><span className="chat-brand-credit"><Image src="/elvora-logo.svg" width={15} height={15} alt="" />Built by Elvora</span></div> : <p className="chat-privacy">{bot.id === "voice" ? copy.voice.privacy : botContent.privacy}</p>}
             </div>
           </BotEmbed>
         )}

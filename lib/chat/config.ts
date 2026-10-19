@@ -1,4 +1,6 @@
 import "server-only";
+import type { ChatSetup } from "@/data/bots";
+import { chatRedisConfiguration } from "./redis-configuration";
 
 export function chatProvider(): "openai" | "gemini" | null {
   const selected = process.env.CHAT_PROVIDER?.trim() || "auto";
@@ -13,10 +15,18 @@ export function chatApiKey(): string {
   return process.env.ELVORA_CHAT_API_KEY?.trim() || process.env.OPENAI_API_KEY?.trim() || "";
 }
 
-export function chatIsConnected(): boolean {
+export function chatSetup(): ChatSetup {
+  if (process.env.CHAT_ENABLED === "false") return "paused";
+  if (!chatProvider()) return "provider";
+  if (!chatApiKey()) return "key";
+  const { url, token } = chatRedisConfiguration();
   const quotasConfigured =
-    process.env.NODE_ENV !== "production" ||
-    Boolean(process.env.CHAT_REDIS_REST_URL && process.env.CHAT_REDIS_REST_TOKEN) ||
-    process.env.CHAT_ALLOW_IN_MEMORY_LIMITER === "true";
-  return process.env.CHAT_ENABLED !== "false" && Boolean(chatApiKey()) && quotasConfigured;
+    url || token
+      ? Boolean(url && token)
+      : process.env.NODE_ENV !== "production" || process.env.CHAT_ALLOW_IN_MEMORY_LIMITER === "true";
+  return quotasConfigured ? "ready" : "quota";
+}
+
+export function chatIsConnected(): boolean {
+  return chatSetup() === "ready";
 }

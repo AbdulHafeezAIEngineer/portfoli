@@ -71,8 +71,8 @@ try {
       const send = await page
         .getByRole("button", { name: "Send message" })
         .evaluate(metrics);
-      assert.equal(send.width, touch ? 44 : 39);
-      assert.equal(send.height, touch ? 44 : 39);
+      assert.equal(send.width, touch ? 44 : 40);
+      assert.equal(send.height, touch ? 44 : 40);
       await input.fill("Do you build websites?");
       await input.press("Enter");
       await page
@@ -81,7 +81,7 @@ try {
         })
         .waitFor();
       assert.equal(calls, 1);
-      await input.focus();
+      await dialog.locator(".chat-privacy-details summary").focus();
       await page.keyboard.press("Tab");
       assert.ok(
         await page
