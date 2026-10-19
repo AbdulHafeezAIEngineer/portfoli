@@ -248,6 +248,18 @@ test("Gemini configuration, unsupported replies and quota errors fail honestly w
   assert.equal(fixture({ env: { GEMINI_API_KEY: "fixture", OPENAI_API_KEY: "", CHAT_PROVIDER: "gemini" } }).load("lib/chat/config.ts").chatIsConnected(), true);
 });
 
+test("provider failures distinguish access, model and request configuration without leaking diagnostics", async () => {
+  for (const [status, label] of [[400, "AI configuration"], [401, "AI access"], [403, "AI access"], [404, "AI model"], [500, "provider is unavailable"]]) {
+    const f = fixture({ env: { GEMINI_API_KEY: "private-fixture-key" }, fetch: () => new Response("sensitive provider details", { status }) });
+    const response = await f.post();
+    assert.equal(response.status, 502);
+    const text = await response.text();
+    assert.ok(text.includes(label));
+    assert.ok(!text.includes("sensitive provider details"));
+    assert.ok(!text.includes("private-fixture-key"));
+  }
+});
+
 test("public knowledge endpoint exposes fictional facts only and never accepts arbitrary sources", async () => {
   const f = fixture();
   const route = f.load("app/api/bot-knowledge/route.ts");

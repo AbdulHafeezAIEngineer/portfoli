@@ -134,11 +134,22 @@ export async function callBot(
   });
   if (!response.ok) {
     await response.body?.cancel();
+    // Log only fixed identifiers and HTTP status, never provider bodies or headers.
+    console.warn("chat_provider_failure", {
+      provider: realBotConfig ? "custom" : gemini ? "gemini" : "openai",
+      status: response.status,
+    });
     if (response.status === 429)
       throw new ChatError(
         503,
         "The AI provider's usage limit has been reached. Please try again later.",
       );
+    if (response.status === 401 || response.status === 403)
+      throw new ChatError(502, "The AI provider rejected this site's access. The site owner needs to check the API key and its permissions. (AI access)");
+    if (!realBotConfig && response.status === 404)
+      throw new ChatError(502, "The configured AI model is unavailable. The site owner needs to select a model available to this API project. (AI model)");
+    if (!realBotConfig && response.status === 400)
+      throw new ChatError(502, "The AI provider rejected the request configuration. The site owner needs to check the API key, model and project settings. (AI configuration)");
     throw new ChatError(
       502,
       "The bot provider is unavailable. Please try again later.",
