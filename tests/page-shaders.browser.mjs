@@ -8,7 +8,7 @@ if (!/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(base))
   throw Error("Local production app required");
 const routes = {
   websites: "/websites",
-  bots: "/ai-bots",
+  // /ai-bots uses its own prismatic WebGL scene; see bot-redesign.browser.mjs.
   collection: "/bunch-of-work",
   about: "/about",
   testimonials: "/testimonials",

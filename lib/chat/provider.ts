@@ -5,7 +5,7 @@ import { bookingPrompt } from "@/data/prompts/booking";
 import { voicePrompt } from "@/data/prompts/voice";
 import { botRuntime } from "@/lib/bot-runtime";
 import { getBusinessPrompt } from "./business-knowledge";
-import { chatApiKey } from "./config";
+import { chatApiKey, chatProvider } from "./config";
 import { systemBoundary } from "./guard";
 import { ChatError, publicHttpsUrl, readUpstreamJson } from "./http";
 
@@ -63,6 +63,7 @@ export async function callBot(
   };
   let body: unknown;
   let responsePath = "choices.0.message.content";
+  let gemini = false;
   const runtime = await botRuntime(botId);
   if (!runtime) throw new ChatError(400, "This bot is unavailable.");
   const realBotConfig = runtime?.config;
@@ -81,25 +82,47 @@ export async function callBot(
     };
     responsePath = realBotConfig.responsePath;
   } else {
-    url = "https://api.openai.com/v1/chat/completions";
-    headers.Authorization = `Bearer ${chatApiKey()}`;
     const date = new Intl.DateTimeFormat("en-GB", {
       dateStyle: "full",
       timeZone: "Asia/Karachi",
     }).format(new Date());
-    body = {
+    const instruction = `${systemBoundary}\n\n${runtime?.prompt || getBusinessPrompt(botId) || prompts[botId as DemoBotId] || "Help visitors understand this portfolio. Do not invent business facts."}\n\nCurrent date: ${date}. Timezone: Asia/Karachi.`;
+    gemini = chatProvider() === "gemini";
+    if (gemini) {
+      const model = process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
+      if (!/^gemini-[a-z0-9.-]{1,100}$/.test(model))
+        throw new ChatError(503, "The AI model configuration needs updating.");
+      url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+      headers["x-goog-api-key"] = chatApiKey();
+      body = {
+        systemInstruction: { parts: [{ text: instruction }] },
+        contents: messages.map((message) => ({
+          role: message.role === "assistant" ? "model" : "user",
+          parts: [{ text: message.content }],
+        })),
+        generationConfig: {
+          temperature: 0.3,
+          maxOutputTokens: maxTokens,
+          ...(model.startsWith("gemini-2.5-flash") ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
+        },
+      };
+    } else {
+      url = "https://api.openai.com/v1/chat/completions";
+      headers.Authorization = `Bearer ${chatApiKey()}`;
+      body = {
       model: process.env.OPENAI_MODEL || "gpt-4o-mini",
       messages: [
         {
           role: "system",
-          content: `${systemBoundary}\n\n${runtime?.prompt || getBusinessPrompt(botId) || prompts[botId as DemoBotId] || "Help visitors understand this portfolio. Do not invent business facts."}\n\nCurrent date: ${date}. Timezone: Asia/Karachi.`,
+          content: instruction,
         },
         ...messages,
       ],
       max_tokens: maxTokens,
       temperature: 0.3,
       stream: false,
-    };
+      };
+    }
   }
   const response = await fetch(url, {
     method: "POST",
@@ -122,7 +145,12 @@ export async function callBot(
     );
   }
   const data = await readUpstreamJson(response);
-  const reply = readPath(data, responsePath);
+  const parts = gemini ? readPath(data, "candidates.0.content.parts") : null;
+  const reply = gemini
+    ? Array.isArray(parts)
+      ? parts.filter((part) => part && typeof part.text === "string" && part.thought !== true).map((part) => part.text).join("\n")
+      : undefined
+    : readPath(data, responsePath);
   if (typeof reply !== "string" || !reply.trim())
     throw new ChatError(502, "The bot provider returned an empty reply.");
   return {
@@ -132,6 +160,7 @@ export async function callBot(
       .slice(0, chatPolicy.maxReply),
     truncated:
       reply.trim().length > chatPolicy.maxReply ||
+      (gemini && readPath(data, "candidates.0.finishReason") === "MAX_TOKENS") ||
       (botId !== "real" &&
         readPath(data, "choices.0.finish_reason") === "length"),
   };

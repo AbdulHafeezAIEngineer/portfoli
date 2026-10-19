@@ -15,7 +15,7 @@ const bots = [
 let server;
 async function start(connected) {
   server = spawn(process.execPath, ['node_modules/next/dist/bin/next', 'start', '--hostname', '127.0.0.1', '--port', '3012'], {
-    env: { ...process.env, NODE_ENV: 'production', CONTENT_SOURCE: 'files', OPENAI_API_KEY: '', ELVORA_CHAT_API_KEY: connected ? 'ui-fixture-not-a-real-key' : '', CHAT_ENABLED: 'true', CHAT_ALLOW_IN_MEMORY_LIMITER: 'true' },
+    env: { ...process.env, NODE_ENV: 'production', CONTENT_SOURCE: 'files', OPENAI_API_KEY: '', ELVORA_CHAT_API_KEY: connected ? 'ui-fixture-not-a-real-key' : '', CHAT_ENABLED: 'true', GEMINI_API_KEY: '', CHAT_PROVIDER: 'auto', CHAT_ALLOW_IN_MEMORY_LIMITER: 'true' },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   let diagnostic = '';
@@ -43,7 +43,7 @@ try {
   await page.goto(base + '/ai-bots');
   await page.getByRole('button', { name: 'Reject All', exact: true }).click();
   for (const [id, name, title] of bots) {
-    await page.getByRole('button', { name: 'Preview assistant: ' + name, exact: true }).click();
+    await page.getByRole('button', { name: 'Open chat preview: ' + name, exact: true }).click();
     await page.getByText('This assistant’s knowledge and chat are ready.', { exact: false }).waitFor();
     assert.equal(await page.getByLabel('Your message', { exact: true }).isDisabled(), true);
     assert.equal(await page.getByRole('button', { name: 'Send message', exact: true }).isDisabled(), true);
@@ -78,10 +78,10 @@ try {
       await page.goto(base + '/ai-bots');
       await page.getByRole('button', { name: 'Reject All', exact: true }).click();
       await page.evaluate(() => document.fonts.ready);
-      assert.equal(await page.locator('.bot-card').count(), 5);
-      assert.equal(await page.locator('.bot-card-real').count(), 1);
+      assert.equal(await page.locator('.bot-feature, .bot-extra').count(), 5);
+      assert.equal(await page.locator('.bot-extra-real').count(), 1);
       for (const [id, name] of bots) {
-        const trigger = page.getByRole('button', { name: 'Try Live Demo: ' + name, exact: true });
+        const trigger = page.getByRole('button', { name: 'Open chat preview: ' + name, exact: true });
         await trigger.click();
         const dialog = page.locator('.chat-dialog[open]');
         await dialog.waitFor();

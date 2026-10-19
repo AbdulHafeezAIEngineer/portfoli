@@ -20,7 +20,7 @@ export async function SiteShell({
 }) {
   const identity = await getIdentity();
   const shaderPage =
-    page && (shaderPages as readonly string[]).includes(page)
+    page && page !== "bots" && (shaderPages as readonly string[]).includes(page)
       ? (page as ShaderPage)
       : undefined;
   return (

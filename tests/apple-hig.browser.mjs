@@ -56,7 +56,7 @@ try {
         .click();
       await page.evaluate(() => document.fonts.ready);
       const trigger = page.getByRole("button", {
-        name: "Try Live Demo: Veldt Support",
+        name: "Open chat preview: Veldt Support",
         exact: true,
       });
       await trigger.click();
@@ -96,7 +96,7 @@ try {
       );
 
       await page
-        .getByRole("button", { name: "Try Live Demo: Aura Voice", exact: true })
+        .locator(".bot-extra-voice .bot-extra-open")
         .click();
       await dialog.waitFor();
       for (const name of [

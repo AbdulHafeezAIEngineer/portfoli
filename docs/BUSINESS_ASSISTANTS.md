@@ -1,6 +1,6 @@
 # Custom business assistants
 
-Three own-brand AI chat experiences are implemented on `/ai-bots`:
+Three own-brand AI chat experiences are implemented on `/ai-bots`. The page now uses original business artwork, clickable HTML chat previews and alternating editorial feature rows inspired by the supplied chatbot.com references. A real prismatic WebGL hero draws animated spectral ribbons on black, inspired by the supplied shader screenshot. Only this route uses the new presentation:
 
 | Assistant | Example use | Approved source |
 | --- | --- | --- |
@@ -20,16 +20,18 @@ Each assistant has its own avatar, starter questions and separate in-memory brow
 
 ## Private activation
 
-1. Configure **one** server-side OpenAI project API key with billing enabled: `OPENAI_API_KEY`, or the alternative `ELVORA_CHAT_API_KEY`. The alternative is checked first. Never use a `NEXT_PUBLIC_` prefix, paste credentials into chat, or commit them. ChatGPT subscription access does not supply the website's API credentials.
-2. The existing default model is `gpt-4o-mini`, configurable through `OPENAI_MODEL` using a model supported by the existing Chat Completions request format. Set `CHAT_ENABLED=true`.
+1. Choose a provider. For Gemini, configure the server-only `GEMINI_API_KEY` in your host, set `CHAT_PROVIDER=gemini` (or leave `auto`, which prefers Gemini when its key exists), and choose an eligible model through `GEMINI_MODEL`. The fallback model name is `gemini-2.5-flash`; confirm its current availability and quota in your own AI Studio project. The owner reported a Free tier project, but this environment has no private key to verify that project, its models or quota. Free tier is limited and eligibility can vary. Google AI Studio free-tier data terms should be reviewed before using confidential client data; these public demos use fictional information.
+
+   Alternatively, configure **one** server-side OpenAI project API key with billing enabled: `OPENAI_API_KEY`, or the alternative `ELVORA_CHAT_API_KEY`. The alternative is checked first. Never use a `NEXT_PUBLIC_` prefix, paste credentials into chat, or commit them. ChatGPT subscription access does not supply the website's API credentials.
+2. For OpenAI, the existing default model is `gpt-4o-mini`, configurable through `OPENAI_MODEL` using a model supported by the existing Chat Completions request format. Set `CHAT_ENABLED=true`.
 3. Production serverless/multi-instance hosting needs the existing `CHAT_REDIS_REST_URL` and `CHAT_REDIS_REST_TOKEN` settings for a shared Upstash-compatible REST usage store. Keep `CHAT_DAILY_REQUEST_CAP` conservative (default 100 across API bots) and configure provider billing limits/alerts separately. Do not enable `CHAT_ALLOW_IN_MEMORY_LIMITER` on serverless hosting; that exception is only for deliberate single-process deployments.
 4. Set `NEXT_PUBLIC_SITE_URL` to the actual HTTPS site origin, including `www` if canonical, and redeploy. Leave the trusted-IP header blank unless your edge actually overwrites it.
 5. In ordinary `CONTENT_SOURCE=files` mode the cards and knowledge are selected automatically. Database content mode uses published CMS records instead; it intentionally does not substitute missing rows. Publish matching bot IDs, method `api`, null connection config and appropriate visible card content to use these built-in sources. A nonempty CMS system prompt overrides the built-in prompt for that row and must be reviewed for accuracy.
 6. Test a question and a follow-up for each bot, unsupported facts, Urdu/Roman Urdu, limit responses and provider failure. Verify real answers against the approved source. These steps are not complete merely because a key variable is present.
 
-The cloud environment draft contains the `ELVORA_CHAT_API_KEY` requirement scoped to `api.openai.com`, plus shared-store variable requirements. Review and save environment settings and publish the cloud environment to activate retained setup. That does not set secrets in the website's production host: the owner must configure the host privately too. API key prefixes named `OPENAI_` are reserved for cloud proxy-secret targets; the alternative key name avoids that restriction while preserving standard hosting support.
+The cloud environment draft contains the `GEMINI_API_KEY` requirement scoped to `generativelanguage.googleapis.com`, plus the earlier optional OpenAI key requirement and shared-store variable requirements. Only the selected provider key is needed. Google destination access was added to the saved restricted policy through its secret requirement. Review and save environment settings and publish the cloud environment to activate retained setup. That does not set secrets in the website's production host: the owner must configure the host privately too. API key prefixes named `OPENAI_` are reserved for cloud proxy-secret targets; the alternative key name avoids that restriction while preserving standard hosting support.
 
-Without the key or production quota setup, the three built-in cards show **Preview assistant / Connection pending**, display a setup notice and disable sending. The API returns an honest unavailable response; no canned-answer fallback impersonates AI. Provider authentication, billing, shared-store connectivity and real model answer quality require actual private credentials and remain unverified until activated.
+Without the key or production quota setup, the three built-in cards show **Explore assistant / AI connection pending**, display a setup notice and disable sending. The API returns an honest unavailable response; no canned-answer fallback impersonates AI. Provider authentication, billing, shared-store connectivity and real model answer quality require actual private credentials and remain unverified until activated.
 
 ## Validation
 
@@ -41,3 +43,19 @@ Without the key or production quota setup, the three built-in cards show **Previ
 No real purchases, order lookup, appointments, reservations, lead submissions, refunds or emails are implemented by these conversational demos. Actual actions need authenticated tools and separate integration work.
 
 Completed local verification on 19 October 2026: production build (including lint/type checks), standalone lint/typecheck, 20 chat tests, 12 security tests and 24 browser scenarios passed. Missing-key API/UI checks also passed for all three assistants. A search of the generated client assets found none of the approved source-document headings or full business-prompt marker. Real AI replies, credentials/billing, live shared Redis connectivity and public-host behavior were not verified; no production provider secrets were available.
+
+
+## Image-led page and shader
+
+- `data/bot-showcase.ts` defines each feature headline, capabilities and sample conversation; samples are labeled and reflect the approved knowledge. They do not claim that a model request was performed.
+- Three original generated photographs in `public/bots/` are optimized WebP files, about 27–205 KB each. UI lettering and example conversations are native HTML, so copy stays crisp and editable. Both the image and its CTA open the matching real chat dialog.
+- The hero is a standalone WebGL fragment shader in `components/bot-prism-shader.tsx`. Render resolution is capped at 1100 × 800 and frame rate at 24. It pauses when offscreen, hidden or Motion Off; Motion Off retains a still frame. The reference image is visual direction, not a claim to use the exact proprietary Unicorn Studio scene.
+- The static fallback in `public/bots/prism-fallback.webp` is an exported frame from this actual shader. Unsupported/lost WebGL still leaves legible content, links and chat controls. GPU resources are disposed when leaving the page.
+- The generic full-page shader is replaced only on `/ai-bots`; other category shaders and the homepage retain their existing implementation. The supplied videos remain present and loop under the existing motion controls.
+- The build process remains below the demos. Integration explanations and code examples are preserved inside expandable details instead of an always-open wall of cards.
+- `node tests/bot-redesign.browser.mjs` checks image decoding, image-to-chat behavior, responsive layouts, preserved process/integration sections and actual WebGL pixels changing on desktop and DPR-3 touch. It also checks Motion Off/On, offscreen stop/resume, lost/unsupported context fallbacks and no bot scene on Home. `SHADER_ONLY=1` limits it to the graphics/lifecycle checks.
+- `npm run test:chat` additionally exercises the Gemini endpoint/header, system instruction, model/user history mapping, output bounds, thought filtering, quota/safety failure behavior and explicit model validation. No real provider reply is claimed by these mocked tests.
+
+For production Vercel activation, save `GEMINI_API_KEY` as a private production environment variable and redeploy. Changing the chat backend in Git does not automatically transfer keys from this workspace, nor does a Vercel key appear in this workspace. The existing shared `CHAT_REDIS_REST_URL` / `CHAT_REDIS_REST_TOKEN` configuration remains required on serverless production, even for a model provider's free tier. If the UI still says connection pending after adding a key, check the usage-store pair and `CHAT_ENABLED` too. Do not use the single-process memory exception as a Vercel workaround.
+
+Redesign verification on 19 October 2026: production build (including lint and type validation), 22 chat/provider tests, 24 conversation UI scenarios and 8 responsive/theme layout cases passed. The tablet video overflow discovered during QA was fixed by bounding the inherited full-bleed video to its story grid. Real fragment pixels changed on desktop and a DPR-3 touch viewport; Motion Off/On, offscreen pause/resume, context loss and no-WebGL fallback checks passed. Public Home has no bot shader. The owner reported saving their key privately in Vercel; this workspace cannot read that key. Provider authentication, exact free quota/model eligibility, deployed shared-store connectivity and live-site AI replies remain separately unverified.

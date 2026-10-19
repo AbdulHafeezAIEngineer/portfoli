@@ -169,6 +169,52 @@ test("assistant preview readiness requires production usage protection and respe
   }
 });
 
+test("Gemini uses its fixed endpoint, private header, isolated knowledge and model/user history", async () => {
+  const f = fixture({
+    env: { OPENAI_API_KEY: "", GEMINI_API_KEY: "gemini-key-fixture" },
+    fetch: () => Response.json({ candidates: [{ content: { parts: [{ text: "internal thought", thought: true }, { text: "A Gemini fixture answer." }] }, finishReason: "MAX_TOKENS" }] }),
+  });
+  const response = await f.post({ botId: "veldt", model: "attacker-model", messages: [
+    { role: "user", content: "Which bag fits my laptop?" },
+    { role: "assistant", content: "What size is your laptop?" },
+    { role: "user", content: "15 inches." },
+  ] });
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), { reply: "A Gemini fixture answer.", truncated: true });
+  const call = f.calls[0];
+  assert.equal(call.url, "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent");
+  assert.equal(call.init.headers["x-goog-api-key"], "gemini-key-fixture");
+  assert.ok(!call.url.includes("gemini-key-fixture"));
+  assert.ok(call.body.systemInstruction.parts[0].text.includes("VELDT STORE"));
+  assert.ok(!call.body.systemInstruction.parts[0].text.includes("NORTHLINE STUDIO"));
+  assert.deepEqual(Array.from(call.body.contents, part => part.role), ["user", "model", "user"]);
+  assert.equal(call.body.generationConfig.maxOutputTokens, 256);
+  assert.equal(call.body.generationConfig.thinkingConfig.thinkingBudget, 0);
+});
+
+test("Gemini configuration, unsupported replies and quota errors fail honestly without a fake fallback", async () => {
+  for (const env of [
+    { CHAT_PROVIDER: "gemini", GEMINI_API_KEY: "", OPENAI_API_KEY: "" },
+    { CHAT_PROVIDER: "unknown" },
+    { CHAT_PROVIDER: "gemini", GEMINI_API_KEY: "fixture", GEMINI_MODEL: "../../attacker" },
+  ]) {
+    const f = fixture({ env });
+    assert.equal((await f.post()).status, 503);
+    assert.equal(f.calls.length, 0);
+  }
+  for (const [upstream, status] of [
+    [new Response("private provider diagnostic", { status: 429 }), 503],
+    [Response.json({ candidates: [{ finishReason: "SAFETY" }] }), 502],
+    [Response.json({ candidates: [{ content: { parts: [{ functionCall: { name: "book" } }] } }] }), 502],
+  ]) {
+    const f = fixture({ env: { GEMINI_API_KEY: "fixture" }, fetch: () => upstream });
+    const response = await f.post();
+    assert.equal(response.status, status);
+    assert.ok(!(await response.text()).includes("private provider diagnostic"));
+  }
+  assert.equal(fixture({ env: { GEMINI_API_KEY: "fixture", OPENAI_API_KEY: "", CHAT_PROVIDER: "gemini" } }).load("lib/chat/config.ts").chatIsConnected(), true);
+});
+
 test("public knowledge endpoint exposes fictional facts only and never accepts arbitrary sources", async () => {
   const f = fixture();
   const route = f.load("app/api/bot-knowledge/route.ts");
