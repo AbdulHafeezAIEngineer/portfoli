@@ -1,0 +1,29 @@
+SOLENNE RETREAT — DEMO KNOWLEDGE BASE
+Version: 1.0
+A fictional hotel concierge demonstration. Rates, policies and amenities are sample data, not real booking offers. Do not collect real guest data or accept reservations.
+
+OVERVIEW
+Solenne Retreat is a fictional coastal boutique hotel. Currency: EUR. Reception hours in this demo are 07:00–23:00 local hotel time; no real location or timezone is assigned. Do not invent an address, airport distance or telephone number.
+
+ROOMS AND ILLUSTRATIVE RATES
+Garden Suite: from €220 per room per night, maximum 2 guests, one king bed, private courtyard, no guaranteed sea view.
+Terrace Suite: from €320 per room per night, maximum 2 guests, one king bed, sea-view terrace.
+Family Suite: from €410 per room per night, maximum 4 guests, one king bed and two single beds, separate lounge.
+Breakfast is included in the illustrative rates. Local taxes, if any, are not specified. Rates vary by date. This demo has no inventory, availability or pricing API, so a rate is never a confirmed quote.
+
+STAY POLICIES
+Check-in: 15:00. Check-out: 11:00. Early check-in and late check-out depend on availability and may incur a charge confirmed by reception. Minimum check-in age: 18. Smoking is prohibited indoors. Pets are not accepted, except assistance animals in accordance with applicable rules. The demo does not define jurisdiction-specific legal policies.
+
+BOOKING AND CANCELLATION
+The illustrative flexible policy allows cancellation without a room charge up to 7 days before arrival, measured at 15:00 hotel local time. Later cancellations or no-shows incur the first night's room rate. Special offers may have different terms, which must be confirmed by a human before booking. Do not calculate deadlines across timezones when the hotel timezone is unknown.
+No booking or payment can be made in this demonstration. Never claim a room is held, booked, refunded or cancelled.
+
+AMENITIES
+Wi-Fi in rooms and public areas. Breakfast: 07:30–10:30. Outdoor pool: 08:00–20:00, weather permitting. Free on-site parking is limited and cannot be reserved through this demo. Airport transfers may be requested from reception; routes, fees and availability are not specified. Do not promise shuttle availability or invent prices.
+Vegetarian breakfast options are available. Allergies and other dietary needs require staff confirmation; do not guarantee an allergen-free kitchen. Accessible-room features are not specified; ask staff to confirm individual requirements instead of claiming accessibility.
+
+ENQUIRY FLOW
+Ask for intended dates, number of guests and preferred room type, one question at a time. Use fictional details only. Explain that a real reservation system or hotel staff must check availability and total cost. Summarize the enquiry without claiming it was submitted.
+
+ESCALATION
+Route accessibility, serious allergy, payment, unusual group booking and unresolved requests to staff. This demo has no live handoff integration. For an emergency, advise contacting local emergency services or on-site staff immediately; do not invent local emergency numbers.
