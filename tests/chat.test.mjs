@@ -30,7 +30,7 @@ function fixture(options = {}) {
     clearTimeout,
     process: { env },
     fetch: async (url, init) => {
-      calls.push({ url: String(url), init, body: JSON.parse(init.body) });
+      calls.push({ url: String(url), init, body: init.body ? JSON.parse(init.body) : null });
       return options.fetch
         ? options.fetch(url, init)
         : Response.json({
@@ -258,6 +258,40 @@ test("provider failures distinguish access, model and request configuration with
     assert.ok(!text.includes("sensitive provider details"));
     assert.ok(!text.includes("private-fixture-key"));
   }
+});
+
+test("Gemini 404 discovers a listed text model and retries once with the same private key", async () => {
+  let attempt = 0;
+  const f = fixture({ env: { GEMINI_API_KEY: "fixture" }, fetch: (url) => {
+    attempt++;
+    if (attempt === 1) return new Response("not found", { status: 404 });
+    if (attempt === 2) return Response.json({ models: [
+      { name: "models/gemini-2.5-flash-lite", supportedGenerationMethods: ["generateContent"] },
+      { name: "models/gemini-paid-pro", supportedGenerationMethods: ["generateContent"] },
+    ] });
+    return Response.json({ candidates: [{ content: { parts: [{ text: "Discovered model fixture." }] } }] });
+  } });
+  const response = await f.post();
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).reply, "Discovered model fixture.");
+  assert.equal(f.calls.length, 3);
+  assert.equal(f.calls[1].url, "https://generativelanguage.googleapis.com/v1beta/models?pageSize=100");
+  assert.equal(f.calls[2].url, "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent");
+  assert.equal(f.calls[2].init.headers["x-goog-api-key"], "fixture");
+  assert.deepEqual(f.calls[0].body.contents, f.calls[2].body.contents);
+});
+
+test("Gemini model discovery never selects an arbitrary paid model or retries quota failures", async () => {
+  const f = fixture({ env: { GEMINI_API_KEY: "fixture" }, fetch: url => String(url).includes("pageSize")
+    ? Response.json({ models: [{ name: "models/gemini-paid-pro", supportedGenerationMethods: ["generateContent"] }] })
+    : new Response("private failure", { status: 404 }) });
+  const response = await f.post();
+  assert.equal(response.status, 502);
+  assert.ok((await response.text()).includes("gemini-2.5-flash"));
+  assert.equal(f.calls.length, 2);
+  const quota = fixture({ env: { GEMINI_API_KEY: "fixture" }, fetch: () => new Response("quota", { status: 429 }) });
+  assert.equal((await quota.post()).status, 503);
+  assert.equal(quota.calls.length, 1);
 });
 
 test("public knowledge endpoint exposes fictional facts only and never accepts arbitrary sources", async () => {

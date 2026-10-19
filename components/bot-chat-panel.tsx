@@ -173,7 +173,7 @@ export default function BotChatPanel({
     >
       <section className="chat-panel">
         <header className="chat-header">
-          {isBusinessAssistant(bot.id) ? <BotAvatar id={bot.id} /> : <span className="chat-avatar" aria-hidden="true">
+          {brand ? <span className="chat-elvora-mark"><Image src="/elvora-logo.svg" width={48} height={48} alt="Elvora" priority /></span> : isBusinessAssistant(bot.id) ? <BotAvatar id={bot.id} /> : <span className="chat-avatar" aria-hidden="true">
             {bot.id === "voice" ? (
               <AudioLines size={24} />
             ) : (

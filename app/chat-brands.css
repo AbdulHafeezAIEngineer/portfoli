@@ -86,3 +86,5 @@
 @media (pointer: coarse) {
  .branded-chat .chat-header .icon-button, .branded-chat .chat-send { width: 44px; height: 44px; }
 }
+.chat-elvora-mark { display: grid; place-items: center; flex: 0 0 48px; width: 48px; height: 48px; border-radius: 14px; overflow: hidden; background: #121119; }
+.chat-elvora-mark img { display: block; width: 48px; height: 48px; }

@@ -124,14 +124,40 @@ export async function callBot(
       };
     }
   }
-  const response = await fetch(url, {
+  const send = (endpoint: string, payload: unknown) => fetch(endpoint, {
     method: "POST",
     headers,
-    body: JSON.stringify(body),
+    body: JSON.stringify(payload),
     signal: combined,
     cache: "no-store",
     redirect: "error",
   });
+  let response = await send(url, body);
+  // A retired/unavailable model can return 404 despite the quota dashboard listing it.
+  // Discover actual generateContent models for this same key before one bounded retry.
+  // Never switch providers or retry quota/auth failures.
+  if (gemini && response.status === 404) {
+    await response.body?.cancel();
+    const requested = url.split("/models/")[1]?.split(":")[0];
+    const listing = await fetch("https://generativelanguage.googleapis.com/v1beta/models?pageSize=100", {
+      headers, signal: combined, cache: "no-store", redirect: "error",
+    });
+    if (!listing.ok) {
+      response = listing;
+    } else {
+      const available = readPath(await readUpstreamJson(listing), "models");
+      const candidates = ["gemini-2.5-flash-lite", "gemini-2.5-flash"];
+      const selected = candidates.find(name => name !== requested && Array.isArray(available) && available.some(model =>
+        model?.name === `models/${name}` && Array.isArray(model.supportedGenerationMethods) && model.supportedGenerationMethods.includes("generateContent"),
+      ));
+      if (!selected) {
+        console.warn("chat_model_unavailable", { requested, listedTextModels: Array.isArray(available) ? available.filter(model => Array.isArray(model?.supportedGenerationMethods) && model.supportedGenerationMethods.includes("generateContent")).map(model => model.name).filter(name => typeof name === "string" && /^models\/gemini-[a-z0-9.-]{1,100}$/.test(name)).slice(0, 20) : [] });
+        throw new ChatError(502, `Google could not find the requested model (${requested}). The site owner needs to check this deployment's Gemini model access. (AI model)`);
+      }
+      console.warn("chat_model_retry", { requested, selected });
+      response = await send(`https://generativelanguage.googleapis.com/v1beta/models/${selected}:generateContent`, body);
+    }
+  }
   if (!response.ok) {
     await response.body?.cancel();
     // Log only fixed identifiers and HTTP status, never provider bodies or headers.
