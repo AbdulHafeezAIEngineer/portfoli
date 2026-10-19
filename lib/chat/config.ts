@@ -15,6 +15,15 @@ export function chatApiKey(): string {
   return process.env.ELVORA_CHAT_API_KEY?.trim() || process.env.OPENAI_API_KEY?.trim() || "";
 }
 
+export function chatGeminiModel(): string {
+  const configured = process.env.GEMINI_MODEL?.trim();
+  // Google rejects these legacy models for new API users (verified upstream 404).
+  // Preserve other explicit choices; migrate only our previously recommended IDs.
+  if (!configured || ["gemini-2.5-flash", "gemini-2.5-flash-lite"].includes(configured))
+    return "gemini-3.5-flash-lite";
+  return configured;
+}
+
 export function chatSetup(): ChatSetup {
   if (process.env.CHAT_ENABLED === "false") return "paused";
   if (!chatProvider()) return "provider";

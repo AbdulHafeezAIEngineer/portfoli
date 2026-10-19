@@ -215,14 +215,20 @@ test("Gemini uses its fixed endpoint, private header, isolated knowledge and mod
   assert.equal(response.status, 200);
   assert.deepEqual(await response.json(), { reply: "A Gemini fixture answer.", truncated: true });
   const call = f.calls[0];
-  assert.equal(call.url, "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent");
+  assert.equal(call.url, "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent");
   assert.equal(call.init.headers["x-goog-api-key"], "gemini-key-fixture");
   assert.ok(!call.url.includes("gemini-key-fixture"));
   assert.ok(call.body.systemInstruction.parts[0].text.includes("VELDT STORE"));
   assert.ok(!call.body.systemInstruction.parts[0].text.includes("NORTHLINE STUDIO"));
   assert.deepEqual(Array.from(call.body.contents, part => part.role), ["user", "model", "user"]);
   assert.equal(call.body.generationConfig.maxOutputTokens, 256);
-  assert.equal(call.body.generationConfig.thinkingConfig.thinkingBudget, 0);
+  assert.equal(call.body.generationConfig.thinkingConfig, undefined);
+});
+
+test("legacy recommended Gemini settings migrate to the real-verified model while custom choices remain explicit", () => {
+  for (const old of [undefined, "gemini-2.5-flash", "gemini-2.5-flash-lite"])
+    assert.equal(fixture({ env: { GEMINI_MODEL: old } }).load("lib/chat/config.ts").chatGeminiModel(), "gemini-3.5-flash-lite");
+  assert.equal(fixture({ env: { GEMINI_MODEL: "gemini-custom-flash" } }).load("lib/chat/config.ts").chatGeminiModel(), "gemini-custom-flash");
 });
 
 test("Gemini configuration, unsupported replies and quota errors fail honestly without a fake fallback", async () => {
@@ -257,7 +263,7 @@ test("provider failures distinguish access, model and request configuration with
     assert.ok(text.includes(label));
     if (status === 404) {
       assert.ok(text.includes("list-models"));
-      assert.ok(text.includes("gemini-2.5-flash"));
+      assert.ok(text.includes("gemini-3.5-flash-lite"));
     }
     assert.ok(!text.includes("sensitive provider details"));
     assert.ok(!text.includes("private-fixture-key"));
@@ -266,11 +272,11 @@ test("provider failures distinguish access, model and request configuration with
 
 test("Gemini 404 discovers a listed text model and retries once with the same private key", async () => {
   let attempt = 0;
-  const f = fixture({ env: { GEMINI_API_KEY: "fixture" }, fetch: (url) => {
+  const f = fixture({ env: { GEMINI_API_KEY: "fixture", GEMINI_MODEL: "gemini-retired-flash" }, fetch: (url) => {
     attempt++;
     if (attempt === 1) return new Response("not found", { status: 404 });
     if (attempt === 2) return Response.json({ models: [
-      { name: "models/gemini-2.5-flash-lite", supportedGenerationMethods: ["generateContent"] },
+      { name: "models/gemini-3.5-flash-lite", supportedGenerationMethods: ["generateContent"] },
       { name: "models/gemini-paid-pro", supportedGenerationMethods: ["generateContent"] },
     ] });
     return Response.json({ candidates: [{ content: { parts: [{ text: "Discovered model fixture." }] } }] });
@@ -280,7 +286,7 @@ test("Gemini 404 discovers a listed text model and retries once with the same pr
   assert.equal((await response.json()).reply, "Discovered model fixture.");
   assert.equal(f.calls.length, 3);
   assert.equal(f.calls[1].url, "https://generativelanguage.googleapis.com/v1beta/models?pageSize=100");
-  assert.equal(f.calls[2].url, "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent");
+  assert.equal(f.calls[2].url, "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent");
   assert.equal(f.calls[2].init.headers["x-goog-api-key"], "fixture");
   assert.deepEqual(f.calls[0].body.contents, f.calls[2].body.contents);
 });
@@ -291,7 +297,7 @@ test("Gemini model discovery never selects an arbitrary paid model or retries qu
     : new Response("private failure", { status: 404 }) });
   const response = await f.post();
   assert.equal(response.status, 502);
-  assert.ok((await response.text()).includes("gemini-2.5-flash"));
+  assert.ok((await response.text()).includes("gemini-3.5-flash-lite"));
   assert.equal(f.calls.length, 2);
   const quota = fixture({ env: { GEMINI_API_KEY: "fixture" }, fetch: () => new Response("quota", { status: 429 }) });
   assert.equal((await quota.post()).status, 503);

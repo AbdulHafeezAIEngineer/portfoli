@@ -5,7 +5,7 @@ import { bookingPrompt } from "@/data/prompts/booking";
 import { voicePrompt } from "@/data/prompts/voice";
 import { botRuntime } from "@/lib/bot-runtime";
 import { getBusinessPrompt } from "./business-knowledge";
-import { chatApiKey, chatProvider } from "./config";
+import { chatApiKey, chatProvider, chatGeminiModel } from "./config";
 import { systemBoundary } from "./guard";
 import { ChatError, publicHttpsUrl, readUpstreamJson } from "./http";
 
@@ -91,7 +91,7 @@ export async function callBot(
     const instruction = `${systemBoundary}\n\n${runtime?.prompt || getBusinessPrompt(botId) || prompts[botId as DemoBotId] || "Help visitors understand this portfolio. Do not invent business facts."}\n\nCurrent date: ${date}. Timezone: Asia/Karachi.`;
     gemini = chatProvider() === "gemini";
     if (gemini) {
-      const model = process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
+      const model = chatGeminiModel();
       if (!/^gemini-[a-z0-9.-]{1,100}$/.test(model))
         throw new ChatError(503, "The AI model configuration needs updating.");
       activeModel = model;
@@ -150,7 +150,7 @@ export async function callBot(
       stage = "list-models";
     } else {
       const available = readPath(await readUpstreamJson(listing), "models");
-      const candidates = ["gemini-2.5-flash-lite", "gemini-2.5-flash"];
+      const candidates = ["gemini-3.5-flash-lite"];
       const selected = candidates.find(name => name !== requested && Array.isArray(available) && available.some(model =>
         model?.name === `models/${name}` && Array.isArray(model.supportedGenerationMethods) && model.supportedGenerationMethods.includes("generateContent"),
       ));
