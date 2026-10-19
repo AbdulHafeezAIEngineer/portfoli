@@ -124,3 +124,12 @@ The separate My bunch of work collage includes four website concepts plus six ne
 Latest previews: [footer](docs/editorial-footer-desktop.png), [contact](docs/editorial-contact-desktop.png), [skills](docs/editorial-skills-desktop.png), [tools](docs/editorial-tools-desktop.png), [technical domains](docs/editorial-domains-desktop.png), [journey](docs/editorial-journey-desktop.png) and [review layout](docs/editorial-reviews-desktop.png). Matching mobile captures use the same names with `-mobile.png`.
 
 Latest follow-up: [editorial motion, responsive work filters and production setup diagnostics](docs/EDITORIAL_UPGRADE.md). Actual current checks and deployment limits are in [VERIFICATION.md](VERIFICATION.md).
+
+### Visible category shader backgrounds
+
+The six main subject pages use full-page WebGPU backgrounds from `shaders@4.0.4`:
+purple/black on Websites, AI Bots, Bunch of Work, About and Contact; neutral grey
+on Testimonials. The homepage keeps its design. Local shader-frame images keep
+the full appearance available without WebGPU or under Motion Off. Runtime,
+resource cleanup, bounded phone rendering, tests and measured download cost are
+recorded in [the category shader review](docs/PAGE_SHADERS.md).

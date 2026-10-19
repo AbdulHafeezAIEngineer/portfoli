@@ -694,6 +694,15 @@ The separate My bunch of work collage includes four website concepts plus six ne
 Latest previews: [footer](docs/editorial-footer-desktop.png), [contact](docs/editorial-contact-desktop.png), [skills](docs/editorial-skills-desktop.png), [tools](docs/editorial-tools-desktop.png), [technical domains](docs/editorial-domains-desktop.png), [journey](docs/editorial-journey-desktop.png) and [review layout](docs/editorial-reviews-desktop.png). Matching mobile captures use the same names with `-mobile.png`.
 
 Latest follow-up: [editorial motion, responsive work filters and production setup diagnostics](docs/EDITORIAL_UPGRADE.md). Actual current checks and deployment limits are in [VERIFICATION.md](VERIFICATION.md).
+
+### Visible category shader backgrounds
+
+The six main subject pages use full-page WebGPU backgrounds from `shaders@4.0.4`:
+purple/black on Websites, AI Bots, Bunch of Work, About and Contact; neutral grey
+on Testimonials. The homepage keeps its design. Local shader-frame images keep
+the full appearance available without WebGPU or under Motion Off. Runtime,
+resource cleanup, bounded phone rendering, tests and measured download cost are
+recorded in [the category shader review](docs/PAGE_SHADERS.md).
 ``````
 
 ## REFERENCE_DESIGN.md
@@ -1120,6 +1129,14 @@ FCP **1.2 s**, LCP **3.3 s**, total blocking time **20 ms**, CLS **0**, speed in
 - Saved cloud startup instructions are a configuration draft, separate from website deployment; review/save and publish environment settings to activate them for future tasks. Fresh-task restoration has not been independently verified.
 
 See `AGENCY_AUDIT.md`, `DEPLOYMENT.md`, `TESTING.md`, `CONTACT_SETUP.md` and `SECURITY_STATUS.md` for implementation and setup details.
+
+## Visible category shader backgrounds
+
+See [PAGE_SHADERS.md](docs/PAGE_SHADERS.md) for the six-page WebGPU integration,
+24-case render/contrast/device-cleanup matrix, lifecycle checks, original page
+and testimonial regressions, static fallbacks and current browser limitations.
+The homepage does not mount the new page background. Local success does not
+establish that the external hosting deployment has completed.
 ``````
 
 ## middleware.ts
@@ -1272,6 +1289,7 @@ export default nextConfig;
         "react": "18.3.1",
         "react-dom": "18.3.1",
         "server-only": "0.0.1",
+        "shaders": "4.0.4",
         "sharp": "0.35.5",
         "zod": "3.25.76"
       },
@@ -8493,6 +8511,42 @@ export default nextConfig;
         "node": ">= 0.4"
       }
     },
+    "node_modules/shaders": {
+      "version": "4.0.4",
+      "resolved": "https://registry.npmjs.org/shaders/-/shaders-4.0.4.tgz",
+      "integrity": "sha512-NB+/RiK0oydteeeKdPqsLpR3iSoDTvt8bsdgw2wPb697QVCY/yadZV8gitCyCQx5t/kb4nJicIR+cbG9Q6JFfQ==",
+      "license": "MIT",
+      "dependencies": {
+        "typegpu": "0.12.3"
+      },
+      "bin": {
+        "shaders": "dist/cli.js"
+      },
+      "peerDependencies": {
+        "react": "^18.0.0 || ^19.0.0",
+        "react-dom": "^18.0.0 || ^19.0.0",
+        "solid-js": "^1.8.0",
+        "svelte": "^5",
+        "vue": "^3.5.0"
+      },
+      "peerDependenciesMeta": {
+        "react": {
+          "optional": true
+        },
+        "react-dom": {
+          "optional": true
+        },
+        "solid-js": {
+          "optional": true
+        },
+        "svelte": {
+          "optional": true
+        },
+        "vue": {
+          "optional": true
+        }
+      }
+    },
     "node_modules/sharp": {
       "version": "0.35.5",
       "resolved": "https://registry.npmjs.org/sharp/-/sharp-0.35.5.tgz",
@@ -9054,6 +9108,15 @@ export default nextConfig;
         "url": "https://github.com/sponsors/sindresorhus"
       }
     },
+    "node_modules/tinyest": {
+      "version": "0.3.4",
+      "resolved": "https://registry.npmjs.org/tinyest/-/tinyest-0.3.4.tgz",
+      "integrity": "sha512-81EcMHTCQ2IPweOGk9SpMgjbenR9ZJRsAE84btEv0DhvVKwhe7qBy28hWgatoXa9ppWzmtpHiJ+e86SiaAtY6w==",
+      "license": "MIT",
+      "engines": {
+        "node": ">=12.20.0"
+      }
+    },
     "node_modules/tinyexec": {
       "version": "1.3.1",
       "resolved": "https://registry.npmjs.org/tinyexec/-/tinyexec-1.3.1.tgz",
@@ -9163,6 +9226,12 @@ export default nextConfig;
       "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz",
       "integrity": "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==",
       "license": "0BSD"
+    },
+    "node_modules/tsover-runtime": {
+      "version": "0.0.7",
+      "resolved": "https://registry.npmjs.org/tsover-runtime/-/tsover-runtime-0.0.7.tgz",
+      "integrity": "sha512-FHHwMJzZbnP23+fU1PxXljy7j0RRRosL2r1/CRUNTqfW+l7m35JsUkM615x/cAzw4GqRdXPIl3axKMj9qzpZtQ==",
+      "license": "Apache-2.0"
     },
     "node_modules/tsx": {
       "version": "4.20.6",
@@ -9285,6 +9354,29 @@ export default nextConfig;
       },
       "funding": {
         "url": "https://github.com/sponsors/ljharb"
+      }
+    },
+    "node_modules/typed-binary": {
+      "version": "4.3.3",
+      "resolved": "https://registry.npmjs.org/typed-binary/-/typed-binary-4.3.3.tgz",
+      "integrity": "sha512-W2hLsSzt3k/tg38gDE4Fn/QiwcoqGuUHBc2cb3mXuH7KcYxe/GM57vzW14s2/bawB4R5knGgGq8Xb57vsaJ4Sg==",
+      "license": "MIT"
+    },
+    "node_modules/typegpu": {
+      "version": "0.12.3",
+      "resolved": "https://registry.npmjs.org/typegpu/-/typegpu-0.12.3.tgz",
+      "integrity": "sha512-zYwQEhnPPwhq5vQKmollXRK1LCVjStOnL+2B0PiebqvAzYPr25rPNR4r3olLoow5sKKjyj3kzHKEcpD5SyDzGQ==",
+      "license": "MIT",
+      "dependencies": {
+        "tinyest": "~0.3.2",
+        "tsover-runtime": "^0.0.7",
+        "typed-binary": "^4.3.3"
+      },
+      "bin": {
+        "typegpu": "bin.mjs"
+      },
+      "engines": {
+        "node": ">=12.20.0"
       }
     },
     "node_modules/typescript": {
@@ -9695,7 +9787,8 @@ export default nextConfig;
     "test:scroll:browser": "node tests/scroll-readiness.browser.mjs",
     "test:emil:browser": "node tests/emil-quality.browser.mjs",
     "test:apple:browser": "node tests/apple-hig.browser.mjs",
-    "test:glass:browser": "node tests/liquid-glass.browser.mjs"
+    "test:glass:browser": "node tests/liquid-glass.browser.mjs",
+    "test:shaders:browser": "node tests/page-shaders.browser.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "5.3.0",
@@ -9715,6 +9808,7 @@ export default nextConfig;
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "server-only": "0.0.1",
+    "shaders": "4.0.4",
     "sharp": "0.35.5",
     "zod": "3.25.76"
   },
@@ -9753,6 +9847,19 @@ export default nextConfig;
 
 ``````javascript
 export default { plugins: { tailwindcss: {}, autoprefixer: {} } };
+``````
+
+## shaders.config.ts
+
+``````ts
+import { defineConfig } from "shaders/config";
+
+export default defineConfig({
+  // Next.js client components host the SDK with explicit lifecycle control.
+  framework: "react",
+  // Where `npx shaders install` writes component files
+  outDir: "components/shaders",
+});
 ``````
 
 ## tailwind.config.ts

@@ -1,0 +1,158 @@
+[
+  {
+    "page": "about",
+    "theme": "dark",
+    "pixels": 256000,
+    "colors": 44,
+    "minLuminance": 0.008099712686536637,
+    "maxLuminance": 0.015246856626673699,
+    "textContrast": {
+      "text": 14.672532354810567,
+      "muted": 6.067221461543847,
+      "accent": 5.913366100452401
+    }
+  },
+  {
+    "page": "about",
+    "theme": "light",
+    "pixels": 256000,
+    "colors": 9,
+    "minLuminance": 0.9210724742200339,
+    "maxLuminance": 0.957234827111453,
+    "textContrast": {
+      "text": 18.26662628514898,
+      "muted": 4.958260759059205,
+      "accent": 5.270228779185111
+    }
+  },
+  {
+    "page": "bots",
+    "theme": "dark",
+    "pixels": 256000,
+    "colors": 45,
+    "minLuminance": 0.008099712686536637,
+    "maxLuminance": 0.015439515193073464,
+    "textContrast": {
+      "text": 14.629335380618572,
+      "muted": 6.049359131950449,
+      "accent": 5.895956731936317
+    }
+  },
+  {
+    "page": "bots",
+    "theme": "light",
+    "pixels": 256000,
+    "colors": 9,
+    "minLuminance": 0.9210724742200339,
+    "maxLuminance": 0.957234827111453,
+    "textContrast": {
+      "text": 18.26662628514898,
+      "muted": 4.958260759059205,
+      "accent": 5.270228779185111
+    }
+  },
+  {
+    "page": "collection",
+    "theme": "dark",
+    "pixels": 256000,
+    "colors": 93,
+    "minLuminance": 0.009659718905961784,
+    "maxLuminance": 0.030457306410627813,
+    "textContrast": {
+      "text": 11.898690841309337,
+      "muted": 4.920213545346057,
+      "accent": 4.795444532633338
+    }
+  },
+  {
+    "page": "collection",
+    "theme": "light",
+    "pixels": 256000,
+    "colors": 25,
+    "minLuminance": 0.8490696125088776,
+    "maxLuminance": 0.9491937547478282,
+    "textContrast": {
+      "text": 16.912196619746958,
+      "muted": 4.590616764156412,
+      "accent": 4.879453050237985
+    }
+  },
+  {
+    "page": "contact",
+    "theme": "dark",
+    "pixels": 256000,
+    "colors": 103,
+    "minLuminance": 0.008099712686536637,
+    "maxLuminance": 0.030457306410627813,
+    "textContrast": {
+      "text": 11.898690841309337,
+      "muted": 4.920213545346057,
+      "accent": 4.795444532633338
+    }
+  },
+  {
+    "page": "contact",
+    "theme": "light",
+    "pixels": 256000,
+    "colors": 27,
+    "minLuminance": 0.8490696125088776,
+    "maxLuminance": 0.957234827111453,
+    "textContrast": {
+      "text": 16.912196619746958,
+      "muted": 4.590616764156412,
+      "accent": 4.879453050237985
+    }
+  },
+  {
+    "page": "testimonials",
+    "theme": "dark",
+    "pixels": 256000,
+    "colors": 24,
+    "minLuminance": 0.006048833022857054,
+    "maxLuminance": 0.02315336617811041,
+    "textContrast": {
+      "text": 13.165472788340477,
+      "muted": 7.476525328024187,
+      "accent": 5.274241915236723
+    }
+  },
+  {
+    "page": "testimonials",
+    "theme": "light",
+    "pixels": 256000,
+    "colors": 7,
+    "minLuminance": 0.8631572134541022,
+    "maxLuminance": 0.9130986517934192,
+    "textContrast": {
+      "text": 16.422098411346187,
+      "muted": 8.470419456939068,
+      "accent": 4.955909629846868
+    }
+  },
+  {
+    "page": "websites",
+    "theme": "dark",
+    "pixels": 256000,
+    "colors": 86,
+    "minLuminance": 0.009343721297599259,
+    "maxLuminance": 0.02749261019908759,
+    "textContrast": {
+      "text": 12.353908488113206,
+      "muted": 5.108450054871039,
+      "accent": 4.978907655143008
+    }
+  },
+  {
+    "page": "websites",
+    "theme": "light",
+    "pixels": 256000,
+    "colors": 22,
+    "minLuminance": 0.8623418038521838,
+    "maxLuminance": 0.9491937547478282,
+    "textContrast": {
+      "text": 17.161856831203256,
+      "muted": 4.658384090768256,
+      "accent": 4.951484218495047
+    }
+  }
+]

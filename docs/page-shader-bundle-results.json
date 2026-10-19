@@ -1,0 +1,21 @@
+{
+  "chunks": [
+    {
+      "file": "4dfdf351.988e2f33a935908c.js",
+      "bytes": 1695255,
+      "gzipBytes": 378842
+    },
+    {
+      "file": "8471d878.9338a17170722fa3.js",
+      "bytes": 199365,
+      "gzipBytes": 132307
+    },
+    {
+      "file": "518.a9ba2184f4d9ac5a.js",
+      "bytes": 708155,
+      "gzipBytes": 193312
+    }
+  ],
+  "totalBytes": 2602775,
+  "totalGzipBytes": 704461
+}

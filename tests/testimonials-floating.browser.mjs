@@ -35,7 +35,10 @@ try {
           .testimonialsActive === "true",
     );
     assert.equal(await page.locator(".testimonial-float").count(), 4);
-    assert.equal(await page.locator(".testimonial-star").count(), 28);
+    assert.equal(
+      await page.locator('[data-page-shader="testimonials"]').count(),
+      1,
+    );
     assert.equal(await page.locator('[data-sample="true"]').count(), 4);
     assert.match(
       await page.locator(".testimonial-sample-note").innerText(),
@@ -61,15 +64,18 @@ try {
       { polling: 100 },
     );
     const card = page.locator(".testimonial-float").first();
-    const star = page.locator(".testimonial-star").first();
+    const background = page.locator('[data-page-shader="testimonials"]');
     const state = async (el) =>
       el.evaluate((e) => ({
         transform: getComputedStyle(e).transform,
         play: getComputedStyle(e).animationPlayState,
         animation: getComputedStyle(e).animationName,
       }));
-    const before = await state(card),
-      starBefore = await state(star);
+    const before = await state(card);
+    assert.notEqual(
+      await background.evaluate((e) => getComputedStyle(e).backgroundImage),
+      "none",
+    );
     assert.equal(before.play, "running");
     await page.waitForTimeout(500);
     assert.notEqual(
@@ -77,11 +83,8 @@ try {
       before.transform,
       "Cards actually float",
     );
-    assert.notEqual(
-      (await state(star)).transform,
-      starBefore.transform,
-      "Background actually moves",
-    );
+    // Real WebGPU background movement is covered by page-shaders.browser.mjs.
+    // This suite also covers browsers that retain the static shader artwork.
     const activate = async (button) =>
       width < 768 ? button.tap() : button.click();
     await activate(
@@ -95,12 +98,11 @@ try {
         document.querySelector(".testimonial-scene").dataset
           .testimonialsActive === "false",
     );
-    const stopped = await state(card),
-      starStopped = await state(star);
+    const stopped = await state(card);
     assert.equal(stopped.play, "paused");
     await page.waitForTimeout(250);
     assert.equal((await state(card)).transform, stopped.transform);
-    assert.equal((await state(star)).transform, starStopped.transform);
+
     await activate(
       page.getByRole("button", {
         name: "Resume testimonial animations",
@@ -142,7 +144,7 @@ try {
       });
     await page.getByLabel("Animation preference").selectOption("reduced");
     assert.equal((await state(card)).animation, "none");
-    assert.equal((await state(star)).animation, "none");
+
     assert.ok(
       await page
         .getByRole("button", {
@@ -164,7 +166,7 @@ try {
           .testimonialsActive === "false",
     );
     assert.equal((await state(card)).play, "paused");
-    assert.equal((await state(star)).play, "paused");
+
     await scene.scrollIntoViewIfNeeded();
     await page.waitForFunction(
       () =>
@@ -175,7 +177,7 @@ try {
     assert.deepEqual(external, []);
     await page.close();
     console.log(
-      `PASS ${width}px / OS reduced ${osReduced}: labeled fictional profiles, local portraits, moving cards/background, pause/resume, hover, global Off, visible-only activity and no overflow or external requests.`,
+      `PASS ${width}px / OS reduced ${osReduced}: labeled fictional profiles, local portraits, moving cards and grey background artwork, pause/resume, hover, global Off, visible-only activity and no overflow or external requests.`,
     );
   }
   const page = await browser.newPage({ javaScriptEnabled: false });

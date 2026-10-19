@@ -507,6 +507,124 @@ These are local production-build checks. External Vercel deployment status is no
 The isolated composition capture hides fixed navigation/progress controls to show the full section design without overlaying them on the image; the full-page captures show the complete site.
 ``````
 
+## docs/PAGE_SHADERS.md
+
+``````md
+# Visible category backgrounds
+
+The six requested category pages now paint a full-viewport shader background,
+including while scrolling long pages. This replaces the faint approval-only
+proposal. The homepage does not mount this background or request its runtime.
+
+| Route            | Actual shader scene                                     |
+| ---------------- | ------------------------------------------------------- |
+| `/websites`      | Violet/black noise fields with contours                 |
+| `/ai-bots`       | Violet/black satin folds and a signal grid              |
+| `/bunch-of-work` | Violet/black fields and flowing strands                 |
+| `/about`         | Violet/black satin folds                                |
+| `/testimonials`  | Neutral grey atmosphere, particles and floating reviews |
+| `/contact`       | Violet/black studio lighting                            |
+
+Light mode uses corresponding pale violet or neutral surfaces. Shader output
+passes through a duotone layer: all color endpoints come from the existing
+`data/theme-tokens.json` via `lib/page-shader-preset.ts`. No second hard-coded
+component palette is introduced. The original content, portrait, project art,
+videos, custom curved gallery, navigation, footer and application logic remain.
+Category tabs explicitly paint above the fixed canvas.
+
+## Runtime and loading
+
+`shaders@4.0.4` is pinned through the normal npm lockfile and used through its
+public vanilla API in a Next.js client component. Repository reviewed:
+https://github.com/shader-effects-inc/shaders, revision
+`81fd4ece5d493ca6c424a2af41f0e2c361ec8258`; package license MIT.
+The requested library's setup CLI ran with `--no-auth --no-skill --yes`.
+No paid preset, account, global installer, external texture or telemetry is used.
+
+The runtime imports dynamically after the saved site preference is ready and
+only when motion is enabled and the main content is visible. The scene uses an
+explicitly owned low-power GPU device. Leaving the page, hiding the tab,
+scrolling the main content out of view, Motion Off and appearance accessibility
+preferences dispose the renderer and device. Async starts are serialized;
+stale or cancelled initialization also releases its device. No shared default
+SDK device is retained by this integration. Testimonials' local pause button
+stops both the cards and the shader.
+
+The canvas covers the viewport; its actual render buffer is bounded to
+960 by 720, including high-density phones, independently of the sharp native
+HTML text and controls above it. Local static WebP images generated from actual
+shader frames supply the same complete design while loading, with Motion Off,
+without JavaScript, or when WebGPU is unavailable. Increased contrast, forced
+colors and reduced transparency use a solid background.
+
+The SDK costs about 2.60 MB raw / 704 KB gzip across its three lazy chunks in
+this build. This is an enabled category-page download, cached across routes;
+it is excluded from fresh homepage and saved-Off requests. It adds real GPU
+work while active. No physical-device frame-rate or battery claim is made.
+See `page-shader-bundle-results.json` for measured chunk sizes.
+
+## Testimonials
+
+The existing four illustrated, visibly fictional review examples remain labeled.
+No person or endorsement from the reference image was copied. Cards stay within
+their grid cells with different 19/22/25/28-second cycles, offsets and directions:
+desktop translation up to 12px horizontally/10px vertically and 0.6-degree
+rotation; phone up to 4px/6px and 0.3 degrees. Gaps leave room for the motion.
+Hover pauses the hovered desktop card. Global Off, local Pause, offscreen state
+and hidden tabs retain their existing control behavior.
+
+## Verification
+
+- Production build, lint and type checks pass; production dependency audit has
+  zero reported vulnerabilities.
+- `npm run test:shaders:browser`: six pages at 1440/390px in both themes, with
+  phone DPR 3 and OS reduced motion while the site's explicit Motion On is
+  selected. Checks actual opaque WebGPU pixels, changing frames, bounded
+  buffers, full viewport coverage, small-text contrast, original content,
+  native video playback/form entry, global Off device release, homepage/runtime
+  exclusion and unsupported-browser static rendering.
+- `node tests/page-shader-lifecycle.browser.mjs`: hidden tab, main content out of
+  view, higher contrast, live theme changes, cancellation during initialization
+  and native SPA navigation home release GPU devices.
+- `npm run test:pages:browser`: original ten-page navigation, content, mobile 3D,
+  themes, saved Off, sitemap and no-JavaScript checks pass.
+- `npm run test:testimonials:browser`: desktop, phone, OS reduced motion with
+  explicit On, pause/resume, hover, offscreen state and no-JavaScript checks pass.
+- All pixels of the twelve lossless fallback images were inspected against the
+  body/muted/accent text tokens: the measured minimum is 4.59:1. Actual animated
+  frame checks also require 4.5:1. These measurements concern the new backgrounds;
+  they do not certify text baked into photographs/videos or every existing UI.
+
+Evidence is in `page-shader-browser-results.json`,
+`page-shader-lifecycle-results.json`, `page-shader-poster-contrast.json` and the
+`page-shader-*.png` screenshots. Software Chromium's screenshot compositor omits
+its WebGPU canvas, so screenshot tooling places the canvas's own pixel readback
+at the identical position. That workaround is test-only; production uses the
+real animated canvas. Physical phones and Safari were not available for testing.
+
+## Changed implementation files
+
+- `components/page-shader-background.tsx`: client lifecycle, real GPU renderer,
+  theme observation, static background, visibility/preferences and cleanup.
+- `lib/page-shader-preset.ts`: route whitelist, scene composition and colors.
+- `app/page-shaders.css`: category-only full background, layering, neutral
+  testimonial cards, bounded floating movement and appearance fallbacks.
+- `components/site-shell.tsx`, `app/layout.tsx`: six-route mounting and CSS import.
+- `components/testimonials.tsx`: staggered review motion timing.
+- `package.json`, `package-lock.json`, `shaders.config.ts`: pinned SDK and tooling.
+- `public/shaders/`: twelve locally generated fallback images.
+- `tests/page-shaders.browser.mjs`, `tests/page-shader-lifecycle.browser.mjs`,
+  `tests/testimonials-floating.browser.mjs`: rendering/lifecycle tests and the
+  existing review regression adapted to the new background.
+- This report, verification/README notes, browser evidence and refreshed delivery
+  source sections document the release.
+
+The cloud environment's proxy denies requests to the live domain and GitHub's
+hosting/status API. Git repository publication can be verified independently;
+external hosting completion cannot be certified from that restriction. A Git
+push is not itself proof that the hosting build has completed.
+``````
+
 ## docs/PORTRAIT_TRANSPARENT_COLLECTION.md
 
 ``````md
@@ -2832,6 +2950,847 @@ Binary asset: 191755 bytes. SHA-256 `9f9f5b5faff202eedb93b23954a6580ab8621d2bb9f
 
 Binary asset: 112676 bytes. SHA-256 `96b2a221f2124e24b183797b3d61e4894cec1df66a9872fb48f402ec1107e2a7`. Available in the repository and source ZIP.
 
+## docs/page-shader-about-dark-1440.png
+
+Binary asset: 382830 bytes. SHA-256 `a51b91020416b61230d49450d2c65e0af9b805c7c678fba282f8df590810c38c`. Available in the repository and source ZIP.
+
+## docs/page-shader-about-light-1440.png
+
+Binary asset: 342384 bytes. SHA-256 `0b7d5876da10996f20872df4e263cdb68ad6e073521d972a2cc284676bb1315f`. Available in the repository and source ZIP.
+
+## docs/page-shader-bots-dark-1440.png
+
+Binary asset: 286192 bytes. SHA-256 `44ce429f7ec0f487931e3f8fe4088753ba6e0946893b5849f02f28878fa395c3`. Available in the repository and source ZIP.
+
+## docs/page-shader-bots-light-1440.png
+
+Binary asset: 335726 bytes. SHA-256 `811fae3fc8b53d3aab914da1c1e34e0b0c12f96cf5632f5e6813503612709d9d`. Available in the repository and source ZIP.
+
+## docs/page-shader-browser-results.json
+
+``````json
+[
+  {
+    "name": "websites",
+    "theme": "dark",
+    "min": 0.009429104247948551,
+    "max": 0.027048346101021806,
+    "opaque": 16384,
+    "uniqueColors": 166,
+    "contrast": {
+      "text": 12.425141659099939,
+      "muted": 5.137905598967544,
+      "accent": 5.0076162521564305
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 54
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "bots",
+    "theme": "dark",
+    "min": 0.008099712686536635,
+    "max": 0.015246856626673699,
+    "opaque": 16384,
+    "uniqueColors": 71,
+    "contrast": {
+      "text": 14.672532354810569,
+      "muted": 6.067221461543847,
+      "accent": 5.913366100452401
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 49
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "collection",
+    "theme": "dark",
+    "min": 0.009659718905961784,
+    "max": 0.030457306410627813,
+    "opaque": 16384,
+    "uniqueColors": 162,
+    "contrast": {
+      "text": 11.898690841309339,
+      "muted": 4.920213545346057,
+      "accent": 4.795444532633338
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 28
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "about",
+    "theme": "dark",
+    "min": 0.008099712686536635,
+    "max": 0.015246856626673699,
+    "opaque": 16384,
+    "uniqueColors": 71,
+    "contrast": {
+      "text": 14.672532354810569,
+      "muted": 6.067221461543847,
+      "accent": 5.913366100452401
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 43
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "testimonials",
+    "theme": "dark",
+    "min": 0.006048833022857054,
+    "max": 0.008568125618069307,
+    "opaque": 16384,
+    "uniqueColors": 6,
+    "contrast": {
+      "text": 16.44407502596064,
+      "muted": 9.338407013867828,
+      "accent": 6.5876882018265475
+    },
+    "gpu": {
+      "created": 2,
+      "destroyed": 2,
+      "submissions": 145
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "contact",
+    "theme": "dark",
+    "min": 0.008099712686536635,
+    "max": 0.030457306410627813,
+    "opaque": 16384,
+    "uniqueColors": 129,
+    "contrast": {
+      "text": 11.898690841309339,
+      "muted": 4.920213545346057,
+      "accent": 4.795444532633338
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 54
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "websites",
+    "theme": "light",
+    "min": 0.8623418038521837,
+    "max": 0.9491937547478282,
+    "opaque": 16384,
+    "uniqueColors": 37,
+    "contrast": {
+      "text": 17.161856831203252,
+      "muted": 4.658384090768256,
+      "accent": 4.951484218495047
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 43
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "bots",
+    "theme": "light",
+    "min": 0.9210724742200339,
+    "max": 0.9572348271114531,
+    "opaque": 16384,
+    "uniqueColors": 9,
+    "contrast": {
+      "text": 18.26662628514898,
+      "muted": 4.958260759059205,
+      "accent": 5.270228779185111
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 36
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "collection",
+    "theme": "light",
+    "min": 0.8490696125088776,
+    "max": 0.9491937547478282,
+    "opaque": 16384,
+    "uniqueColors": 37,
+    "contrast": {
+      "text": 16.912196619746958,
+      "muted": 4.590616764156412,
+      "accent": 4.879453050237985
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 27
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "about",
+    "theme": "light",
+    "min": 0.9210724742200339,
+    "max": 0.9572348271114531,
+    "opaque": 16384,
+    "uniqueColors": 9,
+    "contrast": {
+      "text": 18.26662628514898,
+      "muted": 4.958260759059205,
+      "accent": 5.270228779185111
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 38
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "testimonials",
+    "theme": "light",
+    "min": 0.8962693533742663,
+    "max": 0.9130986517934191,
+    "opaque": 16384,
+    "uniqueColors": 3,
+    "contrast": {
+      "text": 17.01758275113729,
+      "muted": 8.777566693042836,
+      "accent": 5.135616662411886
+    },
+    "gpu": {
+      "created": 2,
+      "destroyed": 2,
+      "submissions": 173
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "contact",
+    "theme": "light",
+    "min": 0.8490696125088776,
+    "max": 0.9572348271114531,
+    "opaque": 16384,
+    "uniqueColors": 28,
+    "contrast": {
+      "text": 16.912196619746958,
+      "muted": 4.590616764156412,
+      "accent": 4.879453050237985
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 59
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "websites",
+    "theme": "dark",
+    "min": 0.009343721297599259,
+    "max": 0.027316542715925304,
+    "opaque": 16384,
+    "uniqueColors": 129,
+    "contrast": {
+      "text": 12.382041168369115,
+      "muted": 5.120083166135805,
+      "accent": 4.99024576868178
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 22
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "bots",
+    "theme": "dark",
+    "min": 0.007970323112720517,
+    "max": 0.015562674528645652,
+    "opaque": 16384,
+    "uniqueColors": 55,
+    "contrast": {
+      "text": 14.601854207248312,
+      "muted": 6.0379954245256835,
+      "accent": 5.884881190572451
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 31
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "collection",
+    "theme": "dark",
+    "min": 0.009659718905961784,
+    "max": 0.030457306410627813,
+    "opaque": 16384,
+    "uniqueColors": 125,
+    "contrast": {
+      "text": 11.898690841309339,
+      "muted": 4.920213545346057,
+      "accent": 4.795444532633338
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 23
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "about",
+    "theme": "dark",
+    "min": 0.007970323112720517,
+    "max": 0.01512578154845977,
+    "opaque": 16384,
+    "uniqueColors": 46,
+    "contrast": {
+      "text": 14.69981000062482,
+      "muted": 6.078501008530182,
+      "accent": 5.92435961555651
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 25
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "testimonials",
+    "theme": "dark",
+    "min": 0.006048833022857054,
+    "max": 0.01599629336550963,
+    "opaque": 16384,
+    "uniqueColors": 17,
+    "contrast": {
+      "text": 14.59322338694774,
+      "muted": 8.287328987277693,
+      "accent": 5.846215453349816
+    },
+    "gpu": {
+      "created": 2,
+      "destroyed": 2,
+      "submissions": 209
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "contact",
+    "theme": "dark",
+    "min": 0.008494814130387258,
+    "max": 0.030457306410627813,
+    "opaque": 16384,
+    "uniqueColors": 101,
+    "contrast": {
+      "text": 11.898690841309339,
+      "muted": 4.920213545346057,
+      "accent": 4.795444532633338
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 22
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "websites",
+    "theme": "light",
+    "min": 0.8623418038521837,
+    "max": 0.9491937547478282,
+    "opaque": 16384,
+    "uniqueColors": 32,
+    "contrast": {
+      "text": 17.161856831203252,
+      "muted": 4.658384090768256,
+      "accent": 4.951484218495047
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 23
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "bots",
+    "theme": "light",
+    "min": 0.9125923216670834,
+    "max": 0.9572348271114531,
+    "opaque": 16384,
+    "uniqueColors": 14,
+    "contrast": {
+      "text": 18.1071080394586,
+      "muted": 4.914961408340916,
+      "accent": 5.224205083505407
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 29
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "collection",
+    "theme": "light",
+    "min": 0.8490696125088776,
+    "max": 0.9491937547478282,
+    "opaque": 16384,
+    "uniqueColors": 31,
+    "contrast": {
+      "text": 16.912196619746958,
+      "muted": 4.590616764156412,
+      "accent": 4.879453050237985
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 22
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "about",
+    "theme": "light",
+    "min": 0.9210724742200339,
+    "max": 0.9572348271114531,
+    "opaque": 16384,
+    "uniqueColors": 9,
+    "contrast": {
+      "text": 18.26662628514898,
+      "muted": 4.958260759059205,
+      "accent": 5.270228779185111
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 21
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "testimonials",
+    "theme": "light",
+    "min": 0.8713671191987972,
+    "max": 0.9130986517934191,
+    "opaque": 16384,
+    "uniqueColors": 6,
+    "contrast": {
+      "text": 16.56974426914681,
+      "muted": 8.546574301181554,
+      "accent": 5.000466635300906
+    },
+    "gpu": {
+      "created": 2,
+      "destroyed": 2,
+      "submissions": 193
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "contact",
+    "theme": "light",
+    "min": 0.8490696125088776,
+    "max": 0.9572348271114531,
+    "opaque": 16384,
+    "uniqueColors": 27,
+    "contrast": {
+      "text": 16.912196619746958,
+      "muted": 4.590616764156412,
+      "accent": 4.879453050237985
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 22
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  }
+]
+``````
+
+## docs/page-shader-bundle-results.json
+
+``````json
+{
+  "chunks": [
+    {
+      "file": "4dfdf351.988e2f33a935908c.js",
+      "bytes": 1695255,
+      "gzipBytes": 378842
+    },
+    {
+      "file": "8471d878.9338a17170722fa3.js",
+      "bytes": 199365,
+      "gzipBytes": 132307
+    },
+    {
+      "file": "518.a9ba2184f4d9ac5a.js",
+      "bytes": 708155,
+      "gzipBytes": 193312
+    }
+  ],
+  "totalBytes": 2602775,
+  "totalGzipBytes": 704461
+}
+``````
+
+## docs/page-shader-collection-dark-1440.png
+
+Binary asset: 754690 bytes. SHA-256 `687b35f260ccd7f18a7669cb832e846ab9a9d6f2034aa3ebd3d0e5c31ee03a13`. Available in the repository and source ZIP.
+
+## docs/page-shader-collection-light-1440.png
+
+Binary asset: 686509 bytes. SHA-256 `98f7d67f652681c527254e4c743e171f93a6c735bf02ad2e2518a60bb29fdb11`. Available in the repository and source ZIP.
+
+## docs/page-shader-contact-dark-1440.png
+
+Binary asset: 484779 bytes. SHA-256 `a300976f6785d3ce0523a5bfefa60325bc028d15a31460985c0b4c8c73e934ee`. Available in the repository and source ZIP.
+
+## docs/page-shader-contact-light-1440.png
+
+Binary asset: 578876 bytes. SHA-256 `067d3362ad9e7bd3de15236d5443f691cbd25ec6c19613abc8a80f3c3a5f5db1`. Available in the repository and source ZIP.
+
+## docs/page-shader-lifecycle-results.json
+
+``````json
+{
+  "hiddenTab": true,
+  "offscreenCleanup": true,
+  "contrastFallback": true,
+  "themeChange": true,
+  "pendingInitializationCleanup": true,
+  "spaHomeCleanup": true,
+  "devices": [
+    {
+      "destroyed": true
+    },
+    {
+      "destroyed": true
+    },
+    {
+      "destroyed": true
+    },
+    {
+      "destroyed": true
+    },
+    {
+      "destroyed": true
+    },
+    {
+      "destroyed": true
+    },
+    {
+      "destroyed": true
+    }
+  ],
+  "errors": []
+}
+``````
+
+## docs/page-shader-poster-contrast.json
+
+``````json
+[
+  {
+    "page": "about",
+    "theme": "dark",
+    "pixels": 256000,
+    "colors": 44,
+    "minLuminance": 0.008099712686536637,
+    "maxLuminance": 0.015246856626673699,
+    "textContrast": {
+      "text": 14.672532354810567,
+      "muted": 6.067221461543847,
+      "accent": 5.913366100452401
+    }
+  },
+  {
+    "page": "about",
+    "theme": "light",
+    "pixels": 256000,
+    "colors": 9,
+    "minLuminance": 0.9210724742200339,
+    "maxLuminance": 0.957234827111453,
+    "textContrast": {
+      "text": 18.26662628514898,
+      "muted": 4.958260759059205,
+      "accent": 5.270228779185111
+    }
+  },
+  {
+    "page": "bots",
+    "theme": "dark",
+    "pixels": 256000,
+    "colors": 45,
+    "minLuminance": 0.008099712686536637,
+    "maxLuminance": 0.015439515193073464,
+    "textContrast": {
+      "text": 14.629335380618572,
+      "muted": 6.049359131950449,
+      "accent": 5.895956731936317
+    }
+  },
+  {
+    "page": "bots",
+    "theme": "light",
+    "pixels": 256000,
+    "colors": 9,
+    "minLuminance": 0.9210724742200339,
+    "maxLuminance": 0.957234827111453,
+    "textContrast": {
+      "text": 18.26662628514898,
+      "muted": 4.958260759059205,
+      "accent": 5.270228779185111
+    }
+  },
+  {
+    "page": "collection",
+    "theme": "dark",
+    "pixels": 256000,
+    "colors": 93,
+    "minLuminance": 0.009659718905961784,
+    "maxLuminance": 0.030457306410627813,
+    "textContrast": {
+      "text": 11.898690841309337,
+      "muted": 4.920213545346057,
+      "accent": 4.795444532633338
+    }
+  },
+  {
+    "page": "collection",
+    "theme": "light",
+    "pixels": 256000,
+    "colors": 25,
+    "minLuminance": 0.8490696125088776,
+    "maxLuminance": 0.9491937547478282,
+    "textContrast": {
+      "text": 16.912196619746958,
+      "muted": 4.590616764156412,
+      "accent": 4.879453050237985
+    }
+  },
+  {
+    "page": "contact",
+    "theme": "dark",
+    "pixels": 256000,
+    "colors": 103,
+    "minLuminance": 0.008099712686536637,
+    "maxLuminance": 0.030457306410627813,
+    "textContrast": {
+      "text": 11.898690841309337,
+      "muted": 4.920213545346057,
+      "accent": 4.795444532633338
+    }
+  },
+  {
+    "page": "contact",
+    "theme": "light",
+    "pixels": 256000,
+    "colors": 27,
+    "minLuminance": 0.8490696125088776,
+    "maxLuminance": 0.957234827111453,
+    "textContrast": {
+      "text": 16.912196619746958,
+      "muted": 4.590616764156412,
+      "accent": 4.879453050237985
+    }
+  },
+  {
+    "page": "testimonials",
+    "theme": "dark",
+    "pixels": 256000,
+    "colors": 24,
+    "minLuminance": 0.006048833022857054,
+    "maxLuminance": 0.02315336617811041,
+    "textContrast": {
+      "text": 13.165472788340477,
+      "muted": 7.476525328024187,
+      "accent": 5.274241915236723
+    }
+  },
+  {
+    "page": "testimonials",
+    "theme": "light",
+    "pixels": 256000,
+    "colors": 7,
+    "minLuminance": 0.8631572134541022,
+    "maxLuminance": 0.9130986517934192,
+    "textContrast": {
+      "text": 16.422098411346187,
+      "muted": 8.470419456939068,
+      "accent": 4.955909629846868
+    }
+  },
+  {
+    "page": "websites",
+    "theme": "dark",
+    "pixels": 256000,
+    "colors": 86,
+    "minLuminance": 0.009343721297599259,
+    "maxLuminance": 0.02749261019908759,
+    "textContrast": {
+      "text": 12.353908488113206,
+      "muted": 5.108450054871039,
+      "accent": 4.978907655143008
+    }
+  },
+  {
+    "page": "websites",
+    "theme": "light",
+    "pixels": 256000,
+    "colors": 22,
+    "minLuminance": 0.8623418038521838,
+    "maxLuminance": 0.9491937547478282,
+    "textContrast": {
+      "text": 17.161856831203256,
+      "muted": 4.658384090768256,
+      "accent": 4.951484218495047
+    }
+  }
+]
+``````
+
+## docs/page-shader-testimonials-dark-1440.png
+
+Binary asset: 120873 bytes. SHA-256 `0a059d2c4e83353dc6597180cc32afb51d276c420b7af7e1225e9e3a845f2f7d`. Available in the repository and source ZIP.
+
+## docs/page-shader-testimonials-dark-390.png
+
+Binary asset: 257150 bytes. SHA-256 `677f2ace7ffea488d7ca52a384b52c32c52714d285fd6d9e2dab98323e8802d7`. Available in the repository and source ZIP.
+
+## docs/page-shader-testimonials-light-1440.png
+
+Binary asset: 115794 bytes. SHA-256 `187abfea227eaf0769a1a466020b2d8105a836ba1094f2a5b9f92a019b5e4353`. Available in the repository and source ZIP.
+
+## docs/page-shader-testimonials-light-390.png
+
+Binary asset: 266772 bytes. SHA-256 `80cc201826f4d3390f1a7ffc24b798df394f9d65556af71cdd11b421288f79ae`. Available in the repository and source ZIP.
+
+## docs/page-shader-websites-dark-1440.png
+
+Binary asset: 240782 bytes. SHA-256 `f5f1e3b1a3c88486e4ebbae0c3ce4b5eddd126fa94116833caefe8bc7369122d`. Available in the repository and source ZIP.
+
+## docs/page-shader-websites-light-1440.png
+
+Binary asset: 343102 bytes. SHA-256 `18ae3eea9c49191c489ceac37dc34a713bb23d0b2659b989eb722fc123b72c56`. Available in the repository and source ZIP.
+
 ## docs/pages-accessibility.json
 
 ``````json
@@ -3094,11 +4053,11 @@ Binary asset: 144687 bytes. SHA-256 `90be81278a61a70304378a8f887155051f4879c6275
 
 ## docs/pages-testimonials-1440.png
 
-Binary asset: 1004596 bytes. SHA-256 `732506da140d707061f08a56a9835a642ebd383afb0e0291718a91f4244c083d`. Available in the repository and source ZIP.
+Binary asset: 958455 bytes. SHA-256 `8834405120552a4bc54fb8ea9433f36155b44245cc0bf1397d726e0d6561f874`. Available in the repository and source ZIP.
 
 ## docs/pages-testimonials-390.png
 
-Binary asset: 540101 bytes. SHA-256 `b8e7f16a6fea579b0d149e72912b68768090bd111760fbc4fb54dcecfb3988e7`. Available in the repository and source ZIP.
+Binary asset: 492493 bytes. SHA-256 `954160d1c521496ff1b5a746efda66aa47197d83c08ac36f4aedec921dfff4fc`. Available in the repository and source ZIP.
 
 ## docs/portrait-transparency-accessibility.json
 
@@ -3686,11 +4645,11 @@ Binary asset: 454501 bytes. SHA-256 `1735d85969122e959103186f9ec912ce15953122117
 
 ## docs/testimonials-floating-1440.png
 
-Binary asset: 1113020 bytes. SHA-256 `bd4aa8b162e81a97c41c6847080388dd784d8454a63c08972e0f0ec1a27b1a76`. Available in the repository and source ZIP.
+Binary asset: 958744 bytes. SHA-256 `84bf204ad8cfe3b1084b98e6c62d45af32cb21b0962696cecb070be478edbb80`. Available in the repository and source ZIP.
 
 ## docs/testimonials-floating-390.png
 
-Binary asset: 573164 bytes. SHA-256 `f539762f0d2e7a11231b139d895c2120f89b4364e38f18442ca8b5009195eb8f`. Available in the repository and source ZIP.
+Binary asset: 492361 bytes. SHA-256 `3e9e0afef0e9c43a6dc9ccd492c1606b4d7cd8c2137b7d1aeac10d3cc0b20951`. Available in the repository and source ZIP.
 
 ## docs/web-positioning-about-1440.png
 

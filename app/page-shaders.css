@@ -1,0 +1,167 @@
+/* Selected category pages only. Homepage, artwork, videos and footer keep their design. */
+[data-shader-page] main {
+  position: relative;
+  isolation: isolate;
+}
+[data-shader-page] main > :not(.page-shader-background) {
+  position: relative;
+  z-index: 1;
+}
+[data-shader-page] main > section {
+  background-color: transparent;
+}
+.page-shader-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background-color: color-mix(in srgb, var(--neutral-black) 80%, var(--accent));
+  background-image: var(--shader-dark-image);
+  background-size: cover;
+  background-position: center;
+}
+[data-theme="light"] .page-shader-background {
+  background-color: color-mix(in srgb, var(--bg) 94%, var(--accent));
+  background-image: var(--shader-light-image);
+}
+.page-shader-canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 0;
+}
+.page-shader-background[data-state="ready"] .page-shader-canvas {
+  opacity: 1;
+}
+[data-shader-page] > .site-footer,
+[data-shader-page] > footer {
+  position: relative;
+  z-index: 1;
+}
+[data-shader-page] .scene-wash {
+  display: none;
+}
+[data-shader-page="testimonials"] main {
+  --text: var(--neutral-paper);
+  --muted: var(--neutral-silver);
+}
+[data-shader-page="testimonials"] .page-shader-background {
+  background-color: var(--neutral-ink);
+}
+[data-theme="light"] [data-shader-page="testimonials"] main {
+  --text: var(--neutral-ink);
+  --muted: var(--neutral-slate);
+}
+[data-theme="light"] [data-shader-page="testimonials"] .page-shader-background {
+  background-color: var(--neutral-paper);
+}
+[data-shader-page="testimonials"] .testimonial-card {
+  --surface: var(--neutral-charcoal);
+  --text: var(--neutral-paper);
+  --muted: var(--neutral-silver);
+  --line: color-mix(in srgb, var(--neutral-silver) 15%, transparent);
+  background: var(--surface);
+}
+[data-theme="light"] [data-shader-page="testimonials"] .testimonial-card {
+  --surface: var(--neutral-white);
+  --text: var(--neutral-ink);
+  --muted: var(--neutral-slate);
+  --line: color-mix(in srgb, var(--neutral-slate) 18%, transparent);
+}
+[data-shader-page="testimonials"] .testimonial-quote-mark {
+  color: var(--muted);
+}
+[data-shader-page="testimonials"] .testimonial-atmosphere {
+  display: none;
+}
+[data-shader-page="testimonials"] .testimonial-star {
+  animation: none;
+}
+[data-shader-page="testimonials"] .testimonial-scene {
+  --orbit-x: 12px;
+  --orbit-y: 10px;
+  --orbit-turn: 0.6deg;
+}
+[data-shader-page="testimonials"] .testimonials-grid {
+  gap: 38px;
+}
+[data-shader-page="testimonials"] .testimonial-float {
+  animation-name: page-review-orbit;
+}
+[data-shader-page="testimonials"]
+  .testimonials-grid
+  > :nth-child(even)
+  .testimonial-float {
+  animation-direction: reverse;
+}
+html[data-motion="full"]
+  [data-shader-page="testimonials"]
+  .testimonial-scene[data-testimonials-active="true"]
+  .testimonials-grid
+  .testimonial-float {
+  animation-play-state: running;
+}
+@keyframes page-review-orbit {
+  0%,
+  100% {
+    transform: translate3d(
+        calc(-0.6 * var(--orbit-x)),
+        calc(0.4 * var(--orbit-y)),
+        0
+      )
+      rotate(calc(-1 * var(--orbit-turn)));
+  }
+  25% {
+    transform: translate3d(
+        calc(0.55 * var(--orbit-x)),
+        calc(-1 * var(--orbit-y)),
+        0
+      )
+      rotate(calc(0.4 * var(--orbit-turn)));
+  }
+  50% {
+    transform: translate3d(var(--orbit-x), calc(-0.35 * var(--orbit-y)), 0)
+      rotate(var(--orbit-turn));
+  }
+  75% {
+    transform: translate3d(calc(-0.3 * var(--orbit-x)), var(--orbit-y), 0)
+      rotate(calc(0.25 * var(--orbit-turn)));
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  html[data-motion="full"]
+    [data-shader-page="testimonials"]
+    .testimonial-scene[data-testimonials-active="true"]
+    .testimonials-grid
+    .testimonial-float:has(.testimonial-card:hover) {
+    animation-play-state: paused;
+  }
+}
+@media (max-width: 767px) {
+  [data-shader-page="testimonials"] .testimonial-scene {
+    --orbit-x: 4px;
+    --orbit-y: 6px;
+    --orbit-turn: 0.3deg;
+  }
+  [data-shader-page="testimonials"] .testimonials-grid {
+    gap: 26px;
+  }
+}
+@media (prefers-contrast: more),
+  (forced-colors: active),
+  (prefers-reduced-transparency: reduce) {
+  .page-shader-background,
+  [data-theme="light"] .page-shader-background {
+    background-image: none;
+    background-color: var(--bg);
+  }
+}
+[data-shader-page] main > .page-shader-background + section {
+  margin-top: 0;
+}
+/* Keep the category tabs above the fixed canvas as well as the content. */
+[data-shader-page] > .page-tabs {
+  position: relative;
+  z-index: 2;
+}

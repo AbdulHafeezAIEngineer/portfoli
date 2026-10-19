@@ -24,6 +24,7 @@ import "./project-art-tokens.css";
 import "./atelier.css";
 import "./pages.css";
 import "./liquid-glass.css";
+import "./page-shaders.css";
 import { ConsentProvider } from "@/components/consent-provider";
 
 const inter = localFont({

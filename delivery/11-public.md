@@ -351,6 +351,54 @@ Binary asset: 67900 bytes. SHA-256 `cb3be68e02779b2242af80355850da1ffb0d66681264
 }
 ``````
 
+## public/shaders/about-dark.webp
+
+Binary asset: 20940 bytes. SHA-256 `dc701a8188a451b876ca40dc20df7760fe655af708eda378b5a5225753285b1c`. Available in the repository and source ZIP.
+
+## public/shaders/about-light.webp
+
+Binary asset: 5220 bytes. SHA-256 `ea7e93e669c23ebd86c4c0b388a2d07200b0a87436dc8a0644090c14b99e812a`. Available in the repository and source ZIP.
+
+## public/shaders/bots-dark.webp
+
+Binary asset: 21684 bytes. SHA-256 `3cdd22f40c9f6bcf875fa1c6eac3dfa547979509017621fa3f48dd6f9ce8c231`. Available in the repository and source ZIP.
+
+## public/shaders/bots-light.webp
+
+Binary asset: 5328 bytes. SHA-256 `d3f10f682ae548ab2662861710f2a1854ce0db19c2ce4a678333a587a7719ed0`. Available in the repository and source ZIP.
+
+## public/shaders/collection-dark.webp
+
+Binary asset: 59382 bytes. SHA-256 `384371713e926d5bee6ced695cbab00c81b50f5741e8fe9b0792b128dab37755`. Available in the repository and source ZIP.
+
+## public/shaders/collection-light.webp
+
+Binary asset: 22546 bytes. SHA-256 `944c3c5f89420149bd6a4180f4e4d81f2031d0721f1c593bc88712ae2620b0e9`. Available in the repository and source ZIP.
+
+## public/shaders/contact-dark.webp
+
+Binary asset: 13058 bytes. SHA-256 `89716c9319ae42e4f5fb8b87cf6584f22e0afb49fa5e3fdf9f52be14f004591b`. Available in the repository and source ZIP.
+
+## public/shaders/contact-light.webp
+
+Binary asset: 4694 bytes. SHA-256 `7ff98e82d4bc3c98a047a0b99d6b8fe6ec851eb72ee33920b7ffa17610b1afc4`. Available in the repository and source ZIP.
+
+## public/shaders/testimonials-dark.webp
+
+Binary asset: 3584 bytes. SHA-256 `84c9499bfc49bfb341778a45605c299456e08e94af45c26c3cc9e495ed8861a8`. Available in the repository and source ZIP.
+
+## public/shaders/testimonials-light.webp
+
+Binary asset: 1192 bytes. SHA-256 `209afe33e50f909967ef7facf7f5d2b1ad0ab412d7cfe638394ae5120d80e6eb`. Available in the repository and source ZIP.
+
+## public/shaders/websites-dark.webp
+
+Binary asset: 50582 bytes. SHA-256 `b3a8218ec54143f5da5614e4f7f10bcc9a4ce5666e0348c48b3fc01bf9a28b02`. Available in the repository and source ZIP.
+
+## public/shaders/websites-light.webp
+
+Binary asset: 27438 bytes. SHA-256 `a9eaad8f93fafc6f7243f8b84d9da92d1788c38ada3490b466768fe5ab6b38dc`. Available in the repository and source ZIP.
+
 ## public/studies/aura.webp
 
 Binary asset: 26308 bytes. SHA-256 `4ffef5b3f3f52e8ecf1016204f2cc62df5b5c01e4c0eee51aa6a53f3f0d337c4`. Available in the repository and source ZIP.

@@ -1,0 +1,554 @@
+[
+  {
+    "name": "websites",
+    "theme": "dark",
+    "min": 0.009429104247948551,
+    "max": 0.027048346101021806,
+    "opaque": 16384,
+    "uniqueColors": 166,
+    "contrast": {
+      "text": 12.425141659099939,
+      "muted": 5.137905598967544,
+      "accent": 5.0076162521564305
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 54
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "bots",
+    "theme": "dark",
+    "min": 0.008099712686536635,
+    "max": 0.015246856626673699,
+    "opaque": 16384,
+    "uniqueColors": 71,
+    "contrast": {
+      "text": 14.672532354810569,
+      "muted": 6.067221461543847,
+      "accent": 5.913366100452401
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 49
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "collection",
+    "theme": "dark",
+    "min": 0.009659718905961784,
+    "max": 0.030457306410627813,
+    "opaque": 16384,
+    "uniqueColors": 162,
+    "contrast": {
+      "text": 11.898690841309339,
+      "muted": 4.920213545346057,
+      "accent": 4.795444532633338
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 28
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "about",
+    "theme": "dark",
+    "min": 0.008099712686536635,
+    "max": 0.015246856626673699,
+    "opaque": 16384,
+    "uniqueColors": 71,
+    "contrast": {
+      "text": 14.672532354810569,
+      "muted": 6.067221461543847,
+      "accent": 5.913366100452401
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 43
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "testimonials",
+    "theme": "dark",
+    "min": 0.006048833022857054,
+    "max": 0.008568125618069307,
+    "opaque": 16384,
+    "uniqueColors": 6,
+    "contrast": {
+      "text": 16.44407502596064,
+      "muted": 9.338407013867828,
+      "accent": 6.5876882018265475
+    },
+    "gpu": {
+      "created": 2,
+      "destroyed": 2,
+      "submissions": 145
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "contact",
+    "theme": "dark",
+    "min": 0.008099712686536635,
+    "max": 0.030457306410627813,
+    "opaque": 16384,
+    "uniqueColors": 129,
+    "contrast": {
+      "text": 11.898690841309339,
+      "muted": 4.920213545346057,
+      "accent": 4.795444532633338
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 54
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "websites",
+    "theme": "light",
+    "min": 0.8623418038521837,
+    "max": 0.9491937547478282,
+    "opaque": 16384,
+    "uniqueColors": 37,
+    "contrast": {
+      "text": 17.161856831203252,
+      "muted": 4.658384090768256,
+      "accent": 4.951484218495047
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 43
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "bots",
+    "theme": "light",
+    "min": 0.9210724742200339,
+    "max": 0.9572348271114531,
+    "opaque": 16384,
+    "uniqueColors": 9,
+    "contrast": {
+      "text": 18.26662628514898,
+      "muted": 4.958260759059205,
+      "accent": 5.270228779185111
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 36
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "collection",
+    "theme": "light",
+    "min": 0.8490696125088776,
+    "max": 0.9491937547478282,
+    "opaque": 16384,
+    "uniqueColors": 37,
+    "contrast": {
+      "text": 16.912196619746958,
+      "muted": 4.590616764156412,
+      "accent": 4.879453050237985
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 27
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "about",
+    "theme": "light",
+    "min": 0.9210724742200339,
+    "max": 0.9572348271114531,
+    "opaque": 16384,
+    "uniqueColors": 9,
+    "contrast": {
+      "text": 18.26662628514898,
+      "muted": 4.958260759059205,
+      "accent": 5.270228779185111
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 38
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "testimonials",
+    "theme": "light",
+    "min": 0.8962693533742663,
+    "max": 0.9130986517934191,
+    "opaque": 16384,
+    "uniqueColors": 3,
+    "contrast": {
+      "text": 17.01758275113729,
+      "muted": 8.777566693042836,
+      "accent": 5.135616662411886
+    },
+    "gpu": {
+      "created": 2,
+      "destroyed": 2,
+      "submissions": 173
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "contact",
+    "theme": "light",
+    "min": 0.8490696125088776,
+    "max": 0.9572348271114531,
+    "opaque": 16384,
+    "uniqueColors": 28,
+    "contrast": {
+      "text": 16.912196619746958,
+      "muted": 4.590616764156412,
+      "accent": 4.879453050237985
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 59
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 1440,
+    "bufferWidth": 640,
+    "bufferHeight": 400
+  },
+  {
+    "name": "websites",
+    "theme": "dark",
+    "min": 0.009343721297599259,
+    "max": 0.027316542715925304,
+    "opaque": 16384,
+    "uniqueColors": 129,
+    "contrast": {
+      "text": 12.382041168369115,
+      "muted": 5.120083166135805,
+      "accent": 4.99024576868178
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 22
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "bots",
+    "theme": "dark",
+    "min": 0.007970323112720517,
+    "max": 0.015562674528645652,
+    "opaque": 16384,
+    "uniqueColors": 55,
+    "contrast": {
+      "text": 14.601854207248312,
+      "muted": 6.0379954245256835,
+      "accent": 5.884881190572451
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 31
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "collection",
+    "theme": "dark",
+    "min": 0.009659718905961784,
+    "max": 0.030457306410627813,
+    "opaque": 16384,
+    "uniqueColors": 125,
+    "contrast": {
+      "text": 11.898690841309339,
+      "muted": 4.920213545346057,
+      "accent": 4.795444532633338
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 23
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "about",
+    "theme": "dark",
+    "min": 0.007970323112720517,
+    "max": 0.01512578154845977,
+    "opaque": 16384,
+    "uniqueColors": 46,
+    "contrast": {
+      "text": 14.69981000062482,
+      "muted": 6.078501008530182,
+      "accent": 5.92435961555651
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 25
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "testimonials",
+    "theme": "dark",
+    "min": 0.006048833022857054,
+    "max": 0.01599629336550963,
+    "opaque": 16384,
+    "uniqueColors": 17,
+    "contrast": {
+      "text": 14.59322338694774,
+      "muted": 8.287328987277693,
+      "accent": 5.846215453349816
+    },
+    "gpu": {
+      "created": 2,
+      "destroyed": 2,
+      "submissions": 209
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "contact",
+    "theme": "dark",
+    "min": 0.008494814130387258,
+    "max": 0.030457306410627813,
+    "opaque": 16384,
+    "uniqueColors": 101,
+    "contrast": {
+      "text": 11.898690841309339,
+      "muted": 4.920213545346057,
+      "accent": 4.795444532633338
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 22
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "websites",
+    "theme": "light",
+    "min": 0.8623418038521837,
+    "max": 0.9491937547478282,
+    "opaque": 16384,
+    "uniqueColors": 32,
+    "contrast": {
+      "text": 17.161856831203252,
+      "muted": 4.658384090768256,
+      "accent": 4.951484218495047
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 23
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "bots",
+    "theme": "light",
+    "min": 0.9125923216670834,
+    "max": 0.9572348271114531,
+    "opaque": 16384,
+    "uniqueColors": 14,
+    "contrast": {
+      "text": 18.1071080394586,
+      "muted": 4.914961408340916,
+      "accent": 5.224205083505407
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 29
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "collection",
+    "theme": "light",
+    "min": 0.8490696125088776,
+    "max": 0.9491937547478282,
+    "opaque": 16384,
+    "uniqueColors": 31,
+    "contrast": {
+      "text": 16.912196619746958,
+      "muted": 4.590616764156412,
+      "accent": 4.879453050237985
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 22
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "about",
+    "theme": "light",
+    "min": 0.9210724742200339,
+    "max": 0.9572348271114531,
+    "opaque": 16384,
+    "uniqueColors": 9,
+    "contrast": {
+      "text": 18.26662628514898,
+      "muted": 4.958260759059205,
+      "accent": 5.270228779185111
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 21
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "testimonials",
+    "theme": "light",
+    "min": 0.8713671191987972,
+    "max": 0.9130986517934191,
+    "opaque": 16384,
+    "uniqueColors": 6,
+    "contrast": {
+      "text": 16.56974426914681,
+      "muted": 8.546574301181554,
+      "accent": 5.000466635300906
+    },
+    "gpu": {
+      "created": 2,
+      "destroyed": 2,
+      "submissions": 193
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  },
+  {
+    "name": "contact",
+    "theme": "light",
+    "min": 0.8490696125088776,
+    "max": 0.9572348271114531,
+    "opaque": 16384,
+    "uniqueColors": 27,
+    "contrast": {
+      "text": 16.912196619746958,
+      "muted": 4.590616764156412,
+      "accent": 4.879453050237985
+    },
+    "gpu": {
+      "created": 1,
+      "destroyed": 1,
+      "submissions": 22
+    },
+    "errors": [],
+    "external": [],
+    "viewportWidth": 390,
+    "bufferWidth": 249,
+    "bufferHeight": 576
+  }
+]

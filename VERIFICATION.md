@@ -180,3 +180,11 @@ FCP **1.2 s**, LCP **3.3 s**, total blocking time **20 ms**, CLS **0**, speed in
 - Saved cloud startup instructions are a configuration draft, separate from website deployment; review/save and publish environment settings to activate them for future tasks. Fresh-task restoration has not been independently verified.
 
 See `AGENCY_AUDIT.md`, `DEPLOYMENT.md`, `TESTING.md`, `CONTACT_SETUP.md` and `SECURITY_STATUS.md` for implementation and setup details.
+
+## Visible category shader backgrounds
+
+See [PAGE_SHADERS.md](docs/PAGE_SHADERS.md) for the six-page WebGPU integration,
+24-case render/contrast/device-cleanup matrix, lifecycle checks, original page
+and testimonial regressions, static fallbacks and current browser limitations.
+The homepage does not mount the new page background. Local success does not
+establish that the external hosting deployment has completed.

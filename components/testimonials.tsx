@@ -41,8 +41,8 @@ export function Testimonials({
               className="testimonial-float"
               style={
                 {
-                  "--review-duration": `${13 + (index % 4) * 2}s`,
-                  "--review-delay": `${-index * 2.3}s`,
+                  "--review-duration": `${19 + (index % 4) * 3}s`,
+                  "--review-delay": `${-index * 4.7}s`,
                   "--review-angle": `${index % 2 ? 0.65 : -0.65}deg`,
                 } as CSSProperties
               }

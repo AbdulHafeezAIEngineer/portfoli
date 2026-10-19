@@ -1,0 +1,32 @@
+{
+  "hiddenTab": true,
+  "offscreenCleanup": true,
+  "contrastFallback": true,
+  "themeChange": true,
+  "pendingInitializationCleanup": true,
+  "spaHomeCleanup": true,
+  "devices": [
+    {
+      "destroyed": true
+    },
+    {
+      "destroyed": true
+    },
+    {
+      "destroyed": true
+    },
+    {
+      "destroyed": true
+    },
+    {
+      "destroyed": true
+    },
+    {
+      "destroyed": true
+    },
+    {
+      "destroyed": true
+    }
+  ],
+  "errors": []
+}
