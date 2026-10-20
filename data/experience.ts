@@ -4,8 +4,8 @@ export const experience = {
   lead: "Design judgment. Practical engineering. A human eye for the details.",
   paragraphs: [
     "I'm Abdul Hafeez, the developer behind Elvora. My curiosity about Python and how the web works grew into a passion for development. Through hands-on projects, agency work and independent development, I've learned to turn ideas into practical digital experiences. Today, I'm bringing that curiosity into a startup of my own.",
-    "AI is a powerful tool, but having access to it is only the beginning. Using it well takes experience, clear instructions and the judgment to question, test and improve what it produces. A convincing first draft still needs someone who understands how a website actually works.",
-    "I bring an understanding of the frontend, backend, databases and deployment, together with practical coding foundations. That knowledge helps me guide the tools, connect the pieces and refine the details. Combined with my own creativity and careful testing, it lets me turn your idea into a polished, useful website. AI supports selected tasks; the direction, decisions and final review stay with me.",
+    "I work across the frontend, backend, databases and deployment. That means the work includes what happens after someone clicks: validating a form, saving information and getting it to the right place.",
+    "I build with React, Next.js and TypeScript, then test the pages on mobile and desktop. Layout, interaction and the services behind the website all need to work together.",
   ],
   fundamentals: {
     eyebrow: "THE ENGINEERING BEHIND THE INTERFACE",
@@ -67,10 +67,10 @@ export const experience = {
       },
       {
         id: "ai",
-        title: "Chatbots & Assistants",
+        title: "AI Agents",
         description:
           "Make business information easier to explore with custom website chatbots, carefully guided prompts and optional voice interaction.",
-        tags: ["Botpress", "OpenAI API", "Business FAQs", "Web Speech API"],
+        tags: ["Business knowledge", "Response testing", "Web Speech API"],
         lines: [
           "Provide useful context.",
           "Test answers and handle uncertainty.",

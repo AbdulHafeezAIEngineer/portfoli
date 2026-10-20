@@ -4,7 +4,7 @@ import { site } from "@/data/site";
 
 const serviceTitles: Partial<Record<PortfolioPage, string>> = {
   websites: "Web Design & Development Services | Elvora",
-  bots: "Custom AI Chatbot Integration for Websites | Elvora",
+  bots: "Custom AI Agents for Websites | Elvora",
 };
 
 export function pageMetadata(page: PortfolioPage): Metadata {

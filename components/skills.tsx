@@ -5,14 +5,12 @@ import { ToolMark } from "./tool-mark";
 import { studio } from "@/data/studio";
 import {
   Braces,
-  CheckCheck,
   Database,
   GitBranch,
   Mic,
-  Waypoints,
 } from "lucide-react";
 
-const categoryIcons = [Waypoints, CheckCheck, Braces, Database, Mic, GitBranch];
+const categoryIcons = [Braces, Database, GitBranch, Mic];
 
 export function Skills({ skills }: { skills: Skill[] }) {
   const purpose = new Map<string, string>(
@@ -65,8 +63,7 @@ export function Skills({ skills }: { skills: Skill[] }) {
                             : ""
                         }
                       >
-                        {category === "AI tools" ||
-                        category === "Web interfaces" ||
+                        {category === "Web interfaces" ||
                         category === "Development tools" ? (
                           <ToolMark name={skill.name} />
                         ) : (
@@ -109,7 +106,7 @@ export function Skills({ skills }: { skills: Skill[] }) {
       </div>
       <p className="skills-note">{copy.note}</p>
       <p className="studio-note">
-        {studio.tools.note} The tools are powerful. The decisions are human.
+        {studio.tools.note}
       </p>
     </section>
   );

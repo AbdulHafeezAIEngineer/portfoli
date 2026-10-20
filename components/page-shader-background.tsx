@@ -8,10 +8,16 @@ import {
   type ShaderPage,
   type ShaderTheme,
 } from "@/lib/page-shader-preset";
+import { FeaturedPageShader } from "./featured-page-shader";
 import { useMotionPreference } from "./motion-preference";
 
 /** Decorative full-page WebGPU. Native content/controls are never drawn into it. */
 export function PageShaderBackground({ page }: { page: ShaderPage }) {
+  if (page === "websites" || page === "testimonials") return <FeaturedPageShader page={page} />;
+  return <SDKPageShaderBackground page={page} />;
+}
+
+function SDKPageShaderBackground({ page }: { page: ShaderPage }) {
   const root = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const queue = useRef<Promise<void>>(Promise.resolve());

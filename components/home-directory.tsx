@@ -18,7 +18,7 @@ export function HomeDirectory() {
           id="directory-title"
           text={"Show what you do.\nMake it easy to get in touch."}
         />
-        <ReadingText text="A clear website helps people understand your business and take the next step: ask a question, request a quote or contact you. I also build AI chatbots that use your own product details, service information and common questions to help customers find answers. Explore the examples below to see what I can build for your business." />
+        <ReadingText text="A clear website helps people understand your business and take the next step: ask a question, request a quote or contact you. I also build AI agents that use your own product details, service information and common questions to help customers find answers. Explore the examples below to see what I can build for your business." />
       </div>
       <nav className="home-feature-grid" aria-label="Explore Elvora's work">
         <Link
@@ -50,15 +50,15 @@ export function HomeDirectory() {
           href="/ai-bots"
         >
           <div className="home-feature-copy">
-            <p className="eyebrow">AI BOTS</p>
-            <h3>Your business. Your chatbot.</h3>
+            <p className="eyebrow">AI AGENTS</p>
+            <h3>Your business. Your assistant.</h3>
             <p>
-              An AI chatbot added to your website, using your own business
+              An AI agent added to your website, using your own business
               information to answer customer questions. Try the demos and see
               how it works.
             </p>
             <span>
-              Explore AI bots <ArrowUpRight size={16} aria-hidden="true" />
+              Explore AI agents <ArrowUpRight size={16} aria-hidden="true" />
             </span>
           </div>
           <div className="home-feature-media home-bot-preview">

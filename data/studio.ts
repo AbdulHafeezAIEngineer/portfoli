@@ -22,12 +22,12 @@ export const studio = {
       },
       {
         id: "chat",
-        title: "AI Chatbot Development",
+        title: "AI Agent Development",
         description:
-          "I create custom AI chatbots trained on your business information, services, and FAQs to answer customer questions and provide instant assistance on your website.",
+          "I build website assistants that answer questions using your approved products, services and FAQs, with a chat interface styled for your brand.",
         tags: ["Custom knowledge", "FAQ automation", "Website chatbots"],
         detail:
-          "Custom AI Chatbots — Trained on your business data for customer support and FAQs.",
+          "Custom AI agents using approved business knowledge for customer support and FAQs.",
       },
       {
         id: "automation",
@@ -82,7 +82,7 @@ export const studio = {
       {
         title: "Build & Connect",
         description:
-          "I build the interface with React, Next.js, TypeScript and Tailwind CSS, then connect APIs, data and the services the website needs. AI assists with selected tasks and is always reviewed. Chatbots, voice and lead capture are added when they serve the project.",
+          "I build the interface with React, Next.js, TypeScript and Tailwind CSS, then connect APIs, data and the services the website needs. Chatbots, voice and lead capture are added when they serve the project.",
         note: "The right tools, carefully applied",
         icon: "build",
       },
@@ -164,7 +164,7 @@ export const studio = {
     eyebrow: "DESIGN JUDGMENT. PRACTICAL TOOLS.",
     title: "CREATIVE\nTOOLKIT.",
     intro:
-      "React, Next.js, TypeScript and a practical engineering stack form the foundation. AI assists with selected tasks; design judgment, testing and the final decisions stay human.",
+      "React, Next.js and TypeScript for interfaces. Prisma and PostgreSQL for data. Git and GitHub to track changes and releases.",
     note: "Tools in the creative and development toolkit; selected to suit each project. Product names belong to their respective owners. No partnership or certification is implied.",
     items: [
       {
@@ -214,42 +214,6 @@ export const studio = {
         mark: "PG",
         purpose: "Structured application data",
         color: "var(--text)",
-      },
-      {
-        name: "Claude",
-        mark: "✳︎",
-        purpose: "Reasoning & code review",
-        color: "#d8a486",
-      },
-      {
-        name: "ChatGPT",
-        mark: "GPT",
-        purpose: "Ideas, prompts & problem-solving",
-        color: "#8cc9b1",
-      },
-      {
-        name: "Gemini",
-        mark: "✦",
-        purpose: "Research & exploration",
-        color: "#b5b3ff",
-      },
-      {
-        name: "GitHub Copilot",
-        mark: "GH",
-        purpose: "Development assistance",
-        color: "#c2c9d1",
-      },
-      {
-        name: "Botpress",
-        mark: "BP",
-        purpose: "Custom chatbot experiences",
-        color: "#aaa1ff",
-      },
-      {
-        name: "OpenAI API",
-        mark: "API",
-        purpose: "Optional assistant integrations",
-        color: "#e4cc88",
       },
     ],
   },

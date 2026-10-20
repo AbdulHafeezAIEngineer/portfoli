@@ -131,10 +131,10 @@ export const botContent = {
     powered: "Powered by Botpress",
   },
   open: "Open chat",
-  eyebrow: "02 / AI CHATBOT SERVICES",
+  eyebrow: "02 / AI AGENTS",
   title: "Better conversations. Built right in.",
   description:
-    "Try three business assistants with their own knowledge, plus a voice demo. See how a custom AI chatbot could help your customers.",
+    "Try three business assistants with their own knowledge, plus a voice demo. See how a custom AI agent could help your customers.",
   try: "Try Live Demo",
   previewDemo: "Preview assistant",
   knowledge: "View demo knowledge",
@@ -157,7 +157,7 @@ export const botContent = {
     "Demo messages are sent to the AI provider. Avoid confidential information. Chat history resets on reload. If conversation logging is enabled, messages are also retained securely for review; avoid personal or confidential information.",
   budget:
     "Demos have usage limits. Orders, enquiries and reservations are demonstrations only. External embeds follow their provider's policies.",
-  embedTitle: "How I Embed Bots",
+  embedTitle: "How I Embed Agents",
   embedDescription:
     "Three ways to meet your visitors where they already are. The right approach depends on the control and integration your business needs.",
   pros: "Works well for",

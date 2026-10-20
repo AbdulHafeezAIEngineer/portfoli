@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { ArrowDown, ArrowUpRight, AudioLines, BookOpen, Check, FileText, MessageCircle, Send, Sparkles } from "lucide-react";
+import { ArrowDown, ArrowUpRight, AudioLines, BookOpen, Check, FileText, MessageCircle, Send } from "lucide-react";
 import { botContent as copy, embedMethods, type Bot, type BotId, type ChatMessage } from "@/data/bots";
 import { botShowcase } from "@/data/bot-showcase";
 import { isBusinessAssistant } from "@/data/business-assistants";
@@ -30,7 +30,7 @@ export function BotServices({ bots }: { bots: Bot[] }) {
         <BotPrismShader />
         <div className="bot-hero-shade" aria-hidden="true" />
         <div className="bot-hero-content">
-          <span className="bot-kicker"><Sparkles size={15} aria-hidden="true" /> CUSTOM AI ASSISTANTS BY ELVORA</span>
+          <span className="bot-kicker"><MessageCircle size={15} aria-hidden="true" /> CUSTOM AI AGENTS BY ELVORA</span>
           <h1 id="bots-title">Your business.<br /><span>Better conversations.</span></h1>
           <p>Answers from your knowledge.<br className="bot-desktop-break" /> A helpful voice for your business.</p>
           <a href="#meet-assistants" className="bot-pill bot-pill-white">Meet the assistants <ArrowDown size={17} aria-hidden="true" /></a>
@@ -52,7 +52,7 @@ export function BotServices({ bots }: { bots: Bot[] }) {
             <p>Different assistants. Separate business knowledge.</p>
           </div>
           <div className="bot-knowledge-chat">
-            <div className="bot-mock-header"><span className="bot-elvora-spark"><Sparkles size={19} /></span><strong>Your assistant</strong><span>EXAMPLE</span></div>
+            <div className="bot-mock-header"><span className="bot-elvora-spark"><MessageCircle size={19} /></span><strong>Your assistant</strong><span>EXAMPLE</span></div>
             <p className="bot-sample-user">Can you help me find the right option?</p>
             <p className="bot-sample-answer">Of course. Tell me what you need, and I’ll guide you using our business information.</p>
             <div className="bot-answer-source"><BookOpen size={13} /> Your approved knowledge</div>

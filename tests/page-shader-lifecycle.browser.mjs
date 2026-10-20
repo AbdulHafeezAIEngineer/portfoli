@@ -50,7 +50,8 @@ try {
       return adapter;
     };
   });
-  await page.goto(base + "/websites");
+  // SDK lifecycle stays on About; featured WebGL effects have their own tests.
+  await page.goto(base + "/about");
   await page.getByRole("button", { name: "Reject All", exact: true }).click();
   const ready = () =>
     page.waitForFunction(

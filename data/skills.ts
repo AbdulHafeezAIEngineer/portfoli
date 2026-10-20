@@ -1,27 +1,10 @@
 export type Skill = { id: string; name: string; category: string };
 export const skills: Skill[] = [
-  { id: "claude", name: "Claude", category: "AI tools" },
-  { id: "chatgpt", name: "ChatGPT", category: "AI tools" },
-  { id: "gemini", name: "Gemini", category: "AI tools" },
-  { id: "copilot", name: "GitHub Copilot", category: "AI tools" },
-  { id: "botpress", name: "Botpress", category: "AI tools" },
-  { id: "openai", name: "OpenAI API", category: "AI tools" },
   { id: "python", name: "Python basics", category: "Development tools" },
   { id: "github", name: "GitHub", category: "Development tools" },
   { id: "git", name: "Git", category: "Development tools" },
   { id: "html", name: "HTML", category: "Web interfaces" },
   { id: "css", name: "CSS", category: "Web interfaces" },
-  { id: "prompts", name: "Structured prompts", category: "Prompt engineering" },
-  {
-    id: "context",
-    name: "Context & constraints",
-    category: "Prompt engineering",
-  },
-  {
-    id: "evaluation",
-    name: "Output evaluation",
-    category: "Prompt engineering",
-  },
   { id: "next", name: "Next.js", category: "Web interfaces" },
   { id: "react", name: "React", category: "Web interfaces" },
   { id: "typescript", name: "TypeScript", category: "Web interfaces" },
@@ -42,19 +25,15 @@ export const skillContent = {
   eyebrow: "04 / TOOLS & TECHNOLOGIES",
   title: "Skills & tools.",
   description:
-    "The primary stack is React, Next.js, TypeScript, Tailwind CSS, Git and structured application data. Selected AI and voice tools support the work when useful.",
+    "The primary stack is React, Next.js, TypeScript, Tailwind CSS, Git and structured application data. Browser speech features support voice input and playback.",
   note: "Always learning. Always refining. The right tool, chosen for the task.",
   categoryLabels: {
-    "AI tools": "AI assistance",
-    "Prompt engineering": "Assistant instructions",
     "Voice AI": "Voice & accessibility",
   },
   categories: [
     "Web interfaces",
     "APIs & data",
     "Development tools",
-    "AI tools",
-    "Prompt engineering",
     "Voice AI",
   ],
 } as const;

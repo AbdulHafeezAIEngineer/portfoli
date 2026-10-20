@@ -1,0 +1,30 @@
+{
+  "effects": [
+    {
+      "route": "websites",
+      "effect": "accretion",
+      "movingPixels": true,
+      "motionOff": true,
+      "pause": false,
+      "offscreenStop": true,
+      "hiddenTabStop": true,
+      "contextFallback": true,
+      "contextRestored": true
+    },
+    {
+      "route": "testimonials",
+      "effect": "tunnel",
+      "movingPixels": true,
+      "motionOff": true,
+      "pause": true,
+      "offscreenStop": true,
+      "hiddenTabStop": true,
+      "contextFallback": true,
+      "contextRestored": true
+    }
+  ],
+  "responsiveLayouts": 8,
+  "noWebGL": true,
+  "agentRename": true,
+  "toolPromotionRemoved": true
+}

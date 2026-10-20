@@ -7,11 +7,10 @@ const base = process.env.PUBLIC_TEST_URL || "http://127.0.0.1:3008";
 if (!/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(base))
   throw Error("Local production app required");
 const routes = {
-  websites: "/websites",
+  // Websites and Testimonials use WebGL; see featured-shaders.browser.mjs.
   // /ai-bots uses its own prismatic WebGL scene; see bot-redesign.browser.mjs.
   collection: "/bunch-of-work",
   about: "/about",
-  testimonials: "/testimonials",
   contact: "/contact",
 };
 const runtimeChunks = fs
@@ -363,15 +362,15 @@ try {
     Object.defineProperty(navigator, "gpu", { get: () => undefined }),
   );
   const page = await context.newPage();
-  await page.goto(base + "/testimonials");
+  await page.goto(base + "/about");
   await page.waitForFunction(
     () =>
       document.querySelector("[data-page-shader]")?.dataset.state ===
       "unsupported",
   );
-  assert.equal(await page.locator(".testimonial-card").count(), 4);
+  assert.ok(await page.getByRole("heading", { level: 1 }).isVisible());
   assert.equal(
-    (await page.request.get(base + "/shaders/testimonials-dark.webp")).status(),
+    (await page.request.get(base + "/shaders/about-dark.webp")).status(),
     200,
   );
   await context.close();

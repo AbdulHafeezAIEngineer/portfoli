@@ -3,18 +3,18 @@ export const site = {
   brand: "Elvora",
   logo: { src: "/elvora-logo.svg" },
   name: "Abdul Hafeez",
-  role: "Web Developer & Chatbot Builder",
+  role: "Web Developer & AI Agent Builder",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.elvoraai.online",
   email: "abdulhafeez@elvoraai.online",
   title: "Web Design & Development by Abdul Hafeez | Elvora",
   description:
-    "We build custom websites and AI assistant bots for your business. Our bots answer customer questions using your own business information.",
+    "We build custom websites and AI agents for your business. Our agents answer customer questions using your own business information.",
   nav: primaryNavigation,
   hero: {
-    eyebrow: "WEB DESIGN, DEVELOPMENT & AI CHATBOTS",
-    heading: ["Custom websites.", "Helpful AI chatbots."],
+    eyebrow: "WEB DESIGN, DEVELOPMENT & AI AGENTS",
+    heading: ["Custom websites.", "Helpful AI agents."],
     intro:
-      "We build custom websites and AI assistant bots for businesses worldwide.",
+      "We build custom websites and AI agents for businesses worldwide.",
     tagline:
       "Make your services clear, help visitors get answers and give them an easy way to contact you. Your chatbot answers questions using the business information you provide.",
     primary: "View Work",
@@ -28,7 +28,7 @@ export const site = {
     portraitStatus: "Portrait placeholder",
     floatingLabel: "HUMAN IDEAS. DIGITAL CRAFT.",
   },
-  expertise: ["Web development", "AI chatbots", "Voice experiences"],
+  expertise: ["Web development", "AI agents", "Voice experiences"],
   work: {
     eyebrow: "01 / SELECTED EXPLORATIONS",
     title: "Ideas, brought to the browser.",
@@ -42,8 +42,8 @@ export const site = {
       },
       {
         id: "bots",
-        title: "AI Chatbot Services",
-        detail: "01 custom bot · 03 AI demos",
+        title: "AI Agent Development",
+        detail: "Business knowledge · Live chat demos",
       },
     ],
     concept: "Concept Project",

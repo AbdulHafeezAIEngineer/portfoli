@@ -8,13 +8,13 @@ export const portfolioPages = {
   },
   bots: {
     href: "/ai-bots",
-    label: "AI Bots",
+    label: "AI Agents",
     description:
-      "AI chatbot integration for your website, using your business information. Help customers find answers about your products, services and policies.",
+      "Custom AI agents for your website, using your business information. Help customers find answers about your products, services and policies.",
   },
   embedding: {
     href: "/ai-bots#embed-methods",
-    label: "How I Embed Bots",
+    label: "How I Embed Agents",
     description:
       "How chatbots connect to websites, from embedded widgets to custom API integrations.",
   },
@@ -33,7 +33,7 @@ export const portfolioPages = {
     href: "/journey",
     label: "My Journey",
     description:
-      "From curiosity about Python and AI to independent web development and building Elvora.",
+      "From curiosity about Python and the web to independent web development and building Elvora.",
   },
   domains: {
     href: "/websites#fundamentals",
@@ -45,7 +45,7 @@ export const portfolioPages = {
     href: "/skills",
     label: "Skills & Tools",
     description:
-      "The development tools, engineering practices and selected assistants behind Elvora's projects.",
+      "The development tools, engineering practices and integrations behind Elvora's projects.",
   },
   certificates: {
     href: "/certificates",
@@ -57,7 +57,7 @@ export const portfolioPages = {
     href: "/websites#workflow",
     label: "How I Build",
     description:
-      "How I build websites with design judgment, a practical development stack and selected AI assistance.",
+      "How I build websites with design judgment, a practical development stack and testing on mobile and desktop.",
   },
   testimonials: {
     href: "/testimonials",

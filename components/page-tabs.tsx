@@ -15,9 +15,9 @@ const subjectSections = {
     { id: "fundamentals", label: "Technical Domains" },
   ],
   bots: [
-    { id: "ai-bots", label: "AI Bots" },
-    { id: "bot-build", label: "How I Build Bots" },
-    { id: "embed-methods", label: "How I Embed Bots" },
+    { id: "ai-bots", label: "AI Agents" },
+    { id: "bot-build", label: "How I Build Agents" },
+    { id: "embed-methods", label: "How I Embed Agents" },
   ],
 };
 export function PageTabs({ page }: { page: PortfolioPage }) {
@@ -59,7 +59,7 @@ export function PageTabs({ page }: { page: PortfolioPage }) {
       aria-label={
         profile
           ? "About Me pages"
-          : `${page === "bots" ? "AI Bots" : "Websites"} sections`
+          : `${page === "bots" ? "AI Agents" : "Websites"} sections`
       }
     >
       <div className="container page-tabs-inner" ref={row}>

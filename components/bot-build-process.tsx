@@ -58,7 +58,7 @@ export function BotBuildProcess() {
         <Reveal>
           <p className="eyebrow">FROM YOUR KNOWLEDGE TO A USEFUL ASSISTANT</p>
         </Reveal>
-        <TextReveal id="bot-build-title" text="How I Build Bots." />
+        <TextReveal id="bot-build-title" text="How I Build Agents." />
         <Reveal>
           <ReadingText text="A useful assistant starts with your business, your information and a clear job to do. I shape the knowledge, conversation and integration, then test the details before it reaches your visitors." />
         </Reveal>
