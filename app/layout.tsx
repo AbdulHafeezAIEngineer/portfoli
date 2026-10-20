@@ -27,19 +27,12 @@ import "./liquid-glass.css";
 import "./page-shaders.css";
 import "./bot-experience.css";
 import "./chat-brands.css";
-import "./field-notes.css";
 import { ConsentProvider } from "@/components/consent-provider";
 
 const inter = localFont({
   src: "../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2",
   weight: "100 900",
   variable: "--font-inter",
-  display: "swap",
-});
-const fraunces = localFont({
-  src: "../node_modules/@fontsource-variable/fraunces/files/fraunces-latin-wght-normal.woff2",
-  weight: "100 900",
-  variable: "--font-fraunces",
   display: "swap",
 });
 const space = localFont({
@@ -87,12 +80,12 @@ export function generateMetadata(): Metadata {
   };
 }
 export const viewport: Viewport = {
-  // The public site defaults to light independently of the OS; saved/manual choices
+  // The site defaults to dark independently of the OS; saved/manual choices
   // are applied by the inline initializer and ThemeColorSync.
-  themeColor: palette.light.background,
+  themeColor: palette.dark.background,
 };
 
-const themeScript = `(function(){var t='light',m='full';try{var s=localStorage.getItem('portfolio-theme');if(s==='light'||s==='dark')t=s;var p=localStorage.getItem('elvora-motion');if(p==='full'||p==='reduced')m=p;}catch(e){}document.documentElement.dataset.theme=t;document.documentElement.dataset.motion=m;if(window.IntersectionObserver&&m==='full')document.documentElement.dataset.motionReveals='enabled';var colors=${JSON.stringify({ dark: palette.dark.background, light: palette.light.background })};function sync(){var selected=document.documentElement.dataset.theme==='light'?'light':'dark';document.querySelectorAll('meta[name="theme-color"]').forEach(function(meta){meta.content=colors[selected];});}sync();if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync,{once:true});})();`;
+const themeScript = `(function(){var t='dark',m='full';try{var s=localStorage.getItem('portfolio-theme');if(s==='light'||s==='dark')t=s;var p=localStorage.getItem('elvora-motion');if(p==='full'||p==='reduced')m=p;}catch(e){}document.documentElement.dataset.theme=t;document.documentElement.dataset.motion=m;if(window.IntersectionObserver&&m==='full')document.documentElement.dataset.motionReveals='enabled';var colors=${JSON.stringify({ dark: palette.dark.background, light: palette.light.background })};function sync(){var selected=document.documentElement.dataset.theme==='light'?'light':'dark';document.querySelectorAll('meta[name="theme-color"]').forEach(function(meta){meta.content=colors[selected];});}sync();if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync,{once:true});})();`;
 
 export default async function RootLayout({
   children,
@@ -101,9 +94,9 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      data-theme="light"
+      data-theme="dark"
       suppressHydrationWarning
-      className={`${inter.variable} ${space.variable} ${fraunces.variable}`}
+      className={`${inter.variable} ${space.variable}`}
     >
       <head>
         <script

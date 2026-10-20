@@ -10,6 +10,7 @@ import { site } from "@/data/site";
 import { Reveal } from "./reveal";
 import { ProjectCard } from "./project-card";
 import { TextReveal } from "./text-reveal";
+import { WorkShowcaseVideo } from "./WorkShowcaseVideo";
 import Gallery from "./project-gallery";
 
 export function Work({ projects }: { projects: ProjectView[] }) {
@@ -46,12 +47,13 @@ export function Work({ projects }: { projects: ProjectView[] }) {
       <Reveal>
         <div className="section-heading">
           <div>
-            <p className="eyebrow">WEBSITE CONCEPTS / WORKING DEMOS</p>
+            <p className="eyebrow">02 / SELECTED EXPLORATIONS</p>
             <TextReveal as="h1" id="work-title" text={site.work.title} />
           </div>
           <p>{site.work.description}</p>
         </div>
       </Reveal>
+      <WorkShowcaseVideo />
       <div className="projects-grid curated-projects-grid">
         {projects.map((item) => (
           <Reveal key={item.id}>

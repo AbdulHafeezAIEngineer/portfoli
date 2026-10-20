@@ -1,7 +1,7 @@
 export const botShowcase = {
   veldt: {
     category: "FOR ONLINE STORES",
-    title: "Which bag fits a 15-inch laptop?",
+    title: "A little guidance. A better shopping experience.",
     description: "Help shoppers find the right product and understand delivery or returns, without searching through pages of FAQs.",
     image: "/bots/veldt-showcase.webp",
     alt: "Original product artwork: an olive backpack, pouch and steel bottle on warm studio platforms",
@@ -14,8 +14,8 @@ export const botShowcase = {
   },
   northline: {
     category: "FOR SERVICE BUSINESSES",
-    title: "What would a website project include?",
-    description: "Northline explains sample website and chatbot packages. It asks about the project and can draft a brief; it does not send an enquiry.",
+    title: "Turn a first question into a clear project brief.",
+    description: "Give visitors a helpful first conversation. Explain your services, understand what they need and guide them towards the right next step.",
     image: "/bots/northline-showcase.webp",
     alt: "Original studio artwork: a silver laptop and sculptural violet glass on an ivory desk",
     abilities: ["Explain website and chatbot packages", "Ask about goals, scope and budget", "Summarize a project enquiry for review"],
@@ -27,8 +27,8 @@ export const botShowcase = {
   },
   solenne: {
     category: "FOR HOTELS & HOSPITALITY",
-    title: "Which room fits four guests?",
-    description: "Solenne answers from its room guide and guest policies. It can suggest a room, but cannot confirm availability or make a booking.",
+    title: "A warm welcome, before the stay begins.",
+    description: "Help guests compare rooms, understand the amenities and plan their enquiry—with answers drawn from the hotel's own information.",
     image: "/bots/solenne-showcase.webp",
     alt: "Original hospitality artwork: a sunlit limestone terrace, olive shadows and a quiet sea-view pool",
     abilities: ["Recommend a stay for the guest's needs", "Explain amenities and check-in policies", "Prepare an enquiry without claiming a booking"],

@@ -1,82 +1,136 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import { ReadingText } from "./reading-text";
+import { TextReveal } from "./text-reveal";
+import { VisibilityVideo } from "./VisibilityVideo";
+import { HomeExplore } from "./home-explore";
 
 export function HomeDirectory() {
   return (
     <section
-      id="selected-work"
-      className="container field-directory"
+      id="explore"
+      className="home-directory home-overview"
       aria-labelledby="directory-title"
     >
-      <header className="field-section-heading">
-        <p className="eyebrow">SELECTED BUILDS / OPEN AND TRY THEM</p>
-        <h2 id="directory-title">
-          Try the stay planner.
-          <br />
-          Change a car’s finish.
-        </h2>
-        <p>
-          These are working concepts with fictional brands. Use the filters,
-          forms and chat demos to judge what I build.
-        </p>
-      </header>
-      <div className="field-work-pair">
-        <article className="field-work-primary">
-          <Link href="/demo/solenne">
-            <Image
-              src="/projects/solenne-1.webp"
-              alt="Actual browser screenshot of the Solenne hotel concept"
-              width={1440}
-              height={1000}
-              sizes="(max-width:760px) 100vw, 58vw"
-            />
-            <span className="field-work-label">
-              <span>01 / SOLENNE</span>
-              <ArrowUpRight size={23} aria-hidden="true" />
-            </span>
-          </Link>
-          <h3>A room shortlist before an enquiry.</h3>
-          <p>
-            Compare the fictional suites and villas, then try the sample stay
-            planner. It creates no booking.
-          </p>
-        </article>
-        <article className="field-work-secondary">
-          <Link href="/demo/vanta">
-            <Image
-              src="/projects/vanta-1.webp"
-              alt="Actual browser screenshot of the Vanta automotive concept"
-              width={1440}
-              height={1000}
-              sizes="(max-width:760px) 100vw, 36vw"
-            />
-            <span className="field-work-label">
-              <span>02 / VANTA</span>
-              <ArrowUpRight size={23} aria-hidden="true" />
-            </span>
-          </Link>
-          <h3>Choose a model. Change the finish.</h3>
-          <p>
-            An electric-car configurator with a local summary. The car and
-            specifications are fictional.
-          </p>
-        </article>
+      <div className="home-purpose home-band-light">
+        <p className="eyebrow">WHAT I CAN BUILD FOR YOU</p>
+        <TextReveal
+          id="directory-title"
+          text={"Show what you do.\nMake it easy to get in touch."}
+        />
+        <ReadingText text="A clear website helps people understand your business and take the next step: ask a question, request a quote or contact you. I also build AI chatbots that use your own product details, service information and common questions to help customers find answers. Explore the examples below to see what I can build for your business." />
       </div>
-      <div className="field-index-links">
-        <Link href="/websites">
-          <span>All four website concepts</span>
-          <ArrowUpRight size={20} />
+      <nav className="home-feature-grid" aria-label="Explore Elvora's work">
+        <Link
+          className="home-feature home-feature-websites home-band-dark"
+          href="/websites"
+        >
+          <div className="home-feature-copy">
+            <p className="eyebrow">WEBSITES</p>
+            <h3>A website built for your business.</h3>
+            <p>
+              Custom design and development that explains your services and
+              makes it easy to contact you. Explore the concept websites and see
+              how I build them.
+            </p>
+            <span>
+              Explore websites <ArrowUpRight size={16} aria-hidden="true" />
+            </span>
+          </div>
+          <div className="home-feature-media home-website-preview">
+            <VisibilityVideo
+              name="home-websites"
+              caption="An architectural website explored in motion."
+              presentation="card"
+            />
+          </div>
         </Link>
-        <Link href="/ai-bots">
-          <span>Veldt, Northline and Solenne chat demos</span>
-          <ArrowUpRight size={20} />
+        <Link
+          className="home-feature home-feature-bots home-band-light"
+          href="/ai-bots"
+        >
+          <div className="home-feature-copy">
+            <p className="eyebrow">AI BOTS</p>
+            <h3>Your business. Your chatbot.</h3>
+            <p>
+              An AI chatbot added to your website, using your own business
+              information to answer customer questions. Try the demos and see
+              how it works.
+            </p>
+            <span>
+              Explore AI bots <ArrowUpRight size={16} aria-hidden="true" />
+            </span>
+          </div>
+          <div className="home-feature-media home-bot-preview">
+            <VisibilityVideo
+              name="home-ai-bot"
+              caption="A delivery question answered by a website assistant."
+              presentation="card"
+            />
+          </div>
         </Link>
-        <Link href="/bunch-of-work">
-          <span>Six interface studies</span>
-          <ArrowUpRight size={20} />
+        <Link
+          className="home-feature home-feature-collection home-band-purple"
+          href="/bunch-of-work"
+        >
+          <div className="home-feature-copy">
+            <p className="eyebrow">BUNCH OF WORK</p>
+            <h3>Different worlds. One eye for detail.</h3>
+            <p>
+              A closer look at websites, dashboards and interface experiments.
+              Discover the full visual collection.
+            </p>
+            <span>
+              See the collection <ArrowUpRight size={16} aria-hidden="true" />
+            </span>
+          </div>
+          <div className="home-feature-media home-collection-preview">
+            <VisibilityVideo
+              name="home-collection"
+              caption="A rotating collection of website designs."
+              presentation="card"
+            />
+          </div>
         </Link>
-      </div>
+      </nav>
+      <HomeExplore>
+        <div className="container">
+          <div>
+            <p className="eyebrow">KEEP EXPLORING</p>
+            <h2>
+              The person. The perspective.{" "}
+              <span className="home-more-highlight">The next idea.</span>
+            </h2>
+          </div>
+          <nav aria-label="More about Elvora">
+            {[
+              {
+                href: "/about",
+                title: "About Me",
+                text: "Meet the developer, see my work and explore the tools I use.",
+              },
+              {
+                href: "/testimonials",
+                title: "Testimonials",
+                text: "Perspectives on working together, all in one place.",
+              },
+              {
+                href: "/contact",
+                title: "Let’s talk",
+                text: "Need a website or a chatbot? Tell me about your business and what you need.",
+              },
+            ].map((item) => (
+              <Link key={item.href} href={item.href}>
+                <h3>
+                  {item.title}
+                  <ArrowUpRight size={18} aria-hidden="true" />
+                </h3>
+                <p>{item.text}</p>
+              </Link>
+            ))}
+          </nav>
+        </div>
+      </HomeExplore>
     </section>
   );
 }

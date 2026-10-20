@@ -64,27 +64,27 @@ async function main() {
       await page.evaluate(() => document.fonts.ready);
       await phone.goto(`${base}/demo/${slug}`, { waitUntil: "networkidle" });
       await phone.evaluate(() => document.fonts.ready);
-      for (const capturePage of [page, phone]) {
-        const reject = capturePage.getByRole("button", { name: "Reject All", exact: true });
-        if (await reject.isVisible()) await reject.click();
-      }
-      await page.getByRole("button", { name: "Maximize preview window", exact: true }).click();
-      await phone.getByRole("button", { name: "Maximize preview window", exact: true }).click();
       for (const [number, target] of [
         [1, "home"],
         [2, "inner"],
         [4, "feature"],
       ] as const) {
-        await page.locator(".demo-window-content").evaluate((region, part) => {
-          const element = region.querySelector(`[data-capture="${part}"]`);
-          region.scrollTo({ top: part === "home" ? 0 : (element?.getBoundingClientRect().top || 0) - region.getBoundingClientRect().top + region.scrollTop, behavior: "instant" });
+        await page.evaluate((part) => {
+          const element = document.querySelector(`[data-capture="${part}"]`);
+          window.scrollTo({
+            top:
+              part === "home"
+                ? 0
+                : (element?.getBoundingClientRect().top || 0) + scrollY,
+            behavior: "instant",
+          });
         }, target);
-        const bytes = await page.locator(".demo-window-content").screenshot({ animations: "disabled" });
+        const bytes = await page.screenshot({ animations: "disabled" });
         await sharp(bytes)
           .webp({ quality: 88 })
           .toFile(path.join(output, `${slug}-${number}.webp`));
       }
-      await sharp(await phone.locator(".demo-window-content").screenshot({ animations: "disabled" }))
+      await sharp(await phone.screenshot({ animations: "disabled" }))
         .webp({ quality: 88 })
         .toFile(path.join(output, `${slug}-3.webp`));
       await writeFile(

@@ -25,9 +25,9 @@ export const certificates: Certificate[] = [
 ];
 export const certificateContent = {
   eyebrow: "05 / CERTIFICATION",
-  title: "Course record.",
+  title: "Certificate Showcase",
   description:
-    "Coursiv’s 6-hour ChatGPT course, completed on 31 October 2024. This is a course completion record, not a professional accreditation. Select the document to read it.",
+    "My course completion certificate, with the original award details. Select the image to explore it in full screen.",
   placeholder: "[PLACEHOLDER] Certificate image pending",
   issuer: "ISSUER",
   date: "AWARDED",

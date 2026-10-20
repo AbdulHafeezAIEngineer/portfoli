@@ -13,16 +13,16 @@ export const portfolioPages = {
       "AI chatbot integration for your website, using your business information. Help customers find answers about your products, services and policies.",
   },
   embedding: {
-    href: "/ai-bots/how-i-embed-bots",
+    href: "/ai-bots#embed-methods",
     label: "How I Embed Bots",
     description:
       "How chatbots connect to websites, from embedded widgets to custom API integrations.",
   },
   collection: {
     href: "/bunch-of-work",
-    label: "Interface studies",
+    label: "Bunch of Work",
     description:
-      "Actual screenshots of four website concepts and six fictional interface studies.",
+      "A larger, immersive collection of Elvora's original website concepts and interface studies.",
   },
   about: {
     href: "/about",
@@ -36,7 +36,7 @@ export const portfolioPages = {
       "From curiosity about Python and AI to independent web development and building Elvora.",
   },
   domains: {
-    href: "/technical-domains",
+    href: "/websites#fundamentals",
     label: "Technical Domains",
     description:
       "The engineering behind the interface: frontend, APIs, data, deployment and conversational AI.",
@@ -63,7 +63,7 @@ export const portfolioPages = {
     href: "/testimonials",
     label: "Testimonials",
     description:
-      "Published client feedback, when permission has been given. Concept demos are available to inspect.",
+      "Client perspectives on design, development and working with Elvora.",
   },
   services: {
     href: "/services",
@@ -91,6 +91,7 @@ export const primaryNavigation = [
   portfolioPages.bots,
   portfolioPages.collection,
   portfolioPages.about,
+  portfolioPages.testimonials,
   portfolioPages.contact,
 ];
 export const legacySections: Record<string, string> = {
@@ -98,7 +99,7 @@ export const legacySections: Record<string, string> = {
   "#work": "/websites",
   "#work-bunch": "/bunch-of-work",
   "#ai-bots": "/ai-bots",
-  "#embed-methods": "/ai-bots/how-i-embed-bots",
+  "#embed-methods": "/ai-bots#embed-methods",
   "#experience": "/about",
   "#journey": "/journey",
   "#fundamentals": "/websites#fundamentals",
@@ -107,6 +108,6 @@ export const legacySections: Record<string, string> = {
   "#certification": "/certificates",
   "#workflow": "/websites#workflow",
   "#testimonials": "/testimonials",
-  "#faq": "/contact",
+  "#faq": "/contact#faq",
   "#contact": "/contact",
 };

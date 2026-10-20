@@ -43,7 +43,7 @@ export const skillContent = {
   title: "Skills & tools.",
   description:
     "The primary stack is React, Next.js, TypeScript, Tailwind CSS, Git and structured application data. Selected AI and voice tools support the work when useful.",
-  note: "The website and chat demos show how these tools are used. Tool use does not imply certification.",
+  note: "Always learning. Always refining. The right tool, chosen for the task.",
   categoryLabels: {
     "AI tools": "AI assistance",
     "Prompt engineering": "Assistant instructions",

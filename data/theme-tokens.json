@@ -1,23 +1,23 @@
 {
   "dark": {
-    "background": "#24251f",
-    "surface": "#2d2e27",
-    "border": "#515248",
-    "text": "#f3efe5",
-    "muted": "#c3c2b6",
-    "accent": "#b9cb8a",
-    "accentHover": "#d0dda9",
-    "accentSoft": "rgba(185,203,138,0.12)"
+    "background": "#0A0A0F",
+    "surface": "#14141C",
+    "border": "#262633",
+    "text": "#F5F3FF",
+    "muted": "#A09CB5",
+    "accent": "#8B5CF6",
+    "accentHover": "#A78BFA",
+    "accentSoft": "rgba(139,92,246,0.12)"
   },
   "light": {
-    "background": "#f3efe5",
-    "surface": "#faf7f0",
-    "border": "#d2d0c3",
-    "text": "#24251f",
-    "muted": "#606257",
-    "accent": "#386344",
-    "accentHover": "#264b31",
-    "accentSoft": "rgba(56,99,68,0.08)"
+    "background": "#FAFAFC",
+    "surface": "#FFFFFF",
+    "border": "#E6E4EE",
+    "text": "#0A0A0F",
+    "muted": "#6B6880",
+    "accent": "#7C3AED",
+    "accentHover": "#6D28D9",
+    "accentSoft": "rgba(124,58,237,0.08)"
   },
   "neutral": {
     "black": "#000000",

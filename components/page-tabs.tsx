@@ -12,11 +12,12 @@ const subjectSections = {
   websites: [
     { id: "work", label: "Website concepts" },
     { id: "workflow", label: "How I Build Websites" },
+    { id: "fundamentals", label: "Technical Domains" },
   ],
   bots: [
     { id: "ai-bots", label: "AI Bots" },
-    { id: "bot-sources", label: "Source policy" },
-    { id: "meet-assistants", label: "Try the demos" },
+    { id: "bot-build", label: "How I Build Bots" },
+    { id: "embed-methods", label: "How I Embed Bots" },
   ],
 };
 export function PageTabs({ page }: { page: PortfolioPage }) {
