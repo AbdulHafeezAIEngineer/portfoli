@@ -198,3 +198,16 @@ html[data-motion="full"]
 @media (prefers-contrast: more), (forced-colors: active), (prefers-reduced-transparency: reduce) {
   .featured-page-shader { visibility: hidden; }
 }
+
+.testimonial-feedback-invitation {
+  max-width: 720px;
+  margin: 0 auto 80px;
+  padding: clamp(28px, 6vw, 64px);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface);
+  text-align: left;
+}
+.testimonial-feedback-invitation h2 { margin: 20px 0; font-size: clamp(30px, 4vw, 48px); }
+.testimonial-feedback-invitation > p:not(.eyebrow) { color: var(--muted); line-height: 1.7; }
+.testimonial-feedback-invitation > a { margin-top: 28px; }

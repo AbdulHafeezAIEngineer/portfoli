@@ -16,7 +16,7 @@ const bundle = await build({
   format: "iife",
   jsx: "automatic",
   tsconfig: path.resolve("tsconfig.json"),
-  define: { "process.env.NODE_ENV": '"production"' },
+  define: { "process.env.NODE_ENV": '"production"', "process.env.NEXT_PUBLIC_SITE_URL": '""' },
   plugins: [
     {
       name: "unused-portrait",
@@ -75,14 +75,14 @@ try {
       await page
         .getByRole("heading", { name: "Testimonials.", exact: true })
         .waitFor();
-      assert.equal(await page.locator(".testimonial-card").count(), 4);
+      assert.equal(await page.locator(".testimonial-card").count(), genuine ? 4 : 0);
       assert.equal(
         await page.locator('[data-sample="true"]').count(),
-        genuine ? 0 : 4,
+        0,
       );
       assert.equal(
         await page.locator(".testimonial-sample-note").count(),
-        genuine ? 0 : 1,
+        0,
       );
       const columns = await page
         .locator(".testimonials-grid")
@@ -96,16 +96,11 @@ try {
         ),
       );
       if (!genuine) {
-        assert.equal(
-          await page.locator(".testimonial-sample-label").count(),
-          4,
-        );
-        assert.equal(
-          new Set(
-            await page.locator(".testimonial-card strong").allTextContents(),
-          ).size,
-          4,
-        );
+        assert.equal(await page.locator(".testimonial-sample-label").count(), 0);
+        const feedback = page.getByRole("link", { name: "Send your feedback", exact: true });
+        assert.ok(await feedback.isVisible());
+        assert.match(await feedback.getAttribute("href"), /^mailto:/);
+        assert.equal(await page.getByText(/Nora Vale|Ethan Reed|Maya Lane|Omar Ellis/).count(), 0);
       }
       if (genuine)
         assert.match(
@@ -116,7 +111,7 @@ try {
   }
   assert.deepEqual(errors, []);
   console.log(
-    "PASS testimonials: three/two/one columns, labeled samples, genuine reviews replace samples, no overflow or runtime errors.",
+    "PASS testimonials: three/two/one columns, no fabricated reviews, feedback invitation and genuine review rendering, no overflow or runtime errors.",
   );
 } finally {
   await browser.close();
