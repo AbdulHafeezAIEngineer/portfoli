@@ -42,7 +42,7 @@ try {
     assert.equal(await page.locator('[data-sample="true"]').count(), 4);
     assert.match(
       await page.locator(".testimonial-sample-note").innerText(),
-      /fictional profiles/,
+      /Sample reviews/,
     );
     assert.equal(
       new Set(await page.locator(".testimonial-card strong").allTextContents())

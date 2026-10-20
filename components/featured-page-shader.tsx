@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState } from "react";
 import { accretionFragment, featuredVertex, tunnelFragment } from "@/lib/featured-shaders";
 import { useMotionPreference } from "./motion-preference";
 
@@ -29,7 +29,7 @@ export function FeaturedPageShader({ page }: { page: FeaturedPage }) {
     const contrast = matchMedia("(prefers-contrast: more)");
     const forced = matchMedia("(forced-colors: active)");
     const transparency = matchMedia("(prefers-reduced-transparency: reduce)");
-    // High-contrast modes keep the content on a plain background.
+    // Accessibility preferences keep the local still image instead of a GPU animation.
     if (contrast.matches || forced.matches || transparency.matches) return;
     const gl = element.getContext("webgl", {
       alpha: false, antialias: false, depth: false, stencil: false,
@@ -128,8 +128,7 @@ export function FeaturedPageShader({ page }: { page: FeaturedPage }) {
     };
   }, [page, effect, ready, revision]);
 
-  return <div ref={root} className="page-shader-background featured-page-shader" data-page-shader={page} data-effect={effect} data-state="fallback" aria-hidden="true"
-    style={{ "--featured-poster": `url("/shaders/${effect}.webp")` } as CSSProperties}>
+  return <div ref={root} className="page-shader-background featured-page-shader" data-page-shader={page} data-effect={effect} data-state="fallback" aria-hidden="true">
     <canvas ref={canvas} className="page-shader-canvas" />
   </div>;
 }

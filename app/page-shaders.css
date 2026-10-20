@@ -170,7 +170,13 @@ html[data-motion="full"]
 .featured-page-shader,
 [data-theme="light"] .featured-page-shader {
   background-color: #090a12;
-  background-image: var(--featured-poster);
+
+}
+.featured-page-shader[data-effect="tunnel"] {
+  background-image: url("/shaders/tunnel.webp");
+}
+.featured-page-shader[data-effect="accretion"] {
+  background-image: url("/shaders/accretion.webp");
 }
 .featured-page-shader[data-state="running"] .page-shader-canvas,
 .featured-page-shader[data-state="still"] .page-shader-canvas { opacity: 1; }
@@ -195,7 +201,9 @@ html[data-motion="full"]
     margin-inline: -8px;
   }
 }
-@media (prefers-contrast: more), (forced-colors: active), (prefers-reduced-transparency: reduce) {
+/* Transparency/contrast preferences stop motion, not the opaque local poster.
+   Forced colours alone suppress decorative imagery for the system palette. */
+@media (forced-colors: active) {
   .featured-page-shader { visibility: hidden; }
 }
 

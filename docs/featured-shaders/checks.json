@@ -26,5 +26,7 @@
   "responsiveLayouts": 8,
   "noWebGL": true,
   "agentRename": true,
-  "toolPromotionRemoved": true
+  "toolPromotionRemoved": true,
+  "accessibilityPosters": true,
+  "noJavaScriptPoster": true
 }

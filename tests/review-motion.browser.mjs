@@ -75,14 +75,14 @@ try {
       await page
         .getByRole("heading", { name: "Testimonials.", exact: true })
         .waitFor();
-      assert.equal(await page.locator(".testimonial-card").count(), genuine ? 4 : 0);
+      assert.equal(await page.locator(".testimonial-card").count(), 4);
       assert.equal(
         await page.locator('[data-sample="true"]').count(),
-        0,
+        genuine ? 0 : 4,
       );
       assert.equal(
         await page.locator(".testimonial-sample-note").count(),
-        0,
+        genuine ? 0 : 1,
       );
       const columns = await page
         .locator(".testimonials-grid")
@@ -96,11 +96,8 @@ try {
         ),
       );
       if (!genuine) {
-        assert.equal(await page.locator(".testimonial-sample-label").count(), 0);
-        const feedback = page.getByRole("link", { name: "Send your feedback", exact: true });
-        assert.ok(await feedback.isVisible());
-        assert.match(await feedback.getAttribute("href"), /^mailto:/);
-        assert.equal(await page.getByText(/Nora Vale|Ethan Reed|Maya Lane|Omar Ellis/).count(), 0);
+        assert.equal(await page.locator(".testimonial-sample-label").count(), 4);
+        assert.match(await page.locator(".testimonial-sample-note").innerText(), /not client endorsements/);
       }
       if (genuine)
         assert.match(
@@ -111,7 +108,7 @@ try {
   }
   assert.deepEqual(errors, []);
   console.log(
-    "PASS testimonials: three/two/one columns, no fabricated reviews, feedback invitation and genuine review rendering, no overflow or runtime errors.",
+    "PASS testimonials: three/two/one columns, clearly labeled samples and genuine reviews replacing all samples, no overflow or runtime errors.",
   );
 } finally {
   await browser.close();

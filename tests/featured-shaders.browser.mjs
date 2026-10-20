@@ -57,6 +57,24 @@ try{
   }
   await c.close();
  }
+ // Browser accessibility preferences retain the opaque poster even without GPU effects.
+ for(const preference of ['prefers-reduced-transparency','prefers-contrast']){
+  const c=await browser.newContext({viewport:{width:1920,height:1080}});const p=await c.newPage();
+  const cdp=await c.newCDPSession(p);
+  const value=preference==='prefers-contrast'?'more':'reduce';
+  await cdp.send('Emulation.setEmulatedMedia',{features:[{name:preference,value}]});
+  for(const [route,effect]of routes){
+   await p.goto(base+'/'+route,{waitUntil:'domcontentloaded'});
+   assert.equal(await p.evaluate(({preference,value})=>matchMedia(`(${preference}: ${value})`).matches,{preference,value}),true);
+   const style=await p.locator('.featured-page-shader').evaluate(e=>({visibility:getComputedStyle(e).visibility,image:getComputedStyle(e).backgroundImage,width:e.clientWidth,height:e.clientHeight}));
+   assert.equal(style.visibility,'visible','Accessibility setting must retain the local still artwork');
+   assert.ok(style.image.includes(`/shaders/${effect}.webp`));assert.ok(style.width>0&&style.height>0);
+  }
+  await c.close();
+ }
+ const noJS=await browser.newContext({javaScriptEnabled:false});const plain=await noJS.newPage();
+ for(const [route,effect]of routes){await plain.goto(base+'/'+route);assert.ok((await plain.locator('.featured-page-shader').evaluate(e=>getComputedStyle(e).backgroundImage)).includes(effect+'.webp'));}
+ await noJS.close();
  // Unsupported WebGL uses the real poster, without blocking page interaction.
  const c=await browser.newContext({viewport:{width:390,height:844}});
  await c.addInitScript(()=>{const get=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){return type==='webgl'?null:get.call(this,type,...args);};});
@@ -69,6 +87,6 @@ try{
  assert.equal(await p.locator('main').getByText(/Claude|ChatGPT|Copilot|Gemini/).count(),0,'AI tool promotion removed');
  await c.close();
  fs.mkdirSync('docs/featured-shaders',{recursive:true});
- fs.writeFileSync('docs/featured-shaders/checks.json',JSON.stringify({effects:results,responsiveLayouts:8,noWebGL:true,agentRename:true,toolPromotionRemoved:true},null,2));
- console.log('PASS moving WebGL pixels for both effects; Motion Off, testimonial Pause, footer stop/resume, context-loss fallback; 8 mobile/desktop/theme layouts; AI Agents labels and no AI-tool promotions.');
+ fs.writeFileSync('docs/featured-shaders/checks.json',JSON.stringify({effects:results,responsiveLayouts:8,noWebGL:true,agentRename:true,toolPromotionRemoved:true,accessibilityPosters:true,noJavaScriptPoster:true},null,2));
+ console.log('PASS moving WebGL pixels for both effects; Motion Off, testimonial Pause, footer stop/resume, context-loss fallback; 8 mobile/desktop/theme layouts; AI Agents labels, no AI-tool promotions, visible posters with reduced transparency/more contrast and without JavaScript.');
 }finally{await browser.close();}
